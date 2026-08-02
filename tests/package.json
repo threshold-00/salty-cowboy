@@ -1,0 +1,14 @@
+{
+  "name": "salty-cowboys-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test suite for the Salty Cowboys booking engine",
+  "scripts": {
+    "test": "node assert.js && node smoke.js",
+    "test:assert": "node assert.js",
+    "test:smoke": "node smoke.js"
+  },
+  "dependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
