@@ -43,8 +43,11 @@ has('perPerson basis text',        'isPerPerson) {\n    priceBasis = selPrice ? 
 has('PHOTOGRAPHER_TIERS declared', 'const PHOTOGRAPHER_TIERS = {');
 has('photog 1hr tier',             'price: 2000000, photos: 20');
 has('photog 1.5hr tier',           'price: 3000000, photos: 30');
-has('photog 2hr tier',             'price: 4000000, photos: 40', 2); // once for "2hr", once for "3hr" cap
-has('WhatsApp uses tier lookup',   'PHOTOGRAPHER_TIERS[durationLabel]');
+has('photog 2hr tier',             'price: 4000000, photos: 40');
+has('WhatsApp uses tier lookup',   'PHOTOGRAPHER_TIERS[photographerTier]', 2); // price calc + WhatsApp message
+has('photographer tier state',     'const [photographerTier, setPhotographerTier] = useState(null);');
+has('photographer price added to total', 'const totalPrice = unitPrice * mult + photographerPrice;');
+has('addon tiers mutually exclusive', 'setPhotographerTier(pv => pv === tier.key ? null : tier.key)');
 
 // ─── horse/horses translation keys ───────────────────────────────────────
 has('en horse',                    'horse: "horse"');
@@ -84,7 +87,10 @@ has('ru cottages max 6',           'Максимум 6 человек на ко�
 // ─── Intro / addon / sessionNote copy ────────────────────────────────────
 has('en intro tiered photog',      'packages from IDR 2,000,000, 20 edited photos per hour');
 has('en intro per horse',          'Beach shoots are priced per horse');
-has('en addon tiered',             'Add a Salty Cowboy photographer (package matches your shoot: 1hr IDR 2M / 20 photos, 1.5hr IDR 3M / 30 photos, 2hr IDR 4M / 40 photos)');
+has('en addon title',              'addonTitle: "Add a Salty Cowboy photographer:"');
+has('id addon title',              'addonTitle: "Tambahkan fotografer Salty Cowboy:"');
+has('ru addon title',              'addonTitle: "Добавить фотографа Salty Cowboy:"');
+has('addon tiers array (3 langs)', 'addonTiers: [', 3);
 has('en sessionNote one per week', 'Only one course booking is accepted per week.');
 has('id sessionNote one per week', 'Hanya satu pemesanan kursus yang diterima per minggu.');
 has('ru sessionNote one per week', 'В неделю принимается только одна бронь на курс.');

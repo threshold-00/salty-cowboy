@@ -2,6 +2,23 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 9 Aug 2026 — Photographer add-on: three independent tick boxes
+
+Changed the photographer add-on from a single checkbox (package auto-matched to shoot duration) to three separate, mutually exclusive tick boxes, one per tier. Customers now choose any tier regardless of the shoot's own duration. Applied identically across all four photoshoot types (Beach, Paddock, Stable, Cottages).
+
+- Tiers unchanged: 1 hr / IDR 2,000,000 / 20 photos, 1.5 hr / IDR 3,000,000 / 30 photos, 2 hr / IDR 4,000,000 / 40 photos.
+- Selecting a tick box now adds that tier's price into the total shown to the customer (previously the total never included the add-on price at all, regardless of selection, which was a bug).
+- Ticking a second tier automatically unticks the first (radio-button behaviour via checkboxes).
+- Price breakdown line and the booking confirmation summary both show which tier was picked.
+- WhatsApp message to Simone states the tier chosen, independent of shoot duration.
+- Removed the old "package matches your shoot duration" auto-behaviour and the 3 hr-to-2 hr cottage cap logic, since customers now pick freely among the three tiers on every shoot type (max available tier is still 2 hr / IDR 4,000,000).
+- Follow-up: removed the duration prefix ("1 hr — ", etc.) from the tick box labels themselves, so each row now reads just "IDR 2,000,000 (20 photos)" and so on. Duration is still shown in the price breakdown, confirm summary, and WhatsApp message.
+
+### Testing
+- 64 / 64 string assertions pass
+- jsdom render passes with zero console errors
+- Verified live in-browser across Beach (1.5 hr, 2 horses), Cottages (3 hr session), and all three languages (EN/ID/RU): tick boxes render correctly, mutual exclusivity works, and total price updates as expected.
+
 ## 2 Aug 2026 — Simone's revised operational rules
 
 Applied Simone's updated rules across the whole engine.

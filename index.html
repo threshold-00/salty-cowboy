@@ -657,7 +657,13 @@ const T = {
       "Rides": "Rides",
       "Lessons": "Lessons"
     },
-    addon: "Add a Salty Cowboy photographer (package matches your shoot: 1hr IDR 2M / 20 photos, 1.5hr IDR 3M / 30 photos, 2hr IDR 4M / 40 photos)",
+    addonTitle: "Add a Salty Cowboy photographer:",
+    photosWord: "photos",
+    addonTiers: [
+      { key: "1hr", label: "1 hr" },
+      { key: "1.5hr", label: "1.5 hr" },
+      { key: "2hr", label: "2 hr" }
+    ],
     sAddon: "Add-on",
     photographerShort: "Photographer",
     perPerson: "Price is per person",
@@ -809,7 +815,13 @@ const T = {
       "Rides": "Berkuda",
       "Lessons": "Pelajaran"
     },
-    addon: "Tambahkan fotografer Salty Cowboy (paket menyesuaikan durasi sesi: 1 jam IDR 2 juta / 20 foto, 1,5 jam IDR 3 juta / 30 foto, 2 jam IDR 4 juta / 40 foto)",
+    addonTitle: "Tambahkan fotografer Salty Cowboy:",
+    photosWord: "foto",
+    addonTiers: [
+      { key: "1hr", label: "1 jam" },
+      { key: "1.5hr", label: "1,5 jam" },
+      { key: "2hr", label: "2 jam" }
+    ],
     sAddon: "Tambahan",
     photographerShort: "Fotografer",
     perPerson: "Harga per orang",
@@ -961,7 +973,13 @@ const T = {
       "Rides": "Прогулки",
       "Lessons": "Уроки"
     },
-    addon: "Добавить фотографа Salty Cowboy (пакет по длительности съёмки: 1 ч IDR 2 млн / 20 фото, 1,5 ч IDR 3 млн / 30 фото, 2 ч IDR 4 млн / 40 фото)",
+    addonTitle: "Добавить фотографа Salty Cowboy:",
+    photosWord: "фото",
+    addonTiers: [
+      { key: "1hr", label: "1 ч" },
+      { key: "1.5hr", label: "1,5 ч" },
+      { key: "2hr", label: "2 ч" }
+    ],
     sAddon: "Доп. услуга",
     photographerShort: "Фотограф",
     perPerson: "Цена за человека",
@@ -1775,6 +1793,8 @@ html, body { background: #0a0a0a; }
 .pt-value { font-size: 13px; color: #ffffff; font-weight: 700; white-space: nowrap; }
 .act-desc  { font-size: 12.5px; color: #5c5c5c; margin-top: 4px; line-height: 1.45; }
 .addon-row { margin-top: 6px; }
+.addon-group { margin-top: 10px; }
+.addon-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
@@ -1903,14 +1923,12 @@ function getFirstDay(year, month) {
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAY_NAMES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-// Photographer add-on tiers. Package length matches the shoot duration; the
-// 3hr cottages session caps out at the 2hr package (Simone confirms actual
-// coverage on WhatsApp).
+// Photographer add-on tiers. Customer picks any one tier independent of the
+// shoot duration (Simone confirms actual coverage on WhatsApp).
 const PHOTOGRAPHER_TIERS = {
   "1hr":   { label: "1 hr",   price: 2000000, photos: 20 },
   "1.5hr": { label: "1.5 hr", price: 3000000, photos: 30 },
-  "2hr":   { label: "2 hr",   price: 4000000, photos: 40 },
-  "3hr":   { label: "2 hr",   price: 4000000, photos: 40 }
+  "2hr":   { label: "2 hr",   price: 4000000, photos: 40 }
 };
 
 // Build the WhatsApp message that lands in Simone's inbox (always English).
@@ -1925,7 +1943,7 @@ function buildWhatsAppMessage({
   riders,
   isRiding,
   notes,
-  photographer,
+  photographerTier,
   grooming
 }) {
   const lines = [];
@@ -1933,8 +1951,8 @@ function buildWhatsAppMessage({
   lines.push("");
   if (actObj) lines.push("Activity: " + T.en.activities[actObj.id] + (durationLabel ? " (" + durationLabel + ")" : ""));
   if (grooming) lines.push("Grooming: " + (grooming === "wet" ? "Wet" : "Dry"));
-  if (photographer) {
-    const tier = PHOTOGRAPHER_TIERS[durationLabel] || PHOTOGRAPHER_TIERS["1hr"];
+  if (photographerTier) {
+    const tier = PHOTOGRAPHER_TIERS[photographerTier];
     lines.push("Add-on: Salty Cowboy photographer (" + tier.label + " · IDR " + tier.price.toLocaleString("en-US") + " · " + tier.photos + " edited images)");
   }
   if (formattedDates && formattedDates.length) {
@@ -2006,7 +2024,7 @@ function App() {
   const [selectedDates, setSelectedDates] = useState([]); // array of { y, m, d }
   const [selectedTime, setSelectedTime] = useState(null);
   const [notes, setNotes] = useState("");
-  const [photographer, setPhotographer] = useState(false);
+  const [photographerTier, setPhotographerTier] = useState(null);
   const [grooming, setGrooming] = useState(null); // "wet" | "dry" — Master Class Horse Care only
   const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
@@ -2052,7 +2070,7 @@ function App() {
     setSelectedDates([]);
     setSelectedTime(null);
     setNotes("");
-    setPhotographer(false);
+    setPhotographerTier(null);
     setGrooming(null);
     setSentMessage("");
     setCopied(false);
@@ -2156,7 +2174,9 @@ function App() {
   if (isRiding) mult = peopleCount || 1;
   else if (isPerHorse) mult = horseCount || 1;
   else if (isPerPerson) mult = peopleCount || 1;
-  const totalPrice = unitPrice * mult;
+  const selectedTier = isPhotoshoot && photographerTier ? t.addonTiers.find(tr => tr.key === photographerTier) : null;
+  const photographerPrice = selectedTier ? PHOTOGRAPHER_TIERS[photographerTier].price : 0;
+  const totalPrice = unitPrice * mult + photographerPrice;
   const totalPriceStr = "IDR " + totalPrice.toLocaleString("en-US");
   let priceBasis;
   if (isRiding) {
@@ -2167,6 +2187,9 @@ function App() {
     priceBasis = selPrice ? selPrice.v + " \u00d7 " + (peopleCount || 1) + " " + ((peopleCount || 1) > 1 ? t.people : t.person) : "";
   } else {
     priceBasis = isPhotoshoot ? t.flatPrice : t.perBooking;
+  }
+  if (selectedTier) {
+    priceBasis += " + " + t.photographerShort + " (" + selectedTier.label + ")";
   }
   const availableSlots = slotsFor(actObj, duration, sortedDates);
   const anySaturday = sortedDates.some(isSaturday);
@@ -2186,7 +2209,7 @@ function App() {
       riders,
       isRiding,
       notes,
-      photographer: isPhotoshoot && photographer,
+      photographerTier: isPhotoshoot ? photographerTier : null,
       grooming: needsGrooming ? grooming : null
     });
     setSentMessage(message);
@@ -2249,7 +2272,7 @@ function App() {
       setActivity(null);
       setDuration(null);
       setNumPeople(null);
-      setPhotographer(false);
+      setPhotographerTier(null);
       setGrooming(null);
     }
   }, t.categories[cat.category]))), /*#__PURE__*/React.createElement("div", {
@@ -2270,7 +2293,7 @@ function App() {
       setDuration(null);
       setNumPeople(null);
       setRiders([]);
-      setPhotographer(false);
+      setPhotographerTier(null);
       setGrooming(null);
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -2449,13 +2472,18 @@ function App() {
       onClick: () => updateRider(idx, "experience", e)
     }, t[e])))));
   }), isPhotoshoot && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "perm-row addon-row",
-    onClick: () => setPhotographer(pv => !pv)
+    className: "addon-group"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "perm-box " + (photographer ? "checked" : "")
-  }, photographer ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+    className: "addon-title"
+  }, t.addonTitle), t.addonTiers.map(tier => /*#__PURE__*/React.createElement("div", {
+    key: tier.key,
+    className: "perm-row addon-row",
+    onClick: () => setPhotographerTier(pv => pv === tier.key ? null : tier.key)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-box " + (photographerTier === tier.key ? "checked" : "")
+  }, photographerTier === tier.key ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, t.addon)), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {
+  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {
     className: "price-reveal"
   }, /*#__PURE__*/React.createElement("span", {
     className: "price-reveal-value"
@@ -2617,13 +2645,13 @@ function App() {
     className: "sum-key"
   }, t.groomingLabel), /*#__PURE__*/React.createElement("span", {
     className: "sum-val"
-  }, grooming === "wet" ? t.gWet : t.gDry)), isPhotoshoot && photographer && /*#__PURE__*/React.createElement("div", {
+  }, grooming === "wet" ? t.gWet : t.gDry)), isPhotoshoot && photographerTier && /*#__PURE__*/React.createElement("div", {
     className: "sum-row"
   }, /*#__PURE__*/React.createElement("span", {
     className: "sum-key"
   }, t.sAddon), /*#__PURE__*/React.createElement("span", {
     className: "sum-val"
-  }, t.photographerShort)), /*#__PURE__*/React.createElement("div", {
+  }, t.photographerShort + " (" + (t.addonTiers.find(tr => tr.key === photographerTier) || {}).label + ")")), /*#__PURE__*/React.createElement("div", {
     className: "sum-row"
   }, /*#__PURE__*/React.createElement("span", {
     className: "sum-key"

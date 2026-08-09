@@ -33,6 +33,18 @@ Front-end booking engine for Salty Cowboys Bali, a horse rescue sanctuary and ri
 - **WhatsApp messages are always English** regardless of the UI language the user has selected.
 - **Ro's preferred deliverable format:** an updated file plus a matching TSV paste block for the sheet, plus a CHANGELOG.md entry summarising what shifted and why.
 
+## Default change workflow (automatic, no need to ask)
+
+For every spec or pricing change, always do ALL of the following steps in order without being prompted:
+
+1. **Edit `index.html`** with the required code change (targeted patch, not a rewrite).
+2. **Update `tests/assert.js`** so assertions reflect the new spec.
+3. **Update the "Business rules" section of this file** to match the new spec.
+4. **Prepend a dated entry to `CHANGELOG.md`** summarising what changed and why.
+5. **Generate a fresh `customer-offerings.tsv` paste block** covering all current offerings, ready for Ro to paste into the Google Sheet "Customer Offerings" tab.
+6. **Run both tests** (`node tests/assert.js` and `node tests/smoke.js`). Stop and report if either fails; do not continue.
+7. **Show a summary** of all changes made and wait for Ro's explicit approval before running `git commit` and `git push`.
+
 ## Commands
 
 ```bash
@@ -56,7 +68,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 | Stable | 1, 1.5, 2 or 3 hr | Same as Paddock | Same as Paddock | 5 people |
 | Cottages | 1 session (3 hr) | IDR 4,500,000 per session | Morning 08:30-11:30 or afternoon 14:30-17:30 | 6 people per cottage |
 
-**Photographer add-on** (all photoshoots): 1hr = IDR 2,000,000 (20 photos), 1.5hr = IDR 3,000,000 (30 photos), 2hr = IDR 4,000,000 (40 photos). 3hr cottage sessions cap at the 2hr package. Package length matches the shoot duration automatically.
+**Photographer add-on** (all photoshoots): three tick boxes, one per tier, mutually exclusive (only one selectable at a time), independent of the shoot's own duration. Tick box labels show price and photo count only, no duration (e.g. "IDR 2,000,000 (20 photos)"); duration still appears in the price breakdown, confirm summary, and WhatsApp message. Tiers: 1hr = IDR 2,000,000 (20 photos), 1.5hr = IDR 3,000,000 (30 photos), 2hr = IDR 4,000,000 (40 photos). No tier above 2hr is offered, even for 3hr shoots (Paddock, Stable, Cottages). Selected tier's price is added to the displayed total and included in the WhatsApp message and booking summary.
 
 ### Rides
 
@@ -80,7 +92,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 - **Test WhatsApp number** in `index.html` (`WA_NUMBER`) must be swapped for Simone's real number before go-live.
 - **Paddock/Stable 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off.
-- **Photographer for 3 hr cottage sessions** is capped at the 2 hr package price. Confirm with Simone if she'd rather offer a bespoke 3 hr rate.
+- **Photographer add-on now sold independent of shoot duration** (any tier up to 2 hr, regardless of how long the shoot itself is). Confirm with Simone that this matches her intent, since it's a behaviour change from the previous auto-matched package.
 
 ## Working with Simone
 
