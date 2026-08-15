@@ -2,6 +2,21 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 15 Aug 2026 — Merge calendar into step 2
+
+Structural, customer-facing layout change only. Booking flow goes from 4 screens (activity, configure, calendar, confirm) to 3 (activity, configure+calendar, confirm).
+
+- Removed the separate "calendar" screen. Its content (month grid, date/day selection, time slots, notes, send button) now renders directly beneath the configuration form on the same screen, appearing automatically once `detailsComplete` is true. No more "See availability" button and no in-between back-link; the single "← Back" at the top of step 2 covers the whole merged screen.
+- Step indicator collapsed from 4 implied states to 3: activity (1), configure+calendar (2), confirm (3).
+- All existing state-driven dependencies were preserved untouched, since they were never tied to which screen was rendering them: the Horse Whisperer Course's 4-day Mon/Tue/Thu/Fri picker and shared 8:30am/9:30am start-time choice, and every ride/lesson's duration-to-slot filtering, all still work exactly as before, just displayed inline instead of on a separate screen.
+- The WhatsApp message sent to Simone is byte-for-byte unchanged (`buildWhatsAppMessage` was never touched; it doesn't depend on screen state).
+- Kept as its own commit, separate from the copy/slot reconciliation commit, so it can be reverted independently if the merged layout doesn't work out.
+
+### Testing
+- 132 / 132 string assertions pass (5 new, locking in the merged structure and the absence of the old calendar screen/button)
+- jsdom render passes with zero console errors
+- Verified live in-browser end to end: Beach & Rice Field Ride (simple case) and Horse Whisperer Course (the riskiest case — 4-day picker, week constraint, per-day time choice) both complete correctly on the single merged screen, through to a real WhatsApp deep link with the message content unchanged from before the merge.
+
 ## 15 Aug 2026 — Notes copy update + ride slot reconciliation
 
 - Reconciled the ride calendar slots against spec: Instagram ride 4:00pm (2hr) / 4:30pm (1.5hr) / 5:00pm (1hr), Beach & Rice Field ride 4:30pm (1.5hr) / 5:00pm (1hr). Checked the live code first rather than assuming; it already matched exactly, so no code change was needed here, just confirmation via `tests/assert.js`'s existing `RIDE_SLOTS` assertions.

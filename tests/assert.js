@@ -183,6 +183,13 @@ has('en sessionNote one per week', 'Only one course booking is accepted per week
 has('id sessionNote one per week', 'Hanya satu pemesanan kursus yang diterima per minggu.');
 has('ru sessionNote one per week', 'В неделю принимается только одна бронь на курс.');
 
+// ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
+has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
+has('calendar section gated on riders + detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "cal-header"\n  },');
+missing('no separate calendar screen state left', '"calendar"');
+missing('"See availability" button removed (calendar reveals automatically)', 't.seeAvailability');
+missing('no lingering setScreen("calendar") calls', 'setScreen("calendar")');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);

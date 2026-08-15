@@ -2139,7 +2139,7 @@ function App() {
     setSentMessage("");
     setCopied(false);
   }
-  const step = screen === "activity" ? 1 : screen === "riders" ? 2 : screen === "calendar" ? 3 : 4;
+  const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;
 
   // ── Weight + age rules ──
   // Max rider weight is 77kg (w4 is over that, so it blocks). Only 2 horses can
@@ -2571,19 +2571,12 @@ function App() {
     className: "price-reveal-value"
   }, totalPriceStr), /*#__PURE__*/React.createElement("span", {
     className: "price-reveal-basis"
-  }, priceBasis)), /*#__PURE__*/React.createElement("button", {
-    className: "cta",
-    disabled: !detailsComplete,
-    onClick: () => setScreen("calendar")
-  }, t.seeAvailability)), screen === "calendar" && /*#__PURE__*/React.createElement("div", {
-    className: "fu"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "back-link",
+  }, priceBasis))), screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {
+    className: "fu",
     style: {
-      padding: "16px 24px 0"
-    },
-    onClick: () => setScreen("riders")
-  }, t.back), /*#__PURE__*/React.createElement("div", {
+      marginTop: 22
+    }
+  }, /*#__PURE__*/React.createElement("div", {
     className: "cal-header"
   }, /*#__PURE__*/React.createElement("button", {
     className: "cal-nav",

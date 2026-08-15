@@ -20,6 +20,8 @@ Front-end booking engine for Salty Cowboys Bali, a horse rescue sanctuary and ri
 **Deploy:** GitHub Pages serves `main` at `pursuit-098.github.io/salty-cowboys`. Every push to `main` deploys automatically. No build step, no bundler, no framework config.
 
 **Site tech:** React 18 UMD is inlined at the top of `index.html`; JSX is pre-compiled to `React.createElement` calls (no runtime Babel). All styles are in a single `<style>` block. Trilingual UI (English, Indonesian, Russian). The WhatsApp message sent to Simone is always English so she can read every request consistently.
+
+**Booking flow (3 steps):** 1) choose activity, 2) configure (duration, people, rider details, weight/experience/photographer as applicable) **and** pick a calendar date + time slot + notes, all on one scrollable screen, 3) confirmation. There is no separate calendar screen; the calendar section reveals automatically below the configuration form once `detailsComplete` is true (no button click needed). This applies uniformly, including the Horse Whisperer Course's 4-day picker and per-duration ride slot filtering, both of which are driven by component state rather than by screen, so the merge didn't require touching that logic.
 **Companion data:** Google Sheet `1EJyp5EWQMLGXz3hOWc5_UK8_pNUdkjoer4Yi9GvYFAE`, "Customer Offerings" tab. This is Simone's human-readable source of truth. When code business rules change, generate a TSV paste block for Ro to paste into the sheet so both stay aligned.
 
 ## Conventions (non-negotiable)
