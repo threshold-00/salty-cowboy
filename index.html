@@ -368,39 +368,14 @@ const IMG_LESSONS = "data:image/webp;base64,UklGRvyTAABXRUJQVlA4IPCTAADwzQKdASoQ
 // was merged into Lessons; the Fun Packed Package was retired.
 //
 // Flags:
-//   photoshoot — no age, no experience, no weight; photographer add-on offered
-//   riding     — weight rules apply (rides + Dressage Masterclass only)
-//   grooming   — offer the wet/dry sub-option (Master Class Horse Care)
-//   course     — multi-day booking, must sit inside one Mon–Sat week
+//   photoshoot  — no age, no experience; photographer add-on offered
+//   needsWeight — weight rules apply even though it's a photoshoot (Beach
+//                 Photoshoot only, since riders mount a horse for that one)
+//   riding      — weight rules apply (rides + Dressage Masterclass)
+//   grooming    — offer the wet/dry sub-option (Horse grooming)
+//   course      — multi-day booking, must sit inside one Mon–Sat week (the
+//                 Horse Whisperer Course also restricts to Mon/Tue/Thu/Fri)
 const ACTIVITIES = [{
-  category: "Photoshoots",
-  items: [{
-    id: "photo_beach",
-    icon: "🏖️",
-    durations: ["1hr", "1.5hr"],
-    maxPeople: 3,
-    perHorse: true,
-    photoshoot: true
-  }, {
-    id: "photo_stable",
-    icon: "🏡",
-    durations: ["1hr", "1.5hr", "2hr", "3hr"],
-    maxPeople: 5,
-    photoshoot: true
-  }, {
-    id: "photo_paddock",
-    icon: "🌾",
-    durations: ["1hr", "1.5hr", "2hr", "3hr"],
-    maxPeople: 5,
-    photoshoot: true
-  }, {
-    id: "photo_cottages",
-    icon: "🛖",
-    durations: ["3hr"],
-    maxPeople: 6,
-    photoshoot: true
-  }]
-}, {
   category: "Rides",
   items: [{
     id: "beach",
@@ -412,30 +387,49 @@ const ACTIVITIES = [{
   }, {
     id: "insta",
     icon: "🌅",
-    durations: ["2hr"],
+    durations: ["1hr", "1.5hr", "2hr"],
     maxPeople: 5,
     riding: true,
     experienceNeeded: "Beginner"
   }]
 }, {
+  category: "Photoshoots",
+  items: [{
+    id: "photo_beach",
+    icon: "🏖️",
+    durations: ["1hr", "1.5hr"],
+    maxPeople: 3,
+    perHorse: true,
+    photoshoot: true,
+    needsWeight: true
+  }, {
+    id: "photo_stable",
+    icon: "🏡",
+    durations: ["1hr", "1.5hr", "2hr", "3hr"],
+    maxPeople: 5,
+    photoshoot: true
+  }, {
+    id: "photo_ricefield",
+    icon: "🌾",
+    durations: ["1hr", "1.5hr", "2hr", "3hr"],
+    maxPeople: 5,
+    photoshoot: true
+  }, {
+    id: "photo_paddock",
+    icon: "🐴",
+    durations: ["1hr", "1.5hr", "2hr", "3hr"],
+    maxPeople: 5,
+    photoshoot: true
+  }, {
+    id: "photo_cottages",
+    icon: "🛖",
+    durations: ["3hr"],
+    maxPeople: 6,
+    photoshoot: true
+  }]
+}, {
   category: "Lessons",
   items: [{
-    id: "whisper",
-    icon: "🤝",
-    durations: ["3hr"],
-    maxPeople: 2,
-    minAge: 8,
-    course: true,
-    courseDays: 3,
-    experienceNeeded: "Beginner"
-  }, {
-    id: "dressage",
-    icon: "🐎",
-    durations: ["50min"],
-    maxPeople: 1,
-    riding: true,
-    experienceNeeded: "Beginner"
-  }, {
     id: "joinup",
     icon: "🔄",
     durations: ["1hr", "1.5hr"],
@@ -443,18 +437,33 @@ const ACTIVITIES = [{
     perPerson: true,
     experienceNeeded: "Beginner"
   }, {
-    id: "lunge",
-    icon: "🎯",
-    durations: ["1hr", "1.5hr"],
+    id: "whisper",
+    icon: "🤝",
+    durations: ["3hr"],
     maxPeople: 2,
-    perPerson: true,
-    experienceNeeded: "Intermediate"
+    minAge: 8,
+    course: true,
+    courseDays: 4,
+    experienceNeeded: "Beginner"
   }, {
     id: "masterclass",
     icon: "🪮",
-    durations: ["1hr"],
+    durations: ["1hr", "1.5hr"],
     maxPeople: 2,
     grooming: true,
+    experienceNeeded: "Beginner"
+  }, {
+    id: "groupclinic",
+    icon: "🤲",
+    durations: ["1.5hr"],
+    maxPeople: 6,
+    experienceNeeded: "Beginner"
+  }, {
+    id: "dressage",
+    icon: "🐎",
+    durations: ["50min"],
+    maxPeople: 1,
+    riding: true,
     experienceNeeded: "Beginner"
   }]
 }];
@@ -465,18 +474,23 @@ const ALL_ACTIVITIES = ACTIVITIES.flatMap(c => c.items);
 // activity. Saturday afternoons are closed, so afternoon slots are filtered out
 // at render time (see slotsFor); Sundays are blocked in the date picker.
 
+// Rides are locked to one fixed start time per duration (no more free choice
+// of morning vs afternoon).
 const RIDE_SLOTS = {
-  "1hr": ["8:00am", "5:00pm"],
-  "1.5hr": ["8:00am", "4:30pm"],
-  "2hr": ["8:00am", "4:00pm"]
+  "1hr": ["5:00pm"],
+  "1.5hr": ["4:30pm"],
+  "2hr": ["4:00pm"]
 };
+// Join Up, Horse grooming and Group Clinic share the same three fixed start
+// times regardless of duration.
 const LESSON_SLOTS = {
-  "1hr": ["8:30am", "5:00pm"],
-  "1.5hr": ["8:30am", "4:30pm"],
-  "2hr": ["8:30am", "4:00pm"]
+  "1hr": ["9:30am", "10:30am", "3:00pm"],
+  "1.5hr": ["9:30am", "10:30am", "3:00pm"]
 };
 const DRESSAGE_SLOTS = ["9:00am", "10:00am", "4:00pm", "5:00pm"];
-const WHISPER_SLOTS = ["8:30am"];
+// The Horse Whisperer Course runs the same start-time choice (8:30 or 9:30am)
+// across all four days.
+const WHISPER_SLOTS = ["8:30am", "9:30am"];
 // Beach shoots run any time between 08:00 and 16:00. They carry slots so the
 // Saturday afternoon closure can apply to them too.
 const PHOTO_SLOTS = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm", "3:00pm", "4:00pm"];
@@ -509,7 +523,7 @@ function slotsFor(actObj, duration, dates) {
   let list;
   if (actObj.id === "dressage") list = DRESSAGE_SLOTS;
   else if (actObj.id === "whisper") list = WHISPER_SLOTS;
-  else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS[duration] || [];
+  else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages" || actObj.id === "photo_ricefield") list = SESSION_SLOTS[duration] || [];
   else if (actObj.photoshoot) list = PHOTO_SLOTS;
   else if (actObj.riding) list = RIDE_SLOTS[duration] || [];
   else list = LESSON_SLOTS[duration] || [];
@@ -555,8 +569,10 @@ const T = {
     heroTitle1: "Book your",
     heroTitle2: "experience",
     heroSub: "Horse rescue sanctuary & riding centre",
+    moneyGoesTitle: "Where the money goes",
+    moneyGoesBody: "Every booking helps a horse. Salty Cowboys began as a rescue and it still is one. The money from your ride, lesson or photoshoot goes straight back into the paddock: veterinary care, feed, farriery and the slow, patient work of bringing neglected and retired horses back to health. Some arrive underweight or frightened of people. Here they are given time, food and trust until they are sound enough to be ridden gently, or simply to live out their days in peace. When you book with us, you fund that second chance.",
     introPhotoshoots: "Beautiful, story-telling photos with our rescue horses across our most scenic backdrops. Sessions are static, so riding isn't included, though for the Beach shoot you'll walk alongside your horse down to the sand. Bring your own photographer, or add a Salty Cowboy photographer with your booking (packages from IDR 2,000,000, 20 edited photos per hour). Beach shoots are priced per horse; other shoots are location-based.",
-    introRides: "See the best of Kedungu on horseback: ride out through emerald rice fields, quiet village lanes and down to the beach, with our grooms guiding you every step of the way. Sunrise and sunset rides are especially magical. Price is per person.",
+    introRides: "See the best of Kedungu on horseback: ride out through emerald rice fields, quiet village lanes and down to the beach, with our grooms guiding you every step of the way. Morning and Golden hour rides are especially magical. Price is per person.",
     introLessons: "Get to know our horses from the ground up. Apart from the Dressage Masterclass, every session is off-saddle, working hand in hand with our rescue horses to build trust, read their body language and discover the quiet art of natural horsemanship.",
     chooseActivity: "Choose an activity",
     chooseActivityHint: "What would you like to do?",
@@ -568,14 +584,14 @@ const T = {
     aboutYou: "About you",
     aboutRiders: "About the riders",
     matchHint: "We'll match each rider to their ideal horse.",
-    whisperHintPre: "The horse whisperer course goes over 3 days. ",
+    whisperHintPre: "The horse whisperer course goes over 4 days. ",
     whisperHintLink: "Click here",
     whisperHintPost: " to view more about this program.",
-    pickCourseDays: "Select 3 days for the course",
-    daysSelected: "of 3 days selected",
+    pickCourseDays: "Select 4 days for the course",
+    daysSelected: "of 4 days selected",
     courseDaysTitle: "Your course days",
-    courseWeekNote: "The course must be completed Monday to Saturday within a single week.",
-    sessionNote: "This course is a total of 10 hrs, split between 2 x 3 hr sessions and 1 x 3.5hr sessions. Only one course booking is accepted per week.",
+    courseWeekNote: "The course runs Monday, Tuesday, Thursday and Friday, all within a single week.",
+    sessionNote: "This course is a total of 10 hrs across 4 days: three 3 hr sessions plus a closing 1 hr session. Only one course booking is accepted per week.",
     friendFree: "Bring a friend for free",
     yourDetails: "Your details",
     rider: "Rider",
@@ -588,10 +604,10 @@ const T = {
     weight: "Weight range",
     w1: "Under 50 kg",
     w2: "50–70 kg",
-    w3: "70–78 kg",
-    w4: "Over 78 kg",
+    w3: "70–77 kg",
+    w4: "Over 77 kg",
     w3Title: "Protecting our horses' backs",
-    w3Body: "Only 2 of our horses can carry riders over 70kg, so we can take at most 2 riders over 70kg per booking, up to 78kg each. If that's not right for your group, we have plenty of off-saddle activities under 'Lessons'.",
+    w3Body: "Only 2 of our horses can carry riders over 70kg, so we can take at most 2 riders over 70kg per booking, up to 77kg each. If that's not right for your group, we have plenty of off-saddle activities under 'Lessons'.",
     w4Title: "So sorry, we can't accommodate this weight",
     w4Body: "It's nothing personal. We're committed to protecting our horses' backs from strain, so we're unable to safely match a horse for this weight. You'd be very welcome to try our off-saddle activities under 'Lessons' instead.",
     minAgeTitle: "Minimum age is 8",
@@ -615,6 +631,7 @@ const T = {
     fullDay: "Full day",
     matchedHorses: "Your matched horses",
     notesLabel: "Anything we should know? (optional)",
+    notesTimeHint: "Times here not suitable? Let us know in the notes.",
     notesPlaceholder: "Write a message for Salty Cowboys",
     notice: "Your selected date and time will be confirmed by Salty Cowboys through WhatsApp.",
     sendBtn: "Send request via WhatsApp →",
@@ -645,18 +662,20 @@ const T = {
       dressage: "Dressage Masterclass (Private lesson)",
       photo_beach: "Beach Photoshoot",
       photo_stable: "Stable Photoshoot",
+      photo_ricefield: "Rice Field Photoshoot",
       photo_paddock: "Paddock Photoshoot",
       photo_cottages: "Cottages Photoshoot",
       whisper: "Horse Whisperer Intensive Course",
       joinup: "Join Up Lesson",
-      lunge: "Lunge Lesson",
-      masterclass: "Masterclass Horse Care (Grooming wet or dry)",
+      masterclass: "Horse grooming (wet or dry)",
+      groupclinic: "Group Clinic",
     },
     categories: {
       "Photoshoots": "Photoshoots",
       "Rides": "Rides",
       "Lessons": "Lessons"
     },
+    byoPhotographer: "BYO Photographer or add a Salty Cowboys photographer",
     addonTitle: "Add a Salty Cowboy photographer:",
     photosWord: "photos",
     addonTiers: [
@@ -670,51 +689,56 @@ const T = {
     perBooking: "Price is per booking, not per person",
     flatPrice: "Flat price, not per person",
     groups: {
-      beach: "Max 5 riders, privately guided. Max 78kg per rider. Max 2 riders over 70kg.",
-      insta: "Max 5 riders, privately guided. Max 78kg per rider. Max 2 riders over 70kg.",
-      dressage: "Private booking, 1 rider. Max 78kg per rider.",
+      beach: "Max 5 riders, privately guided. Max 77kg per rider. Max 2 riders over 70kg.",
+      insta: "Max 5 riders, privately guided. Max 77kg per rider. Max 2 riders over 70kg.",
+      dressage: "Private booking, 1 rider. Max 77kg per rider.",
       joinup: "Max 2 people. Price is per person.",
-      lunge: "Max 2 people. Price is per person.",
       masterclass: "Max 2 people.",
+      groupclinic: "Up to 6 people. Flat price per session, not per person.",
       whisper: "Max 2 people.",
-      photo_beach: "Max 3 people total: up to 2 on horses (one horse each), plus 1 person standing beside a horse. Price is per horse.",
+      photo_beach: "Max 3 people total: up to 2 on horses (one horse each), plus 1 person standing beside a horse. Max 77kg per mounted rider. Price is per horse.",
       photo_stable: "Max 5 people total, including all crew and models.",
+      photo_ricefield: "Max 5 people total, including all crew and models.",
       photo_paddock: "Max 5 people total, including all crew and models.",
       photo_cottages: "Max 6 people per cottage. Choice of cottage upon availability.",
     },
     prices: {
       beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,000,000" }],
-      insta: [{ l: "2 hr", v: "IDR 2,400,000" }],
+      insta: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,000,000" }, { l: "2 hr", v: "IDR 2,400,000" }],
       dressage: [{ l: "50 min", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
       photo_paddock: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "session", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
       joinup: [{ l: "1 hr", v: "IDR 2,500,000" }, { l: "1.5 hr", v: "IDR 3,150,000" }],
-      lunge: [{ l: "1 hr", v: "IDR 2,500,000" }, { l: "1.5 hr", v: "IDR 3,150,000" }],
-      masterclass: [{ l: "1 hr", v: "IDR 1,250,000" }],
+      masterclass: [{ l: "1 hr", v: "IDR 1,250,000" }, { l: "1.5 hr", v: "IDR 1,875,000" }],
+      groupclinic: [{ l: "1.5 hr", v: "IDR 6,000,000" }],
     },
     descs: {
       beach: "A guided ride out through the rice fields to the beach.",
-      insta: "A photo-focused ride through village, beach and rice fields near Kedungu — grooms guide you to the most scenic spots, best at sunset. Same inclusions as the standard ride.",
+      insta: "A photo-focused ride through village, beach and rice fields near Kedungu — grooms guide you to the most scenic spots, best at Golden hour. Same inclusions as the standard ride.",
       dressage: "Private lessons for all levels — learn dressage or polish up your skills.",
       photo_beach: "Static shoot for fashion, pre-wedding or private sessions. One groomed horse plus staff, along a 900m route through the rice fields. Time starts when leaving the stables. To note: we request no swim-ware shoots are taken, out of respect for the local culture - thank you for understanding!",
-      photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. One groomed horse plus team assistance.",
-      photo_paddock: "Open paddock backdrop with grazing horses and rice field views. Location only, photographer not included. Entering the paddocks and touching the horses is not permitted.",
+      photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included.",
+      photo_ricefield: "A private session with your horse framed by Bali's open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light.",
+      photo_paddock: "Open paddock backdrop with grazing horses. Location only, photographer not included. Entering the paddocks and touching the horses is not permitted.",
       photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by session (linked to Airbnb blocking). Location only, no horses included. Photos are taken inside the cottage. Entering the paddocks and touching the horses is not permitted.",
-      whisper: "Learn to 'speak horse' through body awareness, body language and energy. Includes 2 hrs grooming/horse-care master class and mucking out.",
+      whisper: "Four days, ten hours, one deep education in how horses think. Run across Monday, Tuesday, Thursday and Friday: three 3-hour sessions to build the foundation, then a closing 1-hour session to bring it all together. Each day you choose an 8:30 or 9:30am start. You will learn to read the horse, earn its trust and pick up the quiet cues that build a real partnership. Open to all rider levels, no experience required. Bring a friend for free.",
       joinup: "An introduction to natural horsemanship — learn to 'join up' a horse so it chooses to stay with you. Hands-on, no riding.",
-      lunge: "A hands-on ground session in the arena: guide the horse in a circle, read its body language and build clear communication. No riding.",
       masterclass: "Learn the finer art of grooming, with tips for Bali's damp, hot climate — from the stable manager, plus Q&A.",
+      groupclinic: "A hands-on session in leadership, communication and trust, taught through the horse. Working at liberty in the round pen, your group learns to read body language, hold presence and earn cooperation without force, the same skills that carry into any team or boardroom. Popular with women's groups, business teams and horse people alike. No riding experience needed. Up to 6 people, 1.5 hours, IDR 6,000,000 per session as a flat group rate.",
     }
   },
   id: {
     heroTitle1: "Pesan",
     heroTitle2: "pengalaman Anda",
     heroSub: "Tempat penyelamatan kuda & pusat berkuda",
+    moneyGoesTitle: "Ke mana uang Anda pergi",
+    moneyGoesBody: "Setiap pemesanan membantu seekor kuda. Salty Cowboys dimulai sebagai tempat penyelamatan kuda, dan hingga kini tetap begitu. Uang dari ride, pelajaran, atau sesi foto Anda kembali langsung ke paddock: perawatan dokter hewan, pakan, pemasangan sepatu kuda, dan kerja sabar yang panjang untuk memulihkan kesehatan kuda-kuda yang terlantar dan pensiun. Beberapa datang dalam kondisi kurus atau takut pada manusia. Di sini mereka diberi waktu, makanan, dan kepercayaan hingga cukup sehat untuk ditunggangi dengan lembut, atau sekadar menjalani hari-hari mereka dengan tenang. Dengan memesan bersama kami, Anda mendanai kesempatan kedua itu.",
     introPhotoshoots: "Foto-foto indah penuh cerita bersama kuda rescue kami di latar-latar terbaik kami. Sesi bersifat statis, jadi berkuda tidak termasuk, meski untuk sesi Pantai Anda akan berjalan bersama kuda menuju pasir. Bawa fotografer Anda sendiri, atau tambahkan fotografer Salty Cowboy pada pemesanan (paket mulai IDR 2,000,000, 20 foto hasil edit per jam). Sesi Pantai dihitung per kuda; sesi lain dihitung berdasarkan lokasi.",
-    introRides: "Nikmati keindahan Kedungu dari atas kuda: menyusuri sawah hijau, jalan-jalan desa yang tenang, hingga ke pantai, dengan pemandu kami mendampingi di setiap langkah. Berkuda saat matahari terbit atau terbenam terasa sangat magis. Harga per orang.",
+    introRides: "Nikmati keindahan Kedungu dari atas kuda: menyusuri sawah hijau, jalan-jalan desa yang tenang, hingga ke pantai, dengan pemandu kami mendampingi di setiap langkah. Berkuda di pagi hari atau saat golden hour terasa sangat magis. Harga per orang.",
     introLessons: "Kenali kuda kami dari dasar. Selain Masterclass Dressage, setiap sesi dilakukan tanpa berkuda, bekerja sama erat dengan kuda rescue kami untuk membangun kepercayaan, membaca bahasa tubuhnya, dan menemukan seni natural horsemanship.",
     chooseActivity: "Pilih aktivitas",
     chooseActivityHint: "Apa yang ingin Anda lakukan?",
@@ -726,14 +750,14 @@ const T = {
     aboutYou: "Tentang Anda",
     aboutRiders: "Tentang penunggang",
     matchHint: "Kami akan mencocokkan setiap penunggang dengan kuda yang ideal.",
-    whisperHintPre: "Kursus horse whisperer berlangsung selama 3 hari. ",
+    whisperHintPre: "Kursus horse whisperer berlangsung selama 4 hari. ",
     whisperHintLink: "Klik di sini",
     whisperHintPost: " untuk melihat lebih lanjut tentang program ini.",
-    pickCourseDays: "Pilih 3 hari untuk kursus",
-    daysSelected: "dari 3 hari dipilih",
+    pickCourseDays: "Pilih 4 hari untuk kursus",
+    daysSelected: "dari 4 hari dipilih",
     courseDaysTitle: "Hari kursus Anda",
-    courseWeekNote: "Kursus harus diselesaikan Senin sampai Sabtu dalam satu minggu yang sama.",
-    sessionNote: "Kursus ini berdurasi total 10 jam, terbagi menjadi 2 sesi 3 jam dan 1 sesi 3,5 jam. Hanya satu pemesanan kursus yang diterima per minggu.",
+    courseWeekNote: "Kursus berlangsung Senin, Selasa, Kamis, dan Jumat, semuanya dalam satu minggu yang sama.",
+    sessionNote: "Kursus ini berdurasi total 10 jam selama 4 hari: tiga sesi 3 jam ditambah satu sesi penutup 1 jam. Hanya satu pemesanan kursus yang diterima per minggu.",
     friendFree: "Ajak teman gratis",
     yourDetails: "Detail Anda",
     rider: "Penunggang",
@@ -746,10 +770,10 @@ const T = {
     weight: "Rentang berat",
     w1: "Di bawah 50 kg",
     w2: "50–70 kg",
-    w3: "70–78 kg",
-    w4: "Di atas 78 kg",
+    w3: "70–77 kg",
+    w4: "Di atas 77 kg",
     w3Title: "Melindungi punggung kuda kami",
-    w3Body: "Hanya 2 kuda kami yang mampu membawa penunggang di atas 70kg, jadi maksimal 2 penunggang di atas 70kg per pemesanan, hingga 78kg per orang. Jika kurang cocok untuk grup Anda, kami punya banyak aktivitas tanpa berkuda di menu 'Pelajaran'.",
+    w3Body: "Hanya 2 kuda kami yang mampu membawa penunggang di atas 70kg, jadi maksimal 2 penunggang di atas 70kg per pemesanan, hingga 77kg per orang. Jika kurang cocok untuk grup Anda, kami punya banyak aktivitas tanpa berkuda di menu 'Pelajaran'.",
     w4Title: "Mohon maaf, kami tidak dapat menerima berat ini",
     w4Body: "Ini bukan hal pribadi. Kami berkomitmen melindungi punggung kuda kami dari ketegangan, sehingga kami tidak dapat mencocokkan kuda dengan aman untuk berat ini. Anda sangat kami persilakan mencoba aktivitas tanpa berkuda di menu 'Pelajaran'.",
     minAgeTitle: "Usia minimum 8 tahun",
@@ -773,6 +797,7 @@ const T = {
     fullDay: "Sepanjang hari",
     matchedHorses: "Kuda yang cocok untuk Anda",
     notesLabel: "Ada yang perlu kami ketahui? (opsional)",
+    notesTimeHint: "Waktu di sini tidak cocok? Beri tahu kami di catatan.",
     notesPlaceholder: "Tulis pesan untuk Salty Cowboys",
     notice: "Tanggal dan waktu yang Anda pilih akan dikonfirmasi oleh Salty Cowboys melalui WhatsApp.",
     sendBtn: "Kirim permintaan via WhatsApp →",
@@ -803,18 +828,20 @@ const T = {
       dressage: "Masterclass Dressage (Les privat)",
       photo_beach: "Sesi Foto di Pantai",
       photo_stable: "Sesi Foto di Kandang",
+      photo_ricefield: "Sesi Foto di Sawah",
       photo_paddock: "Sesi Foto di Padang",
       photo_cottages: "Sesi Foto di Cottages",
       whisper: "Kursus Intensif Horse Whisperer",
       joinup: "Pelajaran Join Up",
-      lunge: "Pelajaran Lunge",
-      masterclass: "Masterclass Perawatan Kuda (Grooming basah atau kering)",
+      masterclass: "Grooming kuda (basah atau kering)",
+      groupclinic: "Klinik Kelompok",
     },
     categories: {
       "Photoshoots": "Sesi foto",
       "Rides": "Berkuda",
       "Lessons": "Pelajaran"
     },
+    byoPhotographer: "Bawa fotografer sendiri atau tambahkan fotografer Salty Cowboys",
     addonTitle: "Tambahkan fotografer Salty Cowboy:",
     photosWord: "foto",
     addonTiers: [
@@ -828,51 +855,56 @@ const T = {
     perBooking: "Harga per pemesanan, bukan per orang",
     flatPrice: "Harga tetap, bukan per orang",
     groups: {
-      beach: "Maks 5 penunggang, dipandu secara privat. Maks 78 kg per penunggang. Maks 2 penunggang di atas 70 kg.",
-      insta: "Maks 5 penunggang, dipandu secara privat. Maks 78 kg per penunggang. Maks 2 penunggang di atas 70 kg.",
-      dressage: "Pemesanan privat, 1 penunggang. Maks 78 kg per penunggang.",
+      beach: "Maks 5 penunggang, dipandu secara privat. Maks 77 kg per penunggang. Maks 2 penunggang di atas 70 kg.",
+      insta: "Maks 5 penunggang, dipandu secara privat. Maks 77 kg per penunggang. Maks 2 penunggang di atas 70 kg.",
+      dressage: "Pemesanan privat, 1 penunggang. Maks 77 kg per penunggang.",
       joinup: "Maks 2 orang. Harga per orang.",
-      lunge: "Maks 2 orang. Harga per orang.",
       masterclass: "Maks 2 orang.",
+      groupclinic: "Hingga 6 orang. Harga tetap per sesi, bukan per orang.",
       whisper: "Maks 2 orang.",
-      photo_beach: "Maks 3 orang total: hingga 2 orang menunggang kuda (satu kuda per orang), plus 1 orang berdiri di samping kuda. Harga per kuda.",
+      photo_beach: "Maks 3 orang total: hingga 2 orang menunggang kuda (satu kuda per orang), plus 1 orang berdiri di samping kuda. Maks 77 kg per penunggang. Harga per kuda.",
       photo_stable: "Maks 5 orang total, termasuk seluruh kru dan model.",
+      photo_ricefield: "Maks 5 orang total, termasuk seluruh kru dan model.",
       photo_paddock: "Maks 5 orang total, termasuk seluruh kru dan model.",
       photo_cottages: "Maks 6 orang per cottage. Pilihan cottage sesuai ketersediaan.",
     },
     prices: {
       beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,000,000" }],
-      insta: [{ l: "2 jam", v: "IDR 2,400,000" }],
+      insta: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,000,000" }, { l: "2 jam", v: "IDR 2,400,000" }],
       dressage: [{ l: "50 mnt", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
       photo_paddock: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "sesi", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
       joinup: [{ l: "1 jam", v: "IDR 2,500,000" }, { l: "1,5 jam", v: "IDR 3,150,000" }],
-      lunge: [{ l: "1 jam", v: "IDR 2,500,000" }, { l: "1,5 jam", v: "IDR 3,150,000" }],
-      masterclass: [{ l: "1 jam", v: "IDR 1,250,000" }],
+      masterclass: [{ l: "1 jam", v: "IDR 1,250,000" }, { l: "1,5 jam", v: "IDR 1,875,000" }],
+      groupclinic: [{ l: "1,5 jam", v: "IDR 6,000,000" }],
     },
     descs: {
       beach: "Berkuda dengan pemandu melewati sawah menuju pantai.",
-      insta: "Berkuda dengan fokus foto melewati desa, pantai, dan sawah dekat Kedungu — pemandu mengarahkan Anda ke spot terindah, paling pas saat matahari terbenam. Termasuk yang sama seperti ride standar.",
+      insta: "Berkuda dengan fokus foto melewati desa, pantai, dan sawah dekat Kedungu — pemandu mengarahkan Anda ke spot terindah, paling pas saat golden hour. Termasuk yang sama seperti ride standar.",
       dressage: "Pelajaran privat untuk semua tingkat — belajar dressage atau mengasah kemampuan Anda.",
       photo_beach: "Sesi foto statis untuk fashion, prewedding, atau pribadi. Termasuk 1 kuda yang telah dirawat plus bantuan staf, menyusuri rute 900m melewati sawah. Waktu dihitung sejak meninggalkan kandang. Catatan: kami mohon tidak ada pemotretan berpakaian renang, sebagai penghormatan terhadap budaya setempat — terima kasih atas pengertiannya!",
-      photo_stable: "Latar kandang bergaya Western yang rustic untuk fashion, prewedding, atau sesi pribadi. Termasuk 1 kuda yang telah dirawat plus bantuan tim.",
-      photo_paddock: "Latar padang terbuka dengan kuda yang merumput dan pemandangan sawah. Hanya lokasi, fotografer tidak termasuk. Dilarang memasuki padang dan menyentuh kuda.",
+      photo_stable: "Latar kandang bergaya Western yang rustic untuk fashion, prewedding, atau sesi pribadi. Termasuk bantuan tim.",
+      photo_ricefield: "Sesi privat bersama kuda Anda dengan latar terasering sawah Bali yang terbuka. Format sama seperti sesi foto Kandang kami, hanya berlokasi di area hijau, bukan di pekarangan kandang. Golden hour direkomendasikan untuk pencahayaan terbaik.",
+      photo_paddock: "Latar padang terbuka dengan kuda yang merumput. Hanya lokasi, fotografer tidak termasuk. Dilarang memasuki padang dan menyentuh kuda.",
       photo_cottages: "Interior cottage kayu rustic untuk pemotretan fashion, prewedding, atau pribadi. Harga per sesi (terkait blocking Airbnb). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage. Dilarang memasuki padang dan menyentuh kuda.",
-      whisper: "Belajar 'berbicara dengan kuda' melalui kesadaran tubuh, bahasa tubuh, dan energi. Termasuk 2 jam master class grooming/perawatan kuda dan membersihkan kandang.",
+      whisper: "Empat hari, sepuluh jam, satu pembelajaran mendalam tentang cara berpikir kuda. Berlangsung Senin, Selasa, Kamis, dan Jumat: tiga sesi 3 jam untuk membangun dasar, lalu satu sesi penutup 1 jam untuk merangkumnya. Setiap hari Anda memilih waktu mulai 8:30 atau 9:30 pagi. Anda akan belajar membaca kuda, mendapatkan kepercayaannya, dan menangkap isyarat halus yang membangun kemitraan sejati. Terbuka untuk semua tingkat penunggang, tanpa pengalaman yang diperlukan. Ajak teman gratis.",
       joinup: "Pengantar natural horsemanship — belajar 'join up' agar kuda memilih untuk tetap bersama Anda. Praktik langsung, tanpa berkuda.",
-      lunge: "Sesi darat langsung di arena: mengarahkan kuda berputar, membaca bahasa tubuhnya, dan membangun komunikasi yang jelas. Tanpa berkuda.",
       masterclass: "Pelajari seni grooming yang lebih halus, dengan tips untuk iklim Bali yang lembap dan panas — dari manajer kandang, plus tanya jawab.",
+      groupclinic: "Sesi praktik tentang kepemimpinan, komunikasi, dan kepercayaan, diajarkan melalui kuda. Bekerja secara liberty di round pen, kelompok Anda belajar membaca bahasa tubuh, menjaga kehadiran diri, dan mendapatkan kerja sama tanpa paksaan — keterampilan yang sama yang berguna dalam tim atau ruang rapat mana pun. Populer di kalangan kelompok wanita, tim bisnis, maupun pecinta kuda. Tidak perlu pengalaman berkuda. Hingga 6 orang, 1,5 jam, IDR 6.000.000 per sesi sebagai tarif kelompok tetap.",
     }
   },
   ru: {
     heroTitle1: "Забронируйте",
     heroTitle2: "впечатление",
     heroSub: "Приют для лошадей и центр верховой езды",
+    moneyGoesTitle: "Куда идут деньги",
+    moneyGoesBody: "Каждое бронирование помогает лошади. Salty Cowboys начинался как приют для лошадей и остаётся им до сих пор. Деньги от вашей прогулки, урока или фотосессии идут прямо на нужды пастбища: ветеринарный уход, корм, ковку и медленную, терпеливую работу по восстановлению здоровья брошенных и пенсионных лошадей. Некоторые из них прибывают истощёнными или напуганными людьми. Здесь им дают время, еду и доверие, пока они не станут достаточно здоровыми, чтобы на них можно было мягко кататься, или просто чтобы спокойно прожить остаток дней. Бронируя у нас, вы финансируете этот второй шанс.",
     introPhotoshoots: "Красивые, атмосферные снимки с нашими спасёнными лошадьми на самых живописных локациях. Съёмки статичные, поэтому верховая езда не входит, хотя для съёмки на пляже вы пройдёте рядом с лошадью к воде. Приходите со своим фотографом или добавьте фотографа Salty Cowboy к брони (пакеты от IDR 2,000,000, 20 обработанных фото в час). Съёмка на пляже — цена за лошадь; остальные — по локации.",
-    introRides: "Откройте для себя Кедунгу верхом: прогулка через изумрудные рисовые поля, тихие деревенские улочки и к пляжу, а наши грумы сопровождают вас на каждом шагу. Особенно волшебны прогулки на рассвете и закате. Цена за человека.",
+    introRides: "Откройте для себя Кедунгу верхом: прогулка через изумрудные рисовые поля, тихие деревенские улочки и к пляжу, а наши грумы сопровождают вас на каждом шагу. Особенно волшебны прогулки утром и в золотой час. Цена за человека.",
     introLessons: "Познакомьтесь с нашими лошадьми с самых азов. Кроме мастер-класса по выездке, все занятия проходят без седла: вы работаете бок о бок с нашими спасёнными лошадьми, выстраивая доверие, читая язык их тела и постигая тонкое искусство natural horsemanship.",
     chooseActivity: "Выберите занятие",
     chooseActivityHint: "Что бы вы хотели сделать?",
@@ -884,14 +916,14 @@ const T = {
     aboutYou: "О вас",
     aboutRiders: "О наездниках",
     matchHint: "Мы подберём каждому наезднику подходящую лошадь.",
-    whisperHintPre: "Курс «шепчущего с лошадьми» длится 3 дня. ",
+    whisperHintPre: "Курс «шепчущего с лошадьми» длится 4 дня. ",
     whisperHintLink: "Нажмите здесь",
     whisperHintPost: ", чтобы узнать больше об этой программе.",
-    pickCourseDays: "Выберите 3 дня для курса",
-    daysSelected: "из 3 дней выбрано",
+    pickCourseDays: "Выберите 4 дня для курса",
+    daysSelected: "из 4 дней выбрано",
     courseDaysTitle: "Дни вашего курса",
-    courseWeekNote: "Курс должен быть пройден с понедельника по субботу в течение одной недели.",
-    sessionNote: "Курс длится в общей сложности 10 часов: 2 занятия по 3 часа и 1 занятие на 3,5 часа. В неделю принимается только одна бронь на курс.",
+    courseWeekNote: "Курс проходит по понедельникам, вторникам, четвергам и пятницам, всё в течение одной недели.",
+    sessionNote: "Курс длится в общей сложности 10 часов за 4 дня: три занятия по 3 часа и одно заключительное занятие на 1 час. В неделю принимается только одна бронь на курс.",
     friendFree: "Приведите друга бесплатно",
     yourDetails: "Ваши данные",
     rider: "Наездник",
@@ -904,10 +936,10 @@ const T = {
     weight: "Весовая категория",
     w1: "До 50 кг",
     w2: "50–70 кг",
-    w3: "70–78 кг",
-    w4: "Более 78 кг",
+    w3: "70–77 кг",
+    w4: "Более 77 кг",
     w3Title: "Бережём спины наших лошадей",
-    w3Body: "Только 2 наши лошади могут нести наездников тяжелее 70 кг, поэтому в одной броне не более 2 наездников тяжелее 70 кг, до 78 кг каждый. Если это не подходит вашей группе, у нас много занятий без седла в разделе «Уроки».",
+    w3Body: "Только 2 наши лошади могут нести наездников тяжелее 70 кг, поэтому в одной броне не более 2 наездников тяжелее 70 кг, до 77 кг каждый. Если это не подходит вашей группе, у нас много занятий без седла в разделе «Уроки».",
     w4Title: "Извините, мы не можем принять этот вес",
     w4Body: "Ничего личного. Мы бережём спины наших лошадей от перегрузки, поэтому не можем безопасно подобрать лошадь для этого веса. Будем рады видеть вас на занятиях без седла в разделе «Уроки».",
     minAgeTitle: "Минимальный возраст: 8 лет",
@@ -931,6 +963,7 @@ const T = {
     fullDay: "Весь день",
     matchedHorses: "Подобранные лошади",
     notesLabel: "Что-нибудь ещё? (необязательно)",
+    notesTimeHint: "Если время здесь не подходит, напишите об этом в примечаниях.",
     notesPlaceholder: "Напишите сообщение для Salty Cowboys",
     notice: "Выбранные вами дата и время будут подтверждены Salty Cowboys через WhatsApp.",
     sendBtn: "Отправить запрос в WhatsApp →",
@@ -961,18 +994,20 @@ const T = {
       dressage: "Мастер-класс по выездке (частный урок)",
       photo_beach: "Фотосессия на пляже",
       photo_stable: "Фотосессия в конюшне",
+      photo_ricefield: "Фотосессия в рисовых полях",
       photo_paddock: "Фотосессия в загоне",
       photo_cottages: "Фотосессия у коттеджей",
       whisper: "Интенсивный курс «шепчущего с лошадьми»",
       joinup: "Урок Join Up",
-      lunge: "Урок на корде",
-      masterclass: "Мастер-класс по уходу за лошадью (груминг влажный или сухой)",
+      masterclass: "Груминг лошади (влажный или сухой)",
+      groupclinic: "Групповая клиника",
     },
     categories: {
       "Photoshoots": "Фотосессии",
       "Rides": "Прогулки",
       "Lessons": "Уроки"
     },
+    byoPhotographer: "Приходите со своим фотографом или добавьте фотографа Salty Cowboys",
     addonTitle: "Добавить фотографа Salty Cowboy:",
     photosWord: "фото",
     addonTiers: [
@@ -986,43 +1021,46 @@ const T = {
     perBooking: "Цена за бронирование, а не за человека",
     flatPrice: "Фиксированная цена, не за человека",
     groups: {
-      beach: "Максимум 5 наездников, частное сопровождение. Максимум 78 кг на наездника. Максимум 2 наездника тяжелее 70 кг.",
-      insta: "Максимум 5 наездников, частное сопровождение. Максимум 78 кг на наездника. Максимум 2 наездника тяжелее 70 кг.",
-      dressage: "Частное бронирование, 1 наездник. Максимум 78 кг на наездника.",
+      beach: "Максимум 5 наездников, частное сопровождение. Максимум 77 кг на наездника. Максимум 2 наездника тяжелее 70 кг.",
+      insta: "Максимум 5 наездников, частное сопровождение. Максимум 77 кг на наездника. Максимум 2 наездника тяжелее 70 кг.",
+      dressage: "Частное бронирование, 1 наездник. Максимум 77 кг на наездника.",
       joinup: "Максимум 2 человека. Цена за человека.",
-      lunge: "Максимум 2 человека. Цена за человека.",
       masterclass: "Максимум 2 человека.",
+      groupclinic: "До 6 человек. Фиксированная цена за сессию, не за человека.",
       whisper: "Максимум 2 человека.",
-      photo_beach: "Максимум 3 человека: до 2 верхом (по одной лошади на каждого) плюс 1 человек рядом с лошадью. Цена за лошадь.",
+      photo_beach: "Максимум 3 человека: до 2 верхом (по одной лошади на каждого) плюс 1 человек рядом с лошадью. Максимум 77 кг на верхового. Цена за лошадь.",
       photo_stable: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
+      photo_ricefield: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
       photo_paddock: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
       photo_cottages: "Максимум 6 человек на коттедж. Выбор коттеджа по наличию.",
     },
     prices: {
       beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,000,000" }],
-      insta: [{ l: "2 ч", v: "IDR 2,400,000" }],
+      insta: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,000,000" }, { l: "2 ч", v: "IDR 2,400,000" }],
       dressage: [{ l: "50 мин", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
       photo_paddock: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "сессия", v: "IDR 4,500,000" }],
       whisper: [{ l: "всего", v: "IDR 22,500,000" }],
       joinup: [{ l: "1 ч", v: "IDR 2,500,000" }, { l: "1,5 ч", v: "IDR 3,150,000" }],
-      lunge: [{ l: "1 ч", v: "IDR 2,500,000" }, { l: "1,5 ч", v: "IDR 3,150,000" }],
-      masterclass: [{ l: "1 ч", v: "IDR 1,250,000" }],
+      masterclass: [{ l: "1 ч", v: "IDR 1,250,000" }, { l: "1,5 ч", v: "IDR 1,875,000" }],
+      groupclinic: [{ l: "1,5 ч", v: "IDR 6,000,000" }],
     },
     descs: {
       beach: "Прогулка с сопровождающим через рисовые поля к пляжу.",
-      insta: "Прогулка с акцентом на фото через деревню, пляж и рисовые поля возле Кедунгу — грумы приводят вас к самым живописным местам, лучше всего на закате. Те же включения, что и в обычной прогулке.",
+      insta: "Прогулка с акцентом на фото через деревню, пляж и рисовые поля возле Кедунгу — грумы приводят вас к самым живописным местам, лучше всего в золотой час. Те же включения, что и в обычной прогулке.",
       dressage: "Индивидуальные занятия для любого уровня — освойте выездку или отточите навыки.",
       photo_beach: "Статичная съёмка для fashion, love story или личных сессий. Включает 1 ухоженную лошадь и помощь персонала, маршрут 900 м через рисовые поля. Время отсчитывается с момента выхода из конюшни. Обратите внимание: мы просим не проводить съёмки в купальниках — из уважения к местной культуре, спасибо за понимание!",
-      photo_stable: "Рустикальный фон конюшни в western-стиле для fashion, love story или личных съёмок. Включает 1 ухоженную лошадь и помощь команды.",
-      photo_paddock: "Открытый загон с пасущимися лошадьми и видом на рисовые поля. Только локация, фотограф не входит. Заходить в загоны и трогать лошадей нельзя.",
+      photo_stable: "Рустикальный фон конюшни в western-стиле для fashion, love story или личных съёмок. Включает помощь команды.",
+      photo_ricefield: "Приватная съёмка с лошадью на фоне открытых рисовых террас Бали. Тот же формат, что и наша съёмка в конюшне, только на фоне зелени вместо двора конюшни. Для лучшего света рекомендуем золотой час.",
+      photo_paddock: "Открытый загон с пасущимися лошадьми. Только локация, фотограф не входит. Заходить в загоны и трогать лошадей нельзя.",
       photo_cottages: "Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена за сессию (связано с блокировкой Airbnb). Только локация, без лошадей. Съёмка проходит внутри коттеджа. Заходить в загоны и трогать лошадей нельзя.",
-      whisper: "Научитесь «говорить по-лошадиному» через осознание тела, язык тела и энергию. Включает 2 часа мастер-класса по грумингу/уходу и уборку.",
+      whisper: "Четыре дня, десять часов, одно глубокое погружение в то, как мыслят лошади. Курс проходит по понедельникам, вторникам, четвергам и пятницам: три трёхчасовых занятия закладывают основу, а завершающее часовое занятие сводит всё воедино. Каждый день вы выбираете начало в 8:30 или 9:30 утра. Вы научитесь читать лошадь, заслуживать её доверие и улавливать тонкие сигналы, которые создают настоящее партнёрство. Открыт для наездников любого уровня, опыт не требуется. Приведите друга бесплатно.",
       joinup: "Введение в natural horsemanship — научитесь делать join up, чтобы лошадь сама выбирала оставаться с вами. Практика, без верховой езды.",
-      lunge: "Практическое наземное занятие на арене: ведите лошадь по кругу, читайте язык её тела и выстраивайте чёткое общение. Без верховой езды.",
       masterclass: "Освойте тонкое искусство груминга с советами для влажного и жаркого климата Бали — от менеджера конюшни, плюс вопросы и ответы.",
+      groupclinic: "Практическое занятие по лидерству, коммуникации и доверию через работу с лошадью. Работая на свободе в круглом манеже, ваша группа учится читать язык тела, удерживать присутствие и добиваться сотрудничества без принуждения — те же навыки, что пригодятся в любой команде или на переговорах. Популярно среди женских групп, бизнес-команд и любителей лошадей. Опыт верховой езды не требуется. До 6 человек, 1,5 часа, IDR 6 000 000 за сессию как фиксированная групповая цена.",
     }
   }
 };
@@ -1406,6 +1444,7 @@ html, body { background: #0a0a0a; }
 .perm-text { font-size: 12px; color: #444444; line-height: 1.5; }
 
 /* ── NOTES ── */
+.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin: -6px 0 8px; line-height: 1.4; }
 .notes-area {
   width: 100%;
   min-height: 84px;
@@ -1836,6 +1875,7 @@ html, body { background: #0a0a0a; }
   letter-spacing: 0.2px;
 }
 .session-note { font-size: 11.5px; color: var(--dusk); margin-top: 6px; line-height: 1.45; }
+.byo-note { font-size: 11.5px; color: var(--dusk); margin-top: 6px; line-height: 1.45; font-style: italic; }
 .sat-note {
   font-size: 11.5px;
   color: #565656;
@@ -1884,6 +1924,27 @@ html, body { background: #0a0a0a; }
 }
 .price-reveal-value { font-family: var(--display); font-style: italic; font-size: 22px; font-weight: 600; }
 .price-reveal-basis { font-size: 11.5px; color: rgba(255,255,255,0.65); }
+
+/* Mission statement shown once at the top of the landing (activity) screen. */
+.money-goes {
+  background: var(--earth);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  animation: fadeUp 0.3s ease both;
+}
+.money-goes-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.money-goes-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.75);
+}
 
 /* Category intro shown above the activity cards on step 1. */
 .cat-intro {
@@ -1941,7 +2002,7 @@ function buildWhatsAppMessage({
   selectedTime,
   numPeople,
   riders,
-  isRiding,
+  showWeight,
   notes,
   photographerTier,
   grooming
@@ -1973,17 +2034,17 @@ function buildWhatsAppMessage({
     let line = "• " + who;
     if (r.age) line += ", age " + r.age;
     if (r.experience) parts.push(T.en[r.experience]); // experience label in English
-    if (isRiding && r.weight) parts.push(T.en[r.weight]);
+    if (showWeight && r.weight) parts.push(T.en[r.weight]);
     if (parts.length) line += " — " + parts.join(", ");
     if (!isNaN(ageNum) && ageNum < 18) line += " (parent/guardian permission confirmed)";
     lines.push(line);
   });
   // Simone only has 2 horses that can carry a rider over 70kg, so call it out.
-  if (isRiding) {
+  if (showWeight) {
     const heavy = riders.filter(r => r.weight === "w3").length;
     if (heavy > 0) lines.push("⚠️ " + heavy + " rider(s) over 70kg — needs a heavier-weight horse");
   }
-  if (isCourse) lines.push("Course must run Mon–Sat within one week");
+  if (isCourse) lines.push("Course runs Mon, Tue, Thu & Fri within one week");
   lines.push("");
   lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "—"));
   lines.push("");
@@ -2031,14 +2092,17 @@ function App() {
   const [copied, setCopied] = useState(false);
   const actObj = ALL_ACTIVITIES.find(a => a.id === activity);
   const isPhotoshoot = actObj?.photoshoot === true;
-  const isRiding = actObj?.riding === true; // weight rules apply to these only
+  const isRiding = actObj?.riding === true;
+  // Weight rules apply to every riding activity, plus Beach Photoshoot since
+  // riders mount a horse for that shoot. No other photoshoot involves mounting.
+  const showWeight = isRiding || actObj?.needsWeight === true;
   const isWhisper = activity === "whisper";
   // "Rider" only for the Rides category; Photoshoots and Lessons say "Person".
   const actCategory = actObj ? (ACTIVITIES.find(c => c.items.some(it => it.id === actObj.id)) || {}).category : null;
   const personNoun = actCategory === "Rides" ? t.rider : t.personLabel;
   const isCourse = actObj?.course === true;
   const needsGrooming = actObj?.grooming === true;
-  const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 3 days
+  const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 4 days
 
   function initRiders(n) {
     const count = parseInt(n, 10);
@@ -2078,11 +2142,12 @@ function App() {
   const step = screen === "activity" ? 1 : screen === "riders" ? 2 : screen === "calendar" ? 3 : 4;
 
   // ── Weight + age rules ──
-  // Max rider weight is 78kg (w4 is over that, so it blocks). Only 2 horses can
-  // carry a rider over 70kg, so at most 2 riders may sit in the 70–78kg band.
-  // Neither rule applies to photoshoots or off-saddle lessons.
-  const anyOverMax = isRiding && riders.some(r => r.weight === "w4");
-  const heavyCount = isRiding ? riders.filter(r => r.weight === "w3").length : 0;
+  // Max rider weight is 77kg (w4 is over that, so it blocks). Only 2 horses can
+  // carry a rider over 70kg, so at most 2 riders may sit in the 70–77kg band.
+  // Applies to riding activities and Beach Photoshoot (riders mount a horse);
+  // not to off-saddle lessons or the other, static photoshoots.
+  const anyOverMax = showWeight && riders.some(r => r.weight === "w4");
+  const heavyCount = showWeight ? riders.filter(r => r.weight === "w3").length : 0;
   const tooManyHeavy = heavyCount > 2;
   const minAge = actObj?.minAge || 0;
   const anyUnderMinAge = minAge > 0 && riders.some(r => {
@@ -2094,7 +2159,7 @@ function App() {
     const ageNum = parseInt(r.age, 10);
     const ageOk = isPhotoshoot || (r.age !== "" && !isNaN(ageNum) && ageNum > 0 && ageNum < 120);
     const minorOk = isNaN(ageNum) || ageNum >= 18 || r.permission;
-    return r.name.trim() && ageOk && (!isRiding || r.weight) && (isPhotoshoot || r.experience) && minorOk;
+    return r.name.trim() && ageOk && (!showWeight || r.weight) && (isPhotoshoot || r.experience) && minorOk;
   });
   const ridersComplete = ridersFilled && !anyOverMax && !tooManyHeavy && !anyUnderMinAge;
   const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;
@@ -2102,11 +2167,14 @@ function App() {
   const firstDay = getFirstDay(calYear, calMonth);
   // The sanctuary runs Monday to Saturday; Sundays are closed. Saturday
   // afternoons are closed too, which is handled at the time-slot level.
-  // A course must sit inside one Mon–Sat week, so once the first day is picked
-  // every day outside that week is greyed out.
+  // The Horse Whisperer Course only runs Monday, Tuesday, Thursday and Friday
+  // (no Wednesday or Saturday), and must sit inside one Mon–Sat week, so once
+  // the first day is picked every day outside that week is greyed out.
   function isAvailableDay(day) {
     const d = new Date(calYear, calMonth, day);
-    if (d.getDay() === 0) return false;
+    const dow = d.getDay();
+    if (dow === 0) return false;
+    if (isWhisper && (dow === 3 || dow === 6)) return false;
     if (isCourse && selectedDates.length > 0) {
       if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;
     }
@@ -2163,7 +2231,7 @@ function App() {
   // Pricing multipliers vary by category:
   //   Rides                  → per person, multiply by group size
   //   Beach shoot (perHorse) → per horse, capped at 2 (Simone's max mounted)
-  //   Join Up, Lunge (perPerson) → per person, multiply by group size
+  //   Join Up (perPerson)     → per person, multiply by group size
   //   Everything else        → flat / per booking
   const peopleCount = numPeople ? parseInt(numPeople, 10) : 0;
   const unitPrice = selPrice ? (parseInt(String(selPrice.v).replace(/[^0-9]/g, ""), 10) || 0) : 0;
@@ -2207,7 +2275,7 @@ function App() {
       selectedTime,
       numPeople,
       riders,
-      isRiding,
+      showWeight,
       notes,
       photographerTier: isPhotoshoot ? photographerTier : null,
       grooming: needsGrooming ? grooming : null
@@ -2260,7 +2328,13 @@ function App() {
     className: "main"
   }, screen === "activity" && /*#__PURE__*/React.createElement("div", {
     className: "body fu has-dock"
-  }, /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "money-goes"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "money-goes-title"
+  }, t.moneyGoesTitle), /*#__PURE__*/React.createElement("p", {
+    className: "money-goes-body"
+  }, t.moneyGoesBody)), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
   }, t.chooseActivity), /*#__PURE__*/React.createElement("div", {
     className: "cat-tabs"
@@ -2315,7 +2389,9 @@ function App() {
     className: "act-desc"
   }, t.descs[item.id]) : null, item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
     className: "session-note"
-  }, t.sessionNote + " " + t.courseWeekNote)), /*#__PURE__*/React.createElement("div", {
+  }, t.sessionNote + " " + t.courseWeekNote), item.photoshoot && /*#__PURE__*/React.createElement("div", {
+    className: "byo-note"
+  }, t.byoPhotographer)), /*#__PURE__*/React.createElement("div", {
     className: "act-check"
   }, "✓")))))), screen === "activity" && /*#__PURE__*/React.createElement("div", {
     className: "cta-dock"
@@ -2342,7 +2418,13 @@ function App() {
       marginTop: -10,
       marginBottom: 4
     }
-  }, t.sessionNote + " " + t.courseWeekNote), /*#__PURE__*/React.createElement("div", {
+  }, t.sessionNote + " " + t.courseWeekNote), isPhotoshoot && /*#__PURE__*/React.createElement("p", {
+    className: "section-hint",
+    style: {
+      marginTop: -10,
+      marginBottom: 4
+    }
+  }, t.byoPhotographer), /*#__PURE__*/React.createElement("div", {
     className: "fu"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category",
@@ -2430,7 +2512,7 @@ function App() {
       className: "ww-title"
     }, t.minAgeTitle), /*#__PURE__*/React.createElement("div", {
       className: "ww-body"
-    }, t.minAgeBody))))), isRiding && /*#__PURE__*/React.createElement("div", {
+    }, t.minAgeBody))))), showWeight && /*#__PURE__*/React.createElement("div", {
       className: "rider-field"
     }, /*#__PURE__*/React.createElement("div", {
       className: "field-label"
@@ -2612,7 +2694,9 @@ function App() {
     style: {
       marginTop: 0
     }
-  }, t.notesLabel), /*#__PURE__*/React.createElement("textarea", {
+  }, t.notesLabel), /*#__PURE__*/React.createElement("div", {
+    className: "notes-time-hint"
+  }, t.notesTimeHint), /*#__PURE__*/React.createElement("textarea", {
     className: "notes-area",
     value: notes,
     placeholder: t.notesPlaceholder,
