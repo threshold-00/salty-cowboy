@@ -2,6 +2,16 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 15 Aug 2026 — Notes copy update + ride slot reconciliation
+
+- Reconciled the ride calendar slots against spec: Instagram ride 4:00pm (2hr) / 4:30pm (1.5hr) / 5:00pm (1hr), Beach & Rice Field ride 4:30pm (1.5hr) / 5:00pm (1hr). Checked the live code first rather than assuming; it already matched exactly, so no code change was needed here, just confirmation via `tests/assert.js`'s existing `RIDE_SLOTS` assertions.
+- Replaced the notes-section helper text (heading unchanged: "Anything we should know? (optional)"). New helper, all three languages: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know below."
+
+### Testing
+- 127 / 127 string assertions pass
+- jsdom render passes with zero console errors
+- Verified live: Beach & Rice Field Ride (1hr) shows only the 5:00pm slot; new notes helper text renders correctly.
+
 ## 15 Aug 2026 — Wide operational rules pass: reorder, new activities, weight/wording changes
 
 A large batch of changes across every category. Full detail below; see CLAUDE.md "Open items" for gaps that need Simone's input before they're complete.

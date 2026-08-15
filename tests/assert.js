@@ -154,9 +154,9 @@ has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.create
 has('byo note on step2',           'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",');
 
 // ─── Notes section: "times not suitable" hint, all activities ────────────
-has('en notesTimeHint key',        'notesTimeHint: "Times here not suitable? Let us know in the notes."');
-has('id notesTimeHint key',        'notesTimeHint: "Waktu di sini tidak cocok? Beri tahu kami di catatan."');
-has('ru notesTimeHint key',        'notesTimeHint: "Если время здесь не подходит, напишите об этом в примечаниях."');
+has('en notesTimeHint key',        'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know below."');
+has('id notesTimeHint key',        'notesTimeHint: "Kami ingin Anda mendapatkan pengalaman yang berkesan. Jika waktu yang tersedia tidak sesuai, atau Anda memiliki permintaan tambahan, silakan beri tahu kami di bawah."');
+has('ru notesTimeHint key',        'notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом ниже."');
 has('notesTimeHint rendered near notes area', 'className: "notes-time-hint"\n  }, t.notesTimeHint), /*#__PURE__*/React.createElement("textarea"');
 
 // ─── Main page: "Where the money goes" bio copy ───────────────────────────
