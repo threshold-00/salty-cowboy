@@ -580,6 +580,10 @@ const T = {
     numPeople: "Number of people",
     continue: "Continue →",
     next: "Next →",
+    bookActivity: "Book →",
+    stepHeading1: "1. Book a date and time",
+    stepHeading2: "2. Who's coming?",
+    stepHeading3: "3. Your booking summary",
     detailsHint: "Choose your options and tell us who's coming.",
     aboutYou: "About you",
     aboutRiders: "About the riders",
@@ -648,8 +652,9 @@ const T = {
     sDuration: "Duration",
     sDateTime: "Date & time",
     sRiders: "Riders",
+    sTotal: "Total",
     sStatus: "Status",
-    awaiting: "⏳ Awaiting approval",
+    awaiting: "Awaiting approval",
     person: "person",
     people: "people",
     horse: "horse",
@@ -746,6 +751,10 @@ const T = {
     numPeople: "Jumlah orang",
     continue: "Lanjutkan →",
     next: "Berikutnya →",
+    bookActivity: "Pesan →",
+    stepHeading1: "1. Pilih tanggal dan waktu",
+    stepHeading2: "2. Siapa yang ikut?",
+    stepHeading3: "3. Ringkasan pemesanan Anda",
     detailsHint: "Pilih opsi Anda dan beri tahu kami siapa yang ikut.",
     aboutYou: "Tentang Anda",
     aboutRiders: "Tentang penunggang",
@@ -814,8 +823,9 @@ const T = {
     sDuration: "Durasi",
     sDateTime: "Tanggal & waktu",
     sRiders: "Penunggang",
+    sTotal: "Total",
     sStatus: "Status",
-    awaiting: "⏳ Menunggu persetujuan",
+    awaiting: "Menunggu persetujuan",
     person: "orang",
     people: "orang",
     horse: "kuda",
@@ -912,6 +922,10 @@ const T = {
     numPeople: "Количество человек",
     continue: "Продолжить →",
     next: "Далее →",
+    bookActivity: "Забронировать →",
+    stepHeading1: "1. Выберите дату и время",
+    stepHeading2: "2. Кто участвует?",
+    stepHeading3: "3. Итоги вашего бронирования",
     detailsHint: "Выберите параметры и расскажите, кто участвует.",
     aboutYou: "О вас",
     aboutRiders: "О наездниках",
@@ -980,8 +994,9 @@ const T = {
     sDuration: "Длительность",
     sDateTime: "Дата и время",
     sRiders: "Наездники",
+    sTotal: "Итого",
     sStatus: "Статус",
-    awaiting: "⏳ Ожидает подтверждения",
+    awaiting: "Ожидает подтверждения",
     person: "чел.",
     people: "чел.",
     horse: "лошадь",
@@ -1091,7 +1106,7 @@ html, body { background: #0a0a0a; }
   /* Display face, used by the hero title and every section heading.
      Swap this one line (plus the Google Fonts <link> in <head>) to
      re-typeset the headings. */
-  --display: 'Cormorant Garamond', serif;
+  --display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;
 }
 
 .app {
@@ -1206,7 +1221,6 @@ html, body { background: #0a0a0a; }
   font-family: var(--display);
   font-size: 26px;
   color: var(--sand);
-  font-style: italic;
   line-height: 1.2;
   margin-bottom: 4px;
   position: relative;
@@ -1234,7 +1248,7 @@ html, body { background: #0a0a0a; }
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 10px; font-weight: 600;
-  border: 1.5px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
   color: rgba(255,255,255,0.3);
   flex-shrink: 0;
   transition: all 0.3s;
@@ -1254,7 +1268,6 @@ html, body { background: #0a0a0a; }
 .section-title {
   font-family: var(--display);
   font-size: 22px;
-  font-style: italic;
   color: var(--earth);
   margin-bottom: 4px;
 }
@@ -1297,9 +1310,9 @@ html, body { background: #0a0a0a; }
 /* ── ACTIVITY GRID ── */
 .cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 0 14px; margin: 2px 0; scrollbar-width: none; }
 .cat-tabs::-webkit-scrollbar { display: none; }
-.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.15); background: rgba(0,0,0,0.05); color: #5c5c5c; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
-.cat-tab:hover { border-color: rgba(0,0,0,0.5); }
-.cat-tab.active { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+.cat-tab:hover { border-color: var(--clay); }
+.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }
 .act-category {
   font-size: 10px;
   letter-spacing: 2px;
@@ -1313,23 +1326,42 @@ html, body { background: #0a0a0a; }
 
 .act-card {
   background: #fff;
-  border: 1.5px solid var(--fog);
+  border: 1px solid var(--fog);
   border-radius: 14px;
-  padding: 14px 16px;
+  padding: 20px 18px;
   margin-bottom: 8px;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  position: relative;
 }
 .act-card:hover   { border-color: var(--clay); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
 .act-card.selected{ border-color: var(--clay); background: #f7f7f7; }
-.act-icon { font-size: 22px; width: 36px; text-align: center; flex-shrink: 0; }
-.act-name { font-size: 14px; font-weight: 500; color: var(--earth); }
+.act-image { width: 100%; height: 140px; border-radius: 14px; background: var(--fog); margin-bottom: 8px; }
+.act-name { font-size: 22px; font-weight: 500; color: var(--earth); }
 .act-meta { font-size: 11px; color: var(--dusk); margin-top: 2px; }
+.act-book-btn {
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 9px 18px;
+  border-radius: 12px;
+  border: none;
+  background: var(--clay);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.act-book-btn:hover { background: #000000; }
 .act-check {
-  margin-left: auto;
+  position: absolute;
+  top: 14px;
+  right: 14px;
   width: 20px; height: 20px;
   border-radius: 50%;
   background: var(--clay);
@@ -1346,7 +1378,7 @@ html, body { background: #0a0a0a; }
 /* ── OPTION PILLS ── */
 .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .pill {
-  padding: 9px 16px;
+  padding: 9.5px 16.5px;
   border: 1.5px solid var(--fog);
   border-radius: 24px;
   font-size: 13px;
@@ -1362,9 +1394,9 @@ html, body { background: #0a0a0a; }
 /* ── RIDER CARDS ── */
 .rider-card {
   background: #fff;
-  border: 1.5px solid var(--fog);
+  border: 1px solid var(--fog);
   border-radius: 14px;
-  padding: 16px;
+  padding: 23px 16.5px 25px;
   margin-bottom: 12px;
 }
 .rider-label {
@@ -1386,7 +1418,7 @@ html, body { background: #0a0a0a; }
 }
 .field-pills { display: flex; flex-wrap: wrap; gap: 6px; }
 .field-pill {
-  padding: 7px 13px;
+  padding: 7.5px 13.5px;
   border: 1.5px solid var(--fog);
   border-radius: 20px;
   font-size: 12px;
@@ -1402,7 +1434,7 @@ html, body { background: #0a0a0a; }
 /* ── TEXT INPUTS ── */
 .text-input {
   width: 100%;
-  padding: 11px 13px;
+  padding: 11.5px 13.5px;
   border: 1.5px solid var(--fog);
   border-radius: 10px;
   font-family: 'Outfit', sans-serif;
@@ -1462,7 +1494,7 @@ html, body { background: #0a0a0a; }
   margin-bottom: 16px;
 }
 .notes-area:focus { border-color: var(--clay); }
-.notes-area::placeholder { color: #b4b4b4; }
+.notes-area::placeholder { color: #999999; font-size: 11.5px; }
 
 /* ── CTA ── */
 .cta {
@@ -1474,7 +1506,6 @@ html, body { background: #0a0a0a; }
   border: none;
   border-radius: 14px;
   font-family: var(--display);
-  font-style: italic;
   font-size: 18px;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
@@ -1496,6 +1527,33 @@ html, body { background: #0a0a0a; }
 }
 .back-link:hover { color: var(--earth); }
 
+/* Decorative header band on step 2: faint category image (~20% visible)
+   behind a grey overlay, purely decorative, matching the current category's
+   image already used on step 1's cat-intro. */
+.detail-header-band {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 20px 20px 18px;
+  margin-bottom: 18px;
+  background-size: cover;
+  background-position: center;
+}
+.detail-header-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(20,20,20,0.8);
+}
+.detail-header-band .back-link,
+.detail-header-band .section-title {
+  position: relative;
+  z-index: 1;
+}
+.detail-header-band .back-link { color: rgba(255,255,255,0.75); margin-bottom: 14px; }
+.detail-header-band .back-link:hover { color: #fff; }
+.detail-header-band .section-title { color: #fff; margin-bottom: 0; }
+
 /* ── CALENDAR SCREEN ── */
 .cal-header {
   background: var(--earth);
@@ -1503,12 +1561,12 @@ html, body { background: #0a0a0a; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 14px 14px 0 0;
 }
 .cal-month {
   font-family: var(--display);
   font-size: 18px;
   color: var(--sand);
-  font-style: italic;
 }
 .cal-nav {
   background: none;
@@ -1563,9 +1621,9 @@ html, body { background: #0a0a0a; }
 }
 .cal-day.available:hover { background: rgba(255,255,255,0.28); }
 .cal-day.selected {
-  background: var(--clay-dk) !important;
-  color: #111 !important;
-  border-color: var(--clay-dk) !important;
+  background: #fff !important;
+  color: var(--earth) !important;
+  border-color: rgba(255,255,255,0.3) !important;
 }
 
 .cal-legend {
@@ -1574,6 +1632,7 @@ html, body { background: #0a0a0a; }
   display: flex;
   gap: 16px;
   border-top: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0 0 14px 14px;
 }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.4); }
 .legend-dot {
@@ -1587,14 +1646,13 @@ html, body { background: #0a0a0a; }
 .sel-title {
   font-family: var(--display);
   font-size: 18px;
-  font-style: italic;
   color: var(--earth);
   margin-bottom: 14px;
 }
 .time-cards { display: flex; gap: 10px; margin-bottom: 20px; }
 .time-card {
   flex: 1;
-  padding: 14px;
+  padding: 14.5px;
   background: #fff;
   border: 1.5px solid var(--fog);
   border-radius: 12px;
@@ -1605,7 +1663,7 @@ html, body { background: #0a0a0a; }
 .time-card:hover    { border-color: var(--clay); }
 .time-card.selected { background: var(--earth); border-color: var(--earth); }
 .time-card.selected .time-main { color: var(--sand); }
-.time-card.selected .time-sub  { color: rgba(255,255,255,0.5); }
+.time-card.selected .time-sub  { color: var(--sand); font-size: 14px; }
 .time-main { font-size: 16px; font-weight: 500; color: var(--earth); }
 .time-sub  { font-size: 11px; color: var(--dusk); margin-top: 2px; }
 
@@ -1669,18 +1727,17 @@ html, body { background: #0a0a0a; }
   text-align: center;
 }
 .confirm-icon { font-size: 54px; margin-bottom: 16px; }
-.copy-box { margin: 8px 0 22px; text-align: left; }
-.copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 16px; margin-bottom: 8px; }
-.copy-text { white-space: pre-wrap; word-break: break-word; font-size: 12.5px; line-height: 1.5; color: var(--earth); background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 14px; max-height: 210px; overflow-y: auto; }
-.copy-btn { margin-top: 10px; width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--clay); background: rgba(0,0,0,0.10); color: var(--clay); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
-.copy-btn:hover { background: rgba(0,0,0,0.18); }
-.copy-btn.done { background: var(--clay); color: #fff; }
+.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }
+.copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 16px; margin-bottom: 8px; }
+.copy-text { white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }
+.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
+.copy-btn:hover { background: rgba(0,0,0,0.05); }
+.copy-btn.done { background: var(--clay); color: #fff; border-color: var(--clay); }
 .copy-fallback { margin-top: 12px; font-size: 12.5px; line-height: 1.55; color: var(--dusk); }
 .copy-fallback a { color: var(--clay); font-weight: 600; text-decoration: none; white-space: nowrap; }
 .confirm-title {
   font-family: var(--display);
-  font-size: 21px;
-  font-style: italic;
+  font-size: 22px;
   color: var(--earth);
   line-height: 1.3;
   margin-bottom: 8px;
@@ -1693,9 +1750,9 @@ html, body { background: #0a0a0a; }
 }
 .confirm-summary {
   background: #fff;
-  border: 1.5px solid var(--fog);
+  border: 1px solid var(--fog);
   border-radius: 14px;
-  padding: 18px;
+  padding: 18.5px;
   text-align: left;
   margin-bottom: 24px;
 }
@@ -1710,6 +1767,18 @@ html, body { background: #0a0a0a; }
 .sum-row:last-child { border-bottom: none; }
 .sum-key { color: var(--dusk); }
 .sum-val { color: var(--earth); font-weight: 500; text-align: right; max-width: 60%; }
+.reset-link {
+  background: none;
+  border: none;
+  color: var(--dusk);
+  font-size: 14px;
+  font-family: 'Outfit', sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 8px;
+}
+.reset-link:hover { color: var(--earth); }
 
 /* ── WEIGHT WARNING BANNER ── */
 .weight-warning {
@@ -1795,7 +1864,6 @@ html, body { background: #0a0a0a; }
 .no-avail-title {
   font-family: var(--display);
   font-size: 17px;
-  font-style: italic;
   color: var(--sand);
   margin-bottom: 4px;
 }
@@ -1827,10 +1895,10 @@ html, body { background: #0a0a0a; }
 
 .act-price { font-size: 12.5px; color: #1a1a1a; font-weight: 600; margin-top: 3px; letter-spacing: 0.2px; }
 .price-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 8px; background: #1a1a1a; border: 1px solid #1a1a1a; }
-.pt-label { font-size: 10.5px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.pt-value { font-size: 13px; color: #ffffff; font-weight: 700; white-space: nowrap; }
-.act-desc  { font-size: 12.5px; color: #5c5c5c; margin-top: 4px; line-height: 1.45; }
+.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 300px; background: #f7f7f7; border: 1px solid var(--fog); }
+.pt-label { font-size: 11px; color: var(--dusk); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.pt-value { font-size: 13px; color: var(--earth); font-weight: 700; white-space: nowrap; }
+.act-desc  { font-size: 14px; color: #5c5c5c; margin-top: 4px; line-height: 19.5px; }
 .addon-row { margin-top: 6px; }
 .addon-group { margin-top: 10px; }
 .addon-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
@@ -1915,15 +1983,15 @@ html, body { background: #0a0a0a; }
 .detail-emoji { font-size: 26px; line-height: 1.1; flex-shrink: 0; }
 .detail-desc  { font-size: 13px; color: #5c5c5c; line-height: 1.5; }
 
-/* Price reveal once duration + group size are chosen. Black to echo the tags. */
+/* Price reveal once duration + group size are chosen. */
 .price-reveal {
-  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;
   margin: 4px 0 20px; padding: 12px 15px; border-radius: 12px;
-  background: #1a1a1a; color: #fff;
+  background: #fff; border: 1.5px solid var(--fog);
   animation: fadeUp 0.25s ease both;
 }
-.price-reveal-value { font-family: var(--display); font-style: italic; font-size: 22px; font-weight: 600; }
-.price-reveal-basis { font-size: 11.5px; color: rgba(255,255,255,0.65); }
+.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--earth); }
+.price-reveal-basis { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; text-align: right; }
 
 /* Mission statement shown once at the top of the landing (activity) screen. */
 .money-goes {
@@ -1935,7 +2003,6 @@ html, body { background: #0a0a0a; }
 }
 .money-goes-title {
   font-family: var(--display);
-  font-style: italic;
   font-size: 18px;
   color: #fff;
   margin-bottom: 6px;
@@ -1963,7 +2030,7 @@ html, body { background: #0a0a0a; }
   object-position: center;
 }
 .cat-intro-text {
-  padding: 14px 17px;
+  padding: 19px 18px;
   font-size: 12.5px;
   line-height: 1.6;
   color: #4a4a4a;
@@ -2371,8 +2438,8 @@ function App() {
       setGrooming(null);
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "act-icon"
-  }, item.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "act-image"
+  }), /*#__PURE__*/React.createElement("div", {
     className: "act-name"
   }, t.activities[item.id]), /*#__PURE__*/React.createElement("div", {
     className: "price-tags"
@@ -2391,7 +2458,19 @@ function App() {
     className: "session-note"
   }, t.sessionNote + " " + t.courseWeekNote), item.photoshoot && /*#__PURE__*/React.createElement("div", {
     className: "byo-note"
-  }, t.byoPhotographer)), /*#__PURE__*/React.createElement("div", {
+  }, t.byoPhotographer), /*#__PURE__*/React.createElement("button", {
+    className: "act-book-btn",
+    onClick: e => {
+      e.stopPropagation();
+      setActivity(item.id);
+      setDuration(null);
+      setNumPeople(null);
+      setRiders([]);
+      setPhotographerTier(null);
+      setGrooming(null);
+      setScreen("riders");
+    }
+  }, t.bookActivity), /*#__PURE__*/React.createElement("div", {
     className: "act-check"
   }, "✓")))))), screen === "activity" && /*#__PURE__*/React.createElement("div", {
     className: "cta-dock"
@@ -2402,11 +2481,16 @@ function App() {
   }, t.next)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "body fu"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "detail-header-band",
+    style: {
+      backgroundImage: "url(" + (actCategory === "Photoshoots" ? IMG_PHOTOSHOOTS : actCategory === "Rides" ? IMG_RIDES : IMG_LESSONS) + ")"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
     className: "back-link",
     onClick: () => setScreen("activity")
   }, t.back), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("div", {
+  }, t.activities[actObj?.id])), /*#__PURE__*/React.createElement("div", {
     className: "detail-intro"
   }, /*#__PURE__*/React.createElement("span", {
     className: "detail-emoji"
@@ -2424,7 +2508,9 @@ function App() {
       marginTop: -10,
       marginBottom: 4
     }
-  }, t.byoPhotographer), /*#__PURE__*/React.createElement("div", {
+  }, t.byoPhotographer), /*#__PURE__*/React.createElement("h3", {
+    className: "section-title"
+  }, t.stepHeading1), React.createElement("div", {
     className: "fu"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category",
@@ -2437,7 +2523,113 @@ function App() {
     key: d,
     className: "pill " + (duration === d ? "selected" : ""),
     onClick: () => setDuration(d)
-  }, d)))), needsGrooming && /*#__PURE__*/React.createElement("div", {
+  }, d)))), React.createElement("div", {
+    className: "cal-header"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "cal-nav",
+    onClick: () => changeMonth(-1)
+  }, "‹"), /*#__PURE__*/React.createElement("div", {
+    className: "cal-month"
+  }, MONTHS[calMonth], " ", calYear), /*#__PURE__*/React.createElement("button", {
+    className: "cal-nav",
+    onClick: () => changeMonth(1)
+  }, "›")), /*#__PURE__*/React.createElement("div", {
+    className: "cal-grid"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cal-days-header"
+  }, DAY_NAMES.map(d => /*#__PURE__*/React.createElement("div", {
+    key: d,
+    className: "cal-day-name"
+  }, d))), /*#__PURE__*/React.createElement("div", {
+    className: "cal-days"
+  }, Array.from({
+    length: firstDay
+  }).map((_, i) => /*#__PURE__*/React.createElement("div", {
+    key: "e" + i,
+    className: "cal-day"
+  })), Array.from({
+    length: daysInMonth
+  }).map((_, i) => {
+    const day = i + 1;
+    const isAvail = isAvailableDay(day);
+    const isSel = isDaySelected(day);
+    return /*#__PURE__*/React.createElement("div", {
+      key: day,
+      className: "cal-day " + (isAvail ? "available" : "") + " " + (isSel ? "selected" : ""),
+      onClick: () => handleDayClick(day)
+    }, day);
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "cal-legend"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "legend-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "legend-dot",
+    style: {
+      background: "rgba(255,255,255,0.35)",
+      border: "1px solid rgba(255,255,255,0.5)"
+    }
+  }), t.available), /*#__PURE__*/React.createElement("div", {
+    className: "legend-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "legend-dot",
+    style: {
+      background: "var(--clay-dk)"
+    }
+  }), t.selected), /*#__PURE__*/React.createElement("div", {
+    className: "legend-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "legend-dot",
+    style: {
+      background: "rgba(255,255,255,0.08)"
+    }
+  }), t.unavailable)), /*#__PURE__*/React.createElement("div", {
+    className: "cal-selection-panel"
+  }, requiredDates > 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "act-category",
+    style: {
+      marginTop: 0,
+      marginBottom: 10
+    }
+  }, t.pickCourseDays), sortedDates.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "pill-row",
+    style: {
+      marginBottom: 6
+    }
+  }, sortedDates.map((s, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    className: "date-chip",
+    onClick: () => removeDate(s)
+  }, formatOne(s), " ", /*#__PURE__*/React.createElement("span", {
+    className: "x"
+  }, "✕")))), /*#__PURE__*/React.createElement("div", {
+    className: "days-count"
+  }, selectedDates.length, " ", t.daysSelected)) : !datesComplete && /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: "var(--dusk)",
+      lineHeight: 1.6
+    }
+  }, t.pickDate), datesComplete && /*#__PURE__*/React.createElement(React.Fragment, null, requiredDates === 1 && /*#__PURE__*/React.createElement("div", {
+    className: "sel-title"
+  }, formattedDates[0]), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "act-category",
+    style: {
+      marginTop: 0,
+      marginBottom: 10
+    }
+  }, t.timeSlot), anySaturday && /*#__PURE__*/React.createElement("div", {
+    className: "sat-note"
+  }, t.satNote), /*#__PURE__*/React.createElement("div", {
+    className: "time-cards"
+  }, availableSlots.map(slot => /*#__PURE__*/React.createElement("div", {
+    key: slot,
+    className: "time-card " + (selectedTime === slot ? "selected" : ""),
+    onClick: () => setSelectedTime(slot)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "time-main"
+  }, slot), /*#__PURE__*/React.createElement("div", {
+    className: "time-sub"
+  }, duration))))))), needsGrooming && /*#__PURE__*/React.createElement("div", {
     className: "fu2"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
@@ -2447,7 +2639,12 @@ function App() {
     key: g[0],
     className: "pill " + (grooming === g[0] ? "selected" : ""),
     onClick: () => setGrooming(g[0])
-  }, g[1])))), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
+  }, g[1])))), /*#__PURE__*/React.createElement("h3", {
+    className: "section-title",
+    style: {
+      marginTop: 24
+    }
+  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
     className: "fu2"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
@@ -2571,118 +2768,9 @@ function App() {
     className: "price-reveal-value"
   }, totalPriceStr), /*#__PURE__*/React.createElement("span", {
     className: "price-reveal-basis"
-  }, priceBasis))), screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {
-    className: "fu",
-    style: {
-      marginTop: 22
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cal-header"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "cal-nav",
-    onClick: () => changeMonth(-1)
-  }, "‹"), /*#__PURE__*/React.createElement("div", {
-    className: "cal-month"
-  }, MONTHS[calMonth], " ", calYear), /*#__PURE__*/React.createElement("button", {
-    className: "cal-nav",
-    onClick: () => changeMonth(1)
-  }, "›")), /*#__PURE__*/React.createElement("div", {
-    className: "cal-grid"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cal-days-header"
-  }, DAY_NAMES.map(d => /*#__PURE__*/React.createElement("div", {
-    key: d,
-    className: "cal-day-name"
-  }, d))), /*#__PURE__*/React.createElement("div", {
-    className: "cal-days"
-  }, Array.from({
-    length: firstDay
-  }).map((_, i) => /*#__PURE__*/React.createElement("div", {
-    key: "e" + i,
-    className: "cal-day"
-  })), Array.from({
-    length: daysInMonth
-  }).map((_, i) => {
-    const day = i + 1;
-    const isAvail = isAvailableDay(day);
-    const isSel = isDaySelected(day);
-    return /*#__PURE__*/React.createElement("div", {
-      key: day,
-      className: "cal-day " + (isAvail ? "available" : "") + " " + (isSel ? "selected" : ""),
-      onClick: () => handleDayClick(day)
-    }, day);
-  }))), /*#__PURE__*/React.createElement("div", {
-    className: "cal-legend"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "legend-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "legend-dot",
-    style: {
-      background: "rgba(255,255,255,0.35)",
-      border: "1px solid rgba(255,255,255,0.5)"
-    }
-  }), t.available), /*#__PURE__*/React.createElement("div", {
-    className: "legend-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "legend-dot",
-    style: {
-      background: "var(--clay-dk)"
-    }
-  }), t.selected), /*#__PURE__*/React.createElement("div", {
-    className: "legend-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "legend-dot",
-    style: {
-      background: "rgba(255,255,255,0.08)"
-    }
-  }), t.unavailable)), /*#__PURE__*/React.createElement("div", {
-    className: "cal-selection-panel"
-  }, requiredDates > 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "act-category",
-    style: {
-      marginTop: 0,
-      marginBottom: 10
-    }
-  }, t.pickCourseDays), sortedDates.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "pill-row",
-    style: {
-      marginBottom: 6
-    }
-  }, sortedDates.map((s, i) => /*#__PURE__*/React.createElement("button", {
-    key: i,
-    className: "date-chip",
-    onClick: () => removeDate(s)
-  }, formatOne(s), " ", /*#__PURE__*/React.createElement("span", {
-    className: "x"
-  }, "✕")))), /*#__PURE__*/React.createElement("div", {
-    className: "days-count"
-  }, selectedDates.length, " ", t.daysSelected)) : !datesComplete && /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 13,
-      color: "var(--dusk)",
-      lineHeight: 1.6
-    }
-  }, t.pickDate), datesComplete && /*#__PURE__*/React.createElement(React.Fragment, null, requiredDates === 1 && /*#__PURE__*/React.createElement("div", {
-    className: "sel-title"
-  }, formattedDates[0]), /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "act-category",
-    style: {
-      marginTop: 0,
-      marginBottom: 10
-    }
-  }, t.timeSlot), anySaturday && /*#__PURE__*/React.createElement("div", {
-    className: "sat-note"
-  }, t.satNote), /*#__PURE__*/React.createElement("div", {
-    className: "time-cards"
-  }, availableSlots.map(slot => /*#__PURE__*/React.createElement("div", {
-    key: slot,
-    className: "time-card " + (selectedTime === slot ? "selected" : ""),
-    onClick: () => setSelectedTime(slot)
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "time-main"
-  }, slot), /*#__PURE__*/React.createElement("div", {
-    className: "time-sub"
-  }, duration))))), /*#__PURE__*/React.createElement("div", {
+  }, priceBasis))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {
+    className: "fu"
+  }, React.createElement("div", {
     className: "act-category",
     style: {
       marginTop: 0
@@ -2696,11 +2784,69 @@ function App() {
     onChange: e => setNotes(e.target.value)
   }), /*#__PURE__*/React.createElement("div", {
     className: "notice"
-  }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice)), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice)), /*#__PURE__*/React.createElement("h3", {
+    className: "section-title",
+    style: {
+      marginTop: 24
+    }
+  }, t.stepHeading3), /*#__PURE__*/React.createElement("div", {
+    className: "confirm-summary"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sActivity), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, t.activities[actObj?.id])), needsGrooming && grooming && /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.groomingLabel), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, grooming === "wet" ? t.gWet : t.gDry)), isPhotoshoot && photographerTier && /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sAddon), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, t.photographerShort + " (" + (t.addonTiers.find(tr => tr.key === photographerTier) || {}).label + ")")), /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sDuration), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, duration)), /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sDateTime), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, formattedDates.join(" · "), selectedTime ? " · " + selectedTime : "")), /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sRiders), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, numPeople, " ", numPeople === "1" ? t.person : t.people)), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sTotal), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val"
+  }, totalPriceStr)), /*#__PURE__*/React.createElement("div", {
+    className: "sum-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "sum-key"
+  }, t.sStatus), /*#__PURE__*/React.createElement("span", {
+    className: "sum-val",
+    style: {
+      color: "#1a1a1a"
+    }
+  }, t.awaiting))), /*#__PURE__*/React.createElement("button", {
     className: "cta",
-    disabled: !selectedTime,
+    disabled: !selectedTime || !detailsComplete,
     onClick: handleSend
-  }, t.sendBtn)))), screen === "confirm" && /*#__PURE__*/React.createElement("div", {
+  }, t.sendBtn)), screen === "confirm" && /*#__PURE__*/React.createElement("div", {
     className: "confirm-screen fu"
   }, /*#__PURE__*/React.createElement("div", {
     className: "confirm-icon"
@@ -2770,8 +2916,8 @@ function App() {
   }, sentMessage), /*#__PURE__*/React.createElement("button", {
     className: "copy-btn " + (copied ? "done" : ""),
     onClick: copyMessage
-  }, copied ? t.copied : "📋 " + t.copyBtn)), /*#__PURE__*/React.createElement("button", {
-    className: "cta",
+  }, copied ? t.copied : t.copyBtn)), /*#__PURE__*/React.createElement("button", {
+    className: "reset-link",
     onClick: resetAll
   }, t.another)))));
 }

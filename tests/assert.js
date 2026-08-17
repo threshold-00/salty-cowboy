@@ -185,10 +185,97 @@ has('ru sessionNote one per week', 'В неделю принимается то�
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
 has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('calendar section gated on riders + detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "cal-header"\n  },');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), React.createElement("div", {\n    className: "fu"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
+missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
+has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header"\n  },');
 missing('no separate calendar screen state left', '"calendar"');
 missing('"See availability" button removed (calendar reveals automatically)', 't.seeAvailability');
 missing('no lingering setScreen("calendar") calls', 'setScreen("calendar")');
+
+// ─── Step 2 restyle (docs/step2-restyle-spec.md) — look only, no logic ────
+has('step-dot border 1px',         'font-size: 10px; font-weight: 600;\n  border: 1px solid rgba(255,255,255,0.2);');
+has('rider-card border 1px + asymmetric padding', '.rider-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;');
+has('pill padding precision',      '.pill {\n  padding: 9.5px 16.5px;');
+has('field-pill padding precision', '.field-pill {\n  padding: 7.5px 13.5px;');
+has('text-input padding precision', '.text-input {\n  width: 100%;\n  padding: 11.5px 13.5px;');
+has('cal-header top radius',       '.cal-header {\n  background: var(--earth);\n  padding: 20px 24px 18px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  border-radius: 14px 14px 0 0;\n}');
+has('cal-legend bottom radius',    '.cal-legend {\n  padding: 12px 24px;\n  background: var(--earth);\n  display: flex;\n  gap: 16px;\n  border-top: 1px solid rgba(255,255,255,0.06);\n  border-radius: 0 0 14px 14px;\n}');
+has('cal-day.selected is white with dark text', '.cal-day.selected {\n  background: #fff !important;\n  color: var(--earth) !important;\n  border-color: rgba(255,255,255,0.3) !important;\n}');
+has('time-card padding precision', '.time-card {\n  flex: 1;\n  padding: 14.5px;');
+has('time-card selected sub is legible', '.time-card.selected .time-sub  { color: var(--sand); font-size: 14px; }');
+has('notes-area placeholder restyled', ".notes-area::placeholder { color: #999999; font-size: 11.5px; }");
+has('price-reveal flipped to light card', '.price-reveal {\n  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;\n  margin: 4px 0 20px; padding: 12px 15px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
+has('price-reveal-value is dark text', '.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--earth); }');
+has('price-reveal-basis is uppercase label style', '.price-reveal-basis { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; text-align: right; }');
+
+// ─── Step 1 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
+has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth);');
+has('cat-tab.active uses earth/sand', '.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }');
+has('cat-intro-text padding bumped', '.cat-intro-text {\n  padding: 19px 18px;');
+has('act-card border 1px + generous padding', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 18px;');
+has('act-name is 22px (was 14px)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); }');
+missing('act-name did not gain a new font-family (rule: change size/weight/colour only)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); font-family');
+has('act-desc is 14px/19.5 line-height (was 12.5px/1.45)', '.act-desc  { font-size: 14px; color: #5c5c5c; margin-top: 4px; line-height: 19.5px; }');
+has('price-tag flipped to light pill (was dark filled chip)', '.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 300px; background: #f7f7f7; border: 1px solid var(--fog); }');
+has('pt-label is dark on light (was white on dark)', '.pt-label { font-size: 11px; color: var(--dusk); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }');
+has('pt-value is dark on light (was white on dark)', '.pt-value { font-size: 13px; color: var(--earth); font-weight: 700; white-space: nowrap; }');
+
+// ─── Step 3 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
+has('confirm-title is 22px (was 21px)', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;');
+has('confirm-summary border 1px + 18.5 padding', '.confirm-summary {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 18.5px;');
+has('copy-box now carries the card look (was bare)', '.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }');
+has('copy-heading letter-spacing aligned to shared uppercase-label convention', '.copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 1.5px;');
+has('copy-text lost its own box now that copy-box carries it', '.copy-text { white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }');
+has('copy-btn is compact outline (was full-width tinted)', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth);');
+missing('clipboard emoji removed from copy button label', '"📋 " + t.copyBtn');
+has('reset-link class exists (Make another booking no longer shares .cta)', '.reset-link {\n  background: none;\n  border: none;\n  color: var(--dusk);\n  font-size: 14px;');
+has('Make another booking uses reset-link, not cta', 'className: "reset-link",\n    onClick: resetAll');
+has('en awaiting has no hourglass emoji', 'awaiting: "Awaiting approval"');
+has('id awaiting has no hourglass emoji', 'awaiting: "Menunggu persetujuan"');
+has('ru awaiting has no hourglass emoji', 'awaiting: "Ожидает подтверждения"');
+missing('no hourglass emoji anywhere in awaiting text', '⏳');
+
+// ─── Commit A (docs/booking-engine-structural-spec.md): act-card rebuild ──
+missing('act-icon element removed', 'className: "act-icon"');
+has('act-image placeholder added', '}, /*#__PURE__*/React.createElement("div", {\n    className: "act-image"\n  }), /*#__PURE__*/React.createElement("div", {\n    className: "act-name"');
+has('.act-image styled as fog placeholder', '.act-image { width: 100%; height: 140px; border-radius: 14px; background: var(--fog); margin-bottom: 8px; }');
+has('act-card is a vertical column now', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 18px;\n  margin-bottom: 8px;\n  cursor: pointer;\n  transition: all 0.2s;\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n  position: relative;\n}');
+has('act-check repositioned absolute (was margin-left:auto)', '.act-check {\n  position: absolute;\n  top: 14px;\n  right: 14px;');
+missing('act-check no longer uses margin-left:auto', 'margin-left: auto;\n  width: 20px; height: 20px;\n  border-radius: 50%;\n  background: var(--clay);\n  color: #fff;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 11px;\n  flex-shrink: 0;\n  opacity: 0;\n  transform: scale(0.6);\n  transition: all 0.2s;\n}\n.act-card.selected .act-check');
+has('per-card Book button reuses existing state setters, not a new handler', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
+has('en bookActivity label', 'bookActivity: "Book →"');
+has('id bookActivity label', 'bookActivity: "Pesan →"');
+has('ru bookActivity label', 'bookActivity: "Забронировать →"');
+
+// ─── Commit B (docs/booking-engine-structural-spec.md): Step 2 additions ──
+has('detail-header-band CSS present', '.detail-header-band {\n  position: relative;\n  border-radius: 14px;\n  overflow: hidden;');
+has('detail-header-band overlay at 0.8 opacity (image ~20% visible)', 'background: rgba(20,20,20,0.8);');
+has('detail-header-band wraps back-link + title, keyed off actCategory image', 'className: "detail-header-band",\n    style: {\n      backgroundImage: "url(" + (actCategory === "Photoshoots" ? IMG_PHOTOSHOOTS : actCategory === "Rides" ? IMG_RIDES : IMG_LESSONS) + ")"\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link"');
+has('en stepHeading1/2/3 keys', 'stepHeading1: "1. Book a date and time"', 1);
+has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
+has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
+has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
+has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('section 3 (notes/notice/summary/Send) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
+has('en sTotal label added', 'sRiders: "Riders",\n    sTotal: "Total",\n    sStatus: "Status"');
+has('id sTotal label added', 'sRiders: "Penunggang",\n    sTotal: "Total",\n    sStatus: "Status"');
+has('ru sTotal label added', 'sRiders: "Наездники",\n    sTotal: "Итого",\n    sStatus: "Статус"');
+has('confirm-summary block now appears twice (Step 2 in-page + Step 3 confirm)', 'className: "confirm-summary"', 2);
+has('sum-row Total on riders screen reads totalPriceStr, not a fresh computation', 't.sTotal), /*#__PURE__*/React.createElement("span", {\n    className: "sum-val"\n  }, totalPriceStr))');
+has('riders-screen summary sits before Send, heading 3 immediately precedes it', 't.stepHeading3), /*#__PURE__*/React.createElement("div", {\n    className: "confirm-summary"');
+has('Send button disabled on selectedTime OR incomplete details (Commit C moves the completeness check here)', 'className: "cta",\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn)');
+
+// ─── User request (2026-08-17): Step 2 reorder + ungate, Futura upright type ──
+has('--display CSS variable now Futura system stack, not Cormorant italic', "--display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;");
+missing('Cormorant Garamond no longer used as the display font', "--display: 'Cormorant Garamond'");
+has('font-style: italic only remains on the 3 non-display notes (loading label, price-note, byo-note)', 'font-style: italic', 3);
+has('price-note keeps its own italic styling untouched (not a --display heading)', '.price-note { font-size: 11px; color: var(--dusk); margin-top: 5px; font-style: italic; }');
+has('byo-note keeps its own italic styling untouched (not a --display heading)', '.byo-note { font-size: 11.5px; color: var(--dusk); margin-top: 6px; line-height: 1.45; font-style: italic; }');
+has('duration-to-slot filtering still reads duration + sortedDates, untouched by reorder', 'const availableSlots = slotsFor(actObj, duration, sortedDates);');
+has('Horse Whisperer multi-day week-lock logic untouched by reorder', 'if (isCourse && selectedDates.length > 0) {\n      if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;\n    }');
+has('detailsComplete definition unchanged (still riders+duration+numPeople+grooming based)', 'const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;');
+missing('the old marginTop:22 spacer above the calendar is gone (large gap removed)', 'className: "fu",\n    style: {\n      marginTop: 22');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

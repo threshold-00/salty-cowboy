@@ -2,6 +2,347 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 17 Aug 2026 — Commit C: Step 2 reorder, ungate calendar, Futura upright type (structural + LOGIC)
+
+Per Ro's direct request (matching `docs/booking-engine-structural-spec.md` Commit C, plus a
+typography change not in that spec). This is the risky commit: it reorders DOM and moves a
+completeness check off the calendar and onto Send. Held locally, not pushed yet, same reasoning
+as Commits A and B — waiting for everything to land together so a half-finished structural
+change never reaches GitHub Pages.
+
+### Structure
+- Moved the whole "date and time" group (duration pills, calendar, time slot) from the middle
+  of the riders screen to the very top, under a new "1. Book a date and time" heading. The
+  calendar, legend and time-slot panel no longer wait for `detailsComplete` — they render as
+  soon as an activity is chosen, matching the Figma target ("the calendar may show
+  immediately").
+- "2. Who's coming?" now correctly leads section 2 (grooming, number of people, participant
+  details, photographer add-on, live price preview), in that order, unchanged internally.
+- "3. Your booking summary" (notes, WhatsApp-confirmation notice, the summary card, Send) is
+  now its own block, positioned after section 2. It shows once `datesComplete` is true (same
+  trigger as before, just relocated) rather than needing the full rider-details gate too — so a
+  booker who fills in dates before rider details still sees the summary and a disabled Send,
+  instead of nothing.
+- Removed the `marginTop: 22` spacer that used to sit above the calendar. It existed to create
+  breathing room when the calendar rendered far down the page after the price-reveal widget;
+  now that the calendar is the first thing in section 1, it produced the large empty gap Ro
+  flagged. No custom spacing was added in its place, it uses the same default spacing every
+  other section here already uses.
+
+### Logic (the one change that needed care)
+- `detailsComplete` (duration + number of people + grooming-if-applicable + fully valid rider
+  details) no longer gates the calendar's visibility. It now gates the Send button instead:
+  `disabled: !selectedTime || !detailsComplete`. Submitting an incomplete booking is still
+  impossible, the check just moved from "hide the section" to "disable the button", matching
+  the Figma target's always-visible-form pattern.
+- Nothing else changed: `slotsFor(actObj, duration, sortedDates)` (duration-to-slot filtering),
+  the Horse Whisperer week-lock (`isCourse && selectedDates.length > 0` restricting later picks
+  to the same Mon–Sat week as the first), the WhatsApp send handler and message, the pricing
+  math, and the `ACTIVITIES` data are all byte-for-byte unchanged.
+
+### Acceptance checks (per the spec, all four verified live)
+1. Calendar shows on entry, before any rider detail is filled in. Verified on Beach & Rice
+   Field Ride and on the Horse Whisperer Course (4-day picker).
+2. Duration still filters time slots: picking 1hr showed only the 5:00pm slot, matching the
+   fixed-slot rule.
+3. Weight and riding-experience gating still work on the riders screen, unchanged.
+4. Send stayed disabled (visibly greyed out) until name, age, weight and experience were all
+   filled in, then enabled. Confirmed the Horse Whisperer's week-lock also survived the reorder:
+   selecting May 4 correctly narrowed the remaining pickable days to that week's Monday,
+   Tuesday, Thursday and Friday only.
+
+### Type
+- `--display` changed from `'Cormorant Garamond', serif` (loaded via Google Fonts, italic) to
+  `'Futura', 'Century Gothic', 'Outfit', sans-serif` (a system-font stack, upright). Futura
+  isn't a Google Font, so this can't be `@import`ed the way Cormorant Garamond and Outfit are;
+  it renders as real Futura on Mac (where it ships as a system font), falls back to the
+  visually similar Century Gothic on Windows, then to Outfit (already loaded) everywhere else.
+  Ro confirmed this system-stack approach over pulling in a Google Fonts lookalike.
+- Removed `font-style: italic` from every rule that used `var(--display)` (hero title, section
+  headings, the CTA button, the calendar month label, the calendar's own selected-date title,
+  the confirm screen's title, the "no availability" title, the "what your booking cost funds"
+  heading, and the price-reveal total). Left the three unrelated italic rules alone
+  (`#loading .lbl`, `.price-note`, `.byo-note`) since they don't use the display font and
+  weren't part of this request.
+
+### Testing
+- 207 / 207 string assertions pass (16 new, 4 rewritten to match the new structure)
+- jsdom render passes with zero console errors
+- Verified live end-to-end as described in the acceptance checks above
+
+## 17 Aug 2026 — Commit B: Step 2 structural additions (structural, no logic)
+
+Per `docs/booking-engine-structural-spec.md`, Commit B of the four-commit
+structural pass. Purely additive: no `useState`, `screen` conditional, or
+handler touched. Held locally, not pushed yet, same reasoning as Commit A.
+
+- Added `.detail-header-band`: a faint category image (rides / photoshoots /
+  lessons, keyed off `actCategory`) behind a `rgba(20,20,20,0.8)` overlay,
+  radius 14, wrapping the existing Back link and activity title on the
+  riders screen. Purely decorative, no new state.
+- Added numbered section headings, new translation key `stepHeading1` /
+  `stepHeading2` / `stepHeading3`. Placed in the CURRENT block order (not yet
+  reordered, that's Commit C):
+  - "2. Who's coming?" sits above the Number of people block. Duration and
+    grooming, which currently render above this, stay headingless in this
+    interim state since they conceptually belong under heading 1, which
+    Commit C hasn't moved up yet.
+  - "1. Book a date and time" sits above the calendar, still inside the
+    `detailsComplete` gate. Commit B does not touch the gate, only Commit C
+    does.
+  - "3. Your booking summary" sits above the new in-page summary block,
+    inside the same gated section, right before Send.
+- Added an in-page booking summary block on the riders screen, directly
+  lifted from the confirm screen's `confirm-summary` / `sum-row` markup so
+  labels stay identical (Activity, Grooming if applicable, Add-on if
+  applicable, Duration, Date & time, Riders, Total, Status). Displays
+  existing state only, computes nothing new; the Total row reads the
+  already-existing `totalPriceStr`. New translation key `sTotal` ("Total" /
+  "Total" / "Итого") added alongside the other summary labels.
+
+### Flagged: summary asymmetry between Step 2 and Step 3
+The confirm screen's own summary does not have a Total row today (confirmed
+absent during the earlier Step 3 restyle pass). Adding Total to the confirm
+screen was out of scope for this commit, so a booker now sees Total on Step
+2 but not on Step 3. Flagging this for Simone/Ro: recommend adding the same
+Total row to the confirm screen in a follow-up so the two summaries match.
+
+### Testing
+- 196 / 196 string assertions pass (17 new)
+- jsdom render passes with zero console errors
+- Verified live: header band renders with the correct category image,
+  headings appear in the right spots, calendar and summary block both show
+  once rider details are complete, summary values match the selections
+  made (activity, duration, date/time, riders, total, status), Send stays
+  where it was.
+
+## 17 Aug 2026 — Commit A: Step 1 activity card rebuild (structural)
+
+Per `docs/booking-engine-structural-spec.md`, Commit A of a four-commit
+structural pass. Unlike the earlier restyle-only passes, this one adds new
+elements. Held locally, not pushed yet — waiting on Commit C (the risky one)
+before anything goes to origin/main, so a half-finished structural change
+never reaches GitHub Pages.
+
+- Rebuilt `act-card` from a horizontal row (small emoji chip + text column)
+  to a vertical stack: image placeholder, title, price chips, description,
+  Book button. `.act-icon` (the per-activity emoji) is gone, replaced by
+  `.act-image`, an empty styled placeholder (fog background, 14px radius,
+  140px tall). No image loading wired up, per spec ("do not build image
+  loading").
+- Added a per-card "Book →" button. Its `onClick` reuses the exact same
+  state-setter calls the card's own `onClick` already made (select
+  activity, clear duration/people/riders/add-ons), plus `setScreen("riders")`
+  to advance immediately. No new handler logic was invented, this composes
+  two already-existing state transitions. Calls `e.stopPropagation()` so
+  clicking Book doesn't also re-trigger the parent card's onClick.
+- `.act-check` (the selected-state checkmark) repositioned from
+  `margin-left: auto` (meaningless once the card became a column) to
+  `position: absolute; top: 14px; right: 14px`.
+- New translation key `bookActivity` ("Book →" / "Pesan →" /
+  "Забронировать →"), matching the existing arrow-suffix convention used by
+  "Next →" and "Continue →".
+
+### Decisions made explicit (the spec flagged these as undecided)
+- Per-card action: added the Book button (spec offered a choice between
+  this and keeping the single global Next button only).
+- The existing whole-card click-to-select behaviour is unchanged; Book is
+  an additional fast path, not a replacement.
+- "Where the money goes" placement: left at the top of Step 1, unmoved, per
+  the spec's own explicit "do not move until confirmed."
+
+### Testing
+- 179 / 179 string assertions pass (10 new)
+- jsdom render passes with zero console errors
+- Verified live: card layout, image placeholder, Book button correctly
+  selects the activity and advances straight to step 2 (confirmed via
+  screenshot after click).
+
+## 17 Aug 2026 — Step 3 restyle (look only, no logic)
+
+Restyled the `screen === "confirm"` view per `docs/booking-engine-restyle-spec.md`.
+No behaviour changed: the copy-to-clipboard handler, the reset ("make another
+booking") handler, the summary values read from booking state, and the
+WhatsApp message content and phone number are all untouched.
+
+- `.confirm-title`: 21px → 22px, matching the shared heading size.
+- `.confirm-summary`: border 1.5px → 1px, padding 18px → 18.5px.
+- `.sum-row` / `.sum-key` / `.sum-val` / the Status value's colour: already
+  matched the spec exactly, left untouched.
+- `.copy-box` and `.copy-text` swapped which one carries the "card" look.
+  Previously the outer `copy-box` had no styling of its own and the inner
+  `copy-text` (the raw WhatsApp message preview) carried its own dark-tinted
+  box (`rgba(0,0,0,.04)` bg, `rgba(0,0,0,.12)` border). Per spec, `copy-box`
+  now carries the card (`#f7f7f7` bg, `#dcdcdc` border, radius 12) and
+  `copy-text` is now plain text (13px, `#444`, 19px line-height) sitting
+  inside it. Pure CSS reassignment between two elements that already
+  existed; no new DOM nodes.
+- `.copy-heading` letter-spacing 0.5px → 1.5px, aligning it to the shared
+  uppercase-label convention used elsewhere (rider-label, etc).
+- `.copy-btn` (the copy-message button): was a full-width, tinted
+  (`rgba(0,0,0,.1)`) button; now compact and outlined (white bg, `#141414`
+  border/text), per the spec's "Compact... white bg with 1px #141414 border"
+  option. Its `.done` (post-copy) state stays solid dark as a success cue.
+- Removed the "📋 " clipboard emoji from the copy button's label text — the
+  global spec rule explicitly names clipboard emoji for removal from labels.
+  The `copyMessage` handler itself is untouched.
+- Removed the "⏳ " hourglass emoji from the Status value ("Awaiting
+  approval"), all three languages — same global rule, explicitly names
+  hourglass. Found this scanning the confirm screen's translated strings,
+  not just its CSS classes.
+- "Make another booking": this button shared the `.cta` class with the
+  primary action buttons on steps 1 and 2 (Next, Send request via
+  WhatsApp), but the spec wants it styled as a plain underlined text link —
+  restyling `.cta` itself would have broken those other two buttons. Gave
+  it a new class, `.reset-link` (underlined, 14px, `#6e6e6e`), and changed
+  only the `className` attribute on this one existing button. The
+  `onClick={resetAll}` handler is unchanged. This is a class-attribute edit
+  on an existing element, which the spec's global rule 1 explicitly permits
+  ("edit their styles and class attributes... do not rename classes") —
+  no new element was created and no existing class definition was renamed.
+
+### Not built, flagged instead
+- A "Total" row (10px uppercase label + 22px amount) — the spec describes
+  one, but the current confirm-summary has no total/price row at all today
+  (it lists Activity, Grooming/Add-on if applicable, Duration, Date & Time,
+  Riders, Status — no price). Adding one would mean a new
+  `React.createElement` block, out of scope for a restyle.
+- Heading copy tighten (optional per spec: "Almost done. Hit send in
+  WhatsApp to confirm." vs the current longer sentence) — spec says apply
+  only if wanted; left the copy as-is pending a decision.
+- "Participant" vs "Riders" label consistency (optional per spec, flagged
+  as possibly needing to be activity-aware for photoshoots) — left as-is
+  pending a decision, per the spec's explicit "flag, do not silently
+  change".
+- Go-live data note: the WhatsApp number rendered on this screen
+  (`+61 466 567 953`) is confirmed still the placeholder test number, per
+  CLAUDE.md's existing open item. Not touched, since the spec explicitly
+  calls this a data item, not a restyle edit.
+
+### Testing
+- 169 / 169 string assertions pass (13 new, locking in the restyled values)
+- jsdom render passes with zero console errors
+- Verified live in-browser end to end: completed a real booking through to
+  the confirm screen, checked the summary card, the copy-box/copy-text
+  split, the compact copy button, the "Make another booking" link styling,
+  and the emoji removal (re-verified via direct server response after a
+  dev-server restart interrupted the first live check).
+
+## 16 Aug 2026 — Step 1 restyle (look only, no logic)
+
+Restyled the `screen === "activity"` view per `docs/booking-engine-restyle-spec.md`
+(a fuller spec superseding the step-2-only one, covering all three screens with
+a shared token system). No behaviour changed: category filtering, activity
+selection, and the Next button's `onClick` are untouched — verified by diffing
+every touched class against the spec before editing.
+
+- `.cat-tab`: switched from a dark-filled-when-active tab using ad-hoc colours
+  (`rgba(0,0,0,.05)` fill, `#5c5c5c` text) to the shared pill pattern from the
+  token system (white/fog unselected, earth/sand selected). The spec flagged
+  this one element as unverifiable without Figma access ("VERIFY against the
+  frame... If the frame uses filled tabs instead, use the shared pill
+  pattern") and explicitly authorised this fallback for that case.
+- `.cat-intro-text` padding bumped from 14/17px to the spec's ~18-20 range.
+- `.act-card`: border 1.5px → 1px, padding went from a tight 14/16px to a
+  more generous 20/18px per the spec's "calm and spacious" direction (no
+  exact figure was given for this one; chose a value consistent with the
+  padding scale already established elsewhere in the restyle).
+- `.act-name` (activity title): 14px → 22px, matching the spec's card-heading
+  size. Font family intentionally left untouched per the global rule to
+  never change font family, only size/weight/colour/spacing.
+- `.act-desc`: 12.5px/1.45 line-height → 14px/19.5px line-height per spec.
+- `.price-tag` / `.pt-label` / `.pt-value`: flipped from a dark filled chip
+  (`#1a1a1a` bg, white text) to a light, fully-round pill (`#f7f7f7` bg, fog
+  border, dark text) — the same light-card direction as step 2's
+  `price-reveal` flip in the previous entry.
+
+### Not built, flagged instead
+- "Activity image area" — the spec describes a placeholder image region in
+  each card; the current DOM has no image element in `act-card` (only an
+  emoji icon). Not built, since adding one would mean a new
+  `React.createElement` block, which is out of scope for a restyle.
+- "Book button in act-card" — the spec describes a per-card book button; the
+  current DOM has no such element. The existing pattern is: the whole card
+  is clickable (selects the activity, shows the `.act-check` checkmark), and
+  a single global "Next" button in the `cta-dock` advances the screen. Left
+  as-is.
+- `.cat-intro` heading — the spec calls for an 18-22px heading inside the
+  category intro card; the current DOM only has the body paragraph
+  (`cat-intro-text`), no separate heading element. Padding was still bumped
+  since that's a change to an existing element; no heading was added.
+- Checked for decorative horse/hourglass/clipboard/checkmark emoji in
+  headings and labels per the global rule — none exist in this screen's
+  current headings (`t.chooseActivity`, category tab labels), so nothing to
+  remove.
+
+### Testing
+- 156 / 156 string assertions pass (10 new, locking in the restyled values)
+- jsdom render passes with zero console errors
+- Verified live in-browser: category tabs, card sizing/spacing, price-tag
+  flip, selected-card state (checkmark, border, fill) all unchanged in
+  behaviour, changed in look only.
+
+## 16 Aug 2026 — Step 2 restyle (look only, no logic)
+
+Restyled the `screen === "riders"` view (step 2: configure + calendar, merged
+in the previous pass) to match `docs/step2-restyle-spec.md`, a hand-written
+token spec substituting for direct Figma access (hit the Figma MCP plan-level
+rate limit for this file). No behaviour, state, handlers, or content changed —
+verified by diffing every touched class against the spec before editing, and
+by re-running the full test suite unchanged in count except for new assertions
+added to lock in the restyled values.
+
+- `.step-dot` / `.rider-card`: border width 1.5px → 1px per spec (only these
+  two elements state an explicit border width). `.rider-card` padding changed
+  from a flat 16px to the spec's asymmetric pt23/pb25/px16.5.
+- `.pill`, `.field-pill`, `.text-input`: padding precision only (colours
+  already matched the spec's tokens exactly, since this design system was
+  already built on the same earth/clay/fog/dusk palette).
+- `.cal-header` gained rounded top corners (14px), `.cal-legend` gained
+  rounded bottom corners (14px) — previously the merged calendar block was a
+  flat rectangle top-to-bottom; the spec calls for a single rounded card.
+- `.cal-day.selected`: switched from a near-white `#ededed` fill with `#111`
+  text to pure white with `#141414` text and a `rgba(255,255,255,.3)` border,
+  per spec.
+- `.time-card.selected .time-sub`: was 11px at 50% white opacity (hard to
+  read against the dark selected background); now 14px at full `#f0f0f0`
+  per spec.
+- `.notes-area::placeholder`: colour `#b4b4b4` → `#999999`, explicit 11.5px
+  size (previously inherited the input's 14px).
+- `.price-reveal`: flipped from a solid dark (`#1a1a1a`) card with white text
+  to a white card with a fog border, dark amount text, and the basis text
+  (e.g. "IDR 2,250,000 × 2 horses") restyled as a small uppercase
+  letter-spaced label, right-aligned opposite the amount. This is the
+  biggest visual change in the pass; the underlying price text is unchanged,
+  only its typography and the card's colours flipped.
+- `.cta`, `.perm-row`/`.perm-box`, `.cal-grid`, `.notice`, `.act-category`,
+  `.field-label`, `.rider-label` were checked against the spec and already
+  matched — left untouched. `.cta` and `.step-dot` are shared with the
+  activity and confirm screens; every other touched class is step-2-only,
+  confirmed by grepping every `className` usage before editing.
+
+### Not built, flagged instead (per the spec's own instruction to list, not build)
+- The decorative image band behind the activity detail header — not present
+  in the current DOM, header stays flat.
+- A second booking-summary block on step 2 — that content lives only on the
+  confirm screen; not duplicated here.
+- The "cost-funds" block (`div.cat-intro-text` variant, 18px heading + 12.5px
+  body, described as needing its leading emoji removed) has no matching
+  element anywhere in the current step-2 DOM. `cat-intro-text` only exists on
+  the activity screen's category intro blurb. Flagging rather than guessing
+  which element this was meant to be.
+- The numbering/emoji removal note ("1. Book a date and time", horse/hourglass/
+  clipboard emoji) describes mock headings that don't exist in the current
+  DOM at all — none of step 2's headings currently carry numerals or
+  decorative emoji, so there was nothing to remove.
+
+### Testing
+- 146 / 146 string assertions pass (14 new, locking in the restyled values)
+- jsdom render passes with zero console errors
+- Verified live in-browser: price-reveal card flip, calendar rounded corners,
+  selected-day and selected-time-card colours, notes placeholder. Activity
+  and confirm screens spot-checked unchanged.
+
 ## 15 Aug 2026 — Merge calendar into step 2
 
 Structural, customer-facing layout change only. Booking flow goes from 4 screens (activity, configure, calendar, confirm) to 3 (activity, configure+calendar, confirm).
