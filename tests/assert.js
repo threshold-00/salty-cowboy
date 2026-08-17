@@ -154,9 +154,9 @@ has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.create
 has('byo note on step2',           'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",');
 
 // ─── Notes section: "times not suitable" hint, all activities ────────────
-has('en notesTimeHint key',        'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know below."');
-has('id notesTimeHint key',        'notesTimeHint: "Kami ingin Anda mendapatkan pengalaman yang berkesan. Jika waktu yang tersedia tidak sesuai, atau Anda memiliki permintaan tambahan, silakan beri tahu kami di bawah."');
-has('ru notesTimeHint key',        'notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом ниже."');
+has('en notesTimeHint key ends "here" not "below" (Figma parity commit 1)', 'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."');
+has('id notesTimeHint key ends "di sini" not "di bawah" (Figma parity commit 1)', 'notesTimeHint: "Kami ingin Anda mendapatkan pengalaman yang berkesan. Jika waktu yang tersedia tidak sesuai, atau Anda memiliki permintaan tambahan, silakan beri tahu kami di sini."');
+has('ru notesTimeHint key ends "здесь" not "ниже" (Figma parity commit 1)', 'notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом здесь."');
 has('notesTimeHint rendered near notes area', 'className: "notes-time-hint"\n  }, t.notesTimeHint), /*#__PURE__*/React.createElement("textarea"');
 
 // ─── Main page: "Where the money goes" bio copy ───────────────────────────
@@ -185,7 +185,7 @@ has('ru sessionNote one per week', 'В неделю принимается то�
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
 has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), React.createElement("div", {\n    className: "fu"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
 missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
 has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header"\n  },');
 missing('no separate calendar screen state left', '"calendar"');
@@ -258,9 +258,9 @@ has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
 has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
 has('section 3 (notes/notice/summary/Send) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
-has('en sTotal label added', 'sRiders: "Riders",\n    sTotal: "Total",\n    sStatus: "Status"');
-has('id sTotal label added', 'sRiders: "Penunggang",\n    sTotal: "Total",\n    sStatus: "Status"');
-has('ru sTotal label added', 'sRiders: "Наездники",\n    sTotal: "Итого",\n    sStatus: "Статус"');
+has('en sTotal label added, sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sTotal: "Total",\n    sStatus: "Status"');
+has('id sTotal label added, sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sTotal: "Total",\n    sStatus: "Status"');
+has('ru sTotal label added, sRiders renamed to Участник (Figma parity commit 1)', 'sRiders: "Участник",\n    sTotal: "Итого",\n    sStatus: "Статус"');
 has('confirm-summary block now appears twice (Step 2 in-page + Step 3 confirm)', 'className: "confirm-summary"', 2);
 has('sum-row Total on riders screen reads totalPriceStr, not a fresh computation', 't.sTotal), /*#__PURE__*/React.createElement("span", {\n    className: "sum-val"\n  }, totalPriceStr))');
 has('riders-screen summary sits before Send, heading 3 immediately precedes it', 't.stepHeading3), /*#__PURE__*/React.createElement("div", {\n    className: "confirm-summary"');
@@ -276,6 +276,18 @@ has('duration-to-slot filtering still reads duration + sortedDates, untouched by
 has('Horse Whisperer multi-day week-lock logic untouched by reorder', 'if (isCourse && selectedDates.length > 0) {\n      if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;\n    }');
 has('detailsComplete definition unchanged (still riders+duration+numPeople+grooming based)', 'const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;');
 missing('the old marginTop:22 spacer above the calendar is gone (large gap removed)', 'className: "fu",\n    style: {\n      marginTop: 22');
+
+// ─── docs/step2-figma-parity-batch.md, Commit 1: copy and labels ──────────
+has('en dateTimeHint key added under stepHeading1 (diff #3)', 'dateTimeHint: "Select an available date below to choose your time slot."');
+has('dateTimeHint rendered as a section-hint right after heading 1', 't.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint)');
+has('en participantDetails key added (diff #7)', 'participantDetails: "Participant details"');
+missing('aboutYou key removed (folded into participantDetails for the single-rider case)', 'aboutYou:');
+missing('yourDetails key removed (folded into participantDetails for the single-rider case)', 'yourDetails:');
+has('outer "about riders" wrapper only shows for 2+ riders now (was riders.length > 0)', 'riders.length > 1 && /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.aboutRiders)');
+has('single-rider card label reads participantDetails, multi-rider keeps numbered personNoun', 'className: "rider-label"\n    }, riders.length === 1 ? t.participantDetails : personNoun + " " + (idx + 1))');
+has('en sTotal label sits alongside renamed sRiders (diff #13)', 'sRiders: "Participant",');
+has('en awaiting stays hourglass-free (diff #16 declined, no-decorative-emoji decision stands)', 'awaiting: "Awaiting approval"');
+missing('hourglass emoji not reintroduced anywhere in awaiting text', '⏳');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

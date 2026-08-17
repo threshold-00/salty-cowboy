@@ -2,6 +2,43 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Figma parity batch, Commit 1: Step 2 copy and labels
+
+Per `docs/step2-figma-parity-batch.md` (Figma frame `5:1478`), Commit 1 of a five-commit batch
+bringing Step 2 into closer parity with the frame. Pure text, no layout moves, lowest risk of
+the batch.
+
+- Added a hint line under "1. Book a date and time": "Select an available date below to choose
+  your time slot." New translation key `dateTimeHint`.
+- Merged the single-rider double label. Previously a single-person booking showed "About you"
+  (section label) directly above "Your details" (card label), which read as redundant. Now the
+  section label only appears for 2+ riders ("About the riders"), and the single-rider card
+  itself reads "Participant details" (new key `participantDetails`). Multi-rider bookings are
+  unchanged: each card still reads "Rider 1" / "Rider 2" (or "Person 1" / "Person 2" outside the
+  Rides category) so people stay distinguishable. The old `aboutYou` and `yourDetails` keys were
+  removed as dead code once nothing referenced them.
+- Notes hint now ends "...please let us know here." instead of "...please let us know below.",
+  matching the Figma copy. Updated in `index.html` and in this file's own Notes section
+  documentation to match.
+- Summary row label renamed from "Riders" to "Participant" (`sRiders`) in all three languages.
+  This affects both the confirm screen's summary and the in-page summary added in Commit B,
+  since they share the same key. Fixes an existing inconsistency too: a photoshoot or lesson
+  booking previously said "Riders" in this row even though no one is riding.
+
+### Declined
+- diff #16 (restore the hourglass emoji on "Awaiting approval") was declined per Ro's explicit
+  confirmation. This session already removed that emoji deliberately as part of a
+  no-decorative-emoji, spare-editorial-tone pass, and a test asserts it stays gone. Flagging
+  back rather than silently reverting: if the Figma frame is the newer source of truth here,
+  say so and I will restore it.
+
+Business rules: none changed, display only. `CLAUDE.md`'s Notes section hint text updated to
+match.
+
+### Testing
+- 217 / 217 string assertions pass (10 new, 3 rewritten for the new copy)
+- jsdom render passes with zero console errors
+
 ## 17 Aug 2026 — Commit C: Step 2 reorder, ungate calendar, Futura upright type (structural + LOGIC)
 
 Per Ro's direct request (matching `docs/booking-engine-structural-spec.md` Commit C, plus a

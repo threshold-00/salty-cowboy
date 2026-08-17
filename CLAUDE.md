@@ -109,7 +109,7 @@ Lunge Lesson has been removed entirely (activity, pricing, copy, all three langu
 
 ### Notes section
 
-Every activity's notes field shows a small hint above the textarea: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know below."
+Every activity's notes field shows a small hint above the textarea: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."
 
 ### Main page
 
