@@ -2,6 +2,116 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Styling parity sub-steps 2+3: one 22px rhythm, one 623px column
+
+Per `docs/step2-styling-parity.md`, sub-steps 2 and 3, done together per Ro's direction: no
+per-element nudging, one systematic fix for spacing and one for alignment. Presentation only,
+no logic, no copy, no reorder.
+
+### Vertical rhythm: one 22px gap, no per-element margins
+Every Step 2 block that used to carry its own ad hoc margin (18px, 16px, 12px, 20px, or a
+negative-margin hack to fake tight spacing) now uses the same `margin-bottom: 22px`. Fixed
+directly on their own CSS class where that class is Step-2-exclusive (`.detail-header-card`,
+`.section-hint`, `.control-card`, `.rider-card`, `.cal-selection-panel`, `.addon-group`,
+`.notes-area`, `.notice`, `.price-reveal`). Where the class is shared with Step 1 or Step 3
+(`.cta`, `.confirm-summary`, `.fu2`), the 22px was added as a scoped inline style on that one
+Step 2 element instead, so nothing outside Step 2 shifted.
+
+- **The BYO Photographer line** (flagged specifically): removed the `marginTop: -10,
+  marginBottom: 4` hack that jammed it against the header card above and the next heading
+  below. It now sits in `.section-hint`'s normal flow, getting the same real 22px above and
+  below as everything else. Same fix applied to the Horse Whisperer course hint, which used
+  the identical hack.
+- Removed the `marginTop: -6` hack on the date/time hint and the `margin: -6px 0 8px` hack on
+  the notes hint (the latter kept a small heading-to-hint gap, since it isn't a between-block
+  gap, just no longer negative).
+- Removed the inline `marginTop: 24` nudges on section headings 2 and 3. They no longer need
+  their own spacing since the block before each of them now carries the trailing 22px.
+- The calendar's own internal pieces (header, grid, legend) are untouched and still flush
+  against each other, they're one continuous dark card in the frame. The trailing 22px sits on
+  `.cal-selection-panel` (the date readout and time slot area below the dark card), which is
+  the block that's actually last.
+- Card padding for duration, number-of-people, and participant details unified to `23px top,
+  25px bottom, 16.5px sides` (`.control-card` now matches `.rider-card`, which already had the
+  right values). Other cards (header, summary, notes, time-slot) keep their own
+  already-documented padding, not touched.
+
+### Alignment: one 623px column
+Steps 1 and 3 share a `.main > * { max-width: 660px }` rule. Rather than change that shared
+rule (which would also resize Step 1 and Step 3, out of scope), added a more specific override
+`.main > .step2-block { max-width: 671px }` and tagged Step 2's three top-level blocks (details,
+summary/total/notes/Send/notice, cost-funds) with that class. 671 = 623 + the existing 24px side
+padding on each side (already global via `box-sizing: border-box`), so Step 2's cards land at
+exactly 623px content width without touching Step 1 or Step 3's shared 660px rule.
+
+Business rules: none, presentation only.
+
+### Testing
+- 300 / 300 string assertions pass (24 new, 15 rewritten for the removed inline margins and
+  new classes)
+- jsdom render passes with zero console errors
+- Verified live via `getBoundingClientRect`: `.detail-header-card`, `.section-hint`,
+  `.rider-card`, `.confirm-summary`, `.price-reveal`, `.notes-area`, `.cta`, `.notice` all
+  measured `left: 439, width: 623, margin-bottom: 22px` on a completed Beach & Rice Field Ride
+  booking, desktop viewport. Confirmed the BYO Photographer line on the Beach Photoshoot now
+  reads with visible space above and below it, not jammed against the header card or the
+  "1. Book a date and time" heading.
+
+## 18 Aug 2026 — Styling parity sub-step 1: Futura weight 500 across Step 2
+
+Per `docs/step2-styling-parity.md`, sub-step 1 only. Font family and weight only, nothing else.
+No size, colour, letter-spacing, line-height, spacing, or logic touched.
+
+### Token check (done first, as asked)
+Confirmed live before making any change: `--display` resolves to `'Futura', 'Century Gothic',
+'Outfit', sans-serif`, and the browser genuinely renders Futura (not a silent fallback). Checked
+via `document.fonts.check('16px Futura')` (true) and a canvas text-width comparison: Futura
+measured 274.2px for a test string, distinctly different from Outfit (252.5px), Cormorant
+Garamond (244.9px, the old pre-session token), and a generic fallback (266.8px). The token is
+correct and was already resolving to real Futura before this commit.
+
+### What was actually wrong
+Two separate kinds of drift, both invisible until checked:
+1. **Missing weight.** Several rules set `font-family: var(--display)` but never set
+   `font-weight`, so headings rendered at the browser's bold default for `h2`/`h3` (700), or
+   inherited a stray 600 (`.price-reveal-value`, `.cal-day`'s 400 in the other direction).
+2. **Missing family.** Many Step 2 text roles (labels, pills, field values, summary rows, back
+   link, description, notes placeholder, confirmation note, cost-funds copy) never set
+   `font-family` at all, so they silently inherited `.app`'s base `'Outfit', sans-serif` instead
+   of Futura.
+
+### Change
+Added `font-family: var(--display); font-weight: 500;` (or just the missing one of the two)
+to every Step 2 text role: activity title, section headings 1/2/3, activity description, back
+link, eyebrow labels (Duration, Number of people, Participant details, Time slot, Total cost),
+field labels, field input values, duration/people pills, weight/experience pills, date readout,
+calendar month, calendar weekday, calendar day number, calendar legend, summary row label and
+value, Edit link, Total cost label and value, notes placeholder, consent checkbox text,
+confirmation note, cost-funds heading and paragraph, WhatsApp button.
+
+`.sum-key` / `.sum-val` are shared with the Step 3 confirm screen's own summary, so that screen
+picks up the same fix, consistent rather than a scope violation.
+
+### Left alone, confirmed correct already
+- `.time-main` (time-slot time value): stays Outfit, already weight 500. Unedited.
+- `.time-sub` (time-slot duration sublabel): stays Outfit, no explicit weight, defaults to 400.
+  Unedited. These are the spec's two named exceptions.
+- Everything not named in the spec's type-scale table (`.notes-time-hint`, `.days-count`,
+  `.date-chip`, `.cat-tab`, Step 1's `.act-name`/`.act-price`/price-tag chips, the sidebar) was
+  left untouched. Flagging this: if any of these should also move to Futura 500, say so and
+  I will fold it into this same commit before it's finalised.
+
+Business rules: none, presentation only.
+
+### Testing
+- 276 / 276 string assertions pass (26 new, 4 rewritten for the added properties)
+- jsdom render passes with zero console errors
+- Verified live via computed styles: `.section-title`, `.act-category`, `.pill`, `.text-input`,
+  `.back-link`, `.detail-desc`, `.cal-month`, `.field-label`, `.notice`, `.hint-link` all read
+  `Futura, "Century Gothic", Outfit, sans-serif` at `font-weight: 500`. `.time-main` reads
+  `Outfit, sans-serif` at `500`, `.time-sub` reads `Outfit, sans-serif` at `400`, both unchanged
+  from before this commit.
+
 ## 18 Aug 2026 — Figma parity batch, Commit 5: Step 2 price and summary reorder (isolated)
 
 Per `docs/step2-figma-parity-batch.md`, Commit 5, the risky one. Kept isolated and

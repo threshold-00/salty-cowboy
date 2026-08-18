@@ -151,7 +151,7 @@ has('WhatsApp course schedule line updated', 'lines.push("Course runs Mon, Tue, 
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
 has('en byoPhotographer key',      'byoPhotographer: "BYO Photographer or add a Salty Cowboys photographer"');
 has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.createElement("div", {\n    className: "byo-note"\n  }, t.byoPhotographer)');
-has('byo note on step2',           'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",');
+has('byo note on step2, no negative-margin hack (styling parity sub-steps 2/3: defined slot, not jammed)', 'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.byoPhotographer)');
 
 // ─── Notes section: "times not suitable" hint, all activities ────────────
 has('en notesTimeHint key ends "here" not "below" (Figma parity commit 1)', 'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."');
@@ -185,7 +185,7 @@ has('ru sessionNote one per week', 'В неделю принимается то�
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
 has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
 missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
 has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header"\n  },');
 missing('no separate calendar screen state left', '"calendar"');
@@ -203,10 +203,10 @@ has('cal-legend bottom radius',    '.cal-legend {\n  padding: 12px 24px;\n  back
 has('cal-day.selected is white with dark text', '.cal-day.selected {\n  background: #fff !important;\n  color: var(--earth) !important;\n  border-color: rgba(255,255,255,0.3) !important;\n}');
 has('time-card padding precision', '.time-card {\n  flex: 1;\n  padding: 14.5px;');
 has('time-card selected sub is legible', '.time-card.selected .time-sub  { color: var(--sand); font-size: 14px; }');
-has('notes-area placeholder restyled', ".notes-area::placeholder { color: #999999; font-size: 11.5px; }");
-has('price-reveal is a light bordered card, now stacked label-over-value (Figma parity Commit 5, diff #8)', '.price-reveal {\n  display: flex; flex-direction: column; gap: 4px;\n  margin: 4px 0 20px; padding: 14px 16px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
-has('price-reveal-value is dark text', '.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--earth); }');
-has('price-reveal-label replaces price-reveal-basis, reads TOTAL COST (diff #8)', '.price-reveal-label { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }');
+has('notes-area placeholder now Futura 500 (styling parity sub-step 1)', ".notes-area::placeholder { font-family: var(--display); font-weight: 500; color: #999999; font-size: 11.5px; }");
+has('price-reveal is a light bordered card, now stacked label-over-value (Figma parity Commit 5, diff #8)', '.price-reveal {\n  display: flex; flex-direction: column; gap: 4px;\n  margin-bottom: 22px; padding: 14px 16px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
+has('price-reveal-value is dark text, weight 500 not 600 (styling parity sub-step 1)', '.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 500; color: var(--earth); }');
+has('price-reveal-label replaces price-reveal-basis, reads TOTAL COST, Futura 500 (diff #8)', '.price-reveal-label { font-family: var(--display); font-weight: 500; font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }');
 missing('price-reveal-basis CSS class removed', '.price-reveal-basis');
 
 // ─── Step 1 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
@@ -256,8 +256,8 @@ has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
-has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
-has('section 3 (summary/total/notes/Send/notice) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading3)');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('section 3 (summary/total/notes/Send/notice) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu step2-block"\n  }, React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading3)');
 has('en sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sStatus: "Status"');
 has('id sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sStatus: "Status"');
 has('ru sRiders renamed to Участник (Figma parity commit 1)', 'sRiders: "Участник",\n    sStatus: "Статус"');
@@ -265,7 +265,7 @@ has('confirm-summary block still appears twice (Step 2 in-page + Step 3 confirm)
 missing('sTotal translation key removed as dead code (Figma parity Commit 5, diff #14: Total row dropped from the summary table)', 'sTotal:');
 missing('t.sTotal no longer read anywhere in the summary table', 't.sTotal)');
 has('riders-screen summary sits directly under heading 3, before the TOTAL COST block (Figma parity Commit 5)', 't.stepHeading3), React.createElement("div", {\n    className: "confirm-summary"');
-has('Send button disabled on selectedTime OR incomplete details (Commit C moves the completeness check here)', 'className: "cta",\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn)');
+has('Send button disabled on selectedTime OR incomplete details (Commit C moves the completeness check here)', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn)');
 
 // ─── User request (2026-08-17): Step 2 reorder + ungate, Futura upright type ──
 has('--display CSS variable now Futura system stack, not Cormorant italic', "--display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;");
@@ -280,7 +280,7 @@ missing('the old marginTop:22 spacer above the calendar is gone (large gap remov
 
 // ─── docs/step2-figma-parity-batch.md, Commit 1: copy and labels ──────────
 has('en dateTimeHint key added under stepHeading1 (diff #3)', 'dateTimeHint: "Select an available date below to choose your time slot."');
-has('dateTimeHint rendered as a section-hint right after heading 1', 't.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint)');
+has('dateTimeHint rendered as a section-hint right after heading 1, no negative-margin hack (styling parity)', 't.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.dateTimeHint)');
 has('en participantDetails key added (diff #7)', 'participantDetails: "Participant details"');
 missing('aboutYou key removed (folded into participantDetails for the single-rider case)', 'aboutYou:');
 missing('yourDetails key removed (folded into participantDetails for the single-rider case)', 'yourDetails:');
@@ -291,14 +291,14 @@ has('en awaiting stays hourglass-free (diff #16 declined, no-decorative-emoji de
 missing('hourglass emoji not reintroduced anywhere in awaiting text', '⏳');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 2: card containers ──────────
-has('.control-card CSS added, matches rider-card bordered treatment (diff #4/#6)', '.control-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 16.5px 22px;\n  margin-bottom: 16px;\n}');
+has('.control-card CSS added, matches rider-card bordered treatment and padding (diff #4/#6, styling parity sub-step 3)', '.control-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 22px;\n}');
 has('duration selector wrapped in control-card (diff #4)', 'React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0');
 has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
-has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
-has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
+has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",\n    style: {\n      marginBottom: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
+has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 3: activity header ──────────
-has('.detail-header-card CSS added, light bordered card (diff #1)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 18px;\n}');
+has('.detail-header-card CSS added, light bordered card (diff #1)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 22px;\n}');
 has('back-link and title now sit in the light card, no background image (diff #1)', 'className: "detail-header-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link",\n    onClick: () => setScreen("activity")\n  }, t.back), /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id])');
 has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]))');
 missing('detail-intro wrapper removed (description no longer a separate sibling block)', 'className: "detail-intro"');
@@ -311,7 +311,7 @@ has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan A
 has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
 has('.cost-funds-card CSS added, light not dark (unlike step 1 money-goes)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
 has('cost-funds block reuses moneyGoesBody copy (word-for-word identical to Figma diff #19 text)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
-has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice))), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu"');
+has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice))), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu step2-block"');
 missing('no decorative horse emoji added to the cost-funds heading, consistent with the no-decorative-emoji decision', 'costFundsTitle: "🐴');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 5: price/summary reorder ────
@@ -326,10 +326,70 @@ has('ru totalCostLabel key added', 'totalCostLabel: "Итоговая стоим
 has('Edit link appended inside the step 2 summary card, scroll-to-top only, no state mutation (diff #15)', 't.awaiting)), /*#__PURE__*/React.createElement("div", {\n    style: {\n      textAlign: "right",\n      marginTop: 8\n    }\n  }, /*#__PURE__*/React.createElement("span", {\n    className: "hint-link",\n    style: {\n      cursor: "pointer",\n      fontSize: 12\n    },\n    onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })\n  }, t.editLink))');
 has('TOTAL COST block sits directly after the summary card, still gated on duration/numPeople/selPrice (diff #9)', 'onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })\n  }, t.editLink))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {\n    className: "price-reveal"\n  }, /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-label"\n  }, t.totalCostLabel), /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-value"\n  }, totalPriceStr))');
 has('notes block sits right after TOTAL COST, before Send (diffs #9/#12)', 'totalPriceStr)), React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
-has('Send button sits directly after the notes textarea, before the confirmation notice (diff #17)', 'onChange: e => setNotes(e.target.value)\n  }), React.createElement("button", {\n    className: "cta",\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn), React.createElement("div", {\n    className: "notice"');
+has('Send button sits directly after the notes textarea, before the confirmation notice (diff #17)', 'onChange: e => setNotes(e.target.value)\n  }), React.createElement("button", {\n    className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn), React.createElement("div", {\n    className: "notice"');
 has('confirmation notice now sits after Send, last inside the datesComplete-gated block (diff #18)', 't.sendBtn), React.createElement("div", {\n    className: "notice"\n  }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice)))');
 has('handleSend / buildWhatsAppMessage payload fields untouched by the reorder (Simone\'s flow inviolable)', 'const message = buildWhatsAppMessage({\n      actObj,\n      durationLabel: duration,\n      formattedDates,\n      isCourse,\n      selectedTime,\n      numPeople,\n      riders,\n      showWeight,\n      notes,\n      photographerTier: isPhotoshoot ? photographerTier : null,\n      grooming: needsGrooming ? grooming : null\n    });');
 has('totalPrice / totalPriceStr computation itself untouched, only its rendering moved (diff #9)', 'const totalPrice = unitPrice * mult + photographerPrice;\n  const totalPriceStr = "IDR " + totalPrice.toLocaleString("en-US");');
+
+// ─── docs/step2-styling-parity.md, sub-step 1: weights to Futura 500 ──────
+// Weight/family only. No size, colour, spacing or logic touched.
+has('section-title (activity title / section headings) now explicitly weight 500, was bold by h2/h3 default', '.section-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 22px;');
+has('section-hint (Step 1 helper line + Step 2 hints) now Futura 500, was inheriting Outfit at default weight', '.section-hint {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;');
+has('back-link now Futura 500', '.back-link {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;');
+has('detail-desc (activity description) now Futura 500, was inheriting Outfit at default weight', '.detail-desc { font-family: var(--display); font-weight: 500; font-size: 13px;');
+has('act-category (eyebrow labels: Duration, Number of people, Participant details, Time slot, Total cost) now Futura, weight already 500', '.act-category {\n  font-family: var(--display);\n  font-size: 10px;');
+has('rider-label (Participant details eyebrow) now Futura, weight already 500', '.rider-label {\n  font-family: var(--display);\n  font-size: 11px;\n  letter-spacing: 1.5px;');
+has('field-label (Name/Age/Weight range/Riding experience) now Futura, weight already 500', '.field-label {\n  font-family: var(--display);\n  font-size: 11px;\n  color: var(--dusk);');
+has('text-input (field value) now Futura 500, was Outfit at default weight', '.text-input {\n  width: 100%;\n  padding: 11.5px 13.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 10px;\n  font-family: var(--display);\n  font-weight: 500;');
+has('pill (duration/people) now Futura 500, was Outfit at default weight', '.pill {\n  padding: 9.5px 16.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 24px;\n  font-size: 13px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.18s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
+has('field-pill (weight/experience) now Futura 500, was Outfit at default weight', '.field-pill {\n  padding: 7.5px 13.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 20px;\n  font-size: 12px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.15s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
+has('sel-title (date readout) now explicitly weight 500', '.sel-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 16px;');
+has('cal-month now explicitly weight 500', '.cal-month {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 18px;');
+has('cal-day-name (calendar weekday) now Futura 500', '.cal-day-name {\n  font-family: var(--display);\n  font-weight: 500;\n  text-align: center;');
+has('cal-day (calendar day number) now Futura 500, was weight 400', '.cal-day {\n  font-family: var(--display);\n  aspect-ratio: 1;\n  display: flex; align-items: center; justify-content: center;\n  border-radius: 8px;\n  font-size: 13px;\n  font-weight: 500;');
+has('legend-item (calendar legend) now Futura 500', '.legend-item { font-family: var(--display); font-weight: 500; display: flex;');
+has('sum-key (summary row label) now Futura 500, was inheriting Outfit at default weight', '.sum-key { font-family: var(--display); font-weight: 500; color: var(--dusk); }');
+has('sum-val (summary row value, incl. Status) now Futura, weight already 500', '.sum-val { font-family: var(--display); color: var(--earth); font-weight: 500;');
+has('hint-link (Edit link) now Futura, weight already 500', '.hint-link {\n  font-family: var(--display);\n  color: var(--clay);\n  font-weight: 500;');
+has('perm-text (consent checkbox text) now Futura 500, was inheriting Outfit at default weight', '.perm-text { font-family: var(--display); font-weight: 500; font-size: 12px; color: #444444;');
+has('notice (confirmation note) now Futura 500', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--display);\n  font-weight: 500;');
+has('cta (WhatsApp button) now explicitly weight 500', '.cta {\n  display: block;\n  width: 100%;\n  padding: 16px;\n  background: var(--clay);\n  color: #fff;\n  border: none;\n  border-radius: 14px;\n  font-family: var(--display);\n  font-weight: 500;');
+has('cost-funds-title now explicitly weight 500', '.cost-funds-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 18px;');
+has('cost-funds-body now Futura 500, was inheriting Outfit at default weight', '.cost-funds-body {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12.5px;');
+// Confirmed exceptions: time-slot time (Outfit 500) and duration sublabel (Outfit 400) untouched.
+missing('time-main (time-slot time value) NOT switched to Futura, stays Outfit per the two named exceptions', '.time-main { font-family: var(--display)');
+has('time-main keeps its pre-existing weight 500 (Outfit 500 per spec), unedited by this pass', '.time-main { font-size: 16px; font-weight: 500; color: var(--earth); }');
+missing('time-sub (time-slot duration sublabel) NOT switched to Futura, stays Outfit per the two named exceptions', '.time-sub  { font-family: var(--display)');
+missing('time-sub NOT given an explicit weight override (defaults to 400, matching Outfit 400 per spec)', '.time-sub  { font-weight');
+
+// ─── docs/step2-styling-parity.md, sub-steps 2+3: rhythm and alignment ────
+// One uniform 22px inter-block gap, no per-element nudges. 623px column via a
+// scoped .step2-block override (671 = 623 + existing 24px side padding), not
+// a global width change (keeps Steps 1 and 3 untouched).
+has('.step2-block override: 671px so Step 2 cards land at 623px content width, scoped off the shared 660px rule', '.main > .step2-block { max-width: 671px; }');
+has('EXPR_A (details block) tagged step2-block', 'className: "body fu step2-block"');
+has('EXPR_B (summary/total/notes/Send/notice block) tagged step2-block', 'className: "fu step2-block"');
+has('cost-funds block tagged step2-block', 'className: "cost-funds-card fu step2-block"');
+has('detail-header-card trailing gap now the uniform 22px (was 18px)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 22px;\n}');
+has('section-hint trailing gap now the uniform 22px (was 20px), covers isWhisper/BYO/dateTimeHint', '.section-hint {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: var(--dusk);\n  margin-bottom: 22px;');
+missing('isWhisper hint no longer uses the negative-margin jam-against-heading hack', 'isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
+missing('isPhotoshoot (BYO Photographer) hint no longer uses the negative-margin hack, now gets a real defined slot', 'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
+has('dateTimeHint no longer uses the negative-margin hack', '}, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"');
+has('duration control-card and rider-card share identical padding (23/16.5/25) and the uniform 22px gap (styling parity sub-step 3)', '.rider-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 22px;\n}');
+has('cal-selection-panel (date readout + time slot) gets the trailing 22px gap before the next block, not cal-legend (keeps the dark calendar card visually seamless)', '.cal-selection-panel {\n  padding: 20px 24px;\n  margin-bottom: 22px;\n}');
+missing('cal-legend itself has no margin-bottom (stays flush with cal-selection-panel, one continuous card)', '.cal-legend {\n  padding: 12px 24px;\n  background: var(--earth);\n  display: flex;\n  gap: 16px;\n  border-top: 1px solid rgba(255,255,255,0.06);\n  border-radius: 0 0 14px 14px;\n  margin-bottom');
+has('heading 2 no longer carries an inline marginTop:24 nudge', 't.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"');
+has('grooming card gets its own trailing 22px via inline style, not the shared .fu2 class (avoids touching every other .fu2 element site-wide)', 'className: "fu2",\n    style: {\n      marginBottom: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
+has('heading 3 no longer carries an inline marginTop:24 nudge', 't.stepHeading3), React.createElement("div", {\n    className: "confirm-summary",');
+has('confirm-summary gets its trailing 22px via inline style scoped to the Step 2 instance only, not the shared class (Step 3 confirm screen summary is untouched)', 'React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading3), React.createElement("div", {\n    className: "confirm-summary",\n    style: {\n      marginBottom: 22\n    }\n  }');
+has('Step 3 confirm screen summary card has no margin override (only Step 2\'s in-page copy was touched)', 'React.createElement("div", {\n    className: "confirm-summary"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "sum-row"');
+has('addon-group now uses trailing margin-bottom (22px) instead of a leading margin-top nudge', '.addon-group { margin-bottom: 22px; }');
+missing('addon-group no longer uses margin-top', '.addon-group { margin-top');
+has('notes-time-hint negative-margin hack removed, kept as a small heading-to-hint gap (not part of the 22px block rhythm)', '.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }');
+has('notes-area trailing gap now the uniform 22px (was 16px)', 'transition: border 0.18s;\n  margin-bottom: 22px;\n}');
+has('Send button (Step 2 instance) overrides the shared .cta margin locally: 0 top, 22 bottom, not touching Step 1\'s cta-dock button', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete');
+has('Step 1\'s cta-dock Next button still uses the untouched shared .cta class (no inline override, no cross-contamination)', 'className: "cta",\n    disabled: !activity,\n    onClick: () => setScreen("riders")');
+has('notice trailing gap now the uniform 22px (was 16px), sits last before the always-visible cost-funds block', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: #444444;\n  line-height: 1.5;\n  margin-bottom: 22px;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

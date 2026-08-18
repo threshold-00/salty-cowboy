@@ -1172,6 +1172,11 @@ html, body { background: #0a0a0a; }
   }
   .main > * { max-width: 660px; margin-left: auto; margin-right: auto; }
   .main > .fu:not(.body):not(.confirm-screen) { padding-left: 24px; padding-right: 24px; box-sizing: border-box; }
+  /* Step 2's three top-level blocks (details, summary/send, cost-funds) share one
+     623px content column, matching Figma. 671 = 623 + the existing 24px side
+     padding on each side, so headings, hints and cards all land on the same
+     left edge without touching the shared 660px width used by Steps 1 and 3. */
+  .main > .step2-block { max-width: 671px; }
 }
 
 /* ── HERO HEADER ── */
@@ -1273,17 +1278,21 @@ html, body { background: #0a0a0a; }
 
 .section-title {
   font-family: var(--display);
+  font-weight: 500;
   font-size: 22px;
   color: var(--earth);
   margin-bottom: 4px;
 }
 .section-hint {
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 12px;
   color: var(--dusk);
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   line-height: 1.5;
 }
 .hint-link {
+  font-family: var(--display);
   color: var(--clay);
   font-weight: 500;
   text-decoration: underline;
@@ -1320,6 +1329,7 @@ html, body { background: #0a0a0a; }
 .cat-tab:hover { border-color: var(--clay); }
 .cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }
 .act-category {
+  font-family: var(--display);
   font-size: 10px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -1392,7 +1402,8 @@ html, body { background: #0a0a0a; }
   background: #fff;
   color: var(--earth);
   transition: all 0.18s;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--display);
+  font-weight: 500;
 }
 .pill:hover    { border-color: var(--clay); }
 .pill.selected { background: var(--earth); border-color: var(--earth); color: var(--sand); }
@@ -1403,7 +1414,7 @@ html, body { background: #0a0a0a; }
   border: 1px solid var(--fog);
   border-radius: 14px;
   padding: 23px 16.5px 25px;
-  margin-bottom: 12px;
+  margin-bottom: 22px;
 }
 /* Bordered card treatment for the duration and number-of-people selectors,
    matching Figma (they used to float directly on white). */
@@ -1411,10 +1422,11 @@ html, body { background: #0a0a0a; }
   background: #fff;
   border: 1px solid var(--fog);
   border-radius: 14px;
-  padding: 20px 16.5px 22px;
-  margin-bottom: 16px;
+  padding: 23px 16.5px 25px;
+  margin-bottom: 22px;
 }
 .rider-label {
+  font-family: var(--display);
   font-size: 11px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -1425,6 +1437,7 @@ html, body { background: #0a0a0a; }
 .rider-field { margin-bottom: 14px; }
 .rider-field:last-child { margin-bottom: 0; }
 .field-label {
+  font-family: var(--display);
   font-size: 11px;
   color: var(--dusk);
   margin-bottom: 6px;
@@ -1441,7 +1454,8 @@ html, body { background: #0a0a0a; }
   background: #fff;
   color: var(--earth);
   transition: all 0.15s;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--display);
+  font-weight: 500;
 }
 .field-pill:hover    { border-color: var(--clay); }
 .field-pill.selected { background: var(--earth); border-color: var(--earth); color: var(--sand); }
@@ -1452,7 +1466,8 @@ html, body { background: #0a0a0a; }
   padding: 11.5px 13.5px;
   border: 1.5px solid var(--fog);
   border-radius: 10px;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 14px;
   color: var(--earth);
   background: #fff;
@@ -1488,10 +1503,10 @@ html, body { background: #0a0a0a; }
   transition: all 0.15s;
 }
 .perm-box.checked { background: var(--clay); }
-.perm-text { font-size: 12px; color: #444444; line-height: 1.5; }
+.perm-text { font-family: var(--display); font-weight: 500; font-size: 12px; color: #444444; line-height: 1.5; }
 
 /* ── NOTES ── */
-.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin: -6px 0 8px; line-height: 1.4; }
+.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }
 .notes-area {
   width: 100%;
   min-height: 84px;
@@ -1506,10 +1521,10 @@ html, body { background: #0a0a0a; }
   resize: vertical;
   line-height: 1.5;
   transition: border 0.18s;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
 }
 .notes-area:focus { border-color: var(--clay); }
-.notes-area::placeholder { color: #999999; font-size: 11.5px; }
+.notes-area::placeholder { font-family: var(--display); font-weight: 500; color: #999999; font-size: 11.5px; }
 
 /* ── CTA ── */
 .cta {
@@ -1521,6 +1536,7 @@ html, body { background: #0a0a0a; }
   border: none;
   border-radius: 14px;
   font-family: var(--display);
+  font-weight: 500;
   font-size: 18px;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
@@ -1534,6 +1550,8 @@ html, body { background: #0a0a0a; }
   display: flex;
   align-items: center;
   gap: 6px;
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 12px;
   color: var(--dusk);
   cursor: pointer;
@@ -1549,7 +1567,7 @@ html, body { background: #0a0a0a; }
   border: 1px solid var(--fog);
   border-radius: 14px;
   padding: 20px 20px 18px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 .detail-header-card .back-link { margin-bottom: 14px; }
 .detail-header-card .section-title { margin-bottom: 8px; }
@@ -1565,6 +1583,7 @@ html, body { background: #0a0a0a; }
 }
 .cal-month {
   font-family: var(--display);
+  font-weight: 500;
   font-size: 18px;
   color: var(--sand);
 }
@@ -1591,6 +1610,8 @@ html, body { background: #0a0a0a; }
   margin-bottom: 8px;
 }
 .cal-day-name {
+  font-family: var(--display);
+  font-weight: 500;
   text-align: center;
   font-size: 10px;
   letter-spacing: 1px;
@@ -1604,11 +1625,12 @@ html, body { background: #0a0a0a; }
   gap: 3px;
 }
 .cal-day {
+  font-family: var(--display);
   aspect-ratio: 1;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: default;
   color: rgba(255,255,255,0.2);
   position: relative;
@@ -1634,7 +1656,7 @@ html, body { background: #0a0a0a; }
   border-top: 1px solid rgba(255,255,255,0.06);
   border-radius: 0 0 14px 14px;
 }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.4); }
+.legend-item { font-family: var(--display); font-weight: 500; display: flex; align-items: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.4); }
 .legend-dot {
   width: 10px; height: 10px;
   border-radius: 3px;
@@ -1642,9 +1664,11 @@ html, body { background: #0a0a0a; }
 
 .cal-selection-panel {
   padding: 20px 24px;
+  margin-bottom: 22px;
 }
 .sel-title {
   font-family: var(--display);
+  font-weight: 500;
   font-size: 16px;
   color: var(--earth);
   margin-bottom: 14px;
@@ -1717,10 +1741,12 @@ html, body { background: #0a0a0a; }
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 12px 14px;
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 12px;
   color: #444444;
   line-height: 1.5;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
   display: flex;
   gap: 8px;
 }
@@ -1769,8 +1795,8 @@ html, body { background: #0a0a0a; }
   border-bottom: 1px solid var(--fog);
 }
 .sum-row:last-child { border-bottom: none; }
-.sum-key { color: var(--dusk); }
-.sum-val { color: var(--earth); font-weight: 500; text-align: right; max-width: 60%; }
+.sum-key { font-family: var(--display); font-weight: 500; color: var(--dusk); }
+.sum-val { font-family: var(--display); color: var(--earth); font-weight: 500; text-align: right; max-width: 60%; }
 .reset-link {
   background: none;
   border: none;
@@ -1904,7 +1930,7 @@ html, body { background: #0a0a0a; }
 .pt-value { font-size: 13px; color: var(--earth); font-weight: 700; white-space: nowrap; }
 .act-desc  { font-size: 14px; color: #5c5c5c; margin-top: 4px; line-height: 19.5px; }
 .addon-row { margin-top: 6px; }
-.addon-group { margin-top: 10px; }
+.addon-group { margin-bottom: 22px; }
 .addon-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
 
 /* ── ANIMATIONS ── */
@@ -1983,17 +2009,17 @@ html, body { background: #0a0a0a; }
 .has-dock { padding-bottom: 104px; }
 
 /* Page 2 offer recap, now inside .detail-header-card. */
-.detail-desc { font-size: 13px; color: #5c5c5c; line-height: 1.5; margin-top: 2px; }
+.detail-desc { font-family: var(--display); font-weight: 500; font-size: 13px; color: #5c5c5c; line-height: 1.5; margin-top: 2px; }
 
 /* Price reveal once duration + group size are chosen. */
 .price-reveal {
   display: flex; flex-direction: column; gap: 4px;
-  margin: 4px 0 20px; padding: 14px 16px; border-radius: 12px;
+  margin-bottom: 22px; padding: 14px 16px; border-radius: 12px;
   background: #fff; border: 1.5px solid var(--fog);
   animation: fadeUp 0.25s ease both;
 }
-.price-reveal-label { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }
-.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--earth); }
+.price-reveal-label { font-family: var(--display); font-weight: 500; font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }
+.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 500; color: var(--earth); }
 
 /* Mission statement shown once at the top of the landing (activity) screen. */
 .money-goes {
@@ -2026,11 +2052,14 @@ html, body { background: #0a0a0a; }
 }
 .cost-funds-title {
   font-family: var(--display);
+  font-weight: 500;
   font-size: 18px;
   color: var(--earth);
   margin-bottom: 6px;
 }
 .cost-funds-body {
+  font-family: var(--display);
+  font-weight: 500;
   font-size: 12.5px;
   line-height: 20px;
   color: #4a4a4a;
@@ -2489,7 +2518,7 @@ function App() {
     disabled: !activity,
     onClick: () => setScreen("riders")
   }, t.next)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
-    className: "body fu"
+    className: "body fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
     className: "detail-header-card"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2500,24 +2529,13 @@ function App() {
   }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {
     className: "detail-desc"
   }, t.descs[actObj?.id])), isWhisper && /*#__PURE__*/React.createElement("p", {
-    className: "section-hint",
-    style: {
-      marginTop: -10,
-      marginBottom: 4
-    }
+    className: "section-hint"
   }, t.sessionNote + " " + t.courseWeekNote), isPhotoshoot && /*#__PURE__*/React.createElement("p", {
-    className: "section-hint",
-    style: {
-      marginTop: -10,
-      marginBottom: 4
-    }
+    className: "section-hint"
   }, t.byoPhotographer), /*#__PURE__*/React.createElement("h3", {
     className: "section-title"
   }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {
-    className: "section-hint",
-    style: {
-      marginTop: -6
-    }
+    className: "section-hint"
   }, t.dateTimeHint), React.createElement("div", {
     className: "fu control-card"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2638,7 +2656,10 @@ function App() {
   }, slot), /*#__PURE__*/React.createElement("div", {
     className: "time-sub"
   }, duration))))))), needsGrooming && /*#__PURE__*/React.createElement("div", {
-    className: "fu2"
+    className: "fu2",
+    style: {
+      marginBottom: 22
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
   }, t.groomingLabel), /*#__PURE__*/React.createElement("div", {
@@ -2648,10 +2669,7 @@ function App() {
     className: "pill " + (grooming === g[0] ? "selected" : ""),
     onClick: () => setGrooming(g[0])
   }, g[1])))), /*#__PURE__*/React.createElement("h3", {
-    className: "section-title",
-    style: {
-      marginTop: 24
-    }
+    className: "section-title"
   }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
     className: "fu2 control-card"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2771,14 +2789,14 @@ function App() {
   }, photographerTier === tier.key ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
   }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")"))))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {
-    className: "fu"
+    className: "fu step2-block"
   }, React.createElement("h3", {
-    className: "section-title",
-    style: {
-      marginTop: 24
-    }
+    className: "section-title"
   }, t.stepHeading3), React.createElement("div", {
-    className: "confirm-summary"
+    className: "confirm-summary",
+    style: {
+      marginBottom: 22
+    }
   }, React.createElement("div", {
     className: "sum-row"
   }, /*#__PURE__*/React.createElement("span", {
@@ -2856,12 +2874,16 @@ function App() {
     onChange: e => setNotes(e.target.value)
   }), React.createElement("button", {
     className: "cta",
+    style: {
+      marginTop: 0,
+      marginBottom: 22
+    },
     disabled: !selectedTime || !detailsComplete,
     onClick: handleSend
   }, t.sendBtn), React.createElement("div", {
     className: "notice"
   }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
-    className: "cost-funds-card fu"
+    className: "cost-funds-card fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-title"
   }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {
