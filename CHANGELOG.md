@@ -2,6 +2,55 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Figma parity batch, Commit 5: Step 2 price and summary reorder (isolated)
+
+Per `docs/step2-figma-parity-batch.md`, Commit 5, the risky one. Kept isolated and
+independently revertible from Commits 1-4, per the spec's own instruction. Reorders the tail of
+Step 2 (everything gated on `datesComplete`) and touches the price display, but no pricing
+math, WhatsApp payload, or any other business rule changed.
+
+New order inside the datesComplete-gated block: "3. Your booking summary" (with Edit link,
+Total row removed), TOTAL COST, notes, Send, confirmation notice. The participant details card
+itself did not move, it was already correctly positioned in section 2 from earlier commits this
+session.
+
+- **Summary table**: removed the inline Total row (`sTotal`). Total now lives only in the
+  TOTAL COST block below the table. Added an "Edit" link (new key `editLink`) inside the
+  summary card, right-aligned below Status. Its `onClick` is `window.scrollTo({top:0,
+  behavior:"smooth"})`, nothing else. No handler was invented beyond that: the spec described
+  a visual element ("add the Edit link") without specifying behavior, and scroll-to-top is the
+  most conservative interpretation, since Step 2 already has every field on-screen for editing.
+  Flagging this interpretation in case a different behavior was intended.
+- **Price block**: relabeled from a bare value to a "TOTAL COST" label + value pair (new key
+  `totalCostLabel`), matching what an earlier restyle spec had already called for but never
+  actually implemented. Dropped the `IDR 1,600,000 x 1 PERSON` breakdown line entirely, per the
+  spec ("show value only"). `.price-reveal-basis` CSS and the `priceBasis` computation it
+  displayed are both removed as dead code, since nothing else read `priceBasis` (confirmed it
+  was never passed into `buildWhatsAppMessage`).
+- **Position**: the summary table moved from the very bottom of the gated block to directly
+  under its own heading (now first), and the TOTAL COST block moved from section 2 (right after
+  the participant/addon cards) to directly after the summary table in section 3.
+- **Notice**: the "your selected date and time will be confirmed via WhatsApp" note moved from
+  before the summary to after the Send button, now the last element in the gated block, right
+  before the always-visible cost-funds card from Commit 4.
+
+### Business-rules assessment (per the spec's own instruction)
+- `totalPrice` / `totalPriceStr` computation is byte-for-byte unchanged, only where it renders
+  moved. Confirmed no other total is computed anywhere.
+- `handleSend`'s `buildWhatsAppMessage(...)` call and every field passed into it are unchanged.
+  The reorder only touches display order inside the riders screen; it does not touch what gets
+  sent to Simone.
+- Confirmed `priceBasis` was genuinely dead (not referenced by the WhatsApp message) before
+  removing it, rather than assuming.
+
+### Testing
+- 249 / 249 string assertions pass (12 new, 9 rewritten for the new order)
+- jsdom render passes with zero console errors
+- Verified live: summary card shows Activity/Duration/Date & time/Participant/Status with no
+  Total row and an Edit link, TOTAL COST block sits directly below it labelled correctly, Send
+  stays disabled until every field is complete then enables, notice appears after Send, and the
+  always-visible cost-funds card from Commit 4 still sits at the very bottom.
+
 ## 18 Aug 2026 — Figma parity batch, Commit 4: Step 2 cost-funds section
 
 Per `docs/step2-figma-parity-batch.md`, Commit 4. Additive, self-contained, static content.

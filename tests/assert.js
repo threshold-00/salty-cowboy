@@ -68,8 +68,8 @@ has('WhatsApp weight lines use showWeight', 'showWeight,\n  notes,');
 has('isPerHorse flag',             'const isPerHorse = !!(actObj && actObj.perHorse);');
 has('isPerPerson flag',            'const isPerPerson = !!(actObj && actObj.perPerson);');
 has('horseCount cap at 2',         'Math.min(peopleCount || 1, 2)');
-has('perHorse basis text',         'isPerHorse) {\n    priceBasis = selPrice ? selPrice.v + " \\u00d7 " + (horseCount || 1)');
-has('perPerson basis text',        'isPerPerson) {\n    priceBasis = selPrice ? selPrice.v + " \\u00d7 " + (peopleCount || 1)');
+missing('priceBasis computation removed as dead code (Figma parity Commit 5, diff #8: value only, no breakdown line)', 'let priceBasis;');
+missing('price-reveal-basis JSX span removed along with priceBasis', 'className: "price-reveal-basis"');
 
 // ─── PHOTOGRAPHER_TIERS ──────────────────────────────────────────────────
 has('PHOTOGRAPHER_TIERS declared', 'const PHOTOGRAPHER_TIERS = {');
@@ -157,7 +157,7 @@ has('byo note on step2',           'isPhotoshoot && /*#__PURE__*/React.createEle
 has('en notesTimeHint key ends "here" not "below" (Figma parity commit 1)', 'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."');
 has('id notesTimeHint key ends "di sini" not "di bawah" (Figma parity commit 1)', 'notesTimeHint: "Kami ingin Anda mendapatkan pengalaman yang berkesan. Jika waktu yang tersedia tidak sesuai, atau Anda memiliki permintaan tambahan, silakan beri tahu kami di sini."');
 has('ru notesTimeHint key ends "здесь" not "ниже" (Figma parity commit 1)', 'notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом здесь."');
-has('notesTimeHint rendered near notes area', 'className: "notes-time-hint"\n  }, t.notesTimeHint), /*#__PURE__*/React.createElement("textarea"');
+has('notesTimeHint rendered near notes area', 'className: "notes-time-hint"\n  }, t.notesTimeHint), React.createElement("textarea"');
 
 // ─── Main page: "Where the money goes" bio copy ───────────────────────────
 has('en moneyGoesTitle',           'moneyGoesTitle: "Where the money goes"');
@@ -204,9 +204,10 @@ has('cal-day.selected is white with dark text', '.cal-day.selected {\n  backgrou
 has('time-card padding precision', '.time-card {\n  flex: 1;\n  padding: 14.5px;');
 has('time-card selected sub is legible', '.time-card.selected .time-sub  { color: var(--sand); font-size: 14px; }');
 has('notes-area placeholder restyled', ".notes-area::placeholder { color: #999999; font-size: 11.5px; }");
-has('price-reveal flipped to light card', '.price-reveal {\n  display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap;\n  margin: 4px 0 20px; padding: 12px 15px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
+has('price-reveal is a light bordered card, now stacked label-over-value (Figma parity Commit 5, diff #8)', '.price-reveal {\n  display: flex; flex-direction: column; gap: 4px;\n  margin: 4px 0 20px; padding: 14px 16px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
 has('price-reveal-value is dark text', '.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--earth); }');
-has('price-reveal-basis is uppercase label style', '.price-reveal-basis { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; text-align: right; }');
+has('price-reveal-label replaces price-reveal-basis, reads TOTAL COST (diff #8)', '.price-reveal-label { font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }');
+missing('price-reveal-basis CSS class removed', '.price-reveal-basis');
 
 // ─── Step 1 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth);');
@@ -256,13 +257,14 @@ has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
 has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
-has('section 3 (notes/notice/summary/Send) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
-has('en sTotal label added, sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sTotal: "Total",\n    sStatus: "Status"');
-has('id sTotal label added, sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sTotal: "Total",\n    sStatus: "Status"');
-has('ru sTotal label added, sRiders renamed to Участник (Figma parity commit 1)', 'sRiders: "Участник",\n    sTotal: "Итого",\n    sStatus: "Статус"');
-has('confirm-summary block now appears twice (Step 2 in-page + Step 3 confirm)', 'className: "confirm-summary"', 2);
-has('sum-row Total on riders screen reads totalPriceStr, not a fresh computation', 't.sTotal), /*#__PURE__*/React.createElement("span", {\n    className: "sum-val"\n  }, totalPriceStr))');
-has('riders-screen summary sits before Send, heading 3 immediately precedes it', 't.stepHeading3), /*#__PURE__*/React.createElement("div", {\n    className: "confirm-summary"');
+has('section 3 (summary/total/notes/Send/notice) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading3)');
+has('en sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sStatus: "Status"');
+has('id sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sStatus: "Status"');
+has('ru sRiders renamed to Участник (Figma parity commit 1)', 'sRiders: "Участник",\n    sStatus: "Статус"');
+has('confirm-summary block still appears twice (Step 2 in-page + Step 3 confirm)', 'className: "confirm-summary"', 2);
+missing('sTotal translation key removed as dead code (Figma parity Commit 5, diff #14: Total row dropped from the summary table)', 'sTotal:');
+missing('t.sTotal no longer read anywhere in the summary table', 't.sTotal)');
+has('riders-screen summary sits directly under heading 3, before the TOTAL COST block (Figma parity Commit 5)', 't.stepHeading3), React.createElement("div", {\n    className: "confirm-summary"');
 has('Send button disabled on selectedTime OR incomplete details (Commit C moves the completeness check here)', 'className: "cta",\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn)');
 
 // ─── User request (2026-08-17): Step 2 reorder + ungate, Futura upright type ──
@@ -309,8 +311,25 @@ has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan A
 has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
 has('.cost-funds-card CSS added, light not dark (unlike step 1 money-goes)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
 has('cost-funds block reuses moneyGoesBody copy (word-for-word identical to Figma diff #19 text)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
-has('cost-funds block sits after the WhatsApp Send button, always visible on the riders screen', 't.sendBtn)), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu"');
+has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice))), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu"');
 missing('no decorative horse emoji added to the cost-funds heading, consistent with the no-decorative-emoji decision', 'costFundsTitle: "🐴');
+
+// ─── docs/step2-figma-parity-batch.md, Commit 5: price/summary reorder ────
+// ISOLATED, LOGIC-adjacent commit (touches DOM order and drops dead priceBasis
+// code, but not pricing math itself). Kept independently revertible per spec.
+has('en editLink key added (diff #15)', 'editLink: "Edit"');
+has('id editLink key added', 'editLink: "Ubah"');
+has('ru editLink key added', 'editLink: "Изменить"');
+has('en totalCostLabel key added (diff #8)', 'totalCostLabel: "Total cost"');
+has('id totalCostLabel key added', 'totalCostLabel: "Total biaya"');
+has('ru totalCostLabel key added', 'totalCostLabel: "Итоговая стоимость"');
+has('Edit link appended inside the step 2 summary card, scroll-to-top only, no state mutation (diff #15)', 't.awaiting)), /*#__PURE__*/React.createElement("div", {\n    style: {\n      textAlign: "right",\n      marginTop: 8\n    }\n  }, /*#__PURE__*/React.createElement("span", {\n    className: "hint-link",\n    style: {\n      cursor: "pointer",\n      fontSize: 12\n    },\n    onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })\n  }, t.editLink))');
+has('TOTAL COST block sits directly after the summary card, still gated on duration/numPeople/selPrice (diff #9)', 'onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })\n  }, t.editLink))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {\n    className: "price-reveal"\n  }, /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-label"\n  }, t.totalCostLabel), /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-value"\n  }, totalPriceStr))');
+has('notes block sits right after TOTAL COST, before Send (diffs #9/#12)', 'totalPriceStr)), React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
+has('Send button sits directly after the notes textarea, before the confirmation notice (diff #17)', 'onChange: e => setNotes(e.target.value)\n  }), React.createElement("button", {\n    className: "cta",\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn), React.createElement("div", {\n    className: "notice"');
+has('confirmation notice now sits after Send, last inside the datesComplete-gated block (diff #18)', 't.sendBtn), React.createElement("div", {\n    className: "notice"\n  }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice)))');
+has('handleSend / buildWhatsAppMessage payload fields untouched by the reorder (Simone\'s flow inviolable)', 'const message = buildWhatsAppMessage({\n      actObj,\n      durationLabel: duration,\n      formattedDates,\n      isCourse,\n      selectedTime,\n      numPeople,\n      riders,\n      showWeight,\n      notes,\n      photographerTier: isPhotoshoot ? photographerTier : null,\n      grooming: needsGrooming ? grooming : null\n    });');
+has('totalPrice / totalPriceStr computation itself untouched, only its rendering moved (diff #9)', 'const totalPrice = unitPrice * mult + photographerPrice;\n  const totalPriceStr = "IDR " + totalPrice.toLocaleString("en-US");');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
