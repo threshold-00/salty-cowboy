@@ -185,7 +185,7 @@ has('ru sessionNote one per week', 'В неделю принимается то�
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
 has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      marginTop: -6\n    }\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.duration)');
 missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
 has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header"\n  },');
 missing('no separate calendar screen state left', '"calendar"');
@@ -256,7 +256,7 @@ has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
-has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title",\n    style: {\n      marginTop: 24\n    }\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
 has('section 3 (notes/notice/summary/Send) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu"\n  }, React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
 has('en sTotal label added, sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sTotal: "Total",\n    sStatus: "Status"');
 has('id sTotal label added, sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sTotal: "Total",\n    sStatus: "Status"');
@@ -288,6 +288,13 @@ has('single-rider card label reads participantDetails, multi-rider keeps numbere
 has('en sTotal label sits alongside renamed sRiders (diff #13)', 'sRiders: "Participant",');
 has('en awaiting stays hourglass-free (diff #16 declined, no-decorative-emoji decision stands)', 'awaiting: "Awaiting approval"');
 missing('hourglass emoji not reintroduced anywhere in awaiting text', '⏳');
+
+// ─── docs/step2-figma-parity-batch.md, Commit 2: card containers ──────────
+has('.control-card CSS added, matches rider-card bordered treatment (diff #4/#6)', '.control-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 16.5px 22px;\n  margin-bottom: 16px;\n}');
+has('duration selector wrapped in control-card (diff #4)', 'React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0');
+has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
+has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

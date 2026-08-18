@@ -2,6 +2,27 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Figma parity batch, Commit 2: Step 2 card containers
+
+Per `docs/step2-figma-parity-batch.md`, Commit 2. Wraps three controls that previously floated
+directly on white to match Figma's bordered-card look. Styling only, no logic touched.
+
+- New `.control-card` class (white background, 1px `var(--fog)` border, 14px radius, matching
+  the existing `.rider-card` treatment already used further down the same screen) applied to
+  the duration selector and the number-of-people selector. Grooming's selector (wet/dry) was
+  left alone since it wasn't named in the spec's three targets.
+- `.sel-title` (the single selected-date readout, e.g. "May 4, 2026") now renders as a bordered
+  field: white background, 1px border, 10px radius, padding, instead of plain text. Font size
+  trimmed from 18px to 16px so it reads as a field value rather than a heading.
+
+Business rules: none, presentational only.
+
+### Testing
+- 222 / 222 string assertions pass (5 new, 2 rewritten for the new class names)
+- jsdom render passes with zero console errors
+- Verified live: both control cards and the date-readout field render with visible borders,
+  duration and number-of-people selection still work, grooming's own selector is unaffected.
+
 ## 18 Aug 2026 — Figma parity batch, Commit 1: Step 2 copy and labels
 
 Per `docs/step2-figma-parity-batch.md` (Figma frame `5:1478`), Commit 1 of a five-commit batch

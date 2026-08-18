@@ -1399,6 +1399,15 @@ html, body { background: #0a0a0a; }
   padding: 23px 16.5px 25px;
   margin-bottom: 12px;
 }
+/* Bordered card treatment for the duration and number-of-people selectors,
+   matching Figma (they used to float directly on white). */
+.control-card {
+  background: #fff;
+  border: 1px solid var(--fog);
+  border-radius: 14px;
+  padding: 20px 16.5px 22px;
+  margin-bottom: 16px;
+}
 .rider-label {
   font-size: 11px;
   letter-spacing: 1.5px;
@@ -1645,9 +1654,13 @@ html, body { background: #0a0a0a; }
 }
 .sel-title {
   font-family: var(--display);
-  font-size: 18px;
+  font-size: 16px;
   color: var(--earth);
   margin-bottom: 14px;
+  background: #fff;
+  border: 1px solid var(--fog);
+  border-radius: 10px;
+  padding: 12px 14px;
 }
 .time-cards { display: flex; gap: 10px; margin-bottom: 20px; }
 .time-card {
@@ -2516,7 +2529,7 @@ function App() {
       marginTop: -6
     }
   }, t.dateTimeHint), React.createElement("div", {
-    className: "fu"
+    className: "fu control-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category",
     style: {
@@ -2650,7 +2663,7 @@ function App() {
       marginTop: 24
     }
   }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
-    className: "fu2"
+    className: "fu2 control-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
   }, t.numPeople), /*#__PURE__*/React.createElement("div", {
