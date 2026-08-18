@@ -2,6 +2,29 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Batch 3, Commit 2: BYO Photographer line as a static filled chip (#2)
+
+Per `docs/step2-batch3.md`, Commit 2, with Ro's override on the visual: a filled chip matching
+the selected-pill treatment, not an eyebrow label, and not a button since it isn't interactive.
+
+- New `.byo-chip` class: same fill, text colour, radius, padding and font as a selected `.pill`
+  (`background: var(--earth)`, `color: var(--sand)`, 24px radius, 9.5px/16.5px padding, Futura
+  500 13px), but with no `cursor: pointer` and no hover state, since it's a static label, not a
+  selectable control. Rendered as a `<span>`, not a `<button>`, no `onClick`.
+- Replaces the `<p className="section-hint">` treatment the line had after the styling-parity
+  pass. Same conditional (`isPhotoshoot &&`), same position in the flow (between the header
+  card and "1. Book a date and time"), so rides and lessons still never render it.
+- Spacing was already correct going into this commit: the styling-parity pass had already
+  removed the old negative-margin jam-against-the-heading hack and given the line a real 22px
+  slot. Kept that same 22px trailing margin on the new chip so the rhythm is unbroken.
+
+Business rules: none. Confirmed the chip still only renders for photoshoot activities, not
+rides, same as before.
+
+### Testing
+- 323 / 323 string assertions pass (7 new, 1 rewritten for the markup change)
+- jsdom render passes with zero console errors
+
 ## 18 Aug 2026 — Batch 3, Commit 1: duration label spacing (#4)
 
 Per `docs/step2-batch3.md`, Commit 1 only (spacing fixes #4 and #6). Mechanical, no logic.

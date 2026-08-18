@@ -152,7 +152,7 @@ has('WhatsApp course schedule line updated', 'lines.push("Course runs Mon, Tue, 
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
 has('en byoPhotographer key',      'byoPhotographer: "BYO Photographer or add a Salty Cowboys photographer"');
 has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.createElement("div", {\n    className: "byo-note"\n  }, t.byoPhotographer)');
-has('byo note on step2, no negative-margin hack (styling parity sub-steps 2/3: defined slot, not jammed)', 'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.byoPhotographer)');
+has('byo line on step2 now a static filled chip, not a paragraph (batch3 Commit 2, #2)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
 
 // ─── Notes section: "times not suitable" hint, all activities ────────────
 has('en notesTimeHint key ends "here" not "below" (Figma parity commit 1)', 'notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."');
@@ -418,6 +418,15 @@ has('control-card padding already matched the spec (23/16.5/25) before this comm
 // #6: cost-funds alignment verified live already correct via .step2-block
 // (671px outer / 623px inner) from the styling-parity commit, no code change.
 has('cost-funds-card already tagged step2-block from the styling-parity commit, confirmed still aligned to the 623px column (#6, no change needed)', 'className: "cost-funds-card fu step2-block"');
+
+// ─── docs/step2-batch3.md, Commit 2: BYO line as a filled chip (#2) ───────
+// Ro's override: filled/selected-pill visual, static (no button, no onClick),
+// photoshoot activities only.
+has('.byo-chip CSS matches the selected-pill visual: dark fill, sand text, same radius/padding/font as .pill, and has no cursor:pointer (static label, not a selectable control)', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;\n  padding: 9.5px 16.5px;\n  border: 1.5px solid var(--earth);\n  border-radius: 24px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 13px;\n  background: var(--earth);\n  color: var(--sand);\n}');
+missing('byo-chip JSX has no onClick (static, not a button, per Ro\'s explicit override)', 'className: "byo-chip",\n    onClick');
+has('byo-chip still gated on isPhotoshoot only, same conditional as before (rides/lessons never render it)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
+missing('old section-hint paragraph treatment for the BYO line is gone', 'isPhotoshoot && /*#__PURE__*/React.createElement("p"');
+has('byo-chip keeps its own 22px trailing gap before heading 1, same rhythm as every other Step 2 block', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
