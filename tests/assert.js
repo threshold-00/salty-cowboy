@@ -186,9 +186,9 @@ has('ru sessionNote one per week', 'В неделю принимается то�
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
 has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0,\n      marginBottom: 14\n    }\n  }, t.duration)');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("h3", {\n    className: "section-title" + (section1Complete ? " section-title-toggle" : ""),\n    onClick: section1Complete ? () => setSection1ManualOpen(o => !o) : undefined\n  }, t.stepHeading1, section1Complete && /*#__PURE__*/React.createElement("span", {\n    className: "section-toggle-arrow"\n  }, section1Collapsed ? "▾" : "▴")), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, t.dateTimeHint), section1Collapsed && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer"\n    },\n    onClick: () => setSection1ManualOpen(o => !o)\n  }, [duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")), React.createElement("div", {\n    className: "fu control-card",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0,\n      marginBottom: 14\n    }\n  }, t.duration)');
 missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
-has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header"\n  },');
+has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  },');
 missing('no separate calendar screen state left', '"calendar"');
 missing('"See availability" button removed (calendar reveals automatically)', 't.seeAvailability');
 missing('no lingering setScreen("calendar") calls', 'setScreen("calendar")');
@@ -257,7 +257,7 @@ has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
-has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title" + (detailsComplete ? " section-title-toggle" : ""),\n    onClick: detailsComplete ? () => setSection2ManualOpen(o => !o) : undefined\n  }, t.stepHeading2, detailsComplete && /*#__PURE__*/React.createElement("span", {\n    className: "section-toggle-arrow"\n  }, section2Collapsed ? "▾" : "▴")), section2Collapsed && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer"\n    },\n    onClick: () => setSection2ManualOpen(o => !o)\n  }, numPeople, " ", numPeople === "1" ? t.person : t.people), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
 has('section 3 (summary/total/notes/Send/notice) gated on datesComplete, not detailsComplete (Commit C)', 'screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu step2-block"\n  }, React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading3)');
 has('en sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sStatus: "Status"');
 has('id sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sStatus: "Status"');
@@ -281,11 +281,11 @@ missing('the old marginTop:22 spacer above the calendar is gone (large gap remov
 
 // ─── docs/step2-figma-parity-batch.md, Commit 1: copy and labels ──────────
 has('en dateTimeHint key added under stepHeading1 (diff #3)', 'dateTimeHint: "Select an available date below to choose your time slot."');
-has('dateTimeHint rendered as a section-hint right after heading 1, no negative-margin hack (styling parity)', 't.stepHeading1), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"\n  }, t.dateTimeHint)');
+has('dateTimeHint rendered as a section-hint right after heading 1, no negative-margin hack (styling parity)', 't.stepHeading1, section1Complete && /*#__PURE__*/React.createElement("span", {\n    className: "section-toggle-arrow"\n  }, section1Collapsed ? "▾" : "▴")), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, t.dateTimeHint)');
 has('en participantDetails key added (diff #7)', 'participantDetails: "Participant details"');
 missing('aboutYou key removed (folded into participantDetails for the single-rider case)', 'aboutYou:');
 missing('yourDetails key removed (folded into participantDetails for the single-rider case)', 'yourDetails:');
-has('outer "about riders" wrapper only shows for 2+ riders now (was riders.length > 0)', 'riders.length > 1 && /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.aboutRiders)');
+has('outer "about riders" wrapper only shows for 2+ riders now (was riders.length > 0)', 'riders.length > 1 && /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, t.aboutRiders)');
 has('single-rider card label reads participantDetails, multi-rider keeps numbered personNoun', 'className: "rider-label"\n    }, riders.length === 1 ? t.participantDetails : personNoun + " " + (idx + 1))');
 has('en sTotal label sits alongside renamed sRiders (diff #13)', 'sRiders: "Participant",');
 has('en awaiting stays hourglass-free (diff #16 declined, no-decorative-emoji decision stands)', 'awaiting: "Awaiting approval"');
@@ -293,13 +293,13 @@ missing('hourglass emoji not reintroduced anywhere in awaiting text', '⏳');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 2: card containers ──────────
 has('.control-card CSS added, matches rider-card bordered treatment and padding (diff #4/#6, styling parity sub-step 3)', '.control-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 22px;\n}');
-has('duration selector wrapped in control-card (diff #4)', 'React.createElement("div", {\n    className: "fu control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0');
-has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
-has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",\n    style: {\n      marginBottom: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
+has('duration selector wrapped in control-card (diff #4)', 'React.createElement("div", {\n    className: "fu control-card",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0');
+has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",\n    style: {\n      marginBottom: 22,\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
 has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 3: activity header ──────────
-has('.detail-header-card CSS added, light bordered card (diff #1)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 22px;\n}');
+has('.detail-header-card CSS added, light bordered card (diff #1)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-top: -48px;\n  margin-bottom: 22px;\n}');
 has('back-link and title now sit in the light card, no background image (diff #1)', 'className: "detail-header-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link",\n    onClick: () => setScreen("activity")\n  }, t.back), /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id])');
 has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]))');
 missing('detail-intro wrapper removed (description no longer a separate sibling block)', 'className: "detail-intro"');
@@ -337,7 +337,7 @@ has('totalPrice / totalPriceStr computation itself untouched, only its rendering
 // Weight/family only. No size, colour, spacing or logic touched.
 has('section-title (activity title / section headings) now explicitly weight 500, was bold by h2/h3 default', '.section-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 22px;');
 has('section-hint (Step 1 helper line + Step 2 hints) now Futura 500, was inheriting Outfit at default weight', '.section-hint {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;');
-has('back-link now Futura 500', '.back-link {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;');
+has('back-link now Futura 500, restyled as a bordered button (batch3 Commit 3, #1)', '.back-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: var(--earth);\n  cursor: pointer;\n  margin-bottom: 20px;\n  width: fit-content;\n  padding: 8px 16px;\n  border: 1px solid var(--earth);\n  border-radius: 20px;\n  background: #fff;');
 has('detail-desc (activity description) now Futura 500, was inheriting Outfit at default weight', '.detail-desc { font-family: var(--display); font-weight: 500; font-size: 13px;');
 has('act-category (eyebrow labels: Duration, Number of people, Participant details, Time slot, Total cost) now Futura, weight already 500', '.act-category {\n  font-family: var(--display);\n  font-size: 10px;');
 has('rider-label (Participant details eyebrow) now Futura, weight already 500', '.rider-label {\n  font-family: var(--display);\n  font-size: 11px;\n  letter-spacing: 1.5px;');
@@ -372,16 +372,16 @@ has('.step2-block override: 671px so Step 2 cards land at 623px content width, s
 has('EXPR_A (details block) tagged step2-block', 'className: "body fu step2-block"');
 has('EXPR_B (summary/total/notes/Send/notice block) tagged step2-block', 'className: "fu step2-block"');
 has('cost-funds block tagged step2-block', 'className: "cost-funds-card fu step2-block"');
-has('detail-header-card trailing gap now the uniform 22px (was 18px)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 22px;\n}');
+has('detail-header-card trailing gap now the uniform 22px (was 18px)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-top: -48px;\n  margin-bottom: 22px;\n}');
 has('section-hint trailing gap now the uniform 22px (was 20px), covers isWhisper/BYO/dateTimeHint', '.section-hint {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: var(--dusk);\n  margin-bottom: 22px;');
 missing('isWhisper hint no longer uses the negative-margin jam-against-heading hack', 'isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
 missing('isPhotoshoot (BYO Photographer) hint no longer uses the negative-margin hack, now gets a real defined slot', 'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
-has('dateTimeHint no longer uses the negative-margin hack', '}, t.dateTimeHint), React.createElement("div", {\n    className: "fu control-card"');
+has('dateTimeHint no longer uses the negative-margin hack', '}, t.dateTimeHint), section1Collapsed && /*#__PURE__*/React.createElement("p", {');
 has('duration control-card and rider-card share identical padding (23/16.5/25) and the uniform 22px gap (styling parity sub-step 3)', '.rider-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 22px;\n}');
 has('cal-selection-panel (date readout + time slot) gets the trailing 22px gap before the next block, not cal-legend (keeps the dark calendar card visually seamless)', '.cal-selection-panel {\n  padding: 20px 24px;\n  margin-bottom: 22px;\n}');
 missing('cal-legend itself has no margin-bottom (stays flush with cal-selection-panel, one continuous card)', '.cal-legend {\n  padding: 12px 24px;\n  background: var(--earth);\n  display: flex;\n  gap: 16px;\n  border-top: 1px solid rgba(255,255,255,0.06);\n  border-radius: 0 0 14px 14px;\n  margin-bottom');
-has('heading 2 no longer carries an inline marginTop:24 nudge', 't.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"');
-has('grooming card gets its own trailing 22px via inline style, not the shared .fu2 class (avoids touching every other .fu2 element site-wide)', 'className: "fu2",\n    style: {\n      marginBottom: 22\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
+has('heading 2 no longer carries an inline marginTop:24 nudge', 't.stepHeading2, detailsComplete && /*#__PURE__*/React.createElement("span", {\n    className: "section-toggle-arrow"\n  }, section2Collapsed ? "▾" : "▴")), section2Collapsed && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer"\n    },\n    onClick: () => setSection2ManualOpen(o => !o)\n  }, numPeople, " ", numPeople === "1" ? t.person : t.people), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card"');
+has('grooming card gets its own trailing 22px via inline style, not the shared .fu2 class (avoids touching every other .fu2 element site-wide)', 'className: "fu2",\n    style: {\n      marginBottom: 22,\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
 has('heading 3 no longer carries an inline marginTop:24 nudge', 't.stepHeading3), React.createElement("div", {\n    className: "confirm-summary",');
 has('confirm-summary gets its trailing 22px via inline style scoped to the Step 2 instance only, not the shared class (Step 3 confirm screen summary is untouched)', 'React.createElement("h3", {\n    className: "section-title"\n  }, t.stepHeading3), React.createElement("div", {\n    className: "confirm-summary",\n    style: {\n      marginBottom: 22\n    }\n  }');
 has('Step 3 confirm screen summary card has no margin override (only Step 2\'s in-page copy was touched)', 'React.createElement("div", {\n    className: "confirm-summary"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "sum-row"');
@@ -422,11 +422,55 @@ has('cost-funds-card already tagged step2-block from the styling-parity commit, 
 // ─── docs/step2-batch3.md, Commit 2: BYO line as a filled chip (#2) ───────
 // Ro's override: filled/selected-pill visual, static (no button, no onClick),
 // photoshoot activities only.
-has('.byo-chip CSS matches the selected-pill visual: dark fill, sand text, same radius/padding/font as .pill, and has no cursor:pointer (static label, not a selectable control)', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;\n  padding: 9.5px 16.5px;\n  border: 1.5px solid var(--earth);\n  border-radius: 24px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 13px;\n  background: var(--earth);\n  color: var(--sand);\n}');
+has('.byo-chip now a hairline chip (thin light border, no fill) per Ro, less visually loud than the dark filled pill', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;\n  padding: 9.5px 16.5px;\n  border: 1px solid var(--fog);\n  border-radius: 24px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 13px;\n  background: #fff;\n  color: var(--earth);\n}');
 missing('byo-chip JSX has no onClick (static, not a button, per Ro\'s explicit override)', 'className: "byo-chip",\n    onClick');
 has('byo-chip still gated on isPhotoshoot only, same conditional as before (rides/lessons never render it)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
 missing('old section-hint paragraph treatment for the BYO line is gone', 'isPhotoshoot && /*#__PURE__*/React.createElement("p"');
 has('byo-chip keeps its own 22px trailing gap before heading 1, same rhythm as every other Step 2 block', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;');
+
+// ─── docs/step2-batch3.md, Commit 3: header image band (#1) ───────────────
+// Ro's overrides: placeholder box (no per-activity images yet), card
+// overlaps the image (floating-card pattern), Back restyled as a button.
+has('.detail-header-image placeholder band added, 269px per the original Figma header', '.detail-header-image {\n  width: 100%;\n  height: 269px;\n  background: var(--fog);\n  border-radius: 14px;\n}');
+has('detail-header-image is a new sibling directly before detail-header-card, no extra wrapper needed', 'className: "body fu step2-block"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "detail-header-image"\n  }), /*#__PURE__*/React.createElement("div", {\n    className: "detail-header-card"');
+has('detail-header-card pulls up 48px to overlap the image (text-on-card-on-image, floating card)', 'margin-top: -48px;');
+has('back-link restyled as a bordered pill button: dark border, white fill, no more bare-text-link colouring', '.back-link:hover { background: rgba(0,0,0,0.05); }');
+missing('back-link no longer uses the old text-link hover-to-dark pattern', '.back-link:hover { color: var(--earth); }');
+
+// ─── docs/step2-batch3.md, Commit 5: progression-driven accordions (#3) ───
+// Payload safety: buildWhatsAppMessage is called with named state values
+// (formattedDates, selectedTime, numPeople, riders, etc.), never a DOM
+// query, so CSS-hiding collapsed sections cannot blank out the payload.
+has('section1Complete derived from existing dates/time state, no new click-toggle state', 'const section1Complete = datesComplete && !!selectedTime;');
+missing('no new expandedSection/activeSection click-toggle state introduced', 'expandedSection');
+missing('no manual accordion toggle handler introduced', 'toggleSection');
+has('buildWhatsAppMessage takes formattedDates as a named param, not a DOM read', 'function buildWhatsAppMessage({\n  actObj,\n  durationLabel,\n  formattedDates,\n  isCourse,\n  selectedTime,\n  numPeople,\n  riders,');
+has('handleSend passes riders/numPeople/selectedTime from state into buildWhatsAppMessage, not the DOM', 'const message = buildWhatsAppMessage({\n      actObj,\n      durationLabel: duration,\n      formattedDates,\n      isCourse,\n      selectedTime,\n      numPeople,\n      riders,');
+missing('no document.querySelector calls anywhere in the app (payload assembly cannot depend on collapsed/hidden DOM state)', 'document.querySelector');
+has('section 1 calendar block (cal-header) CSS-hidden on completion, not unmounted (stays out of a new conditional gate)', 'className: "cal-header",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  },');
+has('section 1 cal-grid CSS-hidden on completion, still mounted', 'className: "cal-grid",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
+has('section 1 cal-legend CSS-hidden on completion, still mounted', 'className: "cal-legend",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
+has('section 1 cal-selection-panel (date+time readout) CSS-hidden on completion, still mounted', 'className: "cal-selection-panel",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
+has('section 1 collapsed summary line filters out null duration (Horse Whisperer Course has no duration pill) so it never prints the literal string "null", shows date/time once section1Collapsed, and is itself clickable to reopen (batch 4, Commit 2 manual toggle)', 'section1Collapsed && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer"\n    },\n    onClick: () => setSection1ManualOpen(o => !o)\n  }, [duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")');
+has('section 2 rider-card keeps its key/animationDelay AND gains a display toggle, proving it stays mounted (not conditionally removed)', 'className: "rider-card fu",\n      style: {\n        animationDelay: idx * 0.06 + "s",\n        display: section2Collapsed ? "none" : undefined\n      }');
+has('section 2 addon-group (photographer add-on) CSS-hidden on completion, still mounted so its selection stays live', 'className: "addon-group",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }');
+has('section 2 collapsed summary line shows numPeople once section2Collapsed, and is itself clickable to reopen (batch 4, Commit 2 manual toggle)', 'section2Collapsed && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer"\n    },\n    onClick: () => setSection2ManualOpen(o => !o)\n  }, numPeople, " ", numPeople === "1" ? t.person : t.people)');
+
+// ─── docs/batch4-step1-cleanup-accordions.md, Commit 2: manual toggle ─────
+// Reuses section1Complete/detailsComplete for the open/close decision; the
+// manual flags only override which side of that state the section shows,
+// so there is no parallel completion system.
+has('section1ManualOpen/section2ManualOpen are plain UI toggle state, not a new completion system', 'const [section1ManualOpen, setSection1ManualOpen] = useState(false);\n  const [section2ManualOpen, setSection2ManualOpen] = useState(false);');
+has('section1Collapsed reuses section1Complete, only the manual flag is new', 'const section1Collapsed = section1Complete && !section1ManualOpen;');
+has('section2Collapsed reuses detailsComplete, only the manual flag is new', 'const section2Collapsed = detailsComplete && !section2ManualOpen;');
+missing('no parallel/duplicate completeness calculation introduced for the accordions', 'const section1Complete2');
+has('section 1 heading is only clickable once section1Complete (nothing to toggle before then)', 'className: "section-title" + (section1Complete ? " section-title-toggle" : ""),\n    onClick: section1Complete ? () => setSection1ManualOpen(o => !o) : undefined');
+has('section 2 heading is only clickable once detailsComplete (nothing to toggle before then)', 'className: "section-title" + (detailsComplete ? " section-title-toggle" : ""),\n    onClick: detailsComplete ? () => setSection2ManualOpen(o => !o) : undefined');
+has('section 1 collapsed summary line reuses the same toggle-flip handler as the heading (setSection1ManualOpen(o => !o))', 'onClick: () => setSection1ManualOpen(o => !o)');
+has('section 2 collapsed summary line reuses the same toggle-flip handler as the heading (setSection2ManualOpen(o => !o))', 'onClick: () => setSection2ManualOpen(o => !o)');
+has('.section-title-toggle CSS gives the clickable heading a pointer cursor', '.section-title-toggle {\n  cursor: pointer;\n  user-select: none;\n}');
+has('.section-toggle-arrow CSS renders the open/closed indicator inline after the heading text', '.section-toggle-arrow {\n  display: inline-block;\n  margin-left: 8px;');
+has('duration/numPeople control-card style objects still gate solely on the collapsed flag, manual reopen does not require touching detailsComplete/section1Complete directly (single source of truth preserved)', 'className: "fu control-card",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

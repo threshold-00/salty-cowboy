@@ -1271,6 +1271,16 @@ html, body { background: #0a0a0a; }
   color: var(--earth);
   margin-bottom: 4px;
 }
+.section-title-toggle {
+  cursor: pointer;
+  user-select: none;
+}
+.section-toggle-arrow {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 14px;
+  color: var(--dusk);
+}
 .section-hint {
   font-family: var(--display);
   font-weight: 500;
@@ -1396,20 +1406,20 @@ html, body { background: #0a0a0a; }
 .pill:hover    { border-color: var(--clay); }
 .pill.selected { background: var(--earth); border-color: var(--earth); color: var(--sand); }
 
-/* Static filled chip for the BYO Photographer line: same look as a
-   selected pill (dark fill, radius, sizing) but not a button, no
-   cursor/hover, since it's a label, not a selectable control. */
+/* Hairline chip for the BYO Photographer line: thin light border, no
+   fill, so it reads as a quiet label, not a selectable control or a
+   dark, attention-grabbing pill. */
 .byo-chip {
   display: inline-block;
   margin-bottom: 22px;
   padding: 9.5px 16.5px;
-  border: 1.5px solid var(--earth);
+  border: 1px solid var(--fog);
   border-radius: 24px;
   font-family: var(--display);
   font-weight: 500;
   font-size: 13px;
-  background: var(--earth);
-  color: var(--sand);
+  background: #fff;
+  color: var(--earth);
 }
 
 /* ── RIDER CARDS ── */
@@ -1550,19 +1560,36 @@ html, body { background: #0a0a0a; }
 .cta:active  { transform: scale(0.99); }
 .cta:disabled{ background: #c2c2c2; cursor: not-allowed; }
 
+/* Back control reads as a small bordered button, not a bare text link. */
 .back-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   font-family: var(--display);
   font-weight: 500;
   font-size: 12px;
-  color: var(--dusk);
+  color: var(--earth);
   cursor: pointer;
   margin-bottom: 20px;
   width: fit-content;
+  padding: 8px 16px;
+  border: 1px solid var(--earth);
+  border-radius: 20px;
+  background: #fff;
+  transition: background 0.15s;
 }
-.back-link:hover { color: var(--earth); }
+.back-link:hover { background: rgba(0,0,0,0.05); }
+
+/* Full-width placeholder image band behind the header card (no per-activity
+   images yet, ship the placeholder path per Ro, swap to real images later
+   as a data-only change). The card below overlaps its lower edge, text-on-
+   card-on-image, not text-on-image, so the card needs no scrim of its own. */
+.detail-header-image {
+  width: 100%;
+  height: 269px;
+  background: var(--fog);
+  border-radius: 14px;
+}
 
 /* Light bordered card wrapping Back link, title and description on step 2,
    matching Figma. Replaces an earlier dark image band (see CHANGELOG). */
@@ -1571,6 +1598,7 @@ html, body { background: #0a0a0a; }
   border: 1px solid var(--fog);
   border-radius: 14px;
   padding: 20px 20px 18px;
+  margin-top: -48px;
   margin-bottom: 22px;
 }
 .detail-header-card .back-link { margin-bottom: 14px; }
@@ -2212,6 +2240,8 @@ function App() {
   const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [section1ManualOpen, setSection1ManualOpen] = useState(false);
+  const [section2ManualOpen, setSection2ManualOpen] = useState(false);
   const actObj = ALL_ACTIVITIES.find(a => a.id === activity);
   const isPhotoshoot = actObj?.photoshoot === true;
   const isRiding = actObj?.riding === true;
@@ -2285,6 +2315,10 @@ function App() {
   });
   const ridersComplete = ridersFilled && !anyOverMax && !tooManyHeavy && !anyUnderMinAge;
   const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;
+  // Collapsed = section is complete AND the customer hasn't manually reopened it to edit.
+  // Manual toggle only overrides the auto-collapse while the section stays complete; if a
+  // required field is cleared, section2Complete goes false and the section reopens regardless.
+  const section2Collapsed = detailsComplete && !section2ManualOpen;
   const daysInMonth = getDaysInMonth(calYear, calMonth);
   const firstDay = getFirstDay(calYear, calMonth);
   // The sanctuary runs Monday to Saturday; Sundays are closed. Saturday
@@ -2346,6 +2380,13 @@ function App() {
   const sortedDates = [...selectedDates].sort((a, b) => a.y - b.y || a.m - b.m || a.d - b.d);
   const formattedDates = sortedDates.map(formatOne);
   const datesComplete = selectedDates.length === requiredDates;
+  // Section 1 ("Book a date and time") counts as done once both the date(s)
+  // and a time slot are picked. Drives the accordion collapse below.
+  const section1Complete = datesComplete && !!selectedTime;
+  // Collapsed = complete AND not manually reopened; clearing a field flips
+  // section1Complete back to false and forces the section open regardless
+  // of the manual flag.
+  const section1Collapsed = section1Complete && !section1ManualOpen;
   // Slots depend on activity, duration and the date: Saturday afternoons are
   // closed, so a Saturday booking only ever shows morning times.
   const selPriceIdx = actObj ? actObj.durations.indexOf(duration) : -1;
@@ -2523,6 +2564,8 @@ function App() {
   }, t.next)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "body fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "detail-header-image"
+  }), /*#__PURE__*/React.createElement("div", {
     className: "detail-header-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "back-link",
@@ -2536,11 +2579,26 @@ function App() {
   }, t.sessionNote + " " + t.courseWeekNote), isPhotoshoot && /*#__PURE__*/React.createElement("span", {
     className: "byo-chip"
   }, t.byoPhotographer), /*#__PURE__*/React.createElement("h3", {
-    className: "section-title"
-  }, t.stepHeading1), /*#__PURE__*/React.createElement("p", {
-    className: "section-hint"
-  }, t.dateTimeHint), React.createElement("div", {
-    className: "fu control-card"
+    className: "section-title" + (section1Complete ? " section-title-toggle" : ""),
+    onClick: section1Complete ? () => setSection1ManualOpen(o => !o) : undefined
+  }, t.stepHeading1, section1Complete && /*#__PURE__*/React.createElement("span", {
+    className: "section-toggle-arrow"
+  }, section1Collapsed ? "▾" : "▴")), /*#__PURE__*/React.createElement("p", {
+    className: "section-hint",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
+  }, t.dateTimeHint), section1Collapsed && /*#__PURE__*/React.createElement("p", {
+    className: "section-hint",
+    style: {
+      cursor: "pointer"
+    },
+    onClick: () => setSection1ManualOpen(o => !o)
+  }, [duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")), React.createElement("div", {
+    className: "fu control-card",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category",
     style: {
@@ -2554,7 +2612,10 @@ function App() {
     className: "pill " + (duration === d ? "selected" : ""),
     onClick: () => setDuration(d)
   }, d)))), React.createElement("div", {
-    className: "cal-header"
+    className: "cal-header",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("button", {
     className: "cal-nav",
     onClick: () => changeMonth(-1)
@@ -2564,7 +2625,10 @@ function App() {
     className: "cal-nav",
     onClick: () => changeMonth(1)
   }, "›")), /*#__PURE__*/React.createElement("div", {
-    className: "cal-grid"
+    className: "cal-grid",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "cal-days-header"
   }, DAY_NAMES.map(d => /*#__PURE__*/React.createElement("div", {
@@ -2589,7 +2653,10 @@ function App() {
       onClick: () => handleDayClick(day)
     }, day);
   }))), /*#__PURE__*/React.createElement("div", {
-    className: "cal-legend"
+    className: "cal-legend",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "legend-item"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2613,7 +2680,10 @@ function App() {
       background: "rgba(255,255,255,0.08)"
     }
   }), t.unavailable)), /*#__PURE__*/React.createElement("div", {
-    className: "cal-selection-panel"
+    className: "cal-selection-panel",
+    style: {
+      display: section1Collapsed ? "none" : undefined
+    }
   }, requiredDates > 1 ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "act-category",
     style: {
@@ -2662,7 +2732,8 @@ function App() {
   }, duration))))))), needsGrooming && /*#__PURE__*/React.createElement("div", {
     className: "fu2",
     style: {
-      marginBottom: 22
+      marginBottom: 22,
+      display: section2Collapsed ? "none" : undefined
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
@@ -2673,9 +2744,21 @@ function App() {
     className: "pill " + (grooming === g[0] ? "selected" : ""),
     onClick: () => setGrooming(g[0])
   }, g[1])))), /*#__PURE__*/React.createElement("h3", {
-    className: "section-title"
-  }, t.stepHeading2), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
-    className: "fu2 control-card"
+    className: "section-title" + (detailsComplete ? " section-title-toggle" : ""),
+    onClick: detailsComplete ? () => setSection2ManualOpen(o => !o) : undefined
+  }, t.stepHeading2, detailsComplete && /*#__PURE__*/React.createElement("span", {
+    className: "section-toggle-arrow"
+  }, section2Collapsed ? "▾" : "▴")), section2Collapsed && /*#__PURE__*/React.createElement("p", {
+    className: "section-hint",
+    style: {
+      cursor: "pointer"
+    },
+    onClick: () => setSection2ManualOpen(o => !o)
+  }, numPeople, " ", numPeople === "1" ? t.person : t.people), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
+    className: "fu2 control-card",
+    style: {
+      display: section2Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-category"
   }, t.numPeople), /*#__PURE__*/React.createElement("div", {
@@ -2688,7 +2771,10 @@ function App() {
     className: "pill " + (numPeople === n ? "selected" : ""),
     onClick: () => initRiders(n)
   }, n)))), riders.length > 1 && /*#__PURE__*/React.createElement("div", {
-    className: "act-category"
+    className: "act-category",
+    style: {
+      display: section2Collapsed ? "none" : undefined
+    }
   }, t.aboutRiders), riders.map((rider, idx) => {
     const ageNum = parseInt(rider.age, 10);
     const isMinor = !isNaN(ageNum) && ageNum > 0 && ageNum < 18;
@@ -2696,7 +2782,8 @@ function App() {
       key: rider.id,
       className: "rider-card fu",
       style: {
-        animationDelay: idx * 0.06 + "s"
+        animationDelay: idx * 0.06 + "s",
+        display: section2Collapsed ? "none" : undefined
       }
     }, /*#__PURE__*/React.createElement("div", {
       className: "rider-label"
@@ -2781,7 +2868,10 @@ function App() {
       onClick: () => updateRider(idx, "experience", e)
     }, t[e])))));
   }), isPhotoshoot && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "addon-group"
+    className: "addon-group",
+    style: {
+      display: section2Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("div", {
     className: "addon-title"
   }, t.addonTitle), t.addonTiers.map(tier => /*#__PURE__*/React.createElement("div", {

@@ -2,6 +2,110 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Batch 4, Commit 2: manual toggle on the Step 2 accordions (#3)
+
+Per `docs/batch4-step1-cleanup-accordions.md`, Commit 2 only (Commit 1, the Step 1 activity-picker
+cleanup, was not requested and was not touched). Builds directly on the progression-driven
+accordions from Batch 3, Commit 5.
+
+Sections "1. Book a date and time" and "2. Who's coming?" were collapse-only before: once
+complete, a customer had no way back in short of clearing a field. Now each numbered heading is
+clickable once its section is complete, with a small arrow (▾ collapsed, ▴ open) as the affordance,
+and the collapsed one-line summary is itself clickable too. Clicking either toggles the section
+open or closed. Two new pieces of state do this: `section1ManualOpen` and `section2ManualOpen`,
+both plain booleans defaulting to `false`. The existing `section1Complete`/`detailsComplete` flags
+were not duplicated, just combined with the manual flag: `section1Collapsed = section1Complete &&
+!section1ManualOpen` (same pattern for section 2). Clearing a required field still forces the
+section back open regardless of the manual flag, since `Complete` alone goes false.
+
+Section 3 ("Your booking summary") was left as-is, not wrapped in a collapsible header. It has
+nothing after it to progress into and collapsing it would hide the Send button and total cost, so
+per the spec's own "use judgement" allowance it stays permanently open.
+
+Payload safety: reused the existing pre-accordion baseline from Batch 3, Commit 5 (an even earlier,
+stricter checkpoint than "pre-Commit-2", since Batch 3's own accordion work is also still
+uncommitted and git has no boundary between the two) rather than capturing a fresh one, since the
+underlying `buildWhatsAppMessage`/`handleSend` code was not touched by this commit at all, only new
+UI toggle state and `display` styling were added. Verified live: filled the same Beach Photoshoot
+booking (2 riders, weights, photographer add-on, notes), collapsed section 1 via progression,
+manually reopened it, confirmed all fields (duration, date, time) were exactly as entered, manually
+recollapsed it, repeated the same reopen/verify/recollapse cycle for section 2 (riders, weights,
+photographer add-on all intact), then sent. Resulting WhatsApp payload is byte-for-byte identical
+to the baseline (same MD5 hash, `6a0f0e91e844987796fe1d1c918e6ea2`). Also re-verified the Horse
+Whisperer Course's multi-day picker survives a manual reopen/recollapse with all 4 selected days and
+the shared start time intact.
+
+11 new assertions added covering the manual-toggle state, the reused completion flags (no parallel
+completeness system), and the clickable-heading markup. 353/353 assertions and the jsdom smoke test
+both pass.
+
+## 18 Aug 2026 — Batch 3, Commit 5: progression-driven accordions (#3)
+
+Per `docs/step2-batch3.md`, Commit 5, the last and most reversion-sensitive commit in the batch.
+Sections "1. Book a date and time" and "2. Who's coming?" now collapse to a one-line summary once
+the user finishes them (a new `section1Complete` flag for section 1, reusing `detailsComplete` for
+section 2), instead of staying open for the rest of the booking. No manual click-toggle was added;
+collapse is entirely driven by existing state.
+
+Payload safety was verified before writing any collapse logic: `buildWhatsAppMessage` and
+`handleSend` read only from React state (named params like `formattedDates`, `selectedTime`,
+`numPeople`, `riders`), never the DOM, so collapsed sections could not blank out the WhatsApp
+message. Collapsed sections are CSS-hidden (`display: none`), not unmounted, so their state stays
+live and editable data is never lost. Confirmed live: filled a complete Beach Photoshoot booking
+(2 riders, weights, photographer add-on, notes), collapsed both sections through normal
+progression, sent, and compared the resulting WhatsApp payload against a pre-accordion baseline.
+Byte-for-byte identical (same MD5 hash).
+
+While verifying the Horse Whisperer Course (which has no `duration` value, only a flat price), the
+new section 1 summary line was found to render a literal `"null · "` prefix. Fixed by filtering out
+falsy parts (`[duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")`)
+before joining, so the course now shows a clean date/time-only summary. Re-verified live after the
+fix.
+
+14 new assertions added covering the collapse mechanism, the state-not-DOM payload guarantee, and
+the null-duration summary fix. 342/342 assertions and the jsdom smoke test both pass.
+
+## 18 Aug 2026 — BYO Photographer chip revised to a hairline treatment
+
+Follow-up to Commit 2's dark filled chip, per Ro: too visually loud. `.byo-chip` now uses a thin
+`1px solid var(--fog)` border, white fill, dark text, same padding, radius, and pill shape as
+before, just quieter. Verified live via computed styles.
+
+## 18 Aug 2026 — Batch 3, Commit 3: header image band (#1)
+
+Per `docs/step2-batch3.md`, Commit 3, isolated per the doc's own instruction. Two decisions the
+doc flagged as open were resolved with Ro before building:
+
+- **Image source**: the doc wants a per-activity header image, but only 3 category-level images
+  exist (`IMG_RIDES`/`IMG_PHOTOSHOOTS`/`IMG_LESSONS`), no true per-activity set. Per Ro, shipped
+  the placeholder path now rather than reusing the category images as a stand-in: a plain grey
+  box (`.detail-header-image`, matching the same `var(--fog)` placeholder pattern Commit A used
+  for the Step 1 activity card images), 269px tall, full width. Swapping in real per-activity
+  images later is a data/asset task, not a code change, once they exist.
+- **Card overlap**: per Ro, the white text card overlaps the image's lower edge rather than
+  sitting flush below it (`margin-top: -48px` on `.detail-header-card`, pulling it up over the
+  image in normal document flow, no `position`/`z-index` needed since it's simply the later
+  sibling painting on top). This is the "text-on-card-on-image, not text-on-image" structure
+  the doc calls for, so the card needs no scrim of its own, it's opaque white sitting over the
+  image, not translucent text directly on it.
+- **Back control**: restyled from a bare text link to a small bordered pill button (`1px solid
+  var(--earth)` border, white fill, 20px radius, `rgba(0,0,0,0.05)` hover tint), replacing the
+  old dusk-colour-that-darkens-on-hover text-link treatment. Verified it's still a real button,
+  clicking it still calls `setScreen("activity")` and returns to Step 1.
+
+`.detail-header-image` is a new direct sibling inserted before `.detail-header-card`, no extra
+wrapper div needed since both already live as flat children of the Step 2 body.
+
+Business rules: none, presentational. Verified live via `getBoundingClientRect`: image spans
+269px (48 to 317), card starts at 269 (exactly 48px up from the image's bottom edge, confirming
+the overlap), both card and image share the same 623px column left edge as everything else on
+Step 2. Confirmed the BYO Photographer chip from Commit 2 still renders correctly beneath the
+new header on photoshoot activities.
+
+### Testing
+- 328 / 328 string assertions pass (5 new, 3 rewritten for the new CSS)
+- jsdom render passes with zero console errors
+
 ## 18 Aug 2026 — Batch 3, Commit 2: BYO Photographer line as a static filled chip (#2)
 
 Per `docs/step2-batch3.md`, Commit 2, with Ro's override on the visual: a filled chip matching
