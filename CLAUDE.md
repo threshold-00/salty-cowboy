@@ -115,7 +115,7 @@ Every activity's notes field shows a small hint above the textarea: "We want you
 
 ### Main page
 
-The initial activity screen opens with a "Where the money goes" mission paragraph (all three languages), above the "Choose an activity" heading.
+Step 1 (the activity picker) opens directly on the "Choose an activity" heading, no card or mission paragraph above it (batch 4, Commit 1 removed the dark "Where the money goes" card, since Step 2's own light "What your booking cost funds" card already carries that copy). Navigation off Step 1 is via each activity card's own "Book →" button only; the global bottom "Next" bar was removed as redundant (Book already sets the activity and advances the screen in one click). Tapping a card still just selects/previews it without navigating.
 
 ## Open items (not yet resolved)
 

@@ -160,12 +160,9 @@ has('id notesTimeHint key ends "di sini" not "di bawah" (Figma parity commit 1)'
 has('ru notesTimeHint key ends "здесь" not "ниже" (Figma parity commit 1)', 'notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом здесь."');
 has('notesTimeHint rendered near notes area', 'className: "notes-time-hint"\n  }, t.notesTimeHint), React.createElement("textarea"');
 
-// ─── Main page: "Where the money goes" bio copy ───────────────────────────
-has('en moneyGoesTitle',           'moneyGoesTitle: "Where the money goes"');
-has('en moneyGoesBody excerpt',    'Every booking helps a horse. Salty Cowboys began as a rescue and it still is one.');
-has('id moneyGoesTitle',           'moneyGoesTitle: "Ke mana uang Anda pergi"');
-has('ru moneyGoesTitle',           'moneyGoesTitle: "Куда идут деньги"');
-has('money-goes rendered before chooseActivity heading', 'className: "money-goes-body"\n  }, t.moneyGoesBody)), /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.chooseActivity)');
+// ─── Main page: "Where the money goes" bio copy (Step 2 cost-funds-card only, since batch 4 Commit 1 removed the Step 1 card) ─
+has('en moneyGoesBody excerpt (still used by Step 2 cost-funds-card)', 'Every booking helps a horse. Salty Cowboys began as a rescue and it still is one.');
+missing('moneyGoesTitle key removed as dead code (batch 4, Commit 1: Step 1 money-goes card deleted, Step 2 uses its own costFundsTitle)', 'moneyGoesTitle:');
 
 // ─── Wording: Sunrise → Morning, Sunset → Golden hour ─────────────────────
 missing('no "Sunrise" anywhere',   'Sunrise');
@@ -310,7 +307,7 @@ has('IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS still used by Step 1 category intro (
 has('en costFundsTitle key added (diff #19)', 'costFundsTitle: "What your booking cost funds"');
 has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan"');
 has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
-has('.cost-funds-card CSS added, light not dark (unlike step 1 money-goes)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
+has('.cost-funds-card CSS added, light not dark (unlike the now-removed Step 1 money-goes card)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
 has('cost-funds block reuses moneyGoesBody copy (word-for-word identical to Figma diff #19 text)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
 has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice)), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu step2-block"');
 missing('no decorative horse emoji added to the cost-funds heading, consistent with the no-decorative-emoji decision', 'costFundsTitle: "🐴');
@@ -389,8 +386,7 @@ has('addon-group now uses trailing margin-bottom (22px) instead of a leading mar
 missing('addon-group no longer uses margin-top', '.addon-group { margin-top');
 has('notes-time-hint negative-margin hack removed, kept as a small heading-to-hint gap (not part of the 22px block rhythm)', '.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }');
 has('notes-area trailing gap now the uniform 22px (was 16px)', 'transition: border 0.18s;\n  margin-bottom: 22px;\n}');
-has('Send button (Step 2 instance) overrides the shared .cta margin locally: 0 top, 22 bottom, not touching Step 1\'s cta-dock button', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete');
-has('Step 1\'s cta-dock Next button still uses the untouched shared .cta class (no inline override, no cross-contamination)', 'className: "cta",\n    disabled: !activity,\n    onClick: () => setScreen("riders")');
+has('Send button (Step 2 instance) overrides the shared .cta margin locally: 0 top, 22 bottom', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete');
 has('notice trailing gap now the uniform 22px (was 16px), sits last before the always-visible cost-funds block', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: #444444;\n  line-height: 1.5;\n  margin-bottom: 22px;');
 
 // ─── docs/booking-engine-structural-spec.md, Commit D: copy cleanup ───────
@@ -471,6 +467,25 @@ has('section 2 collapsed summary line reuses the same toggle-flip handler as the
 has('.section-title-toggle CSS gives the clickable heading a pointer cursor', '.section-title-toggle {\n  cursor: pointer;\n  user-select: none;\n}');
 has('.section-toggle-arrow CSS renders the open/closed indicator inline after the heading text', '.section-toggle-arrow {\n  display: inline-block;\n  margin-left: 8px;');
 has('duration/numPeople control-card style objects still gate solely on the collapsed flag, manual reopen does not require touching detailsComplete/section1Complete directly (single source of truth preserved)', 'className: "fu control-card",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
+
+// ─── docs/batch4-step1-cleanup-accordions.md, Commit 1: Step 1 cleanup ────
+// Deletions only: the dark "Where the money goes" card and the global Next
+// button. Both were Step 1 (activity picker) only; Step 2's own cost-funds
+// card and its moneyGoesBody copy are untouched.
+missing('.money-goes card removed from Step 1', 'className: "money-goes"');
+missing('.money-goes-title element removed', 'className: "money-goes-title"');
+missing('.money-goes CSS rule removed as dead code', '.money-goes {');
+missing('.money-goes-title CSS rule removed as dead code', '.money-goes-title {');
+missing('.money-goes-body CSS rule removed as dead code', '.money-goes-body {');
+has('Step 2 cost-funds-card is untouched and still renders moneyGoesBody (the two mission-statement instances were confirmed separate before deleting Step 1\'s)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
+missing('global Next button (cta-dock) removed from Step 1', 'className: "cta-dock"');
+missing('.cta-dock CSS rule removed as dead code', '.cta-dock {');
+missing('.has-dock CSS rule removed as dead code (only consumer was the deleted cta-dock spacer)', '.has-dock {');
+missing('has-dock class no longer applied to the Step 1 body wrapper', '"body fu has-dock"');
+missing('next translation key removed from all three languages as dead code', 'next: "Next →"');
+has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom padding for a dock that no longer exists', 'screen === "activity" && /*#__PURE__*/React.createElement("div", {\n    className: "body fu"\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.chooseActivity)');
+has('"Book →" is the sole navigation path off Step 1: sets activity plus every dependent reset AND advances the screen in one click, a strict superset of what tap-card-then-Next used to do', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
+has('tapping an act-card still only selects (sets state, no screen transition), the preview affordance was not removed, only the redundant global Next button was', 'className: "act-card " + (activity === item.id ? "selected" : ""),\n    onClick: () => {\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n    }\n  }');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

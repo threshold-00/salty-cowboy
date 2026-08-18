@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Batch 4, Commit 1: Step 1 cleanup (two deletions)
+
+Per `docs/batch4-step1-cleanup-accordions.md`, Commit 1. Deletions only, Step 1 (the activity
+picker) only.
+
+Removed the dark "Where the money goes" mission-statement card from the top of Step 1. Confirmed
+first that it and Step 2's own "What your booking cost funds" card are separate instances (Step 1
+used `moneyGoesTitle` + `moneyGoesBody`, Step 2 uses `costFundsTitle` + the same `moneyGoesBody`
+text) before deleting, so Step 2's card and its copy are untouched. `moneyGoesTitle` is now removed
+as dead code (was Step 1 only); `moneyGoesBody` stays, since Step 2 still reads it.
+
+Removed the floating "Next" bar at the bottom of Step 1. Verified in the source first that each
+activity card's "Book →" button is a strict superset of what tapping a card then Next used to do:
+Book sets the activity, resets every dependent field, and advances to Step 2 in one click, while
+Next only advanced the screen and depended on a card having already been tapped. Nothing was unique
+to Next, so it was safe to delete outright, including its now-dead `cta-dock`/`has-dock` CSS and
+the `next` translation key in all three languages. Tapping a card to preview/select it before
+booking still works exactly as before, only the redundant bottom button is gone.
+
+With the dark card gone, the "Choose an activity" heading now sits directly on the page background
+inside a plain `body fu` wrapper (no residual card styling was found around it, so no extra
+flattening was needed).
+
+Confirmed the WhatsApp flow is not reachable from Step 1, so neither deletion could touch the
+payload. 15 new assertions added (deletions, dead-CSS/dead-key removal, "Book →" as the sole
+navigation path, tap-to-select preserved). 363/363 assertions and the jsdom smoke test pass.
+Verified live: no dark card, no bottom bar, "Book →" still lands on Step 2 with Step 2's own
+cost-funds card intact.
+
 ## 18 Aug 2026 — Batch 4, Commit 2: manual toggle on the Step 2 accordions (#3)
 
 Per `docs/batch4-step1-cleanup-accordions.md`, Commit 2 only (Commit 1, the Step 1 activity-picker
