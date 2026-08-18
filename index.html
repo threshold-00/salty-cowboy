@@ -1536,32 +1536,17 @@ html, body { background: #0a0a0a; }
 }
 .back-link:hover { color: var(--earth); }
 
-/* Decorative header band on step 2: faint category image (~20% visible)
-   behind a grey overlay, purely decorative, matching the current category's
-   image already used on step 1's cat-intro. */
-.detail-header-band {
-  position: relative;
+/* Light bordered card wrapping Back link, title and description on step 2,
+   matching Figma. Replaces an earlier dark image band (see CHANGELOG). */
+.detail-header-card {
+  background: #fff;
+  border: 1px solid var(--fog);
   border-radius: 14px;
-  overflow: hidden;
   padding: 20px 20px 18px;
   margin-bottom: 18px;
-  background-size: cover;
-  background-position: center;
 }
-.detail-header-band::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(20,20,20,0.8);
-}
-.detail-header-band .back-link,
-.detail-header-band .section-title {
-  position: relative;
-  z-index: 1;
-}
-.detail-header-band .back-link { color: rgba(255,255,255,0.75); margin-bottom: 14px; }
-.detail-header-band .back-link:hover { color: #fff; }
-.detail-header-band .section-title { color: #fff; margin-bottom: 0; }
+.detail-header-card .back-link { margin-bottom: 14px; }
+.detail-header-card .section-title { margin-bottom: 8px; }
 
 /* ── CALENDAR SCREEN ── */
 .cal-header {
@@ -1991,10 +1976,8 @@ html, body { background: #0a0a0a; }
 /* Give the docked screen room so its last content clears the bar. */
 .has-dock { padding-bottom: 104px; }
 
-/* Page 2 offer recap: emoji + repeated description. */
-.detail-intro { display: flex; gap: 10px; align-items: flex-start; margin: 2px 0 18px; }
-.detail-emoji { font-size: 26px; line-height: 1.1; flex-shrink: 0; }
-.detail-desc  { font-size: 13px; color: #5c5c5c; line-height: 1.5; }
+/* Page 2 offer recap, now inside .detail-header-card. */
+.detail-desc { font-size: 13px; color: #5c5c5c; line-height: 1.5; margin-top: 2px; }
 
 /* Price reveal once duration + group size are chosen. */
 .price-reveal {
@@ -2494,20 +2477,13 @@ function App() {
   }, t.next)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "body fu"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "detail-header-band",
-    style: {
-      backgroundImage: "url(" + (actCategory === "Photoshoots" ? IMG_PHOTOSHOOTS : actCategory === "Rides" ? IMG_RIDES : IMG_LESSONS) + ")"
-    }
+    className: "detail-header-card"
   }, /*#__PURE__*/React.createElement("div", {
     className: "back-link",
     onClick: () => setScreen("activity")
   }, t.back), /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
-  }, t.activities[actObj?.id])), /*#__PURE__*/React.createElement("div", {
-    className: "detail-intro"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "detail-emoji"
-  }, actObj?.icon), /*#__PURE__*/React.createElement("p", {
+  }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {
     className: "detail-desc"
   }, t.descs[actObj?.id])), isWhisper && /*#__PURE__*/React.createElement("p", {
     className: "section-hint",

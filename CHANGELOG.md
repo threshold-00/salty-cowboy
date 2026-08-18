@@ -2,6 +2,28 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Figma parity batch, Commit 3: Step 2 activity header
+
+Per `docs/step2-figma-parity-batch.md`, Commit 3. Self-contained restructure of the header card
+at the top of Step 2. Presentational only.
+
+- Replaced `.detail-header-band` (the dark category-photo hero with white text, added earlier
+  this session in Commit B) with `.detail-header-card`: a plain light card, white background,
+  1px `var(--fog)` border, matching the bordered-card look used everywhere else on this screen.
+  Per Ro's explicit confirmation, since this directly reverses recently-built work.
+- The activity description now lives inside this same card, directly under the title, instead
+  of in a separate `.detail-intro` block right below it. Its leading wave/sunrise emoji
+  (`.detail-emoji`, `actObj.icon`) was dropped per the spec.
+- `.detail-intro` and `.detail-emoji` CSS rules removed as dead code once nothing referenced
+  them. `IMG_PHOTOSHOOTS` / `IMG_RIDES` / `IMG_LESSONS` and `actCategory` are untouched, they're
+  still used by Step 1's category intro photo and the rider/person noun logic.
+
+Business rules: none, presentational only.
+
+### Testing
+- 227 / 227 string assertions pass (6 new, 3 rewritten to confirm the old band is gone)
+- jsdom render passes with zero console errors
+
 ## 18 Aug 2026 — Figma parity batch, Commit 2: Step 2 card containers
 
 Per `docs/step2-figma-parity-batch.md`, Commit 2. Wraps three controls that previously floated

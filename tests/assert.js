@@ -248,9 +248,8 @@ has('id bookActivity label', 'bookActivity: "Pesan →"');
 has('ru bookActivity label', 'bookActivity: "Забронировать →"');
 
 // ─── Commit B (docs/booking-engine-structural-spec.md): Step 2 additions ──
-has('detail-header-band CSS present', '.detail-header-band {\n  position: relative;\n  border-radius: 14px;\n  overflow: hidden;');
-has('detail-header-band overlay at 0.8 opacity (image ~20% visible)', 'background: rgba(20,20,20,0.8);');
-has('detail-header-band wraps back-link + title, keyed off actCategory image', 'className: "detail-header-band",\n    style: {\n      backgroundImage: "url(" + (actCategory === "Photoshoots" ? IMG_PHOTOSHOOTS : actCategory === "Rides" ? IMG_RIDES : IMG_LESSONS) + ")"\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link"');
+missing('detail-header-band (dark image band) removed, superseded by the Figma parity light card', 'className: "detail-header-band"');
+missing('detail-header-band CSS block removed', '.detail-header-band {');
 has('en stepHeading1/2/3 keys', 'stepHeading1: "1. Book a date and time"', 1);
 has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
@@ -295,6 +294,14 @@ has('duration selector wrapped in control-card (diff #4)', 'React.createElement(
 has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
 has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
 has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
+
+// ─── docs/step2-figma-parity-batch.md, Commit 3: activity header ──────────
+has('.detail-header-card CSS added, light bordered card (diff #1)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-bottom: 18px;\n}');
+has('back-link and title now sit in the light card, no background image (diff #1)', 'className: "detail-header-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link",\n    onClick: () => setScreen("activity")\n  }, t.back), /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id])');
+has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]))');
+missing('detail-intro wrapper removed (description no longer a separate sibling block)', 'className: "detail-intro"');
+missing('detail-emoji (wave/sunrise icon prefix on the description) removed (diff #2)', 'className: "detail-emoji"');
+has('IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS still used by Step 1 category intro (unaffected)', 'src: activeCat === "Photoshoots" ? IMG_PHOTOSHOOTS : activeCat === "Rides" ? IMG_RIDES : IMG_LESSONS,');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
