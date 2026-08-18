@@ -210,7 +210,7 @@ missing('price-reveal-basis CSS class removed', '.price-reveal-basis');
 // ─── Step 1 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth);');
 has('cat-tab.active uses earth/sand', '.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }');
-has('cat-intro-text padding bumped', '.cat-intro-text {\n  padding: 19px 18px;');
+has('cat-intro-text no longer has its own horizontal padding, so its left/right text edges land at the same inset as the act-cards beneath it (batch 5, Commit 2)', '.cat-intro-text {\n  margin-top: 12px;');
 has('act-card border 1px + generous padding', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 18px;');
 has('act-name is 22px (was 14px)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); }');
 missing('act-name did not gain a new font-family (rule: change size/weight/colour only)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); font-family');
@@ -510,6 +510,15 @@ has('.copy-btn (confirm screen Copy button) now Futura via var(--display)', '.co
 has('.reset-link (Make another booking) now Futura via var(--display)', '.reset-link {\n  background: none;\n  border: none;\n  color: var(--dusk);\n  font-size: 14px;\n  font-family: var(--display);');
 has('.wa-btn (no-availability WhatsApp button) now Futura via var(--display)', '.wa-btn {\n  width: 100%;\n  padding: 13px;\n  background: #1a1a1a;\n  color: #fff;\n  border: none;\n  border-radius: 10px;\n  font-family: var(--display);');
 has('#loading (pre-hydration splash, outside the app\'s own stylesheet/token system) intentionally kept its own Georgia serif treatment, a deliberate exclusion flagged for approval rather than silently converted', 'font-family: Georgia, \'Times New Roman\', serif;');
+
+// ─── docs/batch5-futura-headers-gate.md, Commit 2: Step 1 headers + full-width Book ─
+missing('.cat-intro card background removed, no longer reads as a card', '.cat-intro {\n  background: #f7f7f7;');
+missing('.cat-intro border removed, no longer reads as a card', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);');
+missing('.cat-intro no longer clips its image with overflow: hidden (nothing to clip now the image bleeds past it)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;');
+has('.cat-intro-img bleeds edge to edge of the standard content column via negative margins matching .body\'s 24px padding (full-bleed, not just 100% of its own card)', '.cat-intro-img {\n  display: block;\n  width: calc(100% + 48px);\n  margin: 0 -24px;');
+has('.act-book-btn ("Book ->") is now full width (display: block, width: 100%), no longer align-self: flex-start sized to its own text', '.act-book-btn {\n  display: block;\n  width: 100%;');
+missing('.act-book-btn no longer uses align-self: flex-start (superseded by display:block/width:100%)', '.act-book-btn {\n  align-self: flex-start;');
+has('"Book ->" handler is untouched by the width change: still sets activity, resets every dependent field, and advances to Step 2 in one click', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

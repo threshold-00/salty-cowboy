@@ -1352,7 +1352,8 @@ html, body { background: #0a0a0a; }
 .act-name { font-size: 22px; font-weight: 500; color: var(--earth); }
 .act-meta { font-size: 11px; color: var(--dusk); margin-top: 2px; }
 .act-book-btn {
-  align-self: flex-start;
+  display: block;
+  width: 100%;
   margin-top: 10px;
   padding: 9px 18px;
   border-radius: 12px;
@@ -2046,24 +2047,24 @@ html, body { background: #0a0a0a; }
   color: #4a4a4a;
 }
 
-/* Category intro shown above the activity cards on step 1. */
+/* Category intro shown above the activity cards on step 1. No longer a
+   card (batch 5, Commit 2): the image bleeds edge to edge of .body's
+   24px padding, while the text stays in that standard column so its
+   left/right edges line up with the act-cards beneath it. */
 .cat-intro {
-  background: #f7f7f7;
-  border: 1px solid var(--fog);
-  border-radius: 14px;
-  overflow: hidden;
   margin-bottom: 18px;
   animation: fadeUp 0.3s ease both;
 }
 .cat-intro-img {
   display: block;
-  width: 100%;
+  width: calc(100% + 48px);
+  margin: 0 -24px;
   height: 150px;
   object-fit: cover;
   object-position: center;
 }
 .cat-intro-text {
-  padding: 19px 18px;
+  margin-top: 12px;
   font-size: 12.5px;
   line-height: 1.6;
   color: #4a4a4a;

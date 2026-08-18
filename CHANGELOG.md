@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Batch 5, Commit 2: Step 1 headers + full-width Book
+
+Per `docs/batch5-futura-headers-gate.md`, Commit 2. Step 1 (activity picker) only, presentation only.
+
+The category intro block (the image + description shown above the activity cards, one per
+Rides/Photoshoots/Lessons tab) no longer reads as a clickable card: removed its background,
+border, radius, and clipping. The image now bleeds edge to edge of the standard content column via
+negative margins matching `.body`'s 24px padding, rather than sitting flush inside the old card's
+own bounds. The description text lost its own padding so its left/right edges land exactly where
+the act-cards below it start, not offset by old card padding. Verified live with `getBoundingClientRect`:
+the image spans the full `.body` width, and the text's left/right edges match the act-card's
+left/right edges to the pixel, across all three category tabs.
+
+Each activity card's "Book →" button is now full width (`display: block; width: 100%`, replacing
+`align-self: flex-start`), matching the same full-width button convention already used by the main
+`.cta` button elsewhere in the app. Confirmed the click handler is untouched: it still sets the
+activity, resets every dependent field, and advances to Step 2 in one click. Verified live.
+
+7 new/updated assertions. 384/384 assertions and the jsdom smoke test pass.
+
 ## 18 Aug 2026 — Batch 5, Commit 1: sitewide Futura
 
 Per `docs/batch5-futura-headers-gate.md`, Commit 1. Presentation only, no logic touched.
