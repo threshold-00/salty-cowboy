@@ -571,6 +571,7 @@ const T = {
     heroSub: "Horse rescue sanctuary & riding centre",
     moneyGoesTitle: "Where the money goes",
     moneyGoesBody: "Every booking helps a horse. Salty Cowboys began as a rescue and it still is one. The money from your ride, lesson or photoshoot goes straight back into the paddock: veterinary care, feed, farriery and the slow, patient work of bringing neglected and retired horses back to health. Some arrive underweight or frightened of people. Here they are given time, food and trust until they are sound enough to be ridden gently, or simply to live out their days in peace. When you book with us, you fund that second chance.",
+    costFundsTitle: "What your booking cost funds",
     introPhotoshoots: "Beautiful, story-telling photos with our rescue horses across our most scenic backdrops. Sessions are static, so riding isn't included, though for the Beach shoot you'll walk alongside your horse down to the sand. Bring your own photographer, or add a Salty Cowboy photographer with your booking (packages from IDR 2,000,000, 20 edited photos per hour). Beach shoots are priced per horse; other shoots are location-based.",
     introRides: "See the best of Kedungu on horseback: ride out through emerald rice fields, quiet village lanes and down to the beach, with our grooms guiding you every step of the way. Morning and Golden hour rides are especially magical. Price is per person.",
     introLessons: "Get to know our horses from the ground up. Apart from the Dressage Masterclass, every session is off-saddle, working hand in hand with our rescue horses to build trust, read their body language and discover the quiet art of natural horsemanship.",
@@ -742,6 +743,7 @@ const T = {
     heroSub: "Tempat penyelamatan kuda & pusat berkuda",
     moneyGoesTitle: "Ke mana uang Anda pergi",
     moneyGoesBody: "Setiap pemesanan membantu seekor kuda. Salty Cowboys dimulai sebagai tempat penyelamatan kuda, dan hingga kini tetap begitu. Uang dari ride, pelajaran, atau sesi foto Anda kembali langsung ke paddock: perawatan dokter hewan, pakan, pemasangan sepatu kuda, dan kerja sabar yang panjang untuk memulihkan kesehatan kuda-kuda yang terlantar dan pensiun. Beberapa datang dalam kondisi kurus atau takut pada manusia. Di sini mereka diberi waktu, makanan, dan kepercayaan hingga cukup sehat untuk ditunggangi dengan lembut, atau sekadar menjalani hari-hari mereka dengan tenang. Dengan memesan bersama kami, Anda mendanai kesempatan kedua itu.",
+    costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan",
     introPhotoshoots: "Foto-foto indah penuh cerita bersama kuda rescue kami di latar-latar terbaik kami. Sesi bersifat statis, jadi berkuda tidak termasuk, meski untuk sesi Pantai Anda akan berjalan bersama kuda menuju pasir. Bawa fotografer Anda sendiri, atau tambahkan fotografer Salty Cowboy pada pemesanan (paket mulai IDR 2,000,000, 20 foto hasil edit per jam). Sesi Pantai dihitung per kuda; sesi lain dihitung berdasarkan lokasi.",
     introRides: "Nikmati keindahan Kedungu dari atas kuda: menyusuri sawah hijau, jalan-jalan desa yang tenang, hingga ke pantai, dengan pemandu kami mendampingi di setiap langkah. Berkuda di pagi hari atau saat golden hour terasa sangat magis. Harga per orang.",
     introLessons: "Kenali kuda kami dari dasar. Selain Masterclass Dressage, setiap sesi dilakukan tanpa berkuda, bekerja sama erat dengan kuda rescue kami untuk membangun kepercayaan, membaca bahasa tubuhnya, dan menemukan seni natural horsemanship.",
@@ -913,6 +915,7 @@ const T = {
     heroSub: "Приют для лошадей и центр верховой езды",
     moneyGoesTitle: "Куда идут деньги",
     moneyGoesBody: "Каждое бронирование помогает лошади. Salty Cowboys начинался как приют для лошадей и остаётся им до сих пор. Деньги от вашей прогулки, урока или фотосессии идут прямо на нужды пастбища: ветеринарный уход, корм, ковку и медленную, терпеливую работу по восстановлению здоровья брошенных и пенсионных лошадей. Некоторые из них прибывают истощёнными или напуганными людьми. Здесь им дают время, еду и доверие, пока они не станут достаточно здоровыми, чтобы на них можно было мягко кататься, или просто чтобы спокойно прожить остаток дней. Бронируя у нас, вы финансируете этот второй шанс.",
+    costFundsTitle: "На что идёт стоимость вашего бронирования",
     introPhotoshoots: "Красивые, атмосферные снимки с нашими спасёнными лошадьми на самых живописных локациях. Съёмки статичные, поэтому верховая езда не входит, хотя для съёмки на пляже вы пройдёте рядом с лошадью к воде. Приходите со своим фотографом или добавьте фотографа Salty Cowboy к брони (пакеты от IDR 2,000,000, 20 обработанных фото в час). Съёмка на пляже — цена за лошадь; остальные — по локации.",
     introRides: "Откройте для себя Кедунгу верхом: прогулка через изумрудные рисовые поля, тихие деревенские улочки и к пляжу, а наши грумы сопровождают вас на каждом шагу. Особенно волшебны прогулки утром и в золотой час. Цена за человека.",
     introLessons: "Познакомьтесь с нашими лошадьми с самых азов. Кроме мастер-класса по выездке, все занятия проходят без седла: вы работаете бок о бок с нашими спасёнными лошадьми, выстраивая доверие, читая язык их тела и постигая тонкое искусство natural horsemanship.",
@@ -2009,6 +2012,27 @@ html, body { background: #0a0a0a; }
   color: rgba(255,255,255,0.75);
 }
 
+/* Step 2 equivalent of the step 1 money-goes card, light not dark, sits
+   after the WhatsApp button per Figma. */
+.cost-funds-card {
+  background: #f7f7f7;
+  border: 1px solid var(--fog);
+  border-radius: 14px;
+  padding: 19px 18px;
+  margin-bottom: 18px;
+}
+.cost-funds-title {
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--earth);
+  margin-bottom: 6px;
+}
+.cost-funds-body {
+  font-size: 12.5px;
+  line-height: 20px;
+  color: #4a4a4a;
+}
+
 /* Category intro shown above the activity cards on step 1. */
 .cat-intro {
   background: #f7f7f7;
@@ -2840,7 +2864,13 @@ function App() {
     className: "cta",
     disabled: !selectedTime || !detailsComplete,
     onClick: handleSend
-  }, t.sendBtn)), screen === "confirm" && /*#__PURE__*/React.createElement("div", {
+  }, t.sendBtn)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
+    className: "cost-funds-card fu"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "cost-funds-title"
+  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {
+    className: "cost-funds-body"
+  }, t.moneyGoesBody)), screen === "confirm" && /*#__PURE__*/React.createElement("div", {
     className: "confirm-screen fu"
   }, /*#__PURE__*/React.createElement("div", {
     className: "confirm-icon"

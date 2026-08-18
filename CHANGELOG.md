@@ -2,6 +2,28 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Figma parity batch, Commit 4: Step 2 cost-funds section
+
+Per `docs/step2-figma-parity-batch.md`, Commit 4. Additive, self-contained, static content.
+
+- Added a "What your booking cost funds" card to the bottom of Step 2, after the WhatsApp Send
+  button, always visible on the riders screen regardless of booking progress (mirrors how Step
+  1's "Where the money goes" card is always visible, not tied to any selection). New key
+  `costFundsTitle`.
+- Body copy reuses the existing `moneyGoesBody` translation key rather than duplicating it: the
+  Figma text quoted in diff #19 is word-for-word identical to what Step 1 already shows.
+- Styled as a light card (`#f7f7f7` background, bordered), not the dark card Step 1 uses, so it
+  reads as part of Step 2's now-consistently-light layout rather than a jarring dark block.
+- Declined the `[horse]` emoji prefix shown in the spec's heading text, consistent with the
+  no-decorative-emoji decision from Commit 1 of this same batch. Flagging back rather than
+  silently applying: if the Figma frame is authoritative here, say so and I'll add it.
+
+Business rules: none, static content.
+
+### Testing
+- 234 / 234 string assertions pass (7 new)
+- jsdom render passes with zero console errors
+
 ## 18 Aug 2026 — Figma parity batch, Commit 3: Step 2 activity header
 
 Per `docs/step2-figma-parity-batch.md`, Commit 3. Self-contained restructure of the header card

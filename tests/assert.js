@@ -303,6 +303,15 @@ missing('detail-intro wrapper removed (description no longer a separate sibling 
 missing('detail-emoji (wave/sunrise icon prefix on the description) removed (diff #2)', 'className: "detail-emoji"');
 has('IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS still used by Step 1 category intro (unaffected)', 'src: activeCat === "Photoshoots" ? IMG_PHOTOSHOOTS : activeCat === "Rides" ? IMG_RIDES : IMG_LESSONS,');
 
+// ─── docs/step2-figma-parity-batch.md, Commit 4: cost-funds section ───────
+has('en costFundsTitle key added (diff #19)', 'costFundsTitle: "What your booking cost funds"');
+has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan"');
+has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
+has('.cost-funds-card CSS added, light not dark (unlike step 1 money-goes)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
+has('cost-funds block reuses moneyGoesBody copy (word-for-word identical to Figma diff #19 text)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
+has('cost-funds block sits after the WhatsApp Send button, always visible on the riders screen', 't.sendBtn)), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu"');
+missing('no decorative horse emoji added to the cost-funds heading, consistent with the no-decorative-emoji decision', 'costFundsTitle: "🐴');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);
