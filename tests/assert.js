@@ -17,17 +17,18 @@ has('Photoshoots follows Rides',      'category: "Rides",\n  items: [{\n    id: 
 has('Lessons is last category',       'category: "Lessons",\n  items: [{\n    id: "joinup"');
 
 // ─── ACTIVITIES data structure ───────────────────────────────────────────
-has('photo_beach durations + needsWeight', 'id: "photo_beach",\n    icon: "🏖️",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 3,\n    perHorse: true,\n    photoshoot: true,\n    needsWeight: true');
-has('photo_stable 1-3hr',          'id: "photo_stable",\n    icon: "🏡",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
-has('photo_ricefield clones stable config', 'id: "photo_ricefield",\n    icon: "🌾",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
-has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    icon: "🐴",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
-has('photo_cottages session, 6',   'id: "photo_cottages",\n    icon: "🛖",\n    durations: ["3hr"],\n    maxPeople: 6');
-has('beach ride 1/1.5hr',          'id: "beach",\n    icon: "🌊",\n    durations: ["1hr", "1.5hr"]');
-has('insta now offers 1hr/1.5hr/2hr (priced same as beach ride)', 'id: "insta",\n    icon: "🌅",\n    durations: ["1hr", "1.5hr", "2hr"]');
-has('joinup perPerson',            'id: "joinup",\n    icon: "🔄",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2,\n    perPerson: true');
-has('masterclass now offers 1hr/1.5hr (1.5hr calculated as 1.5x 1hr)', 'id: "masterclass",\n    icon: "🪮",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2');
-has('groupclinic 1.5hr, 6 people', 'id: "groupclinic",\n    icon: "🤲",\n    durations: ["1.5hr"],\n    maxPeople: 6');
-has('whisper courseDays now 4',    'id: "whisper",\n    icon: "🤝",\n    durations: ["3hr"],\n    maxPeople: 2,\n    minAge: 8,\n    course: true,\n    courseDays: 4');
+has('photo_beach durations + needsWeight', 'id: "photo_beach",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 3,\n    perHorse: true,\n    photoshoot: true,\n    needsWeight: true');
+has('photo_stable 1-3hr',          'id: "photo_stable",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
+has('photo_ricefield clones stable config', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
+has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
+has('photo_cottages session, 6',   'id: "photo_cottages",\n    durations: ["3hr"],\n    maxPeople: 6');
+has('beach ride 1/1.5hr',          'id: "beach",\n    durations: ["1hr", "1.5hr"]');
+has('insta now offers 1hr/1.5hr/2hr (priced same as beach ride)', 'id: "insta",\n    durations: ["1hr", "1.5hr", "2hr"]');
+has('joinup perPerson',            'id: "joinup",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2,\n    perPerson: true');
+has('masterclass now offers 1hr/1.5hr (1.5hr calculated as 1.5x 1hr)', 'id: "masterclass",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2');
+has('groupclinic 1.5hr, 6 people', 'id: "groupclinic",\n    durations: ["1.5hr"],\n    maxPeople: 6');
+has('whisper courseDays now 4',    'id: "whisper",\n    durations: ["3hr"],\n    maxPeople: 2,\n    minAge: 8,\n    course: true,\n    courseDays: 4');
+missing('icon field removed from ACTIVITIES data as dead code (never rendered anywhere, Commit D emoji cleanup)', '    icon: "');
 missing('lunge activity removed',  'id: "lunge"');
 
 // ─── SESSION_SLOTS unchanged (Paddock/Stable/Cottages/Rice Field) ────────
@@ -311,7 +312,7 @@ has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan A
 has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
 has('.cost-funds-card CSS added, light not dark (unlike step 1 money-goes)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
 has('cost-funds block reuses moneyGoesBody copy (word-for-word identical to Figma diff #19 text)', 'className: "cost-funds-title"\n  }, t.costFundsTitle), /*#__PURE__*/React.createElement("p", {\n    className: "cost-funds-body"\n  }, t.moneyGoesBody)');
-has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice))), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu step2-block"');
+has('cost-funds block sits after the confirmation notice, which now sits after Send (Figma parity Commit 5, diffs #17/#18), always visible on the riders screen', 't.notice)), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "cost-funds-card fu step2-block"');
 missing('no decorative horse emoji added to the cost-funds heading, consistent with the no-decorative-emoji decision', 'costFundsTitle: "🐴');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 5: price/summary reorder ────
@@ -327,7 +328,8 @@ has('Edit link appended inside the step 2 summary card, scroll-to-top only, no s
 has('TOTAL COST block sits directly after the summary card, still gated on duration/numPeople/selPrice (diff #9)', 'onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })\n  }, t.editLink))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {\n    className: "price-reveal"\n  }, /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-label"\n  }, t.totalCostLabel), /*#__PURE__*/React.createElement("span", {\n    className: "price-reveal-value"\n  }, totalPriceStr))');
 has('notes block sits right after TOTAL COST, before Send (diffs #9/#12)', 'totalPriceStr)), React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0\n    }\n  }, t.notesLabel)');
 has('Send button sits directly after the notes textarea, before the confirmation notice (diff #17)', 'onChange: e => setNotes(e.target.value)\n  }), React.createElement("button", {\n    className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete,\n    onClick: handleSend\n  }, t.sendBtn), React.createElement("div", {\n    className: "notice"');
-has('confirmation notice now sits after Send, last inside the datesComplete-gated block (diff #18)', 't.sendBtn), React.createElement("div", {\n    className: "notice"\n  }, /*#__PURE__*/React.createElement("span", null, "🌿"), /*#__PURE__*/React.createElement("span", null, t.notice)))');
+has('confirmation notice now sits after Send, last inside the datesComplete-gated block, no decorative emoji (Commit D)', 't.sendBtn), React.createElement("div", {\n    className: "notice"\n  }, t.notice))');
+missing('notice no longer wraps its text in a decorative-emoji span (Commit D: seedling-equivalent removed)', 'className: "notice"\n  }, /*#__PURE__*/React.createElement("span"');
 has('handleSend / buildWhatsAppMessage payload fields untouched by the reorder (Simone\'s flow inviolable)', 'const message = buildWhatsAppMessage({\n      actObj,\n      durationLabel: duration,\n      formattedDates,\n      isCourse,\n      selectedTime,\n      numPeople,\n      riders,\n      showWeight,\n      notes,\n      photographerTier: isPhotoshoot ? photographerTier : null,\n      grooming: needsGrooming ? grooming : null\n    });');
 has('totalPrice / totalPriceStr computation itself untouched, only its rendering moved (diff #9)', 'const totalPrice = unitPrice * mult + photographerPrice;\n  const totalPriceStr = "IDR " + totalPrice.toLocaleString("en-US");');
 
@@ -390,6 +392,21 @@ has('notes-area trailing gap now the uniform 22px (was 16px)', 'transition: bord
 has('Send button (Step 2 instance) overrides the shared .cta margin locally: 0 top, 22 bottom, not touching Step 1\'s cta-dock button', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22\n    },\n    disabled: !selectedTime || !detailsComplete');
 has('Step 1\'s cta-dock Next button still uses the untouched shared .cta class (no inline override, no cross-contamination)', 'className: "cta",\n    disabled: !activity,\n    onClick: () => setScreen("riders")');
 has('notice trailing gap now the uniform 22px (was 16px), sits last before the always-visible cost-funds block', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: #444444;\n  line-height: 1.5;\n  margin-bottom: 22px;');
+
+// ─── docs/booking-engine-structural-spec.md, Commit D: copy cleanup ───────
+missing('no em-dashes left anywhere in translation copy, the meta description, or the WhatsApp message builder (standing CLAUDE.md rule)', 'sentTitle: "WhatsApp has opened in another window —');
+has('en sentTitle now reads as two sentences', 'sentTitle: "WhatsApp has opened in another window. Please hit send to make the booking request",');
+has('id sentTitle now reads as two sentences', 'sentTitle: "WhatsApp telah terbuka di jendela lain. Silakan tekan kirim untuk membuat permintaan pemesanan",');
+has('ru sentTitle now reads as two sentences', 'sentTitle: "WhatsApp открылся в другом окне. Нажмите «отправить», чтобы оформить запрос на бронирование",');
+has('meta description em-dash replaced with a natural appositive comma', '<meta name="description" content="Book a horse riding experience at Salty Cowboys, a Bali horse rescue sanctuary & riding centre." />');
+has('WhatsApp message title no longer uses an em-dash', 'lines.push("🐴 *New Salty Cowboys booking request*");');
+has('WhatsApp rider tag line uses a comma, not an em-dash', 'if (parts.length) line += ", " + parts.join(", ");');
+has('WhatsApp heavy-rider warning uses a comma, not an em-dash', 'lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");');
+has('WhatsApp empty-notes placeholder reads "None", not a bare em-dash', 'lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "None"));');
+missing('no em-dash left in any activity description across en/id/ru', 'natural horsemanship —');
+missing('confirm-icon flower emoji (🌺) removed from the confirm screen', '"🌺"');
+missing('confirm-icon CSS class removed as dead code alongside its JSX', '.confirm-icon {');
+missing('notice seedling-equivalent emoji (🌿) removed', '"🌿"');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

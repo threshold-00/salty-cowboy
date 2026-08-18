@@ -2,6 +2,51 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Commit D: em-dash cleanup and decorative emoji removal
+
+Per `docs/booking-engine-structural-spec.md`, Commit D, the last of that structural batch. The
+doc originally named 3 known em-dash spots; a full sweep found many more that had crept in
+since, so this pass covers every em-dash in user-facing copy, not just the 3 originals.
+
+### Em-dashes (standing CLAUDE.md rule: never use them anywhere in code, copy, prose, or commits)
+Swept all three languages plus the WhatsApp message builder and the HTML meta description.
+Replaced each with whichever of a period, comma, or light rewrite read best in context:
+
+- Step 3's "WhatsApp has opened..." heading, in all three languages
+- Several activity descriptions (Insta Ride, Dressage Masterclass, Join Up, Horse Grooming
+  Masterclass, Beach Photoshoot, Group Clinic, the Photoshoots category intro) across en/id/ru
+- The HTML `<meta name="description">` tag
+- The WhatsApp message builder: the message title, the rider tag-list separator, the
+  over-70kg warning line, and the empty-notes placeholder (was a bare em-dash, now reads
+  "None")
+
+Left code comments untouched. The task's own scope is "copy," and comments aren't user or
+Simone-facing; flagging in case a stricter reading is wanted.
+
+### Decorative emoji
+- Removed the flower emoji (🌺) and its wrapping `.confirm-icon` div from the Step 3 confirm
+  screen, plus the now-dead `.confirm-icon` CSS rule. `.confirm-title` sits first in the card
+  now, `.confirm-screen`'s existing 36px top padding already reads fine without an icon above
+  it.
+- Removed the seedling-equivalent leaf emoji (🌿) from the Step 2 WhatsApp-confirmation notice.
+  It now renders just the text, no icon span.
+- Removed the `icon:` field from all 12 entries in the `ACTIVITIES` data (the wave, sunrise,
+  and other per-activity emoji). Confirmed dead code first: neither `actObj.icon` nor
+  `item.icon` was read anywhere in the render tree, both Commit A's card rebuild and the Figma
+  parity batch's header restyle had already removed every call site that used to display them.
+  Matches Ro's earlier confirmation to remove per-activity icons too, not just the two
+  originally-named decorative spots.
+- Functional emoji were left alone: the WhatsApp message's 🐴 title marker and ⚠️ warning, and
+  the weight-warning callouts on the riders screen. These signal information to Simone or the
+  booker, they aren't decorative.
+
+Business rules: none, copy and presentation only.
+
+### Testing
+- 315 / 315 string assertions pass (16 new, 12 rewritten for the removed icon field and
+  em-dashes)
+- jsdom render passes with zero console errors
+
 ## 18 Aug 2026 — Styling parity sub-steps 2+3: one 22px rhythm, one 623px column
 
 Per `docs/step2-styling-parity.md`, sub-steps 2 and 3, done together per Ro's direction: no
