@@ -2,6 +2,37 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Batch 5, Commit 1: sitewide Futura
+
+Per `docs/batch5-futura-headers-gate.md`, Commit 1. Presentation only, no logic touched.
+
+The `.app` root rule (the site's base font, inherited by anything that does not set its own
+`font-family`) switched from a hardcoded `'Outfit', sans-serif` to `var(--display)`, the same
+Futura-first token already used by headings. Nine other selectors that separately hardcoded
+`font-family: 'Outfit', sans-serif` (`.lang-btn`, `.date-chip`, `.cat-tab`, `.act-book-btn`,
+`.notes-area`, `.copy-btn`, `.reset-link`, `.wa-btn`, and the unused `.ww-btn`) were switched to the
+same token, so the whole site now reads in one family.
+
+The time-slot card was the specific exception named in the doc: it never declared its own
+`font-family`, so it was inheriting Outfit from `.app` (500 weight on the time, default 400 on the
+duration sublabel). Changing `.app` to Futura carries the time-slot card along automatically, with
+both weights untouched, exactly matching "keep the existing weight per role, only the family
+changes." Verified live: computed `font-family` on `.time-main`/`.time-sub` is now Futura, weights
+still 500/400.
+
+Grepped for every remaining `font-family: 'Outfit'` declaration: none remain. The `--display`
+token itself still lists `'Century Gothic'` and `'Outfit'` as fallbacks after Futura (the doc's own
+named exception), and the Google Fonts import for Outfit stays, since the token still points to it
+as a fallback face. One deliberate exclusion, flagged here for approval: the pre-hydration `#loading`
+splash screen ("Salty Cowboys" in italic Georgia serif) was left untouched. It renders from a
+separate inline `<style>` block in `<head>`, before the app's own stylesheet (and its `--display`
+token) exists, so it cannot reference the token, and it reads as a deliberate one-off flourish
+rather than app content. Flagging in case the intent was for it to be included too.
+
+18 new/updated assertions (nine converted selectors, the `.app` base rule, the reversed time-slot
+card exception, the Outfit-import and token-fallback checks, and the `#loading` exclusion).
+377/377 assertions and the jsdom smoke test pass.
+
 ## 18 Aug 2026 — Batch 4, Commit 1: Step 1 cleanup (two deletions)
 
 Per `docs/batch4-step1-cleanup-accordions.md`, Commit 1. Deletions only, Step 1 (the activity

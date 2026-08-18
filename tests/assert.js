@@ -355,11 +355,17 @@ has('notice (confirmation note) now Futura 500', '.notice {\n  background: #f7f7
 has('cta (WhatsApp button) now explicitly weight 500', '.cta {\n  display: block;\n  width: 100%;\n  padding: 16px;\n  background: var(--clay);\n  color: #fff;\n  border: none;\n  border-radius: 14px;\n  font-family: var(--display);\n  font-weight: 500;');
 has('cost-funds-title now explicitly weight 500', '.cost-funds-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 18px;');
 has('cost-funds-body now Futura 500, was inheriting Outfit at default weight', '.cost-funds-body {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12.5px;');
-// Confirmed exceptions: time-slot time (Outfit 500) and duration sublabel (Outfit 400) untouched.
-missing('time-main (time-slot time value) NOT switched to Futura, stays Outfit per the two named exceptions', '.time-main { font-family: var(--display)');
-has('time-main keeps its pre-existing weight 500 (Outfit 500 per spec), unedited by this pass', '.time-main { font-size: 16px; font-weight: 500; color: var(--earth); }');
-missing('time-sub (time-slot duration sublabel) NOT switched to Futura, stays Outfit per the two named exceptions', '.time-sub  { font-family: var(--display)');
-missing('time-sub NOT given an explicit weight override (defaults to 400, matching Outfit 400 per spec)', '.time-sub  { font-weight');
+// Batch 5, Commit 1 reversed the two named exceptions above: the time-slot
+// card now also renders in Futura. time-main/time-sub declare no font-family
+// of their own, so they inherit it from .app (now var(--display)); only the
+// weights (500 / default 400) are unchanged, per that commit's explicit
+// "keep the existing weight per role, only the family changes".
+has('.app (site-wide base font) is now Futura via var(--display), not Outfit (batch 5, Commit 1)', '.app {\n  font-family: var(--display);');
+missing('.app no longer hardcodes Outfit as the base font', ".app {\n  font-family: 'Outfit'");
+has('time-main keeps its pre-existing weight 500, unedited by this pass; family now comes from .app inheriting Futura (batch 5, Commit 1)', '.time-main { font-size: 16px; font-weight: 500; color: var(--earth); }');
+missing('time-main still has no explicit font-family override (inherits Futura from .app rather than pinning Outfit locally)', '.time-main { font-family');
+missing('time-sub still has no explicit weight override (defaults to 400, unchanged by the family swap)', '.time-sub  { font-weight');
+missing('time-sub still has no explicit font-family override (inherits Futura from .app rather than pinning Outfit locally)', '.time-sub  { font-family');
 
 // ─── docs/step2-styling-parity.md, sub-steps 2+3: rhythm and alignment ────
 // One uniform 22px inter-block gap, no per-element nudges. 623px column via a
@@ -486,6 +492,24 @@ missing('next translation key removed from all three languages as dead code', 'n
 has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom padding for a dock that no longer exists', 'screen === "activity" && /*#__PURE__*/React.createElement("div", {\n    className: "body fu"\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.chooseActivity)');
 has('"Book →" is the sole navigation path off Step 1: sets activity plus every dependent reset AND advances the screen in one click, a strict superset of what tap-card-then-Next used to do', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 has('tapping an act-card still only selects (sets state, no screen transition), the preview affordance was not removed, only the redundant global Next button was', 'className: "act-card " + (activity === item.id ? "selected" : ""),\n    onClick: () => {\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n    }\n  }');
+
+// ─── docs/batch5-futura-headers-gate.md, Commit 1: sitewide Futura ────────
+// Every explicit "font-family: 'Outfit'" declaration in the app's own
+// injected stylesheet is gone; only var(--display) is used, whose own
+// fallback chain ('Century Gothic', 'Outfit', sans-serif) is the sole
+// intentional exception, per the doc's own carve-out.
+missing('no explicit font-family: \'Outfit\' declarations remain anywhere (the --display token\'s own fallback chain is a --custom-property value, not a font-family: declaration, so it is unaffected by this check)', "font-family: 'Outfit'");
+has('--display token itself is untouched: Futura first, Century Gothic and Outfit kept only as the sanctioned fallback chain', "--display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;");
+has('Google Fonts Outfit import kept (still needed to serve the fallback-of-fallback face named in the --display token)', "family=Outfit:wght@300;400;500;600");
+has('.lang-btn (EN/ID/RU toggle) now Futura via var(--display)', '.lang-btn {\n  padding: 5px 12px;\n  border: 1px solid rgba(255,255,255,0.22);\n  background: transparent;\n  color: rgba(255,255,255,0.55);\n  border-radius: 20px;\n  font-size: 11px;\n  font-family: var(--display);');
+has('.date-chip (Horse Whisperer day picker) now Futura via var(--display)', '.date-chip {\n  padding: 8px 14px;\n  border: 1.5px solid var(--earth);\n  background: var(--earth);\n  color: var(--sand);\n  border-radius: 24px;\n  font-size: 12px;\n  font-family: var(--display);');
+has('.cat-tab (Rides/Photoshoots/Lessons tabs) now Futura via var(--display)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth); font-family: var(--display);');
+has('.act-book-btn ("Book ->") now Futura via var(--display)', '.act-book-btn {');
+has('.notes-area (notes textarea) now Futura via var(--display)', '.notes-area {\n  width: 100%;\n  min-height: 84px;\n  padding: 12px 14px;\n  border: 1.5px solid var(--fog);\n  border-radius: 12px;\n  font-family: var(--display);');
+has('.copy-btn (confirm screen Copy button) now Futura via var(--display)', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display);');
+has('.reset-link (Make another booking) now Futura via var(--display)', '.reset-link {\n  background: none;\n  border: none;\n  color: var(--dusk);\n  font-size: 14px;\n  font-family: var(--display);');
+has('.wa-btn (no-availability WhatsApp button) now Futura via var(--display)', '.wa-btn {\n  width: 100%;\n  padding: 13px;\n  background: #1a1a1a;\n  color: #fff;\n  border: none;\n  border-radius: 10px;\n  font-family: var(--display);');
+has('#loading (pre-hydration splash, outside the app\'s own stylesheet/token system) intentionally kept its own Georgia serif treatment, a deliberate exclusion flagged for approval rather than silently converted', 'font-family: Georgia, \'Times New Roman\', serif;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
