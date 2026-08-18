@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 18 Aug 2026 — Batch 3, Commit 1: duration label spacing (#4)
+
+Per `docs/step2-batch3.md`, Commit 1 only (spacing fixes #4 and #6). Mechanical, no logic.
+
+Checked both items live before touching anything, since the styling-parity commit earlier
+today already covers most of this ground:
+
+- **#4 duration card**: padding (23px top, 25px bottom, 16.5px sides) and the label's left
+  inset already matched the spec exactly, confirmed via `getBoundingClientRect` (label and
+  pill row both start at the same left edge). The one real gap: the "DURATION" label sat 10px
+  above its pill row, spec wants 14px. Fixed by adding `marginBottom: 14` to that one label's
+  inline style. Scoped to the duration label specifically, not the shared `.act-category`
+  class, since that class also drives the Number of people, grooming, time slot, and notes
+  labels, none of which this commit touches.
+- **#6 cost-funds alignment**: already correct. The `.step2-block` mechanism added in the
+  styling-parity commit already aligns it with the WhatsApp button and every other Step 2
+  card. Verified live: `.cta`, `.detail-header-card`, and `.cost-funds-title` all measure the
+  same 623px left edge (`.cta` and `.detail-header-card` at 623 exactly, `.cost-funds-title` at
+  624, a 1px rounding artefact). No code change was needed, confirmed rather than assumed.
+
+Business rules: none, presentation only. Commits 2 to 5 of this batch (BYO label, header image
+band, restoring #5/#7, and the accordion rework) are out of scope for this pass and were not
+touched.
+
+### Testing
+- 318 / 318 string assertions pass (3 new)
+- jsdom render passes with zero console errors
+- Verified live via `getBoundingClientRect` before and after the change
+
 ## 18 Aug 2026 — Commit D: em-dash cleanup and decorative emoji removal
 
 Per `docs/booking-engine-structural-spec.md`, Commit D, the last of that structural batch. The
