@@ -2,6 +2,99 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Figma card rebuild, Step 1: two-column activity cards
+
+Restructures the Step 1 activity cards to match the Figma render: a two-column row (title,
+description and price pills on the left; image and Book button on the right) instead of the
+previous single vertical column. Structural and styling only, same as the spacing audit above.
+No selection logic, navigation, or data binding changed.
+
+- **Card layout:** new `.act-left` (title, description, price pills, stacked 22px apart, 9px
+  between title and description) and `.act-right` (image, then Book button below it at the
+  image's own width, right-aligned) wrap the existing content. Book button's `onClick` (activity
+  selection resets + `setScreen("riders")`) and the card's own select-only `onClick` are untouched,
+  verified live: card-body click still just selects/previews, Book still selects and advances to
+  Step 2.
+- **Responsive:** two-column row only applies at the existing 900px desktop breakpoint (same one
+  the rest of the site's desktop layout switches on); below that, cards stay a single stacked
+  column so mobile bookers aren't left with a cramped, unreadably narrow image. Caught and fixed a
+  cascade bug along the way: the desktop override has to be placed in source order *after* the
+  mobile-first base rule, since an earlier `@media` block matching at the same specificity still
+  loses to a later unconditional rule for the same selector, media match or not. Also caught (via
+  live render, not just code review) that `flex-wrap: wrap` was silently defeating the "image
+  shrinks to fit" intent: wrap decides line breaks using each column's un-shrunk basis
+  (316+284=600px, more than the 578px available inside the 623px content column), so the image
+  column dropped to its own line regardless of its `flex-shrink`. Switched to `flex-wrap: nowrap`
+  so shrinking actually runs.
+- **Price pills:** now render one per duration, stacked vertically, still driven entirely from
+  `t.prices[item.id]` (Beach & Rice Field Ride shows 2, Insta Ride shows 3) — no durations or IDR
+  values hardcoded from the Figma export.
+- **Font weights** (Futura throughout was already correct sitewide): price value (`pt-value`)
+  700→500 and Book button 600→500, matching the title/value/heading/Book = 500 hierarchy.
+  `act-desc` gets an explicit `font-weight: 400`.
+- **Colours:** `pt-label` (duration label) moves off `var(--dusk)` to near-black at 60% opacity
+  (`rgba(20, 20, 20, 0.6)`) — Figma exported this swatch as `rgba(0.11,0.11,0.11,0.60)`, a
+  fractional-channel export glitch, not a real value; used our near-black token at 60% instead.
+  Price pill background and image placeholder now use the captured raw greys (`#eeeeee`,
+  `#d9d9d9`) rather than the `--fog`/`--sand` tokens, per explicit instruction that these stay as
+  captured.
+
+**Not touched, flagged for a decision:** the intro box's fill colour (`#f7f7f7`) was listed in the
+same "greys as captured" instruction, but the intro box isn't one of "the activity cards," and its
+card treatment was explicitly flagged last round as a deliberate batch 5, Commit 2 reversal
+(full-bleed image, no border). Left it alone rather than guess; let me know if you want that
+applied too.
+
+10 new/updated assertions. 404/404 assertions and the jsdom smoke test pass. Verified live in
+Chrome at desktop width (Rides and Photoshoots categories, multiple durations) and confirmed the
+select-vs-Book click behaviour is unchanged.
+
+## 19 Aug 2026 — Figma spacing audit, Step 1: content column, cards, pills, CTA
+
+Applies the non-flagged resolved values from a spacing/layout audit of Step 1 (the activity
+picker) against a Figma export. Presentation only, no state or business-rule changes.
+
+- **Content column bottom padding:** `.body` grows from a flat 24px to 24px sides/top, 112px
+  bottom, matching the Figma content-column spec (this is shared with Step 2, which also uses
+  `.body`, so both steps now get the extra bottom breathing room).
+- **22px block rhythm (override):** the export's raw 24px gap between Step 1's top-level blocks
+  (heading, category tabs, intro, card list) is instead set to 22px to match Step 2's already-locked
+  rhythm, per explicit direction. New scoped rule `.body:not(.step2-block) > .section-title` gives
+  Step 1's heading a 22px trailing gap without touching the shared `.section-title` class used
+  everywhere else. `.cat-tabs` padding/margin was restructured (was an ad hoc 4px/14px padding +
+  2px margin) so its own trailing space is exactly 22px. `.cat-intro`'s trailing margin moved from
+  18px to 22px.
+- **Activity card padding (override):** the export's raw value (16px sides/13px top-bottom) is
+  discarded in favour of the locked Step 2 card padding (23px top/16.5px sides/25px bottom), per
+  explicit direction, for consistency with `.control-card` and `.step2-section-box`. Flagged as a
+  divergence from the raw export at review time.
+- **Activity card inner gap:** 6px to 12px, per the Figma export.
+- **Card image placeholder height:** 140px to 233px, matching the Figma export's aspect ratio (fill
+  colour and 14px radius were already correct).
+- **Price pill:** padding 5px/11px to 5px/10px, row gap 6px to 8px.
+- **CTA button ("Book →"):** padding 9px/18px to a flat 16px, radius 12px to 14px (matches the
+  site's other 14px-radius cards). Full-width sizing from batch 5, Commit 2 is kept as-is; the
+  Figma export's fixed 284x56px was an intentional, already-shipped divergence, not touched here.
+
+**Flagged, not applied (need Ro's call before touching):**
+- Doubled top padding on `.main` + `.body` (48px effective vs Figma's 24px target). Shared with
+  Step 2's already-locked layout, so fixing it is out of this audit's scope.
+- No dedicated "text-block" sub-column exists inside `.act-card` (Figma wants a nested 316px column
+  with its own padding, 22px inner gap, and 9px title/desc micro-gap). Structural addition, not a
+  value tweak.
+- Category tabs' active state is filled (`background`/`border-color: var(--earth)`) where Figma
+  specifies an unfilled 1px `--clay` outline. The filled look is a real, already-shipped visual
+  choice, not a stray pixel value.
+- Category tabs' inactive outline uses `--fog` (#e3e3e3, ≈black-11%) vs Figma's black-15%
+  (≈#d9d9d9). Minor tone gap, recommend keeping `--fog` for token consistency unless exact parity
+  matters.
+- Intro box (`.cat-intro`) has no card treatment at all (full-bleed image + plain text), per an
+  explicit batch 5, Commit 2 reversal. Figma wants it boxed (radius 16px, padding 17px/14px, 1px
+  `--fog` outline). Reapplying the box would reverse that recent decision.
+
+6 new assertions added, 4 updated for the new spacing values. 398/398 assertions and the jsdom
+smoke test pass.
+
 ## 19 Aug 2026 — Batch 5, Commit 3: Step 2 boxing + destructure BYO / duration / back
 
 Per `docs/batch5-futura-headers-gate.md`, Commit 3. Step 2 (booking flow) only, presentation only,

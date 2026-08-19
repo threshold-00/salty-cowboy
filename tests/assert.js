@@ -211,13 +211,13 @@ missing('price-reveal-basis CSS class removed', '.price-reveal-basis');
 has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth);');
 has('cat-tab.active uses earth/sand', '.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }');
 has('cat-intro-text no longer has its own horizontal padding, so its left/right text edges land at the same inset as the act-cards beneath it (batch 5, Commit 2)', '.cat-intro-text {\n  margin-top: 12px;');
-has('act-card border 1px + generous padding', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 18px;');
+has('act-card border 1px + generous padding, matching the locked Step 2 card padding (Figma spacing audit)', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;');
 has('act-name is 22px (was 14px)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); }');
 missing('act-name did not gain a new font-family (rule: change size/weight/colour only)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); font-family');
-has('act-desc is 14px/19.5 line-height (was 12.5px/1.45)', '.act-desc  { font-size: 14px; color: #5c5c5c; margin-top: 4px; line-height: 19.5px; }');
-has('price-tag flipped to light pill (was dark filled chip)', '.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 300px; background: #f7f7f7; border: 1px solid var(--fog); }');
-has('pt-label is dark on light (was white on dark)', '.pt-label { font-size: 11px; color: var(--dusk); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }');
-has('pt-value is dark on light (was white on dark)', '.pt-value { font-size: 13px; color: var(--earth); font-weight: 700; white-space: nowrap; }');
+has('act-desc is 14px/19.5 line-height, explicit weight 400 (Figma card rebuild)', '.act-desc  { font-size: 14px; font-weight: 400; color: #5c5c5c; line-height: 19.5px; }');
+has('price-tag is a light pill, captured grey #eeeeee not the --fog token (Figma card rebuild, greys stay as captured)', '.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 300px; background: #eeeeee; border: 1px solid var(--fog); }');
+has('pt-label uses near-black at 60% opacity via our token, not Figma\'s fractional-channel rgba(0.11,0.11,0.11,0.60) export glitch (Figma card rebuild landmine)', '.pt-label { font-size: 11px; color: rgba(20, 20, 20, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }');
+has('pt-value weight is 500 (was 700), matching the title/value/heading/Book weight hierarchy (Figma card rebuild)', '.pt-value { font-size: 13px; color: var(--earth); font-weight: 500; white-space: nowrap; }');
 
 // ─── Step 3 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('confirm-title is 22px (was 21px)', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;');
@@ -236,9 +236,15 @@ missing('no hourglass emoji anywhere in awaiting text', '⏳');
 
 // ─── Commit A (docs/booking-engine-structural-spec.md): act-card rebuild ──
 missing('act-icon element removed', 'className: "act-icon"');
-has('act-image placeholder added', '}, /*#__PURE__*/React.createElement("div", {\n    className: "act-image"\n  }), /*#__PURE__*/React.createElement("div", {\n    className: "act-name"');
-has('.act-image styled as fog placeholder', '.act-image { width: 100%; height: 140px; border-radius: 14px; background: var(--fog); margin-bottom: 8px; }');
-has('act-card is a vertical column now', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 18px;\n  margin-bottom: 8px;\n  cursor: pointer;\n  transition: all 0.2s;\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 6px;\n  position: relative;\n}');
+has('act-image placeholder sits in the act-right column, above the Book button (Figma card rebuild)', '/*#__PURE__*/React.createElement("div", {\n    className: "act-right"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-image"\n  }), /*#__PURE__*/React.createElement("button", {\n    className: "act-book-btn"');
+has('.act-image is 233px tall, captured grey #d9d9d9 not the --fog token (Figma card rebuild, greys stay as captured)', '.act-image { width: 100%; height: 233px; border-radius: 14px; background: #d9d9d9; }');
+has('act-card base is a mobile-first stacked column (locked Step 2 padding, 12px gap); the Figma two-column row only applies at the 900px desktop breakpoint (Figma card rebuild)', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 8px;\n  cursor: pointer;\n  transition: all 0.2s;\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 12px;\n  position: relative;\n}');
+has('at 900px+, act-card becomes a row with nowrap (not wrap, see the comment: wrap would decide line-breaks on un-shrunk basis and always drop the image), left/right basis 316/284 so the image shrinks to fit the 623px column (Figma card rebuild)', '.act-card { flex-direction: row; flex-wrap: nowrap; align-items: flex-start; }\n  .act-left { flex: 0 1 316px; min-width: 220px; }\n  .act-right { flex: 1 1 284px; min-width: 160px; }');
+has('.act-left base (mobile): title+desc and price pills stacked, 22px inner gap', '.act-left {\n  display: flex;\n  flex-direction: column;\n  gap: 22px;\n}');
+has('.act-titledesc gives title and description their own tighter 9px gap, nested inside act-left\'s 22px rhythm (Figma card rebuild)', '.act-titledesc { display: flex; flex-direction: column; gap: 9px; }');
+has('.act-right base (mobile): image and Book button stacked, right-aligned', '.act-right {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-end;\n}');
+has('price pills stack vertically, one per duration, instead of wrapping in a row (Figma card rebuild)', '.price-tags { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }');
+has('Book button font-weight is 500 (was 600), matching the title/value/heading/Book weight hierarchy (Figma card rebuild)', 'font-family: var(--display);\n  font-size: 13px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: background 0.15s;\n}\n.act-book-btn:hover');
 has('act-check repositioned absolute (was margin-left:auto)', '.act-check {\n  position: absolute;\n  top: 14px;\n  right: 14px;');
 missing('act-check no longer uses margin-left:auto', 'margin-left: auto;\n  width: 20px; height: 20px;\n  border-radius: 50%;\n  background: var(--clay);\n  color: #fff;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 11px;\n  flex-shrink: 0;\n  opacity: 0;\n  transform: scale(0.6);\n  transition: all 0.2s;\n}\n.act-card.selected .act-check');
 has('per-card Book button reuses existing state setters, not a new handler', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
@@ -374,7 +380,7 @@ missing('time-sub still has no explicit font-family override (inherits Futura fr
 // One uniform 22px inter-block gap, no per-element nudges. 623px column via a
 // scoped .step2-block override (671 = 623 + existing 24px side padding), not
 // a global width change (keeps Steps 1 and 3 untouched).
-has('.step2-block override: 671px so Step 2 cards land at 623px content width, scoped off the shared 660px rule', '.main > .step2-block { max-width: 671px; }');
+has('.step2-block and .body override to 671px, so both Step 2 and Step 1 land at the shared 623px content width (Figma card rebuild, Step 2 consistency)', '.main > .step2-block, .main > .body { max-width: 671px; }');
 has('EXPR_A (details block) tagged step2-block', 'className: "body fu step2-block"');
 has('EXPR_B (summary/total/notes/Send/notice block) tagged step2-block, now also boxed (batch 5, Commit 3)', 'className: "step2-section-box fu step2-block"');
 has('cost-funds block tagged step2-block', 'className: "cost-funds-card fu step2-block"');
@@ -535,6 +541,20 @@ has('section 1 box wraps heading1 through cal-selection-panel (grooming and head
 has('section 1 box closes and section 2 box opens at the cal-selection-panel/grooming boundary, grooming is the first child inside section 2\'s box even though it renders before heading2', 'React.createElement("div", {\n    className: "step2-section-box"\n  }, needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",');
 has('section 2 box closes right after addon-group, immediately before section 3\'s own top-level div begins', '")")))))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box fu step2-block"');
 has('header material (image band, header card, isWhisper hint, byo-chip) stays outside/above both section boxes, not swept into section 1\'s box', 'className: "detail-header-card"\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id])), isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"');
+
+// ─── Figma spacing audit, Step 1 (activity picker) ────────────────────────
+// Applies the non-flagged resolved values from the export audit: content
+// column bottom padding, the 22px block-rhythm gap (overriding Figma's raw
+// 24px to match Step 2), the locked Step 2 card padding on act-card, and the
+// remaining 1:1 spacing/radius corrections. The four flagged items (doubled
+// top padding shared with Step 2, the missing text-block sub-column, the
+// active-tab fill-vs-outline treatment, and the intro box's card-vs-bleed
+// treatment) are deliberately left untouched pending Ro's call.
+has('.body bottom padding now 112px per Figma content-column spec, sides/top stay 24px', '.body { padding: 24px 24px 112px; }');
+has('Step 1 heading gets a 22px block-rhythm gap before the category tabs, scoped off Step 2 sections', '.body:not(.step2-block) > .section-title { margin-bottom: 22px; }');
+has('.cat-tabs row spacing rebuilt around the 22px block gap (was 4px/14px padding + 2px margin)', '.cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 0 22px; margin: 0; scrollbar-width: none; }');
+has('.cat-intro trailing gap now 22px (was 18px), completing the block-rhythm chain into the first act-category', '.cat-intro {\n  margin-bottom: 22px;\n  animation: fadeUp 0.3s ease both;\n}');
+has('.act-book-btn padding now flat 16px and radius 14px, matching the Figma CTA spec and the site\'s other 14px-radius cards', '.act-book-btn {\n  display: block;\n  width: 100%;\n  margin-top: 10px;\n  padding: 16px;\n  border-radius: 14px;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

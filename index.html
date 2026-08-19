@@ -1154,11 +1154,12 @@ html, body { background: #0a0a0a; }
   }
   .main > * { max-width: 660px; margin-left: auto; margin-right: auto; }
   .main > .fu:not(.body):not(.confirm-screen) { padding-left: 24px; padding-right: 24px; box-sizing: border-box; }
-  /* Step 2's three top-level blocks (details, summary/send, cost-funds) share one
-     623px content column, matching Figma. 671 = 623 + the existing 24px side
-     padding on each side, so headings, hints and cards all land on the same
-     left edge without touching the shared 660px width used by Steps 1 and 3. */
-  .main > .step2-block { max-width: 671px; }
+  /* Step 2's three top-level blocks (details, summary/send, cost-funds) and
+     Step 1's own body share one 623px content column, matching Figma. 671 =
+     623 + the existing 24px side padding on each side, so headings, hints
+     and cards all land on the same left edge. Step 3 keeps the shared 660px
+     width, unaffected since it doesn't carry .step2-block or .body. */
+  .main > .step2-block, .main > .body { max-width: 671px; }
 }
 
 /* ── HERO HEADER ── */
@@ -1256,7 +1257,7 @@ html, body { background: #0a0a0a; }
 .step-line.done { background: var(--clay-dk); }
 
 /* ── BODY ── */
-.body { padding: 24px; }
+.body { padding: 24px 24px 112px; }
 
 .section-title {
   font-family: var(--display);
@@ -1265,6 +1266,10 @@ html, body { background: #0a0a0a; }
   color: var(--earth);
   margin-bottom: 4px;
 }
+/* Step 1 heading only: 22px block-rhythm gap before the category tabs
+   (Figma spacing audit). Step 2's section-titles keep the base 4px since
+   they sit inside .step2-block, which this selector excludes. */
+.body:not(.step2-block) > .section-title { margin-bottom: 22px; }
 .section-title-toggle {
   cursor: pointer;
   user-select: none;
@@ -1315,7 +1320,7 @@ html, body { background: #0a0a0a; }
 }
 
 /* ── ACTIVITY GRID ── */
-.cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 0 14px; margin: 2px 0; scrollbar-width: none; }
+.cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 0 22px; margin: 0; scrollbar-width: none; }
 .cat-tabs::-webkit-scrollbar { display: none; }
 .cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
 .cat-tab:hover { border-color: var(--clay); }
@@ -1332,37 +1337,70 @@ html, body { background: #0a0a0a; }
 }
 .act-category:first-child { margin-top: 0; }
 
+/* Mobile-first base: a single stacked column (text block, then image +
+   Book button). The Figma two-column row is a desktop layout, applied
+   at 900px+ alongside the rest of the site's desktop enhancements. */
 .act-card {
   background: #fff;
   border: 1px solid var(--fog);
   border-radius: 14px;
-  padding: 20px 18px;
+  padding: 23px 16.5px 25px;
   margin-bottom: 8px;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 6px;
+  gap: 12px;
   position: relative;
 }
 .act-card:hover   { border-color: var(--clay); box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
 .act-card.selected{ border-color: var(--clay); background: #f7f7f7; }
-.act-image { width: 100%; height: 140px; border-radius: 14px; background: var(--fog); margin-bottom: 8px; }
+/* Left column: title, description, price pills. */
+.act-left {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.act-titledesc { display: flex; flex-direction: column; gap: 9px; }
 .act-name { font-size: 22px; font-weight: 500; color: var(--earth); }
 .act-meta { font-size: 11px; color: var(--dusk); margin-top: 2px; }
+/* Right column: image, then the Book button below it at the image's
+   own width, right-aligned within the card (Figma parity). */
+.act-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+/* Desktop two-column row, at the same 900px breakpoint the rest of the
+   layout switches on. Placed after the mobile-first base rules above so
+   it wins the cascade (an earlier @media block with the same selector
+   and specificity would lose to these later unconditional rules).
+   flex-wrap stays off deliberately: with wrap on, the browser decides
+   line breaks using each column's un-shrunk basis (316+284=600px, more
+   than the 578px available inside the 623px content column), so the
+   image column would always drop to its own line no matter its
+   flex-shrink. nowrap forces both columns onto one line and lets shrink
+   do its job, which is what actually produces "image flexes down to
+   fit" (Figma). */
+@media (min-width: 900px) {
+  .act-card { flex-direction: row; flex-wrap: nowrap; align-items: flex-start; }
+  .act-left { flex: 0 1 316px; min-width: 220px; }
+  .act-right { flex: 1 1 284px; min-width: 160px; }
+}
+.act-image { width: 100%; height: 233px; border-radius: 14px; background: #d9d9d9; }
 .act-book-btn {
   display: block;
   width: 100%;
   margin-top: 10px;
-  padding: 9px 18px;
-  border-radius: 12px;
+  padding: 16px;
+  border-radius: 14px;
   border: none;
   background: var(--clay);
   color: #fff;
   font-family: var(--display);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.15s;
 }
@@ -1956,11 +1994,14 @@ html, body { background: #0a0a0a; }
 .wa-icon { font-size: 18px; }
 
 .act-price { font-size: 12.5px; color: #1a1a1a; font-weight: 600; margin-top: 3px; letter-spacing: 0.2px; }
-.price-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 300px; background: #f7f7f7; border: 1px solid var(--fog); }
-.pt-label { font-size: 11px; color: var(--dusk); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-.pt-value { font-size: 13px; color: var(--earth); font-weight: 700; white-space: nowrap; }
-.act-desc  { font-size: 14px; color: #5c5c5c; margin-top: 4px; line-height: 19.5px; }
+.price-tags { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 300px; background: #eeeeee; border: 1px solid var(--fog); }
+/* Figma exported this swatch as rgba(0.11,0.11,0.11,0.60), a fractional-
+   channel export glitch, not a real value. Using our near-black token
+   at 60% opacity instead. */
+.pt-label { font-size: 11px; color: rgba(20, 20, 20, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+.pt-value { font-size: 13px; color: var(--earth); font-weight: 500; white-space: nowrap; }
+.act-desc  { font-size: 14px; font-weight: 400; color: #5c5c5c; line-height: 19.5px; }
 .addon-row { margin-top: 6px; }
 .addon-group { margin-bottom: 22px; }
 .addon-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
@@ -2058,7 +2099,7 @@ html, body { background: #0a0a0a; }
    24px padding, while the text stays in that standard column so its
    left/right edges line up with the act-cards beneath it. */
 .cat-intro {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
   animation: fadeUp 0.3s ease both;
 }
 .cat-intro-img {
@@ -2472,10 +2513,14 @@ function App() {
       setGrooming(null);
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "act-image"
-  }), /*#__PURE__*/React.createElement("div", {
+    className: "act-left"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "act-titledesc"
+  }, /*#__PURE__*/React.createElement("div", {
     className: "act-name"
-  }, t.activities[item.id]), /*#__PURE__*/React.createElement("div", {
+  }, t.activities[item.id]), t.descs[item.id] ? /*#__PURE__*/React.createElement("div", {
+    className: "act-desc"
+  }, t.descs[item.id]) : null), /*#__PURE__*/React.createElement("div", {
     className: "price-tags"
   }, (t.prices[item.id] || []).map((pt, pi) => /*#__PURE__*/React.createElement("div", {
     key: pi,
@@ -2486,13 +2531,15 @@ function App() {
     className: "pt-value"
   }, pt.v)))), item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
     className: "free-chip"
-  }, "🎁 " + t.friendFree), t.descs[item.id] ? /*#__PURE__*/React.createElement("div", {
-    className: "act-desc"
-  }, t.descs[item.id]) : null, item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
+  }, "🎁 " + t.friendFree), item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
     className: "session-note"
   }, t.sessionNote + " " + t.courseWeekNote), item.photoshoot && /*#__PURE__*/React.createElement("div", {
     className: "byo-note"
-  }, t.byoPhotographer), /*#__PURE__*/React.createElement("button", {
+  }, t.byoPhotographer)), /*#__PURE__*/React.createElement("div", {
+    className: "act-right"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "act-image"
+  }), /*#__PURE__*/React.createElement("button", {
     className: "act-book-btn",
     onClick: e => {
       e.stopPropagation();
@@ -2504,7 +2551,7 @@ function App() {
       setGrooming(null);
       setScreen("riders");
     }
-  }, t.bookActivity), /*#__PURE__*/React.createElement("div", {
+  }, t.bookActivity)), /*#__PURE__*/React.createElement("div", {
     className: "act-check"
   }, "✓")))))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "body fu step2-block"
