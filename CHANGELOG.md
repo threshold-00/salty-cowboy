@@ -2,6 +2,40 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Step 2: fix oversized gap between section 2 and section 3
+
+Ro flagged the gap between "2. Who's coming?" and "3. Your booking summary" as much bigger than
+the gap above it, from a screenshot. Root cause: `.body` is shared between Step 1 (where it wraps
+*all* of that screen's content, including the last activity card, so its 112px bottom padding
+correctly lands at the true page end) and Step 2 (where it only wraps sections 1+2 — section 3 and
+the funds card were pulled out as separate top-level siblings during an earlier commit this
+session). Step 2's copy of that same 112px was landing between section 2 and section 3 instead of
+at the real end of the page, stacking with section 2's own 22px margin-bottom for 134px total,
+visibly bigger than the 22px rhythm everywhere else.
+
+Added `.body.step2-block { padding-bottom: 0; }`, scoped to Step 2's instance only (Step 1's
+`.body` has no `step2-block` class and keeps its full 112px). Verified live: section1-to-section2
+and section2-to-section3 gaps are now both exactly 22px, and Step 1's trailing 112px is untouched.
+
+1 new assertion. 428/428 assertions and the jsdom smoke test pass.
+
+## 19 Aug 2026 — Step 2: fix text inset regression from the width-parity commit
+
+The previous width-parity fix (`.step2-section-box.step2-block.fu`, `.cost-funds-card.step2-block.fu`
+pinned to `padding-left/right: 0`) went further than intended: it zeroed section 3's and the funds
+card's horizontal padding entirely instead of only cancelling the `.fu` page-inset that was
+overriding their own component padding. Text in both cards ended up sitting ~1px from the card
+edge (just the border), while sections 1/2 kept their normal 16.5px inset — exactly the "3." and
+funds-card text sitting further left than "2." that Ro flagged from a screenshot.
+
+Fixed by giving both cards their own explicit `padding-left/right: 16.5px` instead of `0`. The
+funds card's own base padding is normally 18px, but Ro asked for all card text to align exactly,
+so it's pinned to the same 16.5px as sections 1-3 (its 19px top/bottom padding is untouched, that
+wasn't part of the complaint). Verified live via `getBoundingClientRect`: all four cards now share
+identical width (623), left offset, and heading text inset (17.5px), exactly equal.
+
+1 assertion updated. 427/427 assertions and the jsdom smoke test pass.
+
 ## 19 Aug 2026 — Step 2: card width parity (centering came free)
 
 Section 3's box and the funds card were rendering 48px wider than Section 1's actual card: both

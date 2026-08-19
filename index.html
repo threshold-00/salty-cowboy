@@ -1172,21 +1172,26 @@ html, body { background: #0a0a0a; }
   .main > .step2-block, .main > .body { max-width: 671px; }
   /* Section 3's box and the funds card are top-level .main children like
      .body, but unlike .body they also carry .fu, so the generic
-     .fu:not(.body):not(.confirm-screen) rule above gives them their own
-     24px page-inset padding on top of the 671px allowance meant for .body
-     to subtract that same padding from. Net effect: their card shell
+     .fu:not(.body):not(.confirm-screen) rule above (higher specificity
+     than either card's own base padding-left/right) was overriding their
+     own 16.5px/18px component padding with a 24px page-inset instead -
+     and inflating their max-width allowance to the full 671px meant for
+     .body to subtract that same inset from. Net effect: a card shell
      rendered 671px wide (48px wider than Section 1's actual 623px card,
-     which sits inset inside .body rather than carrying the inset itself)
-     with doubled internal spacing once their own component padding is
-     added on top. Cancel both here so they match Section 1's box width
-     exactly, using their own component padding for interior spacing
-     instead of the page-level inset. margin-left/right: auto is
-     inherited unchanged from .main > * above, so this only touches width. */
+     which sits inset inside .body and never carries the page-level inset
+     itself) with the wrong, larger horizontal padding on top. Restore
+     each card's own padding-left/right explicitly (equal specificity to
+     the .fu rule, later in source order, so it wins) and pin max-width
+     to 623px. Both cards pinned to 16.5px, not the funds card's own base
+     18px, so its heading text lines up with sections 1-3's text exactly,
+     per Ro's explicit ask; its 19px top/bottom padding is untouched.
+     margin-left/right: auto is inherited unchanged from .main > * above,
+     so this only touches width/padding. */
   .main > .step2-section-box.step2-block.fu,
   .main > .cost-funds-card.step2-block.fu {
     max-width: 623px;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 16.5px;
+    padding-right: 16.5px;
   }
 }
 
@@ -1286,6 +1291,17 @@ html, body { background: #0a0a0a; }
 
 /* ── BODY ── */
 .body { padding: 24px 24px 112px; }
+/* .body is shared by Step 1 (wraps all its content, including the last
+   activity card, so the 112px trailing page-end space above is correct
+   there) and Step 2 (wraps only sections 1+2; section 3 and the funds
+   card are separate top-level siblings rendered after it). Without this
+   override, Step 2's version of the 112px landed between section 2 and
+   section 3 instead of at the true page end, stacking with section 2's
+   own 22px margin-bottom for a 134px gap - visibly bigger than the 22px
+   rhythm between every other pair of blocks. Zeroing it here means
+   section 2's own margin-bottom is the only contributor, exactly
+   matching how the section1-to-section2 gap is produced. */
+.body.step2-block { padding-bottom: 0; }
 
 .section-title {
   font-family: var(--display);

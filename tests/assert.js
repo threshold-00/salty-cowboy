@@ -605,7 +605,8 @@ has('section 3 always renders on the riders screen (no more datesComplete render
 // exactly equal, not just close. margin-left/right: auto is inherited
 // unchanged from the existing `.main > *` rule, so centering came free
 // once the widths matched - no separate centering fix was needed.
-has('Section 3\'s box and the funds card get their own 623px max-width override (not the shared 671px .step2-block width), cancelling the .fu page-inset padding that was doubling their card shell width vs Section 1\'s actual 623px card', '.main > .step2-section-box.step2-block.fu,\n  .main > .cost-funds-card.step2-block.fu {\n    max-width: 623px;\n    padding-left: 0;\n    padding-right: 0;\n  }');
+has('Section 3\'s box and the funds card get their own 623px max-width and 16.5px horizontal padding (not the funds card\'s own base 18px), so heading text lines up exactly with sections 1-3 - verified live via getBoundingClientRect, was briefly 0px in an earlier pass which flushed text to the card edge instead', '.main > .step2-section-box.step2-block.fu,\n  .main > .cost-funds-card.step2-block.fu {\n    max-width: 623px;\n    padding-left: 16.5px;\n    padding-right: 16.5px;\n  }');
+has('.body.step2-block zeroes the shared 112px trailing padding for Step 2\'s instance only; Step 1\'s .body (no step2-block class) keeps the full 112px, since it still wraps its own true last element', '.body.step2-block { padding-bottom: 0; }');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
