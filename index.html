@@ -571,6 +571,7 @@ const T = {
     stepHeading1: "1. Book a date and time",
     stepHeading2: "2. Who's coming?",
     stepHeading3: "3. Your booking summary",
+    summaryPendingHint: "Complete the steps above to see your summary",
     dateTimeHint: "Select an available date below to choose your time slot.",
     detailsHint: "Choose your options and tell us who's coming.",
     aboutRiders: "About the riders",
@@ -742,6 +743,7 @@ const T = {
     stepHeading1: "1. Pilih tanggal dan waktu",
     stepHeading2: "2. Siapa yang ikut?",
     stepHeading3: "3. Ringkasan pemesanan Anda",
+    summaryPendingHint: "Selesaikan langkah-langkah di atas untuk melihat ringkasan Anda",
     dateTimeHint: "Pilih tanggal yang tersedia di bawah untuk memilih slot waktu Anda.",
     detailsHint: "Pilih opsi Anda dan beri tahu kami siapa yang ikut.",
     aboutRiders: "Tentang penunggang",
@@ -913,6 +915,7 @@ const T = {
     stepHeading1: "1. Выберите дату и время",
     stepHeading2: "2. Кто участвует?",
     stepHeading3: "3. Итоги вашего бронирования",
+    summaryPendingHint: "Заполните шаги выше, чтобы увидеть итоги бронирования",
     dateTimeHint: "Выберите доступную дату ниже, чтобы выбрать время.",
     detailsHint: "Выберите параметры и расскажите, кто участвует.",
     aboutRiders: "О наездниках",
@@ -1095,6 +1098,13 @@ html, body { background: #0a0a0a; }
      Swap this one line (plus the Google Fonts <link> in <head>) to
      re-typeset the headings. */
   --display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;
+  /* Body-copy face, used by descriptions/hints/notes. Deliberately skips
+     'Futura': the copy installed on macOS only ships Medium and Bold
+     weights, so any font-weight below ~500 requested on --display just
+     silently clamps back to Medium there, with no lighter face to land
+     on. Century Gothic/Outfit both carry a real light weight, so
+     lightened body copy actually renders lighter. */
+  --body: 'Century Gothic', 'Outfit', sans-serif;
 }
 
 .app {
@@ -1281,8 +1291,8 @@ html, body { background: #0a0a0a; }
   color: var(--dusk);
 }
 .section-hint {
-  font-family: var(--display);
-  font-weight: 500;
+  font-family: var(--body);
+  font-weight: 400;
   font-size: 12px;
   color: var(--dusk);
   margin-bottom: 22px;
@@ -1313,10 +1323,11 @@ html, body { background: #0a0a0a; }
 .date-chip:hover { opacity: 0.85; }
 .date-chip .x { font-size: 13px; opacity: 0.7; }
 .days-count {
+  font-family: var(--body);
   font-size: 12px;
   color: var(--dusk);
   margin: 4px 0 18px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* ── ACTIVITY GRID ── */
@@ -1363,7 +1374,7 @@ html, body { background: #0a0a0a; }
   gap: 22px;
 }
 .act-titledesc { display: flex; flex-direction: column; gap: 9px; }
-.act-name { font-size: 14px; font-weight: 500; color: var(--earth); }
+.act-name { font-size: 16px; font-weight: 500; color: var(--earth); }
 .act-meta { font-size: 11px; color: var(--dusk); margin-top: 2px; }
 /* Right column: image, then the Book button below it at the image's
    own width, right-aligned within the card (Figma parity). */
@@ -1564,7 +1575,7 @@ html, body { background: #0a0a0a; }
 .perm-text { font-family: var(--display); font-weight: 500; font-size: 12px; color: #444444; line-height: 1.5; }
 
 /* ── NOTES ── */
-.notes-time-hint { font-size: 11.5px; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }
+.notes-time-hint { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }
 .notes-area {
   width: 100%;
   min-height: 84px;
@@ -1582,7 +1593,7 @@ html, body { background: #0a0a0a; }
   margin-bottom: 22px;
 }
 .notes-area:focus { border-color: var(--clay); }
-.notes-area::placeholder { font-family: var(--display); font-weight: 500; color: #999999; font-size: 11.5px; }
+.notes-area::placeholder { font-family: var(--body); font-weight: 400; color: #999999; font-size: 11.5px; }
 
 /* ── CTA ── */
 .cta {
@@ -1812,8 +1823,8 @@ html, body { background: #0a0a0a; }
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 12px 14px;
-  font-family: var(--display);
-  font-weight: 500;
+  font-family: var(--body);
+  font-weight: 400;
   font-size: 12px;
   color: #444444;
   line-height: 1.5;
@@ -1829,11 +1840,11 @@ html, body { background: #0a0a0a; }
 }
 .copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }
 .copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 1.5px; margin-top: 16px; margin-bottom: 8px; }
-.copy-text { white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }
+.copy-text { white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: 13px; font-weight: 300; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }
 .copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
 .copy-btn:hover { background: rgba(0,0,0,0.05); }
 .copy-btn.done { background: var(--clay); color: #fff; border-color: var(--clay); }
-.copy-fallback { margin-top: 12px; font-size: 12.5px; line-height: 1.55; color: var(--dusk); }
+.copy-fallback { margin-top: 12px; font-family: var(--body); font-size: 12.5px; font-weight: 300; line-height: 1.55; color: var(--dusk); }
 .copy-fallback a { color: var(--clay); font-weight: 600; text-decoration: none; white-space: nowrap; }
 .confirm-title {
   font-family: var(--display);
@@ -1843,7 +1854,9 @@ html, body { background: #0a0a0a; }
   margin-bottom: 8px;
 }
 .confirm-sub {
+  font-family: var(--body);
   font-size: 13px;
+  font-weight: 300;
   color: var(--dusk);
   line-height: 1.65;
   margin-bottom: 28px;
@@ -2001,7 +2014,7 @@ html, body { background: #0a0a0a; }
    at 60% opacity instead. */
 .pt-label { font-size: 10.5px; color: rgba(20, 20, 20, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
 .pt-value { font-size: 13px; color: var(--earth); font-weight: 500; white-space: nowrap; }
-.act-desc  { font-size: 14px; font-weight: 400; color: #5c5c5c; line-height: 18px; }
+.act-desc  { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 18px; }
 .addon-row { margin-top: 6px; }
 .addon-group { margin-bottom: 22px; }
 .addon-title { font-size: 12px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
@@ -2033,10 +2046,9 @@ html, body { background: #0a0a0a; }
   line-height: 1.45;
 }
 .group-note .gn-icon { flex-shrink: 0; opacity: 0.7; }
-.price-note { font-size: 11px; color: var(--dusk); margin-top: 5px; font-style: italic; }
+.price-note { font-family: var(--body); font-size: 11px; font-weight: 300; color: var(--dusk); margin-top: 5px; font-style: italic; }
 .free-chip {
   display: inline-block;
-  margin-top: 8px;
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--leaf);
@@ -2045,10 +2057,12 @@ html, body { background: #0a0a0a; }
   font-weight: 600;
   letter-spacing: 0.2px;
 }
-.session-note { font-size: 11.5px; color: var(--dusk); margin-top: 6px; line-height: 1.45; }
-.byo-note { font-size: 11.5px; color: var(--dusk); margin-top: 6px; line-height: 1.45; font-style: italic; }
+.session-note { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-top: 6px; line-height: 1.45; }
+.byo-note { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-top: 6px; line-height: 1.45; font-style: italic; }
 .sat-note {
+  font-family: var(--body);
   font-size: 11.5px;
+  font-weight: 300;
   color: #565656;
   background: #fafafa;
   border: 1px solid #d9d9d9;
@@ -2058,7 +2072,7 @@ html, body { background: #0a0a0a; }
   line-height: 1.45;
 }
 /* Page 2 offer recap, now inside .detail-header-card. */
-.detail-desc { font-family: var(--display); font-weight: 500; font-size: 13px; color: #5c5c5c; line-height: 1.5; margin-top: 2px; }
+.detail-desc { font-family: var(--body); font-weight: 300; font-size: 13px; color: #5c5c5c; line-height: 1.5; margin-top: 2px; }
 
 /* Price reveal once duration + group size are chosen. */
 .price-reveal {
@@ -2087,8 +2101,8 @@ html, body { background: #0a0a0a; }
   margin-bottom: 6px;
 }
 .cost-funds-body {
-  font-family: var(--display);
-  font-weight: 500;
+  font-family: var(--body);
+  font-weight: 400;
   font-size: 12.5px;
   line-height: 20px;
   color: #4a4a4a;
@@ -2107,8 +2121,9 @@ html, body { background: #0a0a0a; }
   animation: fadeUp 0.3s ease both;
 }
 .cat-intro-text {
+  font-family: var(--body);
   font-size: 12.5px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.6;
   color: #4a4a4a;
 }
@@ -2236,6 +2251,7 @@ function App() {
   const [copied, setCopied] = useState(false);
   const [section1ManualOpen, setSection1ManualOpen] = useState(false);
   const [section2ManualOpen, setSection2ManualOpen] = useState(false);
+  const [section3ManualCollapse, setSection3ManualCollapse] = useState(false);
   const actObj = ALL_ACTIVITIES.find(a => a.id === activity);
   const isPhotoshoot = actObj?.photoshoot === true;
   const isRiding = actObj?.riding === true;
@@ -2381,6 +2397,12 @@ function App() {
   // section1Complete back to false and forces the section open regardless
   // of the manual flag.
   const section1Collapsed = section1Complete && !section1ManualOpen;
+  // Section 3 has no fields of its own to complete, so its trigger is
+  // inverted from sections 1/2: it starts collapsed (nothing to review
+  // yet) and auto-opens once datesComplete, same point it used to become
+  // visible at all. Once open, the heading becomes clickable and toggles
+  // section3ManualCollapse to let the user close it again manually.
+  const section3Collapsed = !datesComplete || section3ManualCollapse;
   // Slots depend on activity, duration and the date: Saturday afternoons are
   // closed, so a Saturday booking only ever shows morning times.
   const selPriceIdx = actObj ? actObj.durations.indexOf(duration) : -1;
@@ -2510,7 +2532,9 @@ function App() {
     className: "act-titledesc"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-name"
-  }, t.activities[item.id]), t.descs[item.id] ? /*#__PURE__*/React.createElement("div", {
+  }, t.activities[item.id]), item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
+    className: "free-chip"
+  }, "🎁 " + t.friendFree), t.descs[item.id] ? /*#__PURE__*/React.createElement("div", {
     className: "act-desc"
   }, t.descs[item.id]) : null), /*#__PURE__*/React.createElement("div", {
     className: "price-tags"
@@ -2522,8 +2546,6 @@ function App() {
   }, pt.l), /*#__PURE__*/React.createElement("span", {
     className: "pt-value"
   }, pt.v)))), item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
-    className: "free-chip"
-  }, "🎁 " + t.friendFree), item.id === "whisper" && /*#__PURE__*/React.createElement("div", {
     className: "session-note"
   }, t.sessionNote + " " + t.courseWeekNote), item.photoshoot && /*#__PURE__*/React.createElement("div", {
     className: "byo-note"
@@ -2871,14 +2893,24 @@ function App() {
     className: "perm-box " + (photographerTier === tier.key ? "checked" : "")
   }, photographerTier === tier.key ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {
+  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "step2-section-box fu step2-block"
   }, React.createElement("h3", {
-    className: "section-title"
-  }, t.stepHeading3), React.createElement("div", {
+    className: "section-title" + (datesComplete ? " section-title-toggle" : ""),
+    onClick: datesComplete ? () => setSection3ManualCollapse(o => !o) : undefined
+  }, t.stepHeading3, datesComplete && /*#__PURE__*/React.createElement("span", {
+    className: "section-toggle-arrow"
+  }, section3Collapsed ? "▾" : "▴")), section3Collapsed && /*#__PURE__*/React.createElement("p", {
+    className: "section-hint",
+    style: {
+      cursor: datesComplete ? "pointer" : undefined
+    },
+    onClick: datesComplete ? () => setSection3ManualCollapse(o => !o) : undefined
+  }, datesComplete ? (totalPriceStr ? t.totalCostLabel + ": " + totalPriceStr : t.stepHeading3) : t.summaryPendingHint), React.createElement("div", {
     className: "confirm-summary",
     style: {
-      marginBottom: 22
+      marginBottom: 22,
+      display: section3Collapsed ? "none" : undefined
     }
   }, React.createElement("div", {
     className: "sum-row"
@@ -2938,7 +2970,10 @@ function App() {
     },
     onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })
   }, t.editLink))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {
-    className: "price-reveal"
+    className: "price-reveal",
+    style: {
+      display: section3Collapsed ? "none" : undefined
+    }
   }, /*#__PURE__*/React.createElement("span", {
     className: "price-reveal-label"
   }, t.totalCostLabel), /*#__PURE__*/React.createElement("span", {
@@ -2946,12 +2981,19 @@ function App() {
   }, totalPriceStr)), React.createElement("div", {
     className: "act-category",
     style: {
-      marginTop: 0
+      marginTop: 0,
+      display: section3Collapsed ? "none" : undefined
     }
   }, t.notesLabel), React.createElement("div", {
-    className: "notes-time-hint"
+    className: "notes-time-hint",
+    style: {
+      display: section3Collapsed ? "none" : undefined
+    }
   }, t.notesTimeHint), React.createElement("textarea", {
     className: "notes-area",
+    style: {
+      display: section3Collapsed ? "none" : undefined
+    },
     value: notes,
     placeholder: t.notesPlaceholder,
     onChange: e => setNotes(e.target.value)
@@ -2959,12 +3001,16 @@ function App() {
     className: "cta",
     style: {
       marginTop: 0,
-      marginBottom: 22
+      marginBottom: 22,
+      display: section3Collapsed ? "none" : undefined
     },
     disabled: !selectedTime || !detailsComplete,
     onClick: handleSend
   }, t.sendBtn), React.createElement("div", {
-    className: "notice"
+    className: "notice",
+    style: {
+      display: section3Collapsed ? "none" : undefined
+    }
   }, t.notice)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-card fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {

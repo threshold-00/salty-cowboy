@@ -2,6 +2,101 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Step 2: section 3 becomes a closed-by-default accordion
+
+Section 3 ("Your booking summary") previously didn't render at all until `datesComplete`. It now
+always renders on the riders screen, starting collapsed with a static hint ("Complete the steps
+above to see your summary"), and auto-opens once `datesComplete` becomes true — same reveal
+timing as before, just a collapse instead of a hide. Once open, the heading becomes clickable
+(matching sections 1/2) and toggles a new `section3ManualCollapse` state, so the user can manually
+close it again; the collapsed hint then shows the running total price instead of the static text.
+
+Section 2 ("Who's coming?") is unchanged — it still renders open by default and auto-collapses
+once `detailsComplete`, per Ro's explicit call to leave it as-is.
+
+This followed up on a request that initially asked to remove the render gates on sections 2/3 and
+the WhatsApp CTA entirely (so an empty summary and an active-looking Send button would show before
+any date was picked) framed as "Figma parity." That didn't match this codebase: the quoted
+subtitle copy didn't exist anywhere in the file, and `tests/assert.js` already documented the
+`datesComplete` gate as a deliberate decision from earlier project history. Flagged it and asked
+before touching anything; Ro clarified she wanted the sections visible-but-collapsed instead,
+which is what shipped here. `handleSend`/`buildWhatsAppMessage` still read exclusively from React
+state, confirmed unchanged.
+
+9 new assertions, 12 updated. 426/426 assertions and the jsdom smoke test pass. Verified live in
+Chrome: section 3 collapsed pre-datesComplete, auto-opened on datesComplete with Send correctly
+disabled (details still incomplete), manual collapse/reopen toggle both work.
+
+## 19 Aug 2026 — Root-cause fix: body copy wasn't actually rendering lighter
+
+Ro reported that after three rounds of lightening body-copy font-weight (500→400→300→200), the
+card description still looked unchanged on her own machine. Root cause: `'Futura'` is listed
+first in the `--display` font stack, and macOS ships system Futura with only Medium and Bold
+weights, no Light/Regular/300/200 face. Since Futura resolves successfully on any Mac that has it
+installed (which is most of them, it's a stock system font), every `font-weight` request below
+~500 was silently clamping back to the same Medium face — none of the earlier weight changes had
+anywhere lighter to land, even though they *looked* like they worked in this session's own
+Chrome-automation screenshots (that environment evidently doesn't have Futura installed, so it was
+falling through to the Outfit web font and actually showing the requested weight, masking the bug).
+
+**Fix:** added a second font-family token, `--body: 'Century Gothic', 'Outfit', sans-serif;`
+(deliberately excludes Futura), and switched every body-copy class from the earlier sweep onto it:
+`.act-desc`, `.detail-desc`, `.section-hint`, `.cat-intro-text`, `.days-count`, `.notice`,
+`.cost-funds-body`, `.notes-area::placeholder`, `.notes-time-hint`, `.session-note`, `.byo-note`,
+`.price-note`, `.sat-note`, `.copy-fallback`, `.copy-text`, `.confirm-sub`. Headings, tabs, price
+values/labels, chips, links, and buttons stay on `--display` (Futura first), untouched.
+
+7 new assertions, 26 updated. 416/416 assertions and the jsdom smoke test pass.
+
+**Follow-up:** with the `--body` fix in place, Ro could finally see the actual weight difference
+and decided 200 was too light. `.act-desc` and `.detail-desc` are back to weight 300, matching the
+rest of the body-copy set. The Outfit web-font import dropped the 200 weight again since nothing
+uses it now.
+
+**Follow-up 2:** `.act-name` (Step 1 card heading) bumped 14px → 16px per Ro's ask. Weight stays
+500, unaffected by the body-copy work above (headings were explicitly excluded from that sweep).
+
+**Follow-up 3:** the "🎁 Bring a friend for free" chip (Horse Whisperer Course only) moved from
+after the price pills to directly under the card heading, before the description. Its own
+`margin-top: 8px` was dropped since `.act-titledesc`'s 9px flex gap now spaces it on both sides.
+
+
+## 19 Aug 2026 — Sitewide: lighten body copy one weight step
+
+Lightens all body copy (descriptions, intro paragraphs, hints, and notes) across all three steps
+by one font-weight step: 500→400, 400→300 (or the implicit 400 default→300 where no weight was set
+explicitly). Headings, category tabs, price pills, duration labels, chips, links, and buttons are
+untouched, per Ro's explicit scope call.
+
+**Weight 500 → 400:** `.section-hint` (Step 1 + Step 2 hints), `.cat-intro-text` (Step 1 intro
+paragraph), `.days-count`, `.notice` (confirmation note), `.cost-funds-body`,
+`.notes-area::placeholder`.
+
+**Weight 400 → 300 (or implicit default → explicit 300):** `.act-desc` (Step 1 card description),
+`.session-note`, `.byo-note`, `.price-note`, `.sat-note`, `.notes-time-hint`, `.copy-fallback`,
+`.copy-text` (the WhatsApp message preview), `.confirm-sub`.
+
+**Follow-up 1:** `.detail-desc` (Step 2's activity card description) landed at 400 in the sweep
+above, but Ro asked for card descriptions specifically to go lighter still, so it was brought down
+to 300 to match `.act-desc` — both are now the same weight.
+
+**Follow-up 2:** Ro then asked for card descriptions at weight 200 specifically. `.act-desc` and
+`.detail-desc` are now both `font-weight: 200`. This only renders visibly lighter than 300 for
+visitors who fall back to the Outfit web font (the `--display` stack is `'Futura', 'Century
+Gothic', 'Outfit', sans-serif`, and neither Futura nor Century Gothic ships a 200 face on any
+system, so they'd just clamp to their lightest available weight regardless) — so the Google Fonts
+Outfit import was widened from `wght@300;400;500;600` to `wght@200;300;400;500;600` to actually
+serve that face rather than silently rendering identical to 300.
+
+**Explicitly left alone:** headings (`.section-title`), category tabs (`.cat-tab`), price values
+and duration labels (`.pt-value`, `.pt-label`), chips (`.byo-chip`, `.free-chip`), eyebrow labels
+(`.act-category`, `.rider-label`, `.field-label`, etc.), links (`.hint-link`, `.copy-fallback a`),
+and all buttons.
+
+7 new assertions, 13 updated. 413/413 assertions and the jsdom smoke test pass. Verified live in
+Chrome across Step 1 (card description, intro paragraph), Step 2 (activity description, section
+hints, cost-funds card), confirming the lightened copy reads clearly next to unchanged headings.
+
 ## 19 Aug 2026 — Step 1: remove intro header photo band, restore boxed intro
 
 Removes the full-width header photo band above the Step 1 category intro paragraph, matching
