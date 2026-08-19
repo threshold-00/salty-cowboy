@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Figma typography pass, Step 1: activity picker
+
+Sets Step 1's text roles (font size, weight, family) to Figma values. Styling only, no layout,
+selection logic, navigation, data binding, selected-state fill, or check badge changes.
+
+- **Card title (`.act-name`):** 22px → 14px. Was rendering far larger than the card content
+  around it. Weight already 500.
+- **Book button label (`.act-book-btn`):** 13px → 18px. Weight already 500.
+- **Duration eyebrow (`.pt-label`):** 11px → 10.5px. Weight/uppercase/letter-spacing already
+  matched.
+- **Card description (`.act-desc`):** line-height 19.5px → 18px. Size/weight already matched.
+- **Intro paragraph (`.cat-intro-text`):** added explicit `font-weight: 500` (was inheriting the
+  implicit 400 default). Size 12.5px and line-height 1.6 (= 20px) already matched.
+
+**Already matched Figma, left unchanged:** "Choose an activity" heading (22px/500), category tabs
+(14px/500), price value (13px/500).
+
+5 assertions updated, 1 added. 405/405 assertions and the jsdom smoke test pass. Verified live in
+Chrome.
+
 ## 19 Aug 2026 — Figma card rebuild, Step 1: two-column activity cards
 
 Restructures the Step 1 activity cards to match the Figma render: a two-column row (title,
