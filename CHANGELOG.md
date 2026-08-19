@@ -2,6 +2,28 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Step 1: remove intro header photo band, restore boxed intro
+
+Removes the full-width header photo band above the Step 1 category intro paragraph, matching
+Figma (no image above the intro copy). Structural only; the typography pass above is untouched.
+
+- **Removed:** the `<img className="cat-intro-img">` element and its CSS rule. No shared component
+  with Step 2's header image band (`.detail-header-image`) — confirmed the two are entirely
+  separate classes/elements before touching anything; Step 2 is unaffected.
+- **`.cat-intro` restored to a bordered box**, reversing the batch 5, Commit 2 full-bleed/no-card
+  look now that there's no image left to bleed: `#f7f7f7` fill, 1px `--fog` border, 16px radius,
+  padding 14px top/bottom, 17px sides. The intro paragraph now sits directly under the category
+  tab row, inside this box.
+- **Cleanup:** removed `.cat-intro-text`'s `margin-top: 12px` (was spacing the text from the now-
+  gone image above it; the box's own padding replaces it). The 22px tabs-to-intro block gap was
+  already correct and needed no change.
+- The three embedded image constants (`IMG_PHOTOSHOOTS`, `IMG_RIDES`, `IMG_LESSONS`) are now
+  unreferenced dead code, left in place pending a decision on trimming them.
+
+3 assertions updated, 2 added. 406/406 assertions and the jsdom smoke test pass (body size dropped
+~54KB with the three embedded images no longer rendered). Verified live in Chrome: intro box
+renders correctly on Step 1, Step 2's header image band is untouched, Book navigation still works.
+
 ## 19 Aug 2026 — Figma typography pass, Step 1: activity picker
 
 Sets Step 1's text roles (font size, weight, family) to Figma values. Styling only, no layout,

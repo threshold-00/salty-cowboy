@@ -210,8 +210,8 @@ missing('price-reveal-basis CSS class removed', '.price-reveal-basis');
 // ─── Step 1 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth);');
 has('cat-tab.active uses earth/sand', '.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }');
-has('cat-intro-text no longer has its own horizontal padding, so its left/right text edges land at the same inset as the act-cards beneath it (batch 5, Commit 2)', '.cat-intro-text {\n  margin-top: 12px;');
-has('cat-intro-text explicit weight 500 (Figma typography pass, was inheriting the implicit 400 default); size 12.5px and line-height 1.6 (=20px) already matched Figma and were left alone', '.cat-intro-text {\n  margin-top: 12px;\n  font-size: 12.5px;\n  font-weight: 500;\n  line-height: 1.6;');
+has('cat-intro-text no longer needs its own top margin (header photo band above it removed, batch 6: intro image removal); horizontal inset now comes from the restored .cat-intro box padding instead', '.cat-intro-text {\n  font-size: 12.5px;');
+has('cat-intro-text explicit weight 500 (Figma typography pass, was inheriting the implicit 400 default); size 12.5px and line-height 1.6 (=20px) already matched Figma and were left alone', '.cat-intro-text {\n  font-size: 12.5px;\n  font-weight: 500;\n  line-height: 1.6;');
 has('act-card border 1px + generous padding, matching the locked Step 2 card padding (Figma spacing audit)', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;');
 has('act-name is 14px, matching the Figma typography pass (was 22px, oversized relative to the card)', '.act-name { font-size: 14px; font-weight: 500; color: var(--earth); }');
 missing('act-name did not gain a new font-family (rule: change size/weight/colour only)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); font-family');
@@ -310,7 +310,8 @@ missing('back-link no longer lives inside detail-header-card (moved above the im
 has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]))');
 missing('detail-intro wrapper removed (description no longer a separate sibling block)', 'className: "detail-intro"');
 missing('detail-emoji (wave/sunrise icon prefix on the description) removed (diff #2)', 'className: "detail-emoji"');
-has('IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS still used by Step 1 category intro (unaffected)', 'src: activeCat === "Photoshoots" ? IMG_PHOTOSHOOTS : activeCat === "Rides" ? IMG_RIDES : IMG_LESSONS,');
+missing('Step 1 category intro no longer renders a header photo band (batch 6: intro image removal, Figma has no image above the intro copy); IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS constants are now unreferenced dead code, left in place pending a decision on trimming them', 'src: activeCat === "Photoshoots" ? IMG_PHOTOSHOOTS : activeCat === "Rides" ? IMG_RIDES : IMG_LESSONS,');
+missing('.cat-intro-img element no longer rendered (batch 6: intro image removal)', 'className: "cat-intro-img"');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 4: cost-funds section ───────
 has('en costFundsTitle key added (diff #19)', 'costFundsTitle: "What your booking cost funds"');
@@ -523,10 +524,10 @@ has('.wa-btn (no-availability WhatsApp button) now Futura via var(--display)', '
 has('#loading (pre-hydration splash, outside the app\'s own stylesheet/token system) intentionally kept its own Georgia serif treatment, a deliberate exclusion flagged for approval rather than silently converted', 'font-family: Georgia, \'Times New Roman\', serif;');
 
 // ─── docs/batch5-futura-headers-gate.md, Commit 2: Step 1 headers + full-width Book ─
-missing('.cat-intro card background removed, no longer reads as a card', '.cat-intro {\n  background: #f7f7f7;');
-missing('.cat-intro border removed, no longer reads as a card', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);');
-missing('.cat-intro no longer clips its image with overflow: hidden (nothing to clip now the image bleeds past it)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;');
-has('.cat-intro-img bleeds edge to edge of the standard content column via negative margins matching .body\'s 24px padding (full-bleed, not just 100% of its own card)', '.cat-intro-img {\n  display: block;\n  width: calc(100% + 48px);\n  margin: 0 -24px;');
+has('.cat-intro card background restored (batch 6: intro image removal reverses the batch 5, Commit 2 no-card look, now that there\'s no image left to bleed edge to edge)', '.cat-intro {\n  background: #f7f7f7;');
+has('.cat-intro border restored, 16px radius per Figma (not the old 14px card radius)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 16px;');
+missing('.cat-intro no longer clips with overflow: hidden (no image to clip now)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;');
+missing('.cat-intro-img CSS rule removed, no image left to style (batch 6: intro image removal)', '.cat-intro-img {\n  display: block;\n  width: calc(100% + 48px);\n  margin: 0 -24px;');
 has('.act-book-btn ("Book ->") is now full width (display: block, width: 100%), no longer align-self: flex-start sized to its own text', '.act-book-btn {\n  display: block;\n  width: 100%;');
 missing('.act-book-btn no longer uses align-self: flex-start (superseded by display:block/width:100%)', '.act-book-btn {\n  align-self: flex-start;');
 has('"Book ->" handler is untouched by the width change: still sets activity, resets every dependent field, and advances to Step 2 in one click', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerTier(null);\n      setGrooming(null);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
@@ -554,7 +555,7 @@ has('header material (image band, header card, isWhisper hint, byo-chip) stays o
 has('.body bottom padding now 112px per Figma content-column spec, sides/top stay 24px', '.body { padding: 24px 24px 112px; }');
 has('Step 1 heading gets a 22px block-rhythm gap before the category tabs, scoped off Step 2 sections', '.body:not(.step2-block) > .section-title { margin-bottom: 22px; }');
 has('.cat-tabs row spacing rebuilt around the 22px block gap (was 4px/14px padding + 2px margin)', '.cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 0 22px; margin: 0; scrollbar-width: none; }');
-has('.cat-intro trailing gap now 22px (was 18px), completing the block-rhythm chain into the first act-category', '.cat-intro {\n  margin-bottom: 22px;\n  animation: fadeUp 0.3s ease both;\n}');
+has('.cat-intro trailing gap stays 22px, completing the block-rhythm chain into the first act-category; padding 14px/17px and 16px radius per Figma\'s bordered-box spec (batch 6: intro image removal)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 16px;\n  padding: 14px 17px;\n  margin-bottom: 22px;\n  animation: fadeUp 0.3s ease both;\n}');
 has('.act-book-btn padding now flat 16px and radius 14px, matching the Figma CTA spec and the site\'s other 14px-radius cards', '.act-book-btn {\n  display: block;\n  width: 100%;\n  margin-top: 10px;\n  padding: 16px;\n  border-radius: 14px;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
