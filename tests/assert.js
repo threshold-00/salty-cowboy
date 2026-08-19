@@ -594,6 +594,19 @@ has('id summaryPendingHint key', 'summaryPendingHint: "Selesaikan langkah-langka
 has('ru summaryPendingHint key', 'summaryPendingHint: "Заполните шаги выше, чтобы увидеть итоги бронирования"');
 has('section 3 always renders on the riders screen (no more datesComplete render gate), only its content visibility is display-gated', 'screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box fu step2-block"\n  }, React.createElement("h3", {\n    className: "section-title" + (datesComplete ? " section-title-toggle" : ""),');
 
+// ─── Step 2 card width parity ──────────────────────────────────────────────
+// Section 3's box and the funds card both carry .step2-block AND .fu, so
+// the generic .fu:not(.body):not(.confirm-screen) page-inset rule was
+// adding its own 24px/side padding on top of the 671px allowance meant for
+// .body to subtract that same padding from - rendering their card shell
+// 48px wider than Section 1's actual 623px card (which sits inset inside
+// .body and never carries the page-level inset itself). Verified live via
+// getBoundingClientRect: all four cards land at width 623 and left 584.5,
+// exactly equal, not just close. margin-left/right: auto is inherited
+// unchanged from the existing `.main > *` rule, so centering came free
+// once the widths matched - no separate centering fix was needed.
+has('Section 3\'s box and the funds card get their own 623px max-width override (not the shared 671px .step2-block width), cancelling the .fu page-inset padding that was doubling their card shell width vs Section 1\'s actual 623px card', '.main > .step2-section-box.step2-block.fu,\n  .main > .cost-funds-card.step2-block.fu {\n    max-width: 623px;\n    padding-left: 0;\n    padding-right: 0;\n  }');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);

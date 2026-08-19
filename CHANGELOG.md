@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Step 2: card width parity (centering came free)
+
+Section 3's box and the funds card were rendering 48px wider than Section 1's actual card: both
+carry `.step2-block` *and* `.fu`, so the generic `.fu:not(.body):not(.confirm-screen)` page-inset
+rule was adding its own 24px/side padding on top of the 671px allowance meant for `.body` to
+subtract that same padding from, while Section 1's card sits nested inside `.body` and never
+carries the inset itself. Added a higher-specificity override
+(`.step2-section-box.step2-block.fu`, `.cost-funds-card.step2-block.fu`) pinning both to 623px
+with zero page-level padding. Section 1 was not touched.
+
+A second "cards aren't centered" fix was requested alongside this, but checking it against the
+live DOM first (`getBoundingClientRect` on all four cards) showed centering was never actually
+broken — `margin: 0 auto` was already inherited from the existing `.main > *` rule. What looked
+like off-center cards in a screenshot was the width mismatch itself: a 671px-wide box centered in
+the same space sits 24px further left than a 623px box next to it. No separate centering rule was
+added; verified live that all four cards land at the exact same width (623) and left offset
+(584.5), not just close.
+
+1 new assertion. 427/427 assertions and the jsdom smoke test pass.
+
 ## 19 Aug 2026 — Step 2: section 3 becomes a closed-by-default accordion
 
 Section 3 ("Your booking summary") previously didn't render at all until `datesComplete`. It now

@@ -1170,6 +1170,24 @@ html, body { background: #0a0a0a; }
      and cards all land on the same left edge. Step 3 keeps the shared 660px
      width, unaffected since it doesn't carry .step2-block or .body. */
   .main > .step2-block, .main > .body { max-width: 671px; }
+  /* Section 3's box and the funds card are top-level .main children like
+     .body, but unlike .body they also carry .fu, so the generic
+     .fu:not(.body):not(.confirm-screen) rule above gives them their own
+     24px page-inset padding on top of the 671px allowance meant for .body
+     to subtract that same padding from. Net effect: their card shell
+     rendered 671px wide (48px wider than Section 1's actual 623px card,
+     which sits inset inside .body rather than carrying the inset itself)
+     with doubled internal spacing once their own component padding is
+     added on top. Cancel both here so they match Section 1's box width
+     exactly, using their own component padding for interior spacing
+     instead of the page-level inset. margin-left/right: auto is
+     inherited unchanged from .main > * above, so this only touches width. */
+  .main > .step2-section-box.step2-block.fu,
+  .main > .cost-funds-card.step2-block.fu {
+    max-width: 623px;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 /* ── HERO HEADER ── */
