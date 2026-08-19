@@ -2,6 +2,58 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 19 Aug 2026 — Batch 5, Commit 3: Step 2 boxing + destructure BYO / duration / back
+
+Per `docs/batch5-futura-headers-gate.md`, Commit 3. Step 2 (booking flow) only, presentation only,
+reverses two recently-approved visuals per explicit client direction.
+
+**Bounding boxes.** Sections "1. Book a date and time" and "2. Who's coming?" are now each wrapped
+in a new `.step2-section-box` div (border, 14px radius, 23px/16.5px/25px padding, matching the
+existing card system), so the accordion separation reads clearly even before a section collapses.
+Section 3 ("Your booking summary") already had its own top-level wrapper div, so it only needed the
+same `step2-section-box` class added, not a new wrapper.
+
+This was the riskiest part of the commit: wrapping existing JSX siblings in two new container divs
+without breaking the surrounding `React.createElement` call tree. Verified structurally with an
+acorn AST parse (not just string matching) before and after: the outer Step 2 div went from 21
+top-level children to 9, with the new section-1 box containing exactly its intended 8 children
+(heading through cal-selection-panel) and the new section-2 box containing exactly its intended 7
+(the grooming picker, which visually sits above heading 2 but has always counted toward section 2's
+completion state, through the photographer add-on). Nothing lost, nothing duplicated. `node --check`
+passed after every edit.
+
+**BYO line:** already a hairline (changed earlier this session per direct client feedback), so this
+bullet needed no code change; confirmed still correct.
+
+**Duration is no longer boxed.** Removed `.control-card` from the duration control specifically
+(only duration was named; numPeople, rider cards, and the photographer add-on keep their own nested
+card styling inside the new outer box, per the doc's literal scope). Its 22px trailing margin, lost
+along with `.control-card`, was restored via inline style so spacing is unchanged. The 14px
+label-to-pill gap was already inline and untouched.
+
+**Back button** moved out of `.detail-header-card` to sit above the header image band, on white, as
+the first element in Step 2. Pill/button chrome (border, padding, background) removed; it is now a
+plain Futura 500 text link matching the `.hint-link` hover convention (color darken, no background
+tint).
+
+**Known pre-existing gap, not fixed here:** at mobile/tablet widths (below 900px), Step 2's three
+top-level containers only get their 24px content-column inset via a desktop-only CSS rule
+(`.main > .fu:not(.body):not(.confirm-screen)`). Section 3 and the cost-funds card were already
+missing that inset below 900px before this commit (confirmed `.cost-funds-card` has the identical
+gap today); adding a border to section 3 surfaces it more visibly. Fixing the responsive gap
+touches shared layout rules beyond this commit's named scope, so it was left as-is and is flagged
+here for a decision on whether to fix now or separately.
+
+Payload safety: reused the same pre-accordion baseline from earlier in this batch, since this
+commit only restructures wrapper `div`s and CSS, and never touches `buildWhatsAppMessage`,
+`handleSend`, or any state value. Verified live: filled the same Beach Photoshoot booking (2 riders,
+weights, photographer add-on, notes) inside the new boxed sections, sent, and confirmed the payload
+is byte-for-byte identical to baseline (same MD5 hash, `6a0f0e91e844987796fe1d1c918e6ea2`). Also
+re-verified the Horse Whisperer Course's multi-day picker still works correctly inside the new box.
+
+9 new/updated assertions, plus fixes to 9 assertions made stale by the restructuring. 393/393
+assertions and the jsdom smoke test pass.
+
 ## 19 Aug 2026 — Batch 5, Commit 2: Step 1 headers + full-width Book
 
 Per `docs/batch5-futura-headers-gate.md`, Commit 2. Step 1 (activity picker) only, presentation only.

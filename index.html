@@ -1434,6 +1434,17 @@ html, body { background: #0a0a0a; }
   padding: 23px 16.5px 25px;
   margin-bottom: 22px;
 }
+
+/* Bounding box around each of Step 2's three numbered sections, matching
+   the card system (batch 5, Commit 3), so the accordion separation is
+   visually obvious even before a section collapses. */
+.step2-section-box {
+  background: #fff;
+  border: 1px solid var(--fog);
+  border-radius: 14px;
+  padding: 23px 16.5px 25px;
+  margin-bottom: 22px;
+}
 .rider-label {
   font-family: var(--display);
   font-size: 11px;
@@ -1555,7 +1566,8 @@ html, body { background: #0a0a0a; }
 .cta:active  { transform: scale(0.99); }
 .cta:disabled{ background: #c2c2c2; cursor: not-allowed; }
 
-/* Back control reads as a small bordered button, not a bare text link. */
+/* Plain text link on white, above the header image band, not a button
+   (batch 5, Commit 3: reverses the earlier bordered-pill treatment). */
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -1565,15 +1577,10 @@ html, body { background: #0a0a0a; }
   font-size: 12px;
   color: var(--earth);
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   width: fit-content;
-  padding: 8px 16px;
-  border: 1px solid var(--earth);
-  border-radius: 20px;
-  background: #fff;
-  transition: background 0.15s;
 }
-.back-link:hover { background: rgba(0,0,0,0.05); }
+.back-link:hover { color: #000000; }
 
 /* Full-width placeholder image band behind the header card (no per-activity
    images yet, ship the placeholder path per Ro, swap to real images later
@@ -1596,7 +1603,6 @@ html, body { background: #0a0a0a; }
   margin-top: -48px;
   margin-bottom: 22px;
 }
-.detail-header-card .back-link { margin-bottom: 14px; }
 .detail-header-card .section-title { margin-bottom: 8px; }
 
 /* ── CALENDAR SCREEN ── */
@@ -2503,13 +2509,13 @@ function App() {
   }, "✓")))))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "body fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "back-link",
+    onClick: () => setScreen("activity")
+  }, t.back), /*#__PURE__*/React.createElement("div", {
     className: "detail-header-image"
   }), /*#__PURE__*/React.createElement("div", {
     className: "detail-header-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "back-link",
-    onClick: () => setScreen("activity")
-  }, t.back), /*#__PURE__*/React.createElement("h2", {
+  }, /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
   }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {
     className: "detail-desc"
@@ -2517,7 +2523,9 @@ function App() {
     className: "section-hint"
   }, t.sessionNote + " " + t.courseWeekNote), isPhotoshoot && /*#__PURE__*/React.createElement("span", {
     className: "byo-chip"
-  }, t.byoPhotographer), /*#__PURE__*/React.createElement("h3", {
+  }, t.byoPhotographer), /*#__PURE__*/React.createElement("div", {
+    className: "step2-section-box"
+  }, /*#__PURE__*/React.createElement("h3", {
     className: "section-title" + (section1Complete ? " section-title-toggle" : ""),
     onClick: section1Complete ? () => setSection1ManualOpen(o => !o) : undefined
   }, t.stepHeading1, section1Complete && /*#__PURE__*/React.createElement("span", {
@@ -2534,8 +2542,9 @@ function App() {
     },
     onClick: () => setSection1ManualOpen(o => !o)
   }, [duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")), React.createElement("div", {
-    className: "fu control-card",
+    className: "fu",
     style: {
+      marginBottom: 22,
       display: section1Collapsed ? "none" : undefined
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -2668,7 +2677,9 @@ function App() {
     className: "time-main"
   }, slot), /*#__PURE__*/React.createElement("div", {
     className: "time-sub"
-  }, duration))))))), needsGrooming && /*#__PURE__*/React.createElement("div", {
+  }, duration)))))))), /*#__PURE__*/React.createElement("div", {
+    className: "step2-section-box"
+  }, needsGrooming && /*#__PURE__*/React.createElement("div", {
     className: "fu2",
     style: {
       marginBottom: 22,
@@ -2821,8 +2832,8 @@ function App() {
     className: "perm-box " + (photographerTier === tier.key ? "checked" : "")
   }, photographerTier === tier.key ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")"))))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {
-    className: "fu step2-block"
+  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))))), screen === "riders" && datesComplete && /*#__PURE__*/React.createElement("div", {
+    className: "step2-section-box fu step2-block"
   }, React.createElement("h3", {
     className: "section-title"
   }, t.stepHeading3), React.createElement("div", {
