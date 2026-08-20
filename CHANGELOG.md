@@ -2,6 +2,230 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Fixed stale date/time surviving an activity switch
+
+Found while implementing a request that Step 2 always land with accordion 1 open and 2/3 closed on
+a fresh activity: `selectedDates`/`selectedTime` were never cleared when the user picked a new
+activity (category tab, card tap, or the "Book" button). `duration`/`numPeople`/`riders` already
+reset on activity change, but not the date/time. If a previously-picked date and time slot happened
+to still be valid for the new activity (same `requiredDates`, same slot available at the new
+activity's auto-selected duration, e.g. Beach & Rice Field Ride and Insta Ride both offer a 1hr
+5:00pm slot), `section1Complete` would already read true on arrival, so accordion 1 landed
+pre-collapsed and accordion 2 auto-opened on a date/time the user never actually confirmed for that
+activity.
+
+Fixed by adding `setSelectedDates([]); setSelectedTime(null);` alongside the existing
+duration/numPeople/riders resets in all three activity-change entry points (category tab click,
+act-card tap, and the per-card "Book" button). Duration auto-selecting to the first option and
+accordion 1 opening now both follow automatically from the existing completeness-driven collapse
+logic once section1Complete correctly reads false, no separate accordion-open code was needed.
+
+3 assertions updated (stale reset-list needles), 1 new assertion added (category tab click, which
+had no prior coverage of its reset list). 452/452 assertions and the jsdom smoke test pass. Verified
+live in Chrome: booked Beach & Rice Field Ride through to a confirmed 1hr / 5:00pm slot, went back,
+picked Insta Ride (same 1hr / 5:00pm slot available) via its "Book" button, and confirmed duration
+auto-selected to 1hr, section 1's chevron shows open with no date or time carried over from the
+previous activity, and sections 2 and 3 stayed collapsed.
+
+## 20 Aug 2026 — Step 2: Edit reopens both accordions, hourglass added to the WhatsApp notice
+
+**Edit link now reopens sections 1 and 2.** Clicking "Edit" on the booking summary previously only
+scrolled to the top of the page, leaving both accordions collapsed even though the user's intent
+is to review or change something already entered. New `handleEditClick` sets `section1Override` and
+`section2Override` to `false` (open) directly, then scrolls to top. Deliberately bypasses
+`toggleSection2`'s precondition guard, since Edit is an explicit "let me change something" request
+from a fully-completed booking, not sequential progression, so the guard's blocked-note would never
+be the right response here.
+
+**Hourglass emoji added to the WhatsApp confirmation notice.** "Your selected date and time will be
+confirmed by Salty Cowboys through WhatsApp." now reads "⏳ Your selected date and time will be
+confirmed by Salty Cowboys through WhatsApp." in all three languages. This is a different string
+from the confirm screen's Status value ("Awaiting approval"), which stays hourglass-free per Ro's
+earlier explicit decision (diff #16, declined) — that decision was scoped to the Status field, not
+this notice sentence.
+
+**Duration auto-select on landing, reconfirmed still working.** No change needed; verified live that
+the first duration option is still selected automatically when Step 2 first renders.
+
+4 new assertions, 4 updated (2 stale from the Edit link's onClick change, 2 rescoped from a
+file-wide "no hourglass anywhere" check down to "not glued onto the awaiting value specifically",
+now that the emoji legitimately exists elsewhere in the file). 451/451 assertions and the jsdom
+smoke test pass. Verified live in Chrome: filled out a full booking through to the summary,
+confirmed the notice shows the hourglass, then clicked Edit and confirmed both section 1 (calendar)
+and section 2 (rider fields) render open with their full content, not just their headings.
+
+## 20 Aug 2026 — Step 2: blocked-note width matched to its card, gap set to 20px
+
+Flagged by a screenshot: the blocked-note (the small dismissible "please pick a date first"
+style message shown when a section is opened ahead of its own precondition) was wider than the
+accordion card above it and sat flush against it with no gap.
+
+Root cause: the note and its card are both direct children of `.main`, but the card is actually
+inside a `.body` wrapper (671px max-width, 24px side padding, 623px content) while the note only
+inherited the generic `.main > *` rule (660px max-width, no side padding) — 37px wider than the
+card, and misaligned on the right edge. The old `margin-top: -22px` was there to cancel the card's
+own 22px trailing margin so the two sat flush with zero gap.
+
+Fixed by giving `.blocked-note` its own explicit `max-width: 623px` (matching the card's outer
+width exactly, box-sizing is border-box globally so no extra padding math needed) and changing
+`margin-top` from `-22px` to `-2px`, cancelling only 2px of the card's 22px trailing margin and
+leaving a clean 20px gap. Verified live via `getBoundingClientRect`: note and card now both
+measure 623px wide with identical left and right edges, and the gap between them is exactly 20px.
+
+1 assertion updated (CSS needle only, same coverage). 447/447 assertions and the jsdom smoke test
+pass.
+
+## 20 Aug 2026 — Step 2: fixed uneven spacing under sections 1 and 2, centering re-verified
+
+**Uneven bottom spacing under sections 1 and 2, fixed.** Flagged by a screenshot showing extra
+whitespace under the collapsed cards for "1. Book a date and time" and "2. Who's coming?" (section
+3 was already correct). Root cause: when `dateTimeHint` and `section2Subtitle` were made permanent
+(always rendered, not conditionally removed) in an earlier batch, they never got the same
+`marginBottom: 0`-while-collapsed fix that section 3's equivalent hint paragraph already had.
+Both paragraphs stay visible in the collapsed state and sit right before their section's
+`display:none` (not unmounted) body content, so the generic
+`.step2-section-box > *:last-child { margin-bottom: 0; }` CSS rule targets the wrong, hidden
+DOM-last child instead of the visible hint paragraph. Fixed by adding an explicit
+`marginBottom: sectionCollapsed ? 0 : undefined` to each paragraph's inline style, conditional
+(not unconditional) since both still need their normal 22px margin while the section is open.
+Verified live via `getBoundingClientRect`: all three sections now measure `topGap: 24,
+bottomGap: 26` consistently in the collapsed state (sections 1 and 2 previously measured
+`bottomGap: 48`).
+
+**"Centre horizontally aligned" text, re-checked against a reference screenshot, no change made.**
+The same report asked for accordion text to be horizontally centred. Compared current rendering
+against a reference screenshot of the intended look: heading and subtitle left-aligned, chevron on
+the far right. That is exactly what the current `.section-title-toggle`
+(`display: flex; justify-content: space-between`) and `.section-toggle-arrow` CSS already produce,
+so no centering CSS was touched. The uneven spacing above was the only real defect behind the
+original report.
+
+**Sequential auto-open, reconfirmed already working.** The same report also asked that the next
+accordion open automatically once the current one's fields are complete. This was implemented and
+verified in an earlier batch (section 2 opens once `section1Complete`, section 3 once
+`datesComplete`) and nothing in this fix touches that logic, so no change was needed here either.
+
+5 assertions updated (needle text only, same coverage). 447/447 assertions and the jsdom smoke test
+pass.
+
+## 19 Aug 2026 — Step 2: blocked-note, duration auto-select re-added, alignment verified
+
+**Blocked-note.** Trying to open section 2 or 3 ahead of sequence (its own precondition isn't met
+yet) now shows a small dismissible note instead of opening — "Please pick a date and time first"
+for section 2 (its real gate is `section1Complete`, dates *and* time), "Please pick a date first"
+for section 3 (its gate is `datesComplete` only, time isn't required for it). Closing an
+already-open section is never blocked, only opening one early is. Auto-dismisses after 3s, or the
+user can close it with the × button. New `toggleSection2`/`toggleSection3` helpers centralize the
+check instead of duplicating it across each section's heading and hint-paragraph click handlers.
+
+Caught and fixed a real bug during verification, not just added the feature: the note's initial
+CSS reused the shared `fadeUp` keyframe animation, but this is one large monolithic App component
+with many hooks, and it re-renders often enough that the animation kept restarting from frame
+zero — the note was rendering correctly (right text, right position, `display:flex`) but stuck at
+`opacity: 0` for its *entire* visible lifetime, verified via `getAnimations()` showing
+`currentTime` never advancing past 0 even 400ms+ after mount. Removed the animation entirely;
+simplest fix, appears immediately at full opacity.
+
+**Duration auto-select re-added.** The `useEffect` that defaults `duration` to
+`actObj.durations[0]` was part of an earlier batch that got fully reverted along with three
+unrelated fixes in the same commit. Re-added on its own this time.
+
+**Heading/subtitle alignment, verified not broken.** Checked whether section 2's heading and
+subtitle stay left-aligned at the same inset before and after filling in rider details, per a
+screenshot flagging a possible regression. Measured via `getBoundingClientRect` in both states:
+both land at the same 606px absolute position (17.5px inset) whether the card is empty or fully
+filled in and auto-collapsed. No regression found, no change made.
+
+7 new assertions, 10 updated. 447/447 assertions and the jsdom smoke test pass. Verified live in
+Chrome: blocked-note shows correct per-section text and dismisses both by timer and by button,
+closing an open section is never blocked, duration auto-selects on landing, and all three chevrons
+render in the correct orientation for their actual open/collapsed state (confirmed via screenshot
+after `getComputedStyle` gave contradictory readings for SVG `transform` in this environment — the
+DOM's actual inline `style` attribute, the real source of truth for what React rendered, matched
+the visual result; treated the computed-style readings as an SVG measurement artifact, not a bug).
+
+## 19 Aug 2026 — Step 2: sequential reveal, permanent section hints
+
+Two follow-ups to the chevron/mockup work above, both confirmed via quick clarifying questions
+before implementing since they materially changed the accordion's default behaviour.
+
+- **Section 2 starts closed.** Previously it opened by default until its own fields were complete.
+  Now: closed when the user first lands on Step 2 (nothing to work on yet), auto-opens the instant
+  section 1 completes (a sequential, step-by-step reveal), and still auto-collapses again once
+  section 2's own fields are filled in — a compound default (`!section1Complete || detailsComplete`)
+  rather than a single completion flag. `section1Complete` had to move earlier in the component
+  (declared right after section 1's own block) since section 2's new default depends on it.
+- **Permanent hints, not data summaries.** Section 1's `dateTimeHint` and section 2's new
+  `section2Subtitle` now stay visible regardless of collapse state, doing double duty as the
+  click-to-reopen affordance while collapsed. The old collapsed-only data summaries (duration/date/
+  time for section 1, "3 people" for section 2) are removed entirely — matches Ro's mockup, which
+  only shows the static subtitle line, never a data-driven one.
+
+Manual override and the "clearing a required field forces back open" safety guarantee are
+unaffected by either change.
+
+4 new/updated assertions covering the reordering and new default formula, plus fixes to every
+assertion describing the now-removed data-summary lines. 440/440 assertions and the jsdom smoke
+test pass. Verified live in Chrome: section 2 closed on entry with subtitle showing, auto-opens on
+section 1 completion, section 1's hint persists through collapse, section 2 stays open until fully
+filled in (not just numPeople) before auto-collapsing again.
+
+## 19 Aug 2026 — Step 2: always-visible chevron, open/close any time (Figma mockup)
+
+Ro sent a Figma mockup of section 2's header: stroke chevron far right (not the old filled
+`▾`/`▴` text glyphs positioned inline after the title), plus a request that all three accordions
+be freely open/closeable at any time, not just once complete.
+
+- **Chevron:** new `SectionChevron(open)` helper draws a 16x16 inline SVG, 1.5px `currentColor`
+  stroke, rotated 180deg between down (closed) and up (open) instead of swapping glyphs.
+  `.section-title-toggle` now lays the header row out `flex` with `justify-content: space-between`,
+  chevron far right opposite the section number. Applied to sections 1, 2 and 3.
+- **Always-open/closeable:** replaced the `section1ManualOpen`/`section2ManualOpen`/
+  `section3ManualCollapse` booleans with a tri-state override per section (`null` = no manual
+  interaction yet, use the default auto behaviour; `true`/`false` = user has explicitly toggled it).
+  The heading is clickable at all times now for sections 1 and 2, not just once complete. The
+  existing safety guarantee is preserved via a `useEffect` per section that resets the override to
+  `null` the moment its required fields become incomplete again, so a manually-collapsed section
+  can never end up hiding fields the user still needs to fix.
+- **Section 3 exception:** its chevron is always visible (per the mockup), but the click-to-toggle
+  stays gated on `datesComplete`. Section 3 has no fields of its own and starts genuinely empty;
+  opening it early would show a blank summary and a premature-looking Send button, the same risk
+  flagged earlier this session for a similarly-worded request. Chevron-visible-but-inert until
+  `datesComplete` was the safest way to satisfy the visual ask without reopening that risk.
+- **Section 2 subtitle:** added "A few details so we can ensure you have the best experience"
+  (English) plus ID/RU translations, matching the mockup exactly, shown under the heading whenever
+  section 2 is open. This is new copy, not reused from the existing unused `detailsHint` key (whose
+  wording differs) — flagging for Simone's review same as any other new customer-facing text.
+
+7 new assertions, 22 updated. 436/436 assertions and the jsdom smoke test pass. Verified live in
+Chrome: chevron position/rotation, manual collapse/reopen on an incomplete section 2, section 3's
+chevron visible-but-inert before dates are picked.
+
+## 19 Aug 2026 — Step 2: fix oversized bottom padding on sections 1-3
+
+Ro flagged from a screenshot that all three accordion cards had noticeably more whitespace below
+their content than above it. Root cause, verified live via getBoundingClientRect rather than
+guessed: whichever element ends up last inside a `.step2-section-box` usually carries its own
+trailing `margin-bottom`, meant to space it from a *next sibling block* elsewhere on the page
+(`.section-hint`'s 22px, `.cal-selection-panel`'s 22px, etc). When that same element happens to
+also be the box's own last child - true for every section in the empty/initial state Ro's
+screenshot showed - that margin bled into the box's own 25px bottom padding instead, roughly
+doubling the visible gap (up to 48px measured, against a 24px top).
+
+Fixed in two parts:
+- `.step2-section-box > *:last-child { margin-bottom: 0; }` handles the general case (the box's
+  own padding becomes the sole source of bottom spacing, regardless of which specific element ends
+  up last for a given completion state).
+- Section 3's collapsed-state hint paragraph needed its own explicit `marginBottom: 0`, since its
+  true DOM-last sibling is a `display: none` element (the rest of the section's content, hidden
+  but still present), so the generic `:last-child` selector was zeroing the wrong element's margin
+  and missing the visible one.
+
+Verified live across every completion state (empty, section 1 collapsed, mid-selection): top and
+bottom gaps land within 1-2px of each other everywhere, all attributable to the border.
+
+2 assertions updated/added. 429/429 assertions and the jsdom smoke test pass.
+
 ## 19 Aug 2026 — Step 2: fix oversized gap between section 2 and section 3
 
 Ro flagged the gap between "2. Who's coming?" and "3. Your booking summary" as much bigger than

@@ -574,6 +574,9 @@ const T = {
     summaryPendingHint: "Complete the steps above to see your summary",
     dateTimeHint: "Select an available date below to choose your time slot.",
     detailsHint: "Choose your options and tell us who's coming.",
+    section2Subtitle: "A few details so we can ensure you have the best experience",
+    section2Blocked: "Please pick a date and time first",
+    section3Blocked: "Please pick a date first",
     aboutRiders: "About the riders",
     participantDetails: "Participant details",
     matchHint: "We'll match each rider to their ideal horse.",
@@ -625,7 +628,7 @@ const T = {
     notesLabel: "Anything we should know? (optional)",
     notesTimeHint: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here.",
     notesPlaceholder: "Write a message for Salty Cowboys",
-    notice: "Your selected date and time will be confirmed by Salty Cowboys through WhatsApp.",
+    notice: "⏳ Your selected date and time will be confirmed by Salty Cowboys through WhatsApp.",
     sendBtn: "Send request via WhatsApp →",
     noAvailTitle: "No dates available right now",
     noAvailBody: "The date or time you're after isn't showing availability for your group. Message us directly on WhatsApp and we'll do our best to make it work.",
@@ -746,6 +749,9 @@ const T = {
     summaryPendingHint: "Selesaikan langkah-langkah di atas untuk melihat ringkasan Anda",
     dateTimeHint: "Pilih tanggal yang tersedia di bawah untuk memilih slot waktu Anda.",
     detailsHint: "Pilih opsi Anda dan beri tahu kami siapa yang ikut.",
+    section2Subtitle: "Beberapa detail agar kami dapat memastikan Anda mendapatkan pengalaman terbaik",
+    section2Blocked: "Silakan pilih tanggal dan waktu terlebih dahulu",
+    section3Blocked: "Silakan pilih tanggal terlebih dahulu",
     aboutRiders: "Tentang penunggang",
     participantDetails: "Detail peserta",
     matchHint: "Kami akan mencocokkan setiap penunggang dengan kuda yang ideal.",
@@ -797,7 +803,7 @@ const T = {
     notesLabel: "Ada yang perlu kami ketahui? (opsional)",
     notesTimeHint: "Kami ingin Anda mendapatkan pengalaman yang berkesan. Jika waktu yang tersedia tidak sesuai, atau Anda memiliki permintaan tambahan, silakan beri tahu kami di sini.",
     notesPlaceholder: "Tulis pesan untuk Salty Cowboys",
-    notice: "Tanggal dan waktu yang Anda pilih akan dikonfirmasi oleh Salty Cowboys melalui WhatsApp.",
+    notice: "⏳ Tanggal dan waktu yang Anda pilih akan dikonfirmasi oleh Salty Cowboys melalui WhatsApp.",
     sendBtn: "Kirim permintaan via WhatsApp →",
     noAvailTitle: "Belum ada tanggal tersedia",
     noAvailBody: "Tanggal atau waktu yang Anda cari belum tersedia untuk grup Anda. Hubungi kami langsung di WhatsApp dan kami akan berusaha sebaik mungkin.",
@@ -918,6 +924,9 @@ const T = {
     summaryPendingHint: "Заполните шаги выше, чтобы увидеть итоги бронирования",
     dateTimeHint: "Выберите доступную дату ниже, чтобы выбрать время.",
     detailsHint: "Выберите параметры и расскажите, кто участвует.",
+    section2Subtitle: "Несколько деталей, чтобы мы могли обеспечить вам лучший опыт",
+    section2Blocked: "Пожалуйста, сначала выберите дату и время",
+    section3Blocked: "Пожалуйста, сначала выберите дату",
     aboutRiders: "О наездниках",
     participantDetails: "Данные участника",
     matchHint: "Мы подберём каждому наезднику подходящую лошадь.",
@@ -969,7 +978,7 @@ const T = {
     notesLabel: "Что-нибудь ещё? (необязательно)",
     notesTimeHint: "Мы хотим, чтобы у вас остались незабываемые впечатления. Если время не подходит или у вас есть дополнительный запрос, пожалуйста, напишите нам об этом здесь.",
     notesPlaceholder: "Напишите сообщение для Salty Cowboys",
-    notice: "Выбранные вами дата и время будут подтверждены Salty Cowboys через WhatsApp.",
+    notice: "⏳ Выбранные вами дата и время будут подтверждены Salty Cowboys через WhatsApp.",
     sendBtn: "Отправить запрос в WhatsApp →",
     noAvailTitle: "Сейчас нет доступных дат",
     noAvailBody: "На нужную вам дату или время нет мест для вашей группы. Напишите нам напрямую в WhatsApp. Мы постараемся помочь.",
@@ -1317,12 +1326,15 @@ html, body { background: #0a0a0a; }
 .section-title-toggle {
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .section-toggle-arrow {
-  display: inline-block;
+  flex-shrink: 0;
   margin-left: 8px;
-  font-size: 14px;
   color: var(--dusk);
+  transition: transform 0.15s;
 }
 .section-hint {
   font-family: var(--body);
@@ -1528,6 +1540,17 @@ html, body { background: #0a0a0a; }
   padding: 23px 16.5px 25px;
   margin-bottom: 22px;
 }
+/* Whichever element ends up last inside the box (the heading itself with
+   nothing else rendered yet, .section-hint, .cal-selection-panel, or a
+   fuller state's rider/addon block) usually carries its own trailing
+   margin-bottom meant to space it from a *next sibling block* elsewhere
+   in the page. When that same element happens to be the box's own last
+   child, that margin stacks with the box's 25px bottom padding instead,
+   inflating the visible gap well past the 23px symmetric top padding.
+   Zero it here so the box's own padding is always the sole source of
+   bottom spacing, matching the top exactly, regardless of which element
+   is last for a given completion state. */
+.step2-section-box > *:last-child { margin-bottom: 0; }
 .rider-label {
   font-family: var(--display);
   font-size: 11px;
@@ -1866,6 +1889,44 @@ html, body { background: #0a0a0a; }
   display: flex;
   gap: 8px;
 }
+/* Small dismissible note shown right under a section's card when the user
+   tries to open it before its own precondition is met. Renders as a direct
+   .main child like the card above it, but the card sits inside the .body
+   wrapper (671px max-width, 24px side padding, 623px content) while this
+   note only gets the generic ".main > *" 660px max-width with no side
+   padding, so it needs its own explicit 623px max-width to match the
+   card's outer width exactly. margin-top: -2px trims the card's own 22px
+   trailing margin down to a 20px gap; margin-bottom restores the standard
+   22px gap before the next block. */
+.blocked-note {
+  background: #f7f7f7;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 10px 14px;
+  max-width: 623px;
+  margin-top: -2px;
+  margin-bottom: 22px;
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 12px;
+  color: #444444;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.blocked-note-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--dusk);
+  cursor: pointer;
+}
+.blocked-note-close:hover { color: var(--earth); }
 
 /* ── CONFIRM SCREEN ── */
 .confirm-screen {
@@ -2174,6 +2235,27 @@ function getDaysInMonth(year, month) {
 function getFirstDay(year, month) {
   return new Date(year, month, 1).getDay();
 }
+// Stroke chevron for the Step 2 accordion headings (sections 1/2/3). Points
+// down when the section is closed, up when open; `open` flips a CSS
+// rotation rather than swapping path data.
+function SectionChevron(open) {
+  return /*#__PURE__*/React.createElement("svg", {
+    className: "section-toggle-arrow",
+    width: 16,
+    height: 16,
+    viewBox: "0 0 16 16",
+    fill: "none",
+    style: {
+      transform: open ? "rotate(180deg)" : undefined
+    }
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M4 6l4 4 4-4",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }));
+}
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAY_NAMES = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -2283,9 +2365,58 @@ function App() {
   const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
-  const [section1ManualOpen, setSection1ManualOpen] = useState(false);
-  const [section2ManualOpen, setSection2ManualOpen] = useState(false);
-  const [section3ManualCollapse, setSection3ManualCollapse] = useState(false);
+  // Tri-state manual override per section: null = no manual interaction yet
+  // (use the default auto behaviour), true/false = user has explicitly
+  // toggled it open or closed. The chevron is clickable at all times, not
+  // just once the section is "complete", so the user can open/close any
+  // section whenever they want. The reset effects below still force a
+  // section back open the moment its own required fields become
+  // incomplete, so a manual collapse can never hide fields the user needs
+  // to fix - same safety guarantee as before, just reachable from a wider
+  // set of starting states.
+  const [section1Override, setSection1Override] = useState(null);
+  const [section2Override, setSection2Override] = useState(null);
+  const [section3Override, setSection3Override] = useState(null);
+  // Small dismissible message shown under a section's card when the user
+  // tries to OPEN it ahead of sequence (its own precondition isn't met
+  // yet). Closing an already-open section is never blocked, only opening
+  // one early is. null = nothing showing; 2 or 3 = which section's message
+  // is showing. Auto-dismisses after 3s, or the user can close it early.
+  const [blockedSection, setBlockedSection] = useState(null);
+  useEffect(() => {
+    if (blockedSection === null) return;
+    const timer = setTimeout(() => setBlockedSection(null), 3000);
+    return () => clearTimeout(timer);
+  }, [blockedSection]);
+  // Closing an already-open section always works; opening one ahead of its
+  // own precondition shows the blocked-note instead of actually opening.
+  // Safe to reference section1Complete/section2Collapsed/etc. here even
+  // though they're declared further down in this same render: these
+  // functions are only ever invoked from a later click event, by which
+  // point the whole component body (and its closures) has already run.
+  function toggleSection2() {
+    if (section2Collapsed && !section1Complete) {
+      setBlockedSection(2);
+    } else {
+      setSection2Override(!section2Collapsed);
+    }
+  }
+  function toggleSection3() {
+    if (section3Collapsed && !datesComplete) {
+      setBlockedSection(3);
+    } else {
+      setSection3Override(!section3Collapsed);
+    }
+  }
+  // "Edit" link on the booking summary (section 3) is a deliberate request
+  // to review/change everything already filled in, not sequential
+  // progression, so it opens sections 1 and 2 directly rather than going
+  // through toggleSection2's precondition guard.
+  function handleEditClick() {
+    setSection1Override(false);
+    setSection2Override(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   const actObj = ALL_ACTIVITIES.find(a => a.id === activity);
   const isPhotoshoot = actObj?.photoshoot === true;
   const isRiding = actObj?.riding === true;
@@ -2359,10 +2490,6 @@ function App() {
   });
   const ridersComplete = ridersFilled && !anyOverMax && !tooManyHeavy && !anyUnderMinAge;
   const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;
-  // Collapsed = section is complete AND the customer hasn't manually reopened it to edit.
-  // Manual toggle only overrides the auto-collapse while the section stays complete; if a
-  // required field is cleared, section2Complete goes false and the section reopens regardless.
-  const section2Collapsed = detailsComplete && !section2ManualOpen;
   const daysInMonth = getDaysInMonth(calYear, calMonth);
   const firstDay = getFirstDay(calYear, calMonth);
   // The sanctuary runs Monday to Saturday; Sundays are closed. Saturday
@@ -2427,16 +2554,31 @@ function App() {
   // Section 1 ("Book a date and time") counts as done once both the date(s)
   // and a time slot are picked. Drives the accordion collapse below.
   const section1Complete = datesComplete && !!selectedTime;
-  // Collapsed = complete AND not manually reopened; clearing a field flips
-  // section1Complete back to false and forces the section open regardless
-  // of the manual flag.
-  const section1Collapsed = section1Complete && !section1ManualOpen;
-  // Section 3 has no fields of its own to complete, so its trigger is
-  // inverted from sections 1/2: it starts collapsed (nothing to review
+  // Collapsed = the manual override if the user has ever toggled it, else
+  // the default auto behaviour (open until complete, then collapsed). The
+  // reset effect below clears the override the moment section1Complete
+  // goes false, so clearing a field always forces the section back open.
+  const section1Collapsed = section1Override !== null ? section1Override : section1Complete;
+  useEffect(() => {
+    if (!section1Complete) setSection1Override(null);
+  }, [section1Complete]);
+  // Section 2's default (no manual override yet) is a sequential reveal, not
+  // a simple completion flag: closed until section 1 is done (nothing to
+  // work on yet), opens the moment section 1 completes, then auto-collapses
+  // again once section 2's own fields are complete too - same tidy-up-when-
+  // done behaviour as before, just gated on section 1 first.
+  const section2Collapsed = section2Override !== null ? section2Override : (!section1Complete || detailsComplete);
+  useEffect(() => {
+    if (!detailsComplete) setSection2Override(null);
+  }, [detailsComplete]);
+  // Section 3 has no fields of its own to complete, so its default trigger
+  // is inverted from sections 1/2: it starts collapsed (nothing to review
   // yet) and auto-opens once datesComplete, same point it used to become
-  // visible at all. Once open, the heading becomes clickable and toggles
-  // section3ManualCollapse to let the user close it again manually.
-  const section3Collapsed = !datesComplete || section3ManualCollapse;
+  // visible at all. Same override/reset pattern as sections 1/2 otherwise.
+  const section3Collapsed = section3Override !== null ? section3Override : !datesComplete;
+  useEffect(() => {
+    if (!datesComplete) setSection3Override(null);
+  }, [datesComplete]);
   // Slots depend on activity, duration and the date: Saturday afternoons are
   // closed, so a Saturday booking only ever shows morning times.
   const selPriceIdx = actObj ? actObj.durations.indexOf(duration) : -1;
@@ -2466,6 +2608,19 @@ function App() {
   useEffect(() => {
     if (selectedTime && availableSlots.indexOf(selectedTime) === -1) setSelectedTime(null);
   }, [selectedTime, availableSlots.join("|")]);
+  // Default duration to the first option whenever the activity changes and
+  // nothing is picked yet. Depends on `activity` (the primitive id), not
+  // `actObj` (re-derived every render via .find, so a reference-equality
+  // dependency would refire this on every render). The existing
+  // setDuration(null) calls on activity change (Step 1 card/book clicks,
+  // category tab clicks) are what make this fire again per activity; a
+  // manual selection is never overwritten since the guard only acts when
+  // duration is still null.
+  useEffect(() => {
+    if (actObj && actObj.durations && actObj.durations.length > 0 && duration === null) {
+      setDuration(actObj.durations[0]);
+    }
+  }, [activity]);
   function handleSend() {
     const message = buildWhatsAppMessage({
       actObj,
@@ -2542,6 +2697,8 @@ function App() {
       setNumPeople(null);
       setPhotographerTier(null);
       setGrooming(null);
+      setSelectedDates([]);
+      setSelectedTime(null);
     }
   }, t.categories[cat.category]))), /*#__PURE__*/React.createElement("div", {
     className: "cat-intro"
@@ -2559,6 +2716,8 @@ function App() {
       setRiders([]);
       setPhotographerTier(null);
       setGrooming(null);
+      setSelectedDates([]);
+      setSelectedTime(null);
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-left"
@@ -2597,6 +2756,13 @@ function App() {
       setRiders([]);
       setPhotographerTier(null);
       setGrooming(null);
+      // Clearing these here (not just duration/numPeople) matters: without
+      // it, a date/time picked for a previous activity can still satisfy
+      // section1Complete for the new one (same requiredDates, slot still
+      // valid), so section 1 would land pre-collapsed and section 2 would
+      // auto-open on a booking the user never actually confirmed.
+      setSelectedDates([]);
+      setSelectedTime(null);
       setScreen("riders");
     }
   }, t.bookActivity)), /*#__PURE__*/React.createElement("div", {
@@ -2621,22 +2787,16 @@ function App() {
   }, t.byoPhotographer), /*#__PURE__*/React.createElement("div", {
     className: "step2-section-box"
   }, /*#__PURE__*/React.createElement("h3", {
-    className: "section-title" + (section1Complete ? " section-title-toggle" : ""),
-    onClick: section1Complete ? () => setSection1ManualOpen(o => !o) : undefined
-  }, t.stepHeading1, section1Complete && /*#__PURE__*/React.createElement("span", {
-    className: "section-toggle-arrow"
-  }, section1Collapsed ? "▾" : "▴")), /*#__PURE__*/React.createElement("p", {
+    className: "section-title section-title-toggle",
+    onClick: () => setSection1Override(!section1Collapsed)
+  }, t.stepHeading1, SectionChevron(!section1Collapsed)), /*#__PURE__*/React.createElement("p", {
     className: "section-hint",
     style: {
-      display: section1Collapsed ? "none" : undefined
-    }
-  }, t.dateTimeHint), section1Collapsed && /*#__PURE__*/React.createElement("p", {
-    className: "section-hint",
-    style: {
-      cursor: "pointer"
+      cursor: section1Collapsed ? "pointer" : undefined,
+      marginBottom: section1Collapsed ? 0 : undefined
     },
-    onClick: () => setSection1ManualOpen(o => !o)
-  }, [duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")), React.createElement("div", {
+    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined
+  }, t.dateTimeHint), React.createElement("div", {
     className: "fu",
     style: {
       marginBottom: 22,
@@ -2789,17 +2949,16 @@ function App() {
     className: "pill " + (grooming === g[0] ? "selected" : ""),
     onClick: () => setGrooming(g[0])
   }, g[1])))), /*#__PURE__*/React.createElement("h3", {
-    className: "section-title" + (detailsComplete ? " section-title-toggle" : ""),
-    onClick: detailsComplete ? () => setSection2ManualOpen(o => !o) : undefined
-  }, t.stepHeading2, detailsComplete && /*#__PURE__*/React.createElement("span", {
-    className: "section-toggle-arrow"
-  }, section2Collapsed ? "▾" : "▴")), section2Collapsed && /*#__PURE__*/React.createElement("p", {
+    className: "section-title section-title-toggle",
+    onClick: toggleSection2
+  }, t.stepHeading2, SectionChevron(!section2Collapsed)), /*#__PURE__*/React.createElement("p", {
     className: "section-hint",
     style: {
-      cursor: "pointer"
+      cursor: "pointer",
+      marginBottom: section2Collapsed ? 0 : undefined
     },
-    onClick: () => setSection2ManualOpen(o => !o)
-  }, numPeople, " ", numPeople === "1" ? t.person : t.people), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
+    onClick: toggleSection2
+  }, t.section2Subtitle), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {
     className: "fu2 control-card",
     style: {
       display: section2Collapsed ? "none" : undefined
@@ -2927,19 +3086,24 @@ function App() {
     className: "perm-box " + (photographerTier === tier.key ? "checked" : "")
   }, photographerTier === tier.key ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
+  }, "IDR " + PHOTOGRAPHER_TIERS[tier.key].price.toLocaleString("en-US") + " (" + PHOTOGRAPHER_TIERS[tier.key].photos + " " + t.photosWord + ")")))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {
+    className: "blocked-note"
+  }, /*#__PURE__*/React.createElement("span", null, t.section2Blocked), /*#__PURE__*/React.createElement("button", {
+    className: "blocked-note-close",
+    type: "button",
+    onClick: () => setBlockedSection(null)
+  }, "✕")), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "step2-section-box fu step2-block"
   }, React.createElement("h3", {
-    className: "section-title" + (datesComplete ? " section-title-toggle" : ""),
-    onClick: datesComplete ? () => setSection3ManualCollapse(o => !o) : undefined
-  }, t.stepHeading3, datesComplete && /*#__PURE__*/React.createElement("span", {
-    className: "section-toggle-arrow"
-  }, section3Collapsed ? "▾" : "▴")), section3Collapsed && /*#__PURE__*/React.createElement("p", {
+    className: "section-title section-title-toggle",
+    onClick: toggleSection3
+  }, t.stepHeading3, SectionChevron(!section3Collapsed)), section3Collapsed && /*#__PURE__*/React.createElement("p", {
     className: "section-hint",
     style: {
-      cursor: datesComplete ? "pointer" : undefined
+      cursor: "pointer",
+      marginBottom: 0
     },
-    onClick: datesComplete ? () => setSection3ManualCollapse(o => !o) : undefined
+    onClick: toggleSection3
   }, datesComplete ? (totalPriceStr ? t.totalCostLabel + ": " + totalPriceStr : t.stepHeading3) : t.summaryPendingHint), React.createElement("div", {
     className: "confirm-summary",
     style: {
@@ -3002,7 +3166,7 @@ function App() {
       cursor: "pointer",
       fontSize: 12
     },
-    onClick: () => window.scrollTo({ top: 0, behavior: "smooth" })
+    onClick: handleEditClick
   }, t.editLink))), duration && numPeople && selPrice && /*#__PURE__*/React.createElement("div", {
     className: "price-reveal",
     style: {
@@ -3045,7 +3209,13 @@ function App() {
     style: {
       display: section3Collapsed ? "none" : undefined
     }
-  }, t.notice)), screen === "riders" && /*#__PURE__*/React.createElement("div", {
+  }, t.notice)), blockedSection === 3 && /*#__PURE__*/React.createElement("div", {
+    className: "blocked-note"
+  }, /*#__PURE__*/React.createElement("span", null, t.section3Blocked), /*#__PURE__*/React.createElement("button", {
+    className: "blocked-note-close",
+    type: "button",
+    onClick: () => setBlockedSection(null)
+  }, "✕")), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-card fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-title"
