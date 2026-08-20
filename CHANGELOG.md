@@ -2,6 +2,18 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Logo click returns to the activity selection screen
+
+Clicking the "Salty Cowboys" logo in the sidebar now calls `setScreen("activity")`, the same
+navigation the Step 2 "← Back" link already uses, from any screen (Step 1, 2, or the confirm
+screen). Added `cursor: pointer` to `.hero-logo` as the click affordance. Deliberately no field
+resets, matching the existing back-link's behaviour exactly, not "Make another booking"'s full
+`resetAll()`.
+
+2 new assertions added. 457/457 assertions and the jsdom smoke test pass. Verified live in Chrome:
+clicked the logo from Step 2 (calendar/rider details filled in) and landed back on the activity
+cards.
+
 ## 20 Aug 2026 — Confirm screen heading and Copy button set to regular weight
 
 "WhatsApp has opened in another window. Please hit send to make the booking request" (the confirm

@@ -223,6 +223,8 @@ has('pt-value weight is 500 (was 700), matching the title/value/heading/Book wei
 // ─── Step 3 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('confirm-title is 22px (was 21px)', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;');
 has('confirm-title (the "WhatsApp has opened..." heading) is explicit regular weight, overriding the browser\'s default bold h2', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;\n  font-weight: 400;');
+has('.hero-logo is clickable (cursor:pointer) to support the new logo-click-to-restart behaviour', '.hero-logo {\n  position: relative;\n  display: block;\n  width: 172px;\n  max-width: 62%;\n  height: auto;\n  margin: 0 auto 14px;\n  cursor: pointer;\n}');
+has('clicking the Salty Cowboys logo takes the user back to the activity selection screen from any step, same setScreen("activity") call the Step 2 back-link already uses, no field resets - consistent with that existing back-link\'s behaviour', 'alt: "Salty Cowboys Bali",\n    onClick: () => setScreen("activity")');
 has('.copy-btn ("Copy message") is regular weight, not the earlier semibold 600', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 400;');
 has('confirm-summary border 1px + 18.5 padding', '.confirm-summary {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 18.5px;');
 has('copy-box now carries the card look (was bare)', '.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }');

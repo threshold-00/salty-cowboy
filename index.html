@@ -1265,6 +1265,7 @@ html, body { background: #0a0a0a; }
   max-width: 62%;
   height: auto;
   margin: 0 auto 14px;
+  cursor: pointer;
 }
 @media (min-width: 900px) {
   .hero-logo { width: 210px; max-width: 78%; margin-bottom: 18px; }
@@ -2681,7 +2682,8 @@ function App() {
   }, l.label))), /*#__PURE__*/React.createElement("img", {
     className: "hero-logo",
     src: LOGO_SRC,
-    alt: "Salty Cowboys Bali"
+    alt: "Salty Cowboys Bali",
+    onClick: () => setScreen("activity")
   }), /*#__PURE__*/React.createElement("div", {
     className: "hero-title"
   }, t.heroTitle1 + " " + t.heroTitle2), /*#__PURE__*/React.createElement("div", {
