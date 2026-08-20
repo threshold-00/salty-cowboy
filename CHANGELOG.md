@@ -2,6 +2,16 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Confirm screen heading and Copy button set to regular weight
+
+"WhatsApp has opened in another window. Please hit send to make the booking request" (the confirm
+screen's `<h2>`) had no explicit `font-weight` in its CSS, so it fell back to the browser's default
+bold `<h2>` styling. Added `font-weight: 400`. The "Copy message" button was explicitly set to
+`font-weight: 600` (semibold); changed to `400` to match.
+
+2 new assertions added. 455/455 assertions and the jsdom smoke test pass. Verified live in Chrome:
+both elements now compute to `font-weight: 400`.
+
 ## 20 Aug 2026 — Fixed section 3 / funds card / blocked-note width on mobile
 
 Flagged by a mobile screenshot: "3. Your booking summary", the notes textarea, Send button, the

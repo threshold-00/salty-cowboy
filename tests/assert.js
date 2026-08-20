@@ -222,6 +222,8 @@ has('pt-value weight is 500 (was 700), matching the title/value/heading/Book wei
 
 // ─── Step 3 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('confirm-title is 22px (was 21px)', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;');
+has('confirm-title (the "WhatsApp has opened..." heading) is explicit regular weight, overriding the browser\'s default bold h2', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;\n  font-weight: 400;');
+has('.copy-btn ("Copy message") is regular weight, not the earlier semibold 600', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 400;');
 has('confirm-summary border 1px + 18.5 padding', '.confirm-summary {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 18.5px;');
 has('copy-box now carries the card look (was bare)', '.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }');
 has('copy-heading letter-spacing aligned to shared uppercase-label convention', '.copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 1.5px;');
