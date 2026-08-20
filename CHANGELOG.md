@@ -2,6 +2,19 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Instagram and Airbnb Listings links added to the dark sidebar
+
+Added "Instagram" (https://www.instagram.com/salty.cowboy/?hl=en) and "Airbnb Listings"
+(https://www.airbnb.com/users/profile/1470526584044287896?previous_page_name=PdpHomeMarketplace)
+as two small underlined links right under the "Horse rescue sanctuary & riding centre" subtitle in
+the dark sidebar, so they show on every screen (Step 1, 2, and confirm). Both open in a new tab
+with `rel="noopener noreferrer"`. Link labels are translated for ID (brand names Instagram/Airbnb
+stay in Latin script per convention); the URLs themselves are the same across all three languages.
+
+7 new assertions added. 463/463 assertions and the jsdom smoke test pass. Verified live in Chrome:
+both links render with the correct href/target/rel, and persist onto Step 2 after picking an
+activity.
+
 ## 20 Aug 2026 — Logo click returns to the activity selection screen
 
 Clicking the "Salty Cowboys" logo in the sidebar now calls `setScreen("activity")`, the same

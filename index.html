@@ -354,6 +354,11 @@ const {
 const WA_NUMBER = "61466567953"; // +61 466 567 953
 const WA_DISPLAY = "+61 466 567 953"; // shown in the copy/paste fallback — swap together with WA_NUMBER at go-live
 
+// ─── SOCIAL / EXTERNAL LINKS ─────────────────────────────────────────────────
+// Shown in the dark sidebar under the hero copy, on every screen.
+const IG_URL = "https://www.instagram.com/salty.cowboy/?hl=en";
+const AIRBNB_URL = "https://www.airbnb.com/users/profile/1470526584044287896?previous_page_name=PdpHomeMarketplace";
+
 // ─── LOGO ────────────────────────────────────────────────────────────────────
 // Inlined so the app stays a single self-contained file with no extra requests.
 // The artwork is white, so it sits straight on the dark header.
@@ -557,6 +562,8 @@ const T = {
     heroTitle1: "Book your",
     heroTitle2: "experience",
     heroSub: "Horse rescue sanctuary & riding centre",
+    igLink: "Instagram",
+    airbnbLink: "Airbnb Listings",
     moneyGoesBody: "Every booking helps a horse. Salty Cowboys began as a rescue and it still is one. The money from your ride, lesson or photoshoot goes straight back into the paddock: veterinary care, feed, farriery and the slow, patient work of bringing neglected and retired horses back to health. Some arrive underweight or frightened of people. Here they are given time, food and trust until they are sound enough to be ridden gently, or simply to live out their days in peace. When you book with us, you fund that second chance.",
     costFundsTitle: "What your booking cost funds",
     introPhotoshoots: "Beautiful, story-telling photos with our rescue horses across our most scenic backdrops. Sessions are static, so riding isn't included, though for the Beach shoot you'll walk alongside your horse down to the sand. Bring your own photographer, or add a Salty Cowboy photographer with your booking (packages from IDR 2,000,000, 20 edited photos per hour). Beach shoots are priced per horse; other shoots are location-based.",
@@ -732,6 +739,8 @@ const T = {
     heroTitle1: "Pesan",
     heroTitle2: "pengalaman Anda",
     heroSub: "Tempat penyelamatan kuda & pusat berkuda",
+    igLink: "Instagram",
+    airbnbLink: "Daftar Airbnb",
     moneyGoesBody: "Setiap pemesanan membantu seekor kuda. Salty Cowboys dimulai sebagai tempat penyelamatan kuda, dan hingga kini tetap begitu. Uang dari ride, pelajaran, atau sesi foto Anda kembali langsung ke paddock: perawatan dokter hewan, pakan, pemasangan sepatu kuda, dan kerja sabar yang panjang untuk memulihkan kesehatan kuda-kuda yang terlantar dan pensiun. Beberapa datang dalam kondisi kurus atau takut pada manusia. Di sini mereka diberi waktu, makanan, dan kepercayaan hingga cukup sehat untuk ditunggangi dengan lembut, atau sekadar menjalani hari-hari mereka dengan tenang. Dengan memesan bersama kami, Anda mendanai kesempatan kedua itu.",
     costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan",
     introPhotoshoots: "Foto-foto indah penuh cerita bersama kuda rescue kami di latar-latar terbaik kami. Sesi bersifat statis, jadi berkuda tidak termasuk, meski untuk sesi Pantai Anda akan berjalan bersama kuda menuju pasir. Bawa fotografer Anda sendiri, atau tambahkan fotografer Salty Cowboy pada pemesanan (paket mulai IDR 2,000,000, 20 foto hasil edit per jam). Sesi Pantai dihitung per kuda; sesi lain dihitung berdasarkan lokasi.",
@@ -907,6 +916,8 @@ const T = {
     heroTitle1: "Забронируйте",
     heroTitle2: "впечатление",
     heroSub: "Приют для лошадей и центр верховой езды",
+    igLink: "Instagram",
+    airbnbLink: "Объявления на Airbnb",
     moneyGoesBody: "Каждое бронирование помогает лошади. Salty Cowboys начинался как приют для лошадей и остаётся им до сих пор. Деньги от вашей прогулки, урока или фотосессии идут прямо на нужды пастбища: ветеринарный уход, корм, ковку и медленную, терпеливую работу по восстановлению здоровья брошенных и пенсионных лошадей. Некоторые из них прибывают истощёнными или напуганными людьми. Здесь им дают время, еду и доверие, пока они не станут достаточно здоровыми, чтобы на них можно было мягко кататься, или просто чтобы спокойно прожить остаток дней. Бронируя у нас, вы финансируете этот второй шанс.",
     costFundsTitle: "На что идёт стоимость вашего бронирования",
     introPhotoshoots: "Красивые, атмосферные снимки с нашими спасёнными лошадьми на самых живописных локациях. Съёмки статичные, поэтому верховая езда не входит, хотя для съёмки на пляже вы пройдёте рядом с лошадью к воде. Приходите со своим фотографом или добавьте фотографа Salty Cowboy к брони (пакеты от IDR 2,000,000, 20 обработанных фото в час). Съёмка на пляже, цена за лошадь; остальные, по локации.",
@@ -1286,6 +1297,22 @@ html, body { background: #0a0a0a; }
   letter-spacing: 0.3px;
   position: relative;
 }
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+  position: relative;
+}
+.hero-social a {
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--clay-dk);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.hero-social a:hover { color: var(--sand); }
 
 /* ── STEP INDICATOR ── */
 .steps {
@@ -2688,7 +2715,17 @@ function App() {
     className: "hero-title"
   }, t.heroTitle1 + " " + t.heroTitle2), /*#__PURE__*/React.createElement("div", {
     className: "hero-sub"
-  }, t.heroSub)), screen !== "confirm" && /*#__PURE__*/React.createElement("div", {
+  }, t.heroSub), /*#__PURE__*/React.createElement("div", {
+    className: "hero-social"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: IG_URL,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, t.igLink), /*#__PURE__*/React.createElement("a", {
+    href: AIRBNB_URL,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, t.airbnbLink))), screen !== "confirm" && /*#__PURE__*/React.createElement("div", {
     className: "steps"
   }, [1, 2, 3].map((s, i) => /*#__PURE__*/React.createElement(React.Fragment, {
     key: s
