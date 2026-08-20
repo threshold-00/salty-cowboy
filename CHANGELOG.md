@@ -2,6 +2,46 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Fixed section 3 / funds card / blocked-note width on mobile
+
+Flagged by a mobile screenshot: "3. Your booking summary", the notes textarea, Send button, the
+⏳ notice, and the "What your booking cost funds" card were all rendering wider than sections 1
+and 2's box above them, some nearly flush against the screen edge with no inset at all.
+
+Root cause, in two layers. First: every rule that gave section 3's box, the funds card, and the
+blocked-note their page-level horizontal inset lived inside `@media (min-width: 900px)` — the
+desktop-only two-pane layout block. Below 900px (every phone), none of it applied, so these three
+(all direct `.main` children, unlike sections 1/2 which sit inside `.body` and inherit `.body`'s
+own unconditional 24px padding) had zero page inset and rendered edge-to-edge.
+
+Second, deeper bug found while writing the fix: the desktop rule was using
+`padding-left/right: 24px` to create that inset, but padding never shrinks a block element's own
+outer width when box-sizing is border-box (global rule on this codebase) — the border edge stays
+at 100% of the container regardless of padding, padding only insets the *content* inside that
+edge. On desktop this was invisible, because `max-width: 623px` plus an inherited
+`margin-left/right: auto` (from `.main > *`) did the actual shrink-and-center work; padding-left/
+right:16.5px was only ever handling the internal text inset, a separate concern. On mobile, with
+no such centering margin set anywhere and the container already narrower than 623px (so max-width
+never triggered either), there was nothing left to shrink the box at all.
+
+Fixed with one base (all-viewport-widths) rule: `width: calc(100% - 48px)` reproduces `.body`'s
+"inset by 24px on each side" behavior directly, at any container width, so it matches sections 1/2
+on mobile exactly the way `.body`'s own padding always did; `max-width: 623px` with
+`margin-left/right: auto` takes over once the container is wide enough to hit that cap, centering
+the box exactly like before on desktop. `padding-left/right: 16.5px` is unchanged, still doing only
+the internal text-inset job. blocked-note is included in this same rule by name (not via the
+shared `.fu` class it deliberately doesn't carry, since `.fu` also carries a fadeUp entrance
+animation that gets stuck at opacity 0 on frequently re-rendering elements like this one).
+
+5 assertions updated (2 stale from moving/consolidating the CSS block, 1 rewritten for the
+blocked-note width rule it made redundant), 2 new assertions added locking in the calc()-based
+rule and the deliberate .fu exclusion. 453/453 assertions and the jsdom smoke test pass. Verified
+live in Chrome at a 500px-wide viewport (this environment's browser automation renders a fixed
+viewport regardless of window resize, so true mobile pixel widths couldn't be forced, but 500px is
+already well below the old 623px/671px breakpoints and exercises the exact regression): section 1's
+box, section 3's box, the funds card, and the blocked-note all measured identically at 382px wide
+with matching left/right edges.
+
 ## 20 Aug 2026 — Fixed stale date/time surviving an activity switch
 
 Found while implementing a request that Step 2 always land with accordion 1 open and 2/3 closed on

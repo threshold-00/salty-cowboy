@@ -1126,6 +1126,42 @@ html, body { background: #0a0a0a; }
   overflow: hidden;
 }
 
+/* Page-level horizontal inset for Step 2's top-level cards that sit
+   directly under .main (section 3's box, the funds card, and the
+   blocked-note), applied at every viewport width so they always match
+   sections 1/2's box, which gets its 24px inset for free from .body's own
+   unconditional padding.
+   This used to be a padding-left/right:24px rule gated inside the desktop
+   media query below - but padding never shrinks a block element's own
+   OUTER width (box-sizing:border-box keeps the border edge at 100% of the
+   container regardless of padding), it only insets the content inside
+   that box. On desktop this was invisible: max-width:623px plus the
+   inherited "margin-left/right: auto" from ".main > *" did the real
+   shrink-and-center work, padding only handled the internal text inset.
+   On mobile, .main never sets that centering margin at all (it's also
+   desktop-only), so with no max-width trigger below 623px wide either,
+   these three rendered full-width, flush against the screen edge.
+   width: calc(100% - 48px) reproduces .body's "inset by 24px on each
+   side" behavior directly, at any container width, mobile or desktop;
+   max-width + the auto margins take over once the container is wide
+   enough to hit 623px, capping and centering exactly like sections 1-3's
+   671px/623px column. blocked-note is included here rather than via the
+   shared .fu class: it deliberately does not carry .fu, since .fu also
+   carries a fadeUp entrance animation that gets stuck permanently at
+   opacity 0 on elements that re-render as often as this one does (see
+   the comment on .blocked-note itself). */
+.main > .step2-section-box.step2-block.fu,
+.main > .cost-funds-card.step2-block.fu,
+.main > .blocked-note {
+  width: calc(100% - 48px);
+  max-width: 623px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16.5px;
+  padding-right: 16.5px;
+  box-sizing: border-box;
+}
+
 /* On tablet: present the app as a centered, framed card. */
 @media (min-width: 620px) and (max-width: 899px) {
   .app {
@@ -1172,36 +1208,16 @@ html, body { background: #0a0a0a; }
     padding: 24px 0 60px;
   }
   .main > * { max-width: 660px; margin-left: auto; margin-right: auto; }
-  .main > .fu:not(.body):not(.confirm-screen) { padding-left: 24px; padding-right: 24px; box-sizing: border-box; }
   /* Step 2's three top-level blocks (details, summary/send, cost-funds) and
      Step 1's own body share one 623px content column, matching Figma. 671 =
      623 + the existing 24px side padding on each side, so headings, hints
      and cards all land on the same left edge. Step 3 keeps the shared 660px
-     width, unaffected since it doesn't carry .step2-block or .body. */
+     width, unaffected since it doesn't carry .step2-block or .body.
+     The padding/max-width that pins section 3's box, the funds card and
+     the blocked-note to the same 623px width as sections 1/2 is a base
+     (all-widths) rule now, not desktop-only - see the comment above the
+     tablet media query near the top of this stylesheet. */
   .main > .step2-block, .main > .body { max-width: 671px; }
-  /* Section 3's box and the funds card are top-level .main children like
-     .body, but unlike .body they also carry .fu, so the generic
-     .fu:not(.body):not(.confirm-screen) rule above (higher specificity
-     than either card's own base padding-left/right) was overriding their
-     own 16.5px/18px component padding with a 24px page-inset instead -
-     and inflating their max-width allowance to the full 671px meant for
-     .body to subtract that same inset from. Net effect: a card shell
-     rendered 671px wide (48px wider than Section 1's actual 623px card,
-     which sits inset inside .body and never carries the page-level inset
-     itself) with the wrong, larger horizontal padding on top. Restore
-     each card's own padding-left/right explicitly (equal specificity to
-     the .fu rule, later in source order, so it wins) and pin max-width
-     to 623px. Both cards pinned to 16.5px, not the funds card's own base
-     18px, so its heading text lines up with sections 1-3's text exactly,
-     per Ro's explicit ask; its 19px top/bottom padding is untouched.
-     margin-left/right: auto is inherited unchanged from .main > * above,
-     so this only touches width/padding. */
-  .main > .step2-section-box.step2-block.fu,
-  .main > .cost-funds-card.step2-block.fu {
-    max-width: 623px;
-    padding-left: 16.5px;
-    padding-right: 16.5px;
-  }
 }
 
 /* ── HERO HEADER ── */
@@ -1891,11 +1907,10 @@ html, body { background: #0a0a0a; }
 }
 /* Small dismissible note shown right under a section's card when the user
    tries to open it before its own precondition is met. Renders as a direct
-   .main child like the card above it, but the card sits inside the .body
-   wrapper (671px max-width, 24px side padding, 623px content) while this
-   note only gets the generic ".main > *" 660px max-width with no side
-   padding, so it needs its own explicit 623px max-width to match the
-   card's outer width exactly. margin-top: -2px trims the card's own 22px
+   .main child like the card above it. Its width/horizontal padding come
+   from the ".main > .blocked-note" rule near the top of this stylesheet
+   (matches section 3's box and the funds card, at every viewport width),
+   not from this block. margin-top: -2px trims the card's own 22px
    trailing margin down to a 20px gap; margin-bottom restores the standard
    22px gap before the next block. */
 .blocked-note {
@@ -1903,7 +1918,6 @@ html, body { background: #0a0a0a; }
   border: 1px solid #dcdcdc;
   border-radius: 10px;
   padding: 10px 14px;
-  max-width: 623px;
   margin-top: -2px;
   margin-bottom: 22px;
   font-family: var(--body);
