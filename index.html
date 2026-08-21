@@ -426,7 +426,13 @@ const ACTIVITIES = [{
     maxPeople: 5,
     photoshoot: true,
     image: "images/photo-paddock.avif",
-    imagePosition: "center 70%"
+    imagePosition: "center 70%",
+    // PADDOCK-IMG commit: this photo (a bridal-style shoot) was pulled from
+    // the Step 1 card specifically, at Ro's request, while the Step 2
+    // header band keeps showing it (that band reads actObj.image directly,
+    // untouched by this flag). hideCardImage is the only thing that decouples
+    // the two, since both previously read the exact same `image` field.
+    hideCardImage: true
   }, {
     id: "photo_cottages",
     durations: ["3hr"],
@@ -2818,7 +2824,7 @@ function App() {
     className: "act-right"
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-image",
-    style: item.image ? {
+    style: item.image && !item.hideCardImage ? {
       backgroundImage: "url(" + item.image + ")",
       backgroundSize: "cover",
       backgroundPosition: "center"

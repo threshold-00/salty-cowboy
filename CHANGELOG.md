@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - PADDOCK-IMG: removed the bridal-style photo from the Step 1 card only
+
+Paddock Photoshoot's Step 1 card and Step 2 header band previously both read the same `image`
+field, so there was no way to remove one without removing the other. Added a new `hideCardImage:
+true` flag to the `photo_paddock` activity entry (the only activity that carries it) and updated
+`.act-image`'s conditional style to `item.image && !item.hideCardImage`, so the card now falls back
+to the plain grey placeholder while `.detail-header-image` (Step 2's band), which reads
+`actObj.image` directly and never checks this flag, keeps showing the photo exactly as before.
+
+Interpreted "the Paddock photoshoot page" as the Step 1 card specifically, since Step 2 only has
+one image element (the header band), and the instruction explicitly said not to touch it - the
+only other place an image could be "removed" from is the card. Flagging this reading in case it's
+not what was meant.
+
+2 assertions updated/added. 489/489 assertions and the jsdom smoke test pass. Verified live in
+Chrome: the Step 1 card's image style is now `null` (plain placeholder renders), the Step 2 header
+band's inline style is completely unchanged, still showing `images/photo-paddock.avif`.
+
 ## 21 Aug 2026 - BYO-COPY: standalone "BYO" spelled out to "Bring your own"
 
 Word-boundary search (regex `\bBYO\b`, scoped to the app's own script to exclude coincidental "BYO"
