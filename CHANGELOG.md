@@ -2,6 +2,67 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - PHOTO-GALLERY: 4-thumbnail gallery row replaces the header image on all photoshoot pages
+
+Grepped and listed the 5 photoshoot pages before editing, approved: Beach, Stable, Rice Field,
+Paddock, Cottages Photoshoot. Applies to every one of them uniformly via the existing `isPhotoshoot`
+flag; every other category (Rides, Lessons) is completely unaffected.
+
+DOM structure before (every activity, same shared JSX):
+```
+div.body.fu.step2-block
+  div.back-link
+  div.detail-header-image          [269px photo band or --fog placeholder]
+  div.detail-header-card           [margin-top: -48px, overlaps the band]
+    h2.section-title
+    p.detail-desc
+  span.byo-chip (isPhotoshoot only)
+  ...section boxes...
+```
+
+DOM structure after, isPhotoshoot only (Rides/Lessons keep the "before" structure unchanged):
+```
+div.body.fu.step2-block
+  div.back-link
+  div.gallery-row                  [NEW - 4 thumbnails, replaces the image band]
+    div.gallery-thumb x4
+  div.detail-header-card           [margin-top: 0, header-only now]
+    h2.section-title
+    p.detail-desc
+  span.byo-chip
+  ...section boxes...
+```
+
+`.detail-header-image` is gated on `!isPhotoshoot`; `.gallery-row` is gated on `isPhotoshoot`, so
+exactly one of the two ever renders for a given activity. `.detail-header-card`'s base CSS still
+carries `margin-top: -48px` (designed to overlap 48px onto the image band above it) - left that in
+place for non-photoshoot activities, and override it to `0` inline for `isPhotoshoot`, since there's
+no band underneath the card to overlap onto anymore.
+
+Width parity: `.gallery-row` is a direct child of the same `.body` wrapper as `.detail-header-image`
+and section 1's `.step2-section-box`, so it inherits the identical 623px content width from `.body`'s
+own padding with no extra width rule needed. Verified live via `getBoundingClientRect`: gallery row
+measured exactly 623px, matching section 1's box exactly.
+
+Tokens: `.gallery-thumb` reuses `var(--fog)` (the same placeholder fill `.detail-header-image`
+already used) and the page's existing 14px border-radius; `.gallery-row` reuses the existing 8px gap
+convention (`.cat-tabs`/`.pill-row`) and the existing 22px block-rhythm margin. No new CSS custom
+properties introduced. `--display`/`--earth`/`--clay` weren't directly invoked since the thumbnails
+carry no text or foreground color of their own, matching how `.detail-header-image`'s and
+`.act-image`'s existing placeholders also carry none.
+
+**Flagging an interaction with the PADDOCK-IMG commit that just landed:** that commit specifically
+preserved Paddock Photoshoot's Step 2 header image while removing its Step 1 card image. This
+commit, applying uniformly to the whole photoshoot category as instructed, now replaces Paddock's
+Step 2 header image with the gallery row too, superseding that narrower fix. This follows directly
+from "applies to EVERY activity in the photoshoot category" - flagging in case that supersession
+wasn't intended.
+
+6 assertions added/updated. 494/494 assertions and the jsdom smoke test pass. Verified live in
+Chrome: Beach Photoshoot shows 4 placeholder thumbnails at 623px total width with a header-only card
+directly below (no gap, no overlap); Beach & Rice Field Ride (non-photoshoot) is unchanged, still
+shows its image band with the tuned crop position and the card's base -48px overlap intact.
+
 ## 21 Aug 2026 - PADDOCK-IMG: removed the bridal-style photo from the Step 1 card only
 
 Paddock Photoshoot's Step 1 card and Step 2 header band previously both read the same `image`

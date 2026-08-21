@@ -1763,6 +1763,26 @@ html, body { background: #0a0a0a; }
   border-radius: 14px;
 }
 
+/* PHOTO-GALLERY commit: replaces .detail-header-image for isPhotoshoot
+   activities. Direct child of the same .body wrapper as .detail-header-image
+   and section 1's .step2-section-box, so it inherits the same 623px content
+   width from .body's own padding for free, no extra width rule needed here.
+   Reuses existing tokens only: --fog (same placeholder fill as
+   .detail-header-image), the same 14px border-radius used on every card on
+   this screen, the same 8px gap already used for .cat-tabs/.pill-row, and
+   the same 22px block-rhythm margin used everywhere else on this page. */
+.gallery-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.gallery-thumb {
+  flex: 1;
+  aspect-ratio: 1;
+  background: var(--fog);
+  border-radius: 14px;
+}
+
 /* Light bordered card wrapping Back link, title and description on step 2,
    matching Figma. Replaces an earlier dark image band (see CHANGELOG). */
 .detail-header-card {
@@ -2855,7 +2875,17 @@ function App() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "back-link",
     onClick: () => setScreen("activity")
-  }, t.back), /* This band is a fixed 269px tall but stretches full column
+  }, t.back), /* PHOTO-GALLERY commit: photoshoot activities get a 4-thumbnail
+     gallery row instead of the single header image band, so the band and
+     the card's -48px overlap onto it (see .detail-header-card) are both
+     switched off for isPhotoshoot; every other category is unaffected and
+     still gets the plain image band exactly as before. */
+  isPhotoshoot && /*#__PURE__*/React.createElement("div", {
+    className: "gallery-row"
+  }, [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "gallery-thumb"
+  }))), /* This band is a fixed 269px tall but stretches full column
      width, which is much wider on desktop (623px) than mobile - a portrait
      source photo needs far more vertical cropping to "cover" the wider
      desktop box, so a plain centered position cuts off the subject on
@@ -2869,7 +2899,7 @@ function App() {
      the true 623px desktop width, since the math (percent vs. resulting
      crop window) didn't match observed rendering closely enough to trust
      outright. Re-tune per photo if any of these images are ever swapped. */
-  /*#__PURE__*/React.createElement("div", {
+  !isPhotoshoot && /*#__PURE__*/React.createElement("div", {
     className: "detail-header-image",
     style: actObj?.image ? {
       backgroundImage: "url(" + actObj.image + ")",
@@ -2877,7 +2907,8 @@ function App() {
       backgroundPosition: actObj.imagePosition || "center"
     } : undefined
   }), /*#__PURE__*/React.createElement("div", {
-    className: "detail-header-card"
+    className: "detail-header-card",
+    style: isPhotoshoot ? { marginTop: 0 } : undefined
   }, /*#__PURE__*/React.createElement("h2", {
     className: "section-title"
   }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {
