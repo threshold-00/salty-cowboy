@@ -2,6 +2,21 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - REJECT-COPY: weight-rejection title and body reworded
+
+Exact find/replace of the English weight-rejection block (`w4Title`/`w4Body`), confirmed exactly
+one occurrence before editing. Title: "So sorry, we can't accommodate this weight" -> "Sorry, we
+can't accommodate this weight". Body: "You'd be very welcome to try our off-saddle activities
+under 'Lessons' instead." -> "You're welcome to try our off-saddle activities under 'Lessons'
+instead. Unfortunately we do not refund bookings for people over 75kg." Apostrophe style matched
+to the file's existing straight-apostrophe convention (confirmed by byte inspection before
+editing, not assumed). Indonesian and Russian `w4Title`/`w4Body` are untouched, since the find text
+was English-specific and those translations use different wording entirely.
+
+5 new assertions added (2 positive, 2 `missing()` guards against the old phrasing, 1 confirming
+ID/RU stayed untouched). 487/487 assertions and the jsdom smoke test pass. Verified live in
+Chrome: selecting "Over 75 kg" now shows the new title and body text exactly.
+
 ## 21 Aug 2026 - WEIGHT-THRESHOLD: universal weight cap lowered 77kg to 75kg
 
 Business rule change per Ro's explicit request. Every instance of the 77kg weight cap replaced

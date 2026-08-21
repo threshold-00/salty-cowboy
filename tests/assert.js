@@ -76,6 +76,13 @@ missing('no more 77kg (no space)', '77kg');
 missing('no more 77 кг anywhere (ru)', '77 кг');
 has('w3 band is 70-75kg (en + id share Latin unit)', 'w3: "70–75 kg"', 2);
 has('w4 band is over 75kg',        'w4: "Over 75 kg"');
+
+// ─── REJECT-COPY commit: weight-rejection title/body reworded ────────────
+has('en w4Title reworded ("So sorry" -> "Sorry")', 'w4Title: "Sorry, we can\'t accommodate this weight",');
+has('en w4Body reworded, adds no-refund sentence', 'w4Body: "It\'s nothing personal. We\'re committed to protecting our horses\' backs from strain, so we\'re unable to safely match a horse for this weight. You\'re welcome to try our off-saddle activities under \'Lessons\' instead. Unfortunately we do not refund bookings for people over 75kg.",');
+missing('old "So sorry" phrasing gone', 'So sorry, we can\'t accommodate this weight');
+missing('old "You\'d be very welcome" phrasing gone', 'You\'d be very welcome');
+has('id/ru w4Title/w4Body untouched by the English-only REJECT-COPY find/replace', 'w4Title: "Mohon maaf, kami tidak dapat menerima berat ini",');
 has('showWeight combines isRiding + needsWeight', 'const showWeight = isRiding || actObj?.needsWeight === true;');
 has('weight render gated on showWeight', 'showWeight && /*#__PURE__*/React.createElement("div", {\n      className: "rider-field"');
 has('WhatsApp weight lines use showWeight', 'showWeight,\n  notes,');
