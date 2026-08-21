@@ -2,6 +2,32 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - PRICE-INSTARIDE: Insta Ride 2hr price raised to IDR 2,700,000
+
+Grepped the price field before editing per instruction: `t.prices.insta` is an array of
+`{ l: label, v: value }` pairs, `v` always the full "IDR X,XXX,XXX" format (never abbreviated).
+Current 2hr value was "IDR 2,400,000". Confirmed with Ro that the shorthand "2,700" in the request
+should conform to that existing format, i.e. "IDR 2,700,000", before writing it. Updated all three
+languages (EN/ID/RU), 1hr and 1.5hr prices untouched.
+
+This is the only place the 2hr price is stored: `unitPrice` is computed by stripping non-digits
+straight out of this same string (`parseInt(String(selPrice.v).replace(/[^0-9]/g, ""), 10)`), so
+there's no separate numeric constant elsewhere to keep in sync. Insta Ride is `riding: true`, so
+the total multiplies by group size (per person), same as before.
+
+Breaks a previously documented business rule: `CLAUDE.md` said Insta Ride's prices matched Beach &
+Rice Field Ride's linear per-half-hour rate ("same as Beach & Rice Field Ride, per Ro"). That's
+still true at 1hr and 1.5hr, but the new 2hr price is no longer the same rate (2,700,000 instead of
+the 2,400,000 the linear pattern would give). Updated the business-rules note in `CLAUDE.md` to
+say so explicitly rather than leaving a stale claim in place.
+
+Verified live in Chrome: booking Insta Ride at 2hr for 1 person shows "IDR 2,700,000" in the total
+cost line. Confirmed the WhatsApp payload does not include price at all (by design, Simone handles
+pricing separately), so it's fully unaffected by this change, same fields, same shape.
+
+3 stale assertions updated (needle values only). 487/487 assertions and the jsdom smoke test pass.
+Fresh Customer Offerings TSV generated reflecting the new price (see chat).
+
 ## 21 Aug 2026 - REJECT-COPY: weight-rejection title and body reworded
 
 Exact find/replace of the English weight-rejection block (`w4Title`/`w4Body`), confirmed exactly

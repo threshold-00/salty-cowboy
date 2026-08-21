@@ -85,7 +85,7 @@ Every photoshoot card and the step-2 detail screen show: "BYO Photographer or ad
 ### Rides
 
 - **Beach & Rice Field Ride:** 1 or 1.5 hr, per person (IDR 1,600,000 / 2,000,000). Fixed slots: 1hr → 5:00pm, 1.5hr → 4:30pm.
-- **Insta Ride:** 1, 1.5 or 2 hr, per person (IDR 1,600,000 / 2,000,000 / 2,400,000, same as Beach & Rice Field Ride, per Ro). Fixed slots: 1hr → 5:00pm, 1.5hr → 4:30pm, 2hr → 4:00pm. Same route as the 1.5 hr ride with more photo stops.
+- **Insta Ride:** 1, 1.5 or 2 hr, per person (IDR 1,600,000 / 2,000,000 / 2,700,000). 1hr and 1.5hr still match Beach & Rice Field Ride's per-half-hour rate; the 2hr price was raised from 2,400,000 to 2,700,000 (PRICE-INSTARIDE commit), so the "same as Beach & Rice Field Ride" linear rate no longer holds at 2hr. Fixed slots: 1hr → 5:00pm, 1.5hr → 4:30pm, 2hr → 4:00pm. Same route as the 1.5 hr ride with more photo stops.
 - Rides no longer offer a morning start; each duration has exactly one fixed afternoon start time. Since Saturday afternoons are closed, **rides currently show zero available slots on any Saturday** (worth flagging to Simone, see Open items).
 - **Weight rules in the UI:** blanket 75 kg max, max 2 riders over 70 kg. Per-horse allocation (Lundstar walk-only max 1 hr, Othello all gaits at 77, Whiskey max 50 kg, others under 70) is handled by Simone on WhatsApp confirmation and intentionally NOT enforced in code. Othello's own 77kg figure is the horse's actual physical capability, not the site's UI cap, and is unaffected by the UI cap moving to 75kg.
 
