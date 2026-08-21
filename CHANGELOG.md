@@ -2,6 +2,23 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - BYO-COPY: standalone "BYO" spelled out to "Bring your own"
+
+Word-boundary search (regex `\bBYO\b`, scoped to the app's own script to exclude coincidental "BYO"
+substrings inside the base64-encoded image constants) found exactly 2 real occurrences: the English
+`byoPhotographer` translation value ("BYO Photographer or add a Salty Cowboys photographer") and a
+CSS comment describing the resulting chip element. Both updated to "Bring your own Photographer...".
+The `byoPhotographer` property key itself was left untouched, since renaming an object key is not a
+copy change and would require updating every `t.byoPhotographer` reference site-wide for no visible
+benefit. Indonesian and Russian translations never used the literal word "BYO" to begin with
+(already fully localized, e.g. ID reads "Bawa fotografer sendiri"), so nothing to change there.
+
+Count: 2 occurrences replaced, 0 remaining anywhere in the file.
+
+2 assertions updated/added (1 needle updated for the new text, 1 new `missing()` guard). 488/488
+assertions and the jsdom smoke test pass. Verified live in Chrome: both the Step 1 card's BYO note
+and the Step 2 chip now read "Bring your own Photographer or add a Salty Cowboys photographer".
+
 ## 21 Aug 2026 - PRICE-INSTARIDE: Insta Ride 2hr price raised to IDR 2,700,000
 
 Grepped the price field before editing per instruction: `t.prices.insta` is an array of

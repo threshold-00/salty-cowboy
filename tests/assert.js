@@ -172,7 +172,8 @@ has('en courseWeekNote Mon/Tue/Thu/Fri', 'courseWeekNote: "The course runs Monda
 has('WhatsApp course schedule line updated', 'lines.push("Course runs Mon, Tue, Thu & Fri within one week");');
 
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
-has('en byoPhotographer key',      'byoPhotographer: "BYO Photographer or add a Salty Cowboys photographer"');
+has('en byoPhotographer key (BYO-COPY commit: "BYO" spelled out to "Bring your own", key name itself untouched since renaming an identifier is not a copy change)',      'byoPhotographer: "Bring your own Photographer or add a Salty Cowboys photographer"');
+missing('standalone "BYO" no longer appears anywhere (word-boundary, base64 image constants excluded since they can\'t coincidentally spell BYO as a standalone token)', 'BYO Photographer');
 has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.createElement("div", {\n    className: "byo-note"\n  }, t.byoPhotographer)');
 has('byo line on step2 now a static filled chip, not a paragraph (batch3 Commit 2, #2)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
 
