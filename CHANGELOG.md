@@ -2,6 +2,31 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - WEIGHT-THRESHOLD: universal weight cap lowered 77kg to 75kg
+
+Business rule change per Ro's explicit request. Every instance of the 77kg weight cap replaced
+with 75kg across `index.html`: the two weight-bucket labels ("70-77 kg" -> "70-75 kg", "Over 77 kg"
+-> "Over 75 kg"), the informational body copy under the 70-77kg bucket ("up to 77kg each" -> "up to
+75kg each"), the group-size/weight-cap descriptions for Beach & Rice Field Ride, Insta Ride,
+Dressage Masterclass and Beach Photoshoot ("Max 77kg per rider" / "per mounted rider" -> 75kg), and
+the code comment documenting the rule. All three languages (EN/ID/RU) updated identically.
+
+No numeric weight-gate constant exists anywhere in the code: the gate is entirely categorical,
+keyed on which bucket button the user selects (`rider.weight === "w4"`), so this was purely a copy
+change with no logic to touch (the task description assumed a separate numeric constant; there
+isn't one, confirmed by grep). The 75kg mid-tier note about Othello's own physical carrying
+capacity in `CLAUDE.md`'s per-horse allocation note is a fact about that horse, not the site's UI
+cap, and was deliberately left at 77 rather than changed to match.
+
+Verified live in Chrome: selecting "Over 75 kg" still correctly shows the rejection block and
+disables Send; selecting "70-75 kg" (the new top allowed bucket) shows only the informational
+heavier-horse note and Send stays enabled. Confirmed the WhatsApp payload shape is unchanged, the
+weight value still flows from React state into the rider line unaltered except for now reading the
+updated bucket label ("70-75 kg").
+
+3 new assertions added (missing-77kg guards mirroring the existing missing-78kg ones from the prior
+77kg change), 3 existing assertions updated. 482/482 assertions and the jsdom smoke test pass.
+
 ## 20 Aug 2026 — Real photos added for 9 more activities; crop position made data-driven
 
 Added real photos (Ro-provided, all already reasonably web-sized) for: Insta Ride, Beach

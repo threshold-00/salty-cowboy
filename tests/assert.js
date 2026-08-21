@@ -68,11 +68,14 @@ has('isWhisper blocks Wed + Sat',    'if (isWhisper && (dow === 3 || dow === 6))
 // ─── slotsFor routes correctly ───────────────────────────────────────────
 has('slotsFor paddock/stable/cottages/ricefield routing', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages" || actObj.id === "photo_ricefield") list = SESSION_SLOTS');
 
-// ─── Weight: 77kg universal max, incl. Beach Photoshoot ───────────────────
+// ─── Weight: 75kg universal max, incl. Beach Photoshoot (was 77kg) ────────
 missing('no more 78kg anywhere',   '78 kg');
 missing('no more 78kg (no space)', '78kg');
-has('w3 band is 70-77kg (en + id share Latin unit)', 'w3: "70–77 kg"', 2);
-has('w4 band is over 77kg',        'w4: "Over 77 kg"');
+missing('no more 77kg anywhere (WEIGHT-THRESHOLD commit, 77kg -> 75kg)',   '77 kg');
+missing('no more 77kg (no space)', '77kg');
+missing('no more 77 кг anywhere (ru)', '77 кг');
+has('w3 band is 70-75kg (en + id share Latin unit)', 'w3: "70–75 kg"', 2);
+has('w4 band is over 75kg',        'w4: "Over 75 kg"');
 has('showWeight combines isRiding + needsWeight', 'const showWeight = isRiding || actObj?.needsWeight === true;');
 has('weight render gated on showWeight', 'showWeight && /*#__PURE__*/React.createElement("div", {\n      className: "rider-field"');
 has('WhatsApp weight lines use showWeight', 'showWeight,\n  notes,');
@@ -120,7 +123,7 @@ missing('no lunge prices anywhere',   'lunge:');
 has('3,750,000 = paddock/stable/ricefield 3hr × 3 langs', '3,750,000', 9);
 
 // ─── Group / description copy updated ────────────────────────────────────
-has('en photo_beach per horse + weight cap', 'plus 1 person standing beside a horse. Max 77kg per mounted rider. Price is per horse.');
+has('en photo_beach per horse + weight cap', 'plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.');
 has('en cottages max 6',           'Max 6 people per cottage. Choice of cottage upon availability.');
 has('en joinup per person',        'joinup: "Max 2 people. Price is per person."');
 has('en groupclinic group desc',   'groupclinic: "Up to 6 people. Flat price per session, not per person."');

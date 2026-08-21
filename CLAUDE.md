@@ -64,7 +64,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 **Top-level order:** Rides, Photoshoots, Lessons (in that tab order; Rides is the default-selected category on load).
 
-**Universal weight cap: 77 kg** (blanket max, max 2 riders/mounted people over 70 kg). Applies to every riding activity (Beach & Rice Field Ride, Insta Ride, Dressage Masterclass) and to Beach Photoshoot (the only photoshoot where riders mount a horse). No other photoshoot, and no ground-based lesson, asks for weight.
+**Universal weight cap: 75 kg** (blanket max, max 2 riders/mounted people over 70 kg). Applies to every riding activity (Beach & Rice Field Ride, Insta Ride, Dressage Masterclass) and to Beach Photoshoot (the only photoshoot where riders mount a horse). No other photoshoot, and no ground-based lesson, asks for weight.
 
 **Wording:** "Morning" and "Golden hour" (not Sunrise/Sunset) used everywhere the time-of-day is mentioned, in all three languages.
 
@@ -72,7 +72,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 | Shoot | Duration | Pricing | Time slots | Group cap |
 |---|---|---|---|---|
-| Beach | 1 or 1.5 hr | Per horse per hour (IDR 1,750,000 / 2,250,000) | Any start 08:00 to 16:00 | 3 people (2 mounted, 1 standing). Max 77kg per mounted rider |
+| Beach | 1 or 1.5 hr | Per horse per hour (IDR 1,750,000 / 2,250,000) | Any start 08:00 to 16:00 | 3 people (2 mounted, 1 standing). Max 75kg per mounted rider |
 | Stable | 1, 1.5, 2 or 3 hr | Flat per hour (IDR 1,750,000 / 2,250,000 / 2,750,000 / 3,750,000) | Morning 08:30-11:30 or afternoon 14:30-17:30 | 5 people. No groomed horse included (team assistance only) |
 | Rice Field | Same as Stable (cloned config) | Same as Stable | Same as Stable | 5 people. Same "no groomed horse" copy as Stable |
 | Paddock | 1, 1.5, 2 or 3 hr | Same as Stable | Same as Stable | 5 people. No horse-touching; no rice field view mentioned in copy |
@@ -87,7 +87,7 @@ Every photoshoot card and the step-2 detail screen show: "BYO Photographer or ad
 - **Beach & Rice Field Ride:** 1 or 1.5 hr, per person (IDR 1,600,000 / 2,000,000). Fixed slots: 1hr → 5:00pm, 1.5hr → 4:30pm.
 - **Insta Ride:** 1, 1.5 or 2 hr, per person (IDR 1,600,000 / 2,000,000 / 2,400,000, same as Beach & Rice Field Ride, per Ro). Fixed slots: 1hr → 5:00pm, 1.5hr → 4:30pm, 2hr → 4:00pm. Same route as the 1.5 hr ride with more photo stops.
 - Rides no longer offer a morning start; each duration has exactly one fixed afternoon start time. Since Saturday afternoons are closed, **rides currently show zero available slots on any Saturday** (worth flagging to Simone, see Open items).
-- **Weight rules in the UI:** blanket 77 kg max, max 2 riders over 70 kg. Per-horse allocation (Lundstar walk-only max 1 hr, Othello all gaits at 77, Whiskey max 50 kg, others under 70) is handled by Simone on WhatsApp confirmation and intentionally NOT enforced in code.
+- **Weight rules in the UI:** blanket 75 kg max, max 2 riders over 70 kg. Per-horse allocation (Lundstar walk-only max 1 hr, Othello all gaits at 77, Whiskey max 50 kg, others under 70) is handled by Simone on WhatsApp confirmation and intentionally NOT enforced in code. Othello's own 77kg figure is the horse's actual physical capability, not the site's UI cap, and is unaffected by the UI cap moving to 75kg.
 
 ### Lessons
 
