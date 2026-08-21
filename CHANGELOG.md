@@ -2,6 +2,23 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - Final total price added to the WhatsApp payload
+
+Deliberate exception to "never alter the payload shape" (Ro explicitly asked for it): added
+`totalPriceStr` as a new named param to `buildWhatsAppMessage`, passed straight from the same
+`totalPriceStr` already computed in component state for the on-screen total, no separate
+calculation. New line, `"Total cost: " + totalPriceStr` (reads `T.en.totalCostLabel`, the site's
+own English label text, rather than a new hardcoded string), inserted right after `Group size:` and
+before the blank line into `*Riders:*`. Skipped entirely if `totalPriceStr` is falsy, e.g. mid-flow
+before duration/numPeople/selPrice are all chosen. Every other field in the payload is untouched.
+
+3 assertions updated/added, including the existing payload-integrity guard assertion (rewritten to
+document why this specific field addition is the sanctioned exception, not silently overwritten).
+506/506 assertions and the jsdom smoke test pass. Verified live in Chrome: booked Beach & Rice Field
+Ride for 2 riders (IDR 1,600,000 each), on-screen total read "IDR 3,200,000", and the sent payload's
+new "Total cost: IDR 3,200,000" line matched it exactly, positioned as described, every other field
+unchanged.
+
 ## 21 Aug 2026 - Gallery thumbnails open a fullscreen lightbox (extends PHOTO-GALLERY, commit 8b14a43)
 
 Added `lightboxIndex` state (null when closed, 0-3 for which thumbnail is open), reset to null

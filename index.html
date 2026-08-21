@@ -2415,7 +2415,8 @@ function buildWhatsAppMessage({
   showWeight,
   notes,
   photographerTier,
-  grooming
+  grooming,
+  totalPriceStr
 }) {
   const lines = [];
   lines.push("🐴 *New Salty Cowboys booking request*");
@@ -2435,6 +2436,7 @@ function buildWhatsAppMessage({
     }
   }
   lines.push("Group size: " + numPeople);
+  if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);
   lines.push("");
   lines.push("*Riders:*");
   riders.forEach((r, i) => {
@@ -2780,7 +2782,8 @@ function App() {
       showWeight,
       notes,
       photographerTier: isPhotoshoot ? photographerTier : null,
-      grooming: needsGrooming ? grooming : null
+      grooming: needsGrooming ? grooming : null,
+      totalPriceStr
     });
     setSentMessage(message);
     setCopied(false);
