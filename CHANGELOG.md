@@ -2,6 +2,111 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 20 Aug 2026 — Real photos added for 9 more activities; crop position made data-driven
+
+Added real photos (Ro-provided, all already reasonably web-sized) for: Insta Ride, Beach
+Photoshoot, Stable Photoshoot, Paddock Photoshoot, Cottages Photoshoot, Join Up, Horse Whisperer
+Course, Horse grooming, Group Clinic, and Dressage Masterclass. Copied the 9 `.avif` files
+straight into `images/` (already small, 22-146KB each, no reprocessing needed); the Horse
+Whisperer Course photo was a 708KB PNG, converted to a 99KB JPEG via `sips`. Rice Field Photoshoot
+still has no photo (none provided for it - clones Stable's config, but doesn't clone its image)
+and keeps the plain placeholder, same as before.
+
+Verified every photo against its activity before wiring it in (checked each against the copy /
+what the activity actually is, not just the filename) and checked both the Step 1 card and the
+Step 2 header band for all ten now-photographed activities.
+
+Two needed a crop fix, both on the Step 2 header band specifically (fixed 269px tall, much wider
+on desktop than mobile - explained in an existing code comment from the beach-ride fix): Insta
+Ride's source photo is a wide scenic beach shot with the rider small and low in an otherwise
+empty-sky frame, so a plain centered crop showed nothing but sky at the true 623px desktop width;
+Paddock Photoshoot's rider and horse are also positioned low in its source photo, so centered cut
+both out entirely, showing only trees and a cottage roof. Refactored `backgroundPosition` from the
+hardcoded `"center 28%"` (tuned only for beach-ride) to `actObj.imagePosition || "center"` - an
+optional per-activity field in `ACTIVITIES`, since each photo's own composition dictates whether it
+needs a crop bias at all (most don't). Set `imagePosition: "center 28%"` on beach (carrying forward
+its existing tuned value), `"center 80%"` on insta, `"center 70%"` on photo_paddock. Found the same
+way as the original beach-ride tuning: testing values live in the browser at the true 623px desktop
+width, not by calculation.
+
+12 new assertions added, 1 stale assertion updated. 479/479 assertions and the jsdom smoke test
+pass. Verified live in Chrome: all 10 photographed activities' cards and Step 2 headers, Rice Field
+still shows its placeholder, and both fixed crops (Insta Ride, Paddock Photoshoot) now show their
+full subject instead of empty background.
+
+## 20 Aug 2026 — Beach & Rice Field Ride photo swapped again, crop re-tuned
+
+Swapped the photo once more (Ro provided a different shot of the same session; same 3120x4160
+source dimensions, resized/compressed the same way, saved over `images/beach-ride.jpg`). This
+photo's composition differs from the previous one - the horse's eyes aren't covered by its mane -
+so the crop needed re-tuning rather than reusing the prior value. `backgroundPosition` moved from
+`"center 20%"` to `"center 28%"`, found the same way (testing live at the true 623px desktop
+width): this value gets the rider's full smiling face AND the horse's eyes/forehead both in frame
+together, a clean result this specific photo's composition actually allows.
+
+1 stale assertion updated. 465/465 assertions and the jsdom smoke test pass. Verified live in
+Chrome at the true 623px desktop column width, and in the full Step 2 page context.
+
+## 20 Aug 2026 — Section 3 (booking summary) now waits for all of section 2, not just section 1
+
+Section 3 previously auto-opened as soon as `datesComplete` was true (a date picked, per
+`requiredDates`) - it didn't even wait for a time slot, let alone any of section 2's fields
+(numPeople, rider details, grooming). Flagged as a bug: the summary could appear well before the
+booking was actually ready to review.
+
+Introduced `section3Complete = section1Complete && detailsComplete` (both a full date+time AND
+every section-2 field) and switched every place that previously read `datesComplete` for section
+3's own state to this new flag instead: `section3Collapsed`'s default, its override-reset
+`useEffect`, `toggleSection3`'s open-ahead-of-sequence guard, and the collapsed-hint text that
+decides between the "complete the steps above" placeholder and the price/heading. `section2Blocked`
+was already correctly scoped to `section1Complete`; only section 3's own gate was too loose.
+
+The blocked-note shown when opening section 3 early no longer says "Please pick a date first" (now
+misleading, since dates could be fully picked and it would still block on section 2's own fields)
+- reworded to "Please complete steps 1 and 2 first" in all three languages.
+
+7 stale assertions updated to match. 465/465 assertions and the jsdom smoke test pass. Verified
+live in Chrome: picked a date and time (section 1 complete) with section 2 still empty - section 3
+correctly stayed collapsed showing "Complete the steps above to see your summary", not the price.
+Filled in numPeople and the rider's fields - section 3 auto-opened immediately with the full
+summary and total cost. Confirmed the reworded blocked-note text on a fresh booking too.
+
+## 20 Aug 2026 — Beach & Rice Field Ride photo swapped, desktop crop tuned to keep both faces in frame
+
+Swapped the Beach & Rice Field Ride photo for a different shot Ro provided (both 3120x4160
+originals, resized/compressed to 825x1100 via `sips`, saved over `images/beach-ride.jpg`).
+
+The Step 2 header band is a fixed 269px tall but stretches to the full column width - 623px on
+desktop versus a much narrower mobile width - so covering a portrait photo needs far more vertical
+cropping on desktop, and a plain centered position was cutting the rider's face out of frame
+entirely there. Added `backgroundPosition: "center 20%"` (was plain `"center"`) to bias the crop
+upward. Tuned by testing values directly in the live browser at the true 623px desktop width, since
+the calculated crop window didn't match observed rendering closely enough to trust outright; 20% is
+the best available balance for this specific photo, keeping the rider's full smiling face in frame
+along with the horse's ear/forehead (its eyes are covered by its own mane in this shot, so a
+full view of both faces literally isn't available in any crop of this particular photo). Re-tune
+this value if the source photo is ever swapped again.
+
+1 stale assertion updated. 465/465 assertions and the jsdom smoke test pass. Verified live in
+Chrome at the true 623px desktop column width.
+
+## 20 Aug 2026 — Real photo added for Beach & Rice Field Ride (first activity image)
+
+Replaced the grey placeholder for Beach & Rice Field Ride with a real photo, on both the Step 1
+activity card and the Step 2 header band. Source photo (3120x4160, 701KB) resized and compressed
+to 825x1100 (130KB) via `sips`, saved to a new `images/` directory as `images/beach-ride.jpg`.
+
+Data-only change per the plan already noted in the `.detail-header-image` CSS comment ("ship the
+placeholder path per Ro, swap to real images later as a data-only change"): added an `image` field
+to the `beach` activity's entry in `ACTIVITIES`, and both `.act-image` (Step 1 card) and
+`.detail-header-image` (Step 2 header) now render that as a `background-image` when present,
+falling back to their existing plain grey/`--fog` placeholder otherwise. Every other activity is
+untouched and still shows the placeholder, since none of them have an `image` field yet.
+
+2 stale assertions updated, 1 new assertion added. 464/464 assertions and the jsdom smoke test
+pass. Verified live in Chrome: the photo renders correctly, well-cropped, on both the Step 1 card
+and the Step 2 header, and Insta Ride's card still shows the plain placeholder as before.
+
 ## 20 Aug 2026 — Instagram and Airbnb Listings links added to the dark sidebar
 
 Added "Instagram" (https://www.instagram.com/salty.cowboy/?hl=en) and "Airbnb Listings"

@@ -387,13 +387,17 @@ const ACTIVITIES = [{
     durations: ["1hr", "1.5hr"],
     maxPeople: 5,
     riding: true,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/beach-ride.jpg",
+    imagePosition: "center 28%"
   }, {
     id: "insta",
     durations: ["1hr", "1.5hr", "2hr"],
     maxPeople: 5,
     riding: true,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/insta-ride.avif",
+    imagePosition: "center 80%"
   }]
 }, {
   category: "Photoshoots",
@@ -403,12 +407,14 @@ const ACTIVITIES = [{
     maxPeople: 3,
     perHorse: true,
     photoshoot: true,
-    needsWeight: true
+    needsWeight: true,
+    image: "images/photo-beach.avif"
   }, {
     id: "photo_stable",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
-    photoshoot: true
+    photoshoot: true,
+    image: "images/photo-stable.avif"
   }, {
     id: "photo_ricefield",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
@@ -418,12 +424,15 @@ const ACTIVITIES = [{
     id: "photo_paddock",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
-    photoshoot: true
+    photoshoot: true,
+    image: "images/photo-paddock.avif",
+    imagePosition: "center 70%"
   }, {
     id: "photo_cottages",
     durations: ["3hr"],
     maxPeople: 6,
-    photoshoot: true
+    photoshoot: true,
+    image: "images/photo-cottages.avif"
   }]
 }, {
   category: "Lessons",
@@ -432,7 +441,8 @@ const ACTIVITIES = [{
     durations: ["1hr", "1.5hr"],
     maxPeople: 2,
     perPerson: true,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/join-up.avif"
   }, {
     id: "whisper",
     durations: ["3hr"],
@@ -440,24 +450,28 @@ const ACTIVITIES = [{
     minAge: 8,
     course: true,
     courseDays: 4,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/horse-whisperer.jpg"
   }, {
     id: "masterclass",
     durations: ["1hr", "1.5hr"],
     maxPeople: 2,
     grooming: true,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/grooming.avif"
   }, {
     id: "groupclinic",
     durations: ["1.5hr"],
     maxPeople: 6,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/group-clinic.avif"
   }, {
     id: "dressage",
     durations: ["50min"],
     maxPeople: 1,
     riding: true,
-    experienceNeeded: "Beginner"
+    experienceNeeded: "Beginner",
+    image: "images/dressage.avif"
   }]
 }];
 const ALL_ACTIVITIES = ACTIVITIES.flatMap(c => c.items);
@@ -583,7 +597,7 @@ const T = {
     detailsHint: "Choose your options and tell us who's coming.",
     section2Subtitle: "A few details so we can ensure you have the best experience",
     section2Blocked: "Please pick a date and time first",
-    section3Blocked: "Please pick a date first",
+    section3Blocked: "Please complete steps 1 and 2 first",
     aboutRiders: "About the riders",
     participantDetails: "Participant details",
     matchHint: "We'll match each rider to their ideal horse.",
@@ -760,7 +774,7 @@ const T = {
     detailsHint: "Pilih opsi Anda dan beri tahu kami siapa yang ikut.",
     section2Subtitle: "Beberapa detail agar kami dapat memastikan Anda mendapatkan pengalaman terbaik",
     section2Blocked: "Silakan pilih tanggal dan waktu terlebih dahulu",
-    section3Blocked: "Silakan pilih tanggal terlebih dahulu",
+    section3Blocked: "Silakan selesaikan langkah 1 dan 2 terlebih dahulu",
     aboutRiders: "Tentang penunggang",
     participantDetails: "Detail peserta",
     matchHint: "Kami akan mencocokkan setiap penunggang dengan kuda yang ideal.",
@@ -937,7 +951,7 @@ const T = {
     detailsHint: "Выберите параметры и расскажите, кто участвует.",
     section2Subtitle: "Несколько деталей, чтобы мы могли обеспечить вам лучший опыт",
     section2Blocked: "Пожалуйста, сначала выберите дату и время",
-    section3Blocked: "Пожалуйста, сначала выберите дату",
+    section3Blocked: "Пожалуйста, сначала завершите шаги 1 и 2",
     aboutRiders: "О наездниках",
     participantDetails: "Данные участника",
     matchHint: "Мы подберём каждому наезднику подходящую лошадь.",
@@ -2445,7 +2459,7 @@ function App() {
     }
   }
   function toggleSection3() {
-    if (section3Collapsed && !datesComplete) {
+    if (section3Collapsed && !(section1Complete && detailsComplete)) {
       setBlockedSection(3);
     } else {
       setSection3Override(!section3Collapsed);
@@ -2616,12 +2630,16 @@ function App() {
   }, [detailsComplete]);
   // Section 3 has no fields of its own to complete, so its default trigger
   // is inverted from sections 1/2: it starts collapsed (nothing to review
-  // yet) and auto-opens once datesComplete, same point it used to become
-  // visible at all. Same override/reset pattern as sections 1/2 otherwise.
-  const section3Collapsed = section3Override !== null ? section3Override : !datesComplete;
+  // yet) and auto-opens once BOTH section 1 and section 2 are done -
+  // requiring detailsComplete too (not just section1Complete) means the
+  // summary only appears once every rider/numPeople/grooming field is
+  // actually filled in, not just as soon as a date and time are picked.
+  // Same override/reset pattern as sections 1/2 otherwise.
+  const section3Complete = section1Complete && detailsComplete;
+  const section3Collapsed = section3Override !== null ? section3Override : !section3Complete;
   useEffect(() => {
-    if (!datesComplete) setSection3Override(null);
-  }, [datesComplete]);
+    if (!section3Complete) setSection3Override(null);
+  }, [section3Complete]);
   // Slots depend on activity, duration and the date: Saturday afternoons are
   // closed, so a Saturday booking only ever shows morning times.
   const selPriceIdx = actObj ? actObj.durations.indexOf(duration) : -1;
@@ -2799,7 +2817,12 @@ function App() {
   }, t.byoPhotographer)), /*#__PURE__*/React.createElement("div", {
     className: "act-right"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "act-image"
+    className: "act-image",
+    style: item.image ? {
+      backgroundImage: "url(" + item.image + ")",
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    } : undefined
   }), /*#__PURE__*/React.createElement("button", {
     className: "act-book-btn",
     onClick: e => {
@@ -2826,8 +2849,27 @@ function App() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "back-link",
     onClick: () => setScreen("activity")
-  }, t.back), /*#__PURE__*/React.createElement("div", {
-    className: "detail-header-image"
+  }, t.back), /* This band is a fixed 269px tall but stretches full column
+     width, which is much wider on desktop (623px) than mobile - a portrait
+     source photo needs far more vertical cropping to "cover" the wider
+     desktop box, so a plain centered position cuts off the subject on
+     several of these photos (varies a lot by composition: some need the
+     crop biased up towards a rider's face, at least one needs it biased
+     almost all the way down since its subject sits low in an otherwise
+     empty-sky shot). Per-activity imagePosition is optional in ACTIVITIES,
+     defaulting to plain "center" when a photo's composition already works
+     fine there (most of them do) - only add it for a photo that needs
+     correcting. Values found empirically by testing in the live browser at
+     the true 623px desktop width, since the math (percent vs. resulting
+     crop window) didn't match observed rendering closely enough to trust
+     outright. Re-tune per photo if any of these images are ever swapped. */
+  /*#__PURE__*/React.createElement("div", {
+    className: "detail-header-image",
+    style: actObj?.image ? {
+      backgroundImage: "url(" + actObj.image + ")",
+      backgroundSize: "cover",
+      backgroundPosition: actObj.imagePosition || "center"
+    } : undefined
   }), /*#__PURE__*/React.createElement("div", {
     className: "detail-header-card"
   }, /*#__PURE__*/React.createElement("h2", {
@@ -3158,7 +3200,7 @@ function App() {
       marginBottom: 0
     },
     onClick: toggleSection3
-  }, datesComplete ? (totalPriceStr ? t.totalCostLabel + ": " + totalPriceStr : t.stepHeading3) : t.summaryPendingHint), React.createElement("div", {
+  }, section3Complete ? (totalPriceStr ? t.totalCostLabel + ": " + totalPriceStr : t.stepHeading3) : t.summaryPendingHint), React.createElement("div", {
     className: "confirm-summary",
     style: {
       marginBottom: 22,
