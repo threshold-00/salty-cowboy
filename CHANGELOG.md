@@ -2,6 +2,29 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 21 Aug 2026 - Gallery thumbnails open a fullscreen lightbox (extends PHOTO-GALLERY, commit 8b14a43)
+
+Added `lightboxIndex` state (null when closed, 0-3 for which thumbnail is open), reset to null
+whenever the user switches activity so a stale lightbox can never carry over. Clicking a
+`.gallery-thumb` opens it at that thumbnail's index; prev/next buttons wrap around via modulo
+(`(li + 3) % 4` / `(li + 1) % 4`); the close button and a backdrop click both dismiss it; clicking
+the photo itself does not (stops propagation before it reaches the backdrop's handler). Photos stay
+placeholders, per instruction - no real images added.
+
+Found and fixed a real bug during verification, not just added the feature: the lightbox initially
+rendered nested inside `.body.fu`, and `.fu`'s `fadeUp` animation leaves a persistent (identity, but
+still present) `transform: translateY(0)` on that ancestor via `animation-fill-mode: both`. A
+`transform` on any ancestor creates a new containing block for `position: fixed` descendants, so
+`inset: 0` was resolving against `.body`'s own box instead of the true viewport - confirmed live via
+`getBoundingClientRect`, the "fullscreen" overlay only covered the `.main` column, leaving the dark
+sidebar visibly uncovered. Fixed by portaling the lightbox onto `document.body` via
+`ReactDOM.createPortal`, escaping the `.fu` ancestor's containing block entirely.
+
+10 assertions added/updated. 504/504 assertions and the jsdom smoke test pass. Verified live in
+Chrome: lightbox now measures exactly `window.innerWidth`/`innerHeight` at (0,0), portal target
+confirmed as `document.body`; opened a thumbnail, clicked next (index advances, no crash), closed
+via the X button, reopened, closed via backdrop click.
+
 ## 21 Aug 2026 - PHOTO-GALLERY: 4-thumbnail gallery row replaces the header image on all photoshoot pages
 
 Grepped and listed the 5 photoshoot pages before editing, approved: Beach, Stable, Rice Field,

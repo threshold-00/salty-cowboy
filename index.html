@@ -1781,7 +1781,59 @@ html, body { background: #0a0a0a; }
   aspect-ratio: 1;
   background: var(--fog);
   border-radius: 14px;
+  cursor: pointer;
 }
+/* Fullscreen viewer opened by tapping a gallery-thumb. Reuses var(--earth)
+   as a solid backdrop (same dark tone as the sidebar/hero, not a new
+   color), var(--sand) for icon color and var(--fog) for the placeholder
+   fill, same as everywhere else this session. .cal-nav (calendar's
+   prev/next month buttons) is the closest existing pattern for a small
+   circular icon button on a dark background, so gallery-lightbox-nav
+   mirrors its sizing/border/hover treatment rather than inventing a new
+   button style. */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: var(--earth);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.gallery-lightbox-photo {
+  width: min(80vw, 480px);
+  aspect-ratio: 1;
+  background: var(--fog);
+  border-radius: 14px;
+}
+.gallery-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--sand);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.gallery-lightbox-nav {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--sand);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.gallery-lightbox-nav:hover { background: rgba(255,255,255,0.1); }
 
 /* Light bordered card wrapping Back link, title and description on step 2,
    matching Figma. Replaces an earlier dark image band (see CHANGELOG). */
@@ -2471,6 +2523,14 @@ function App() {
     const timer = setTimeout(() => setBlockedSection(null), 3000);
     return () => clearTimeout(timer);
   }, [blockedSection]);
+  // Fullscreen viewer for the gallery-row thumbnails (photoshoot pages
+  // only). null = closed; 0-3 = which of the 4 placeholder slots is open.
+  // Reset whenever the user switches activity, so a stale lightbox can
+  // never carry over onto a different (or non-photoshoot) activity's page.
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  useEffect(() => {
+    setLightboxIndex(null);
+  }, [activity]);
   // Closing an already-open section always works; opening one ahead of its
   // own precondition shows the blocked-note instead of actually opening.
   // Safe to reference section1Complete/section2Collapsed/etc. here even
@@ -2884,8 +2944,45 @@ function App() {
     className: "gallery-row"
   }, [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement("div", {
     key: i,
-    className: "gallery-thumb"
-  }))), /* This band is a fixed 269px tall but stretches full column
+    className: "gallery-thumb",
+    onClick: () => setLightboxIndex(i)
+  }))), lightboxIndex !== null && ReactDOM.createPortal(/* Portaled straight
+     onto document.body: this component tree sits inside .body.fu, and the
+     .fu class's fadeUp animation leaves a persistent (identity, but still
+     present) transform on that ancestor via animation-fill-mode:both, which
+     creates a new containing block for position:fixed descendants - without
+     the portal, "fixed; inset:0" resolves against that ancestor's box
+     instead of the true viewport, and the lightbox only covers the .main
+     column instead of the full screen. Confirmed live via
+     getBoundingClientRect before adding this fix. */
+  /*#__PURE__*/React.createElement("div", {
+    className: "gallery-lightbox",
+    onClick: () => setLightboxIndex(null)
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "gallery-lightbox-close",
+    type: "button",
+    onClick: e => {
+      e.stopPropagation();
+      setLightboxIndex(null);
+    }
+  }, "✕"), /*#__PURE__*/React.createElement("button", {
+    className: "gallery-lightbox-nav gallery-lightbox-prev",
+    type: "button",
+    onClick: e => {
+      e.stopPropagation();
+      setLightboxIndex(li => (li + 3) % 4);
+    }
+  }, "‹"), /*#__PURE__*/React.createElement("div", {
+    className: "gallery-lightbox-photo",
+    onClick: e => e.stopPropagation()
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "gallery-lightbox-nav gallery-lightbox-next",
+    type: "button",
+    onClick: e => {
+      e.stopPropagation();
+      setLightboxIndex(li => (li + 1) % 4);
+    }
+  }, "›")), document.body), /* This band is a fixed 269px tall but stretches full column
      width, which is much wider on desktop (623px) than mobile - a portrait
      source photo needs far more vertical cropping to "cover" the wider
      desktop box, so a plain centered position cuts off the subject on
