@@ -119,7 +119,6 @@ Step 1 (the activity picker) opens directly on the "Choose an activity" heading,
 
 ## Open items (not yet resolved)
 
-- **Test WhatsApp number** in `index.html` (`WA_NUMBER`) must be swapped for Simone's real number before go-live.
 - **Rides now show zero Saturday availability.** The new fixed ride slots (4:00pm/4:30pm/5:00pm) are all in the afternoon, and Saturday afternoons are closed sanctuary-wide. This is a direct, mechanical consequence of the two rules combined. Confirmed acceptable by Ro (consistent with the Horse Whisperer Course also having no Saturday availability).
 - **Weight selector added to Beach Photoshoot only** (not Stable/Rice Field/Paddock/Cottages), since it's the only photoshoot where riders mount a horse. Confirmed with Ro; flagging for Simone's awareness since it's a new behaviour (photoshoots previously never asked for weight).
 - **Paddock/Stable/Rice Field 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off.

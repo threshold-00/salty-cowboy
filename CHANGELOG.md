@@ -2,6 +2,20 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 22 Aug 2026 - Live WhatsApp number swapped in for Simone's real number
+
+`WA_NUMBER` and `WA_DISPLAY` (`index.html`, top-of-file constants) were still the placeholder test
+number (+61 466 567 953) used throughout development. Swapped to Simone's real WhatsApp number,
++62 812-3731-2248, formatted to match the existing convention: `WA_NUMBER` is digits only with
+country code first and no "+"/spaces/dashes ("6281237312248"), `WA_DISPLAY` is the human-readable
+form shown in the copy/paste fallback ("+62 812-3731-2248"). Both call sites (the `wa.me` deep
+link built in `handleSend`, and the fallback link/display text on the confirmation screen) read
+from these constants, so no other code changed.
+
+This resolves the "Test WhatsApp number must be swapped for Simone's real number before go-live"
+line in `CLAUDE.md`'s Open Items, now removed since it's done. No assertions locked in the old
+number's literal value, so no `assert.js` changes were needed; both test suites still pass.
+
 ## 22 Aug 2026 - Beach & Rice Field Ride 1.5hr price raised to IDR 2,200,000
 
 Grepped the price field before editing: `t.prices.beach`, same `{ l, v }` array format as every
