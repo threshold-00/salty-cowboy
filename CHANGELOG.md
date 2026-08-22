@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 22 Aug 2026 - Beach & Rice Field Ride 1.5hr price raised to IDR 2,200,000
+
+Grepped the price field before editing: `t.prices.beach`, same `{ l, v }` array format as every
+other activity, `v` always the full "IDR X,XXX,XXX" string. Current 1.5hr value was "IDR 2,000,000",
+Ro's requested "2,200,000" matched that format directly with no conversion needed. Updated all
+three languages; 1hr price untouched.
+
+This breaks a documented relationship the same way the earlier PRICE-INSTARIDE commit did: Insta
+Ride's 1hr and 1.5hr prices were originally copied directly from Beach & Rice Field Ride
+(`CLAUDE.md` Open Items). Insta Ride's 1.5hr price was not raised to match, since Ro's request
+named Beach & Rice Field Ride specifically, so now only the 1hr price matches between the two.
+Updated `CLAUDE.md`'s business rules and Open Items sections to say so explicitly.
+
+3 assertion descriptions corrected (they claimed insta ride's 1.5hr "still matches beach ride,"
+no longer true), 3 new assertions added locking in beach ride's actual new price. 513/513
+assertions and the jsdom smoke test pass. Verified live in Chrome: booking a 1.5hr Beach & Rice
+Field Ride shows "IDR 2,200,000" in both the on-screen total and the WhatsApp payload's "Total
+cost" line, everything else in the payload unchanged. Fresh Customer Offerings TSV generated
+reflecting the new price (see chat).
+
 ## 22 Aug 2026 - New card photos for Paddock and Rice Field Photoshoot
 
 Ro picked two specific photos for Step 1 card images: a bridal-style shot (woman feeding a horse
