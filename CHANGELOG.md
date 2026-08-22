@@ -2,6 +2,64 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 22 Aug 2026 - New card photos for Paddock and Rice Field Photoshoot
+
+Ro picked two specific photos for Step 1 card images: a bridal-style shot (woman feeding a horse
+over a fence, in a white dress with a flower basket) for Paddock Photoshoot, and the sunset ricefield
+photo already sitting in the gallery folder for Rice Field Photoshoot.
+
+Rice Field's card `image` reuses `images/gallery-ricefield-1.jpg` directly rather than duplicating
+the file, since it's the exact same photo already processed for that activity's gallery.
+
+Paddock's photo needed real troubleshooting to even reach: the source screenshot's filename uses a
+narrow no-break space (U+202F, not a regular space) between the time and "pm", which macOS's
+screenshot tool inserts automatically and which no amount of retyping the path (by me or Ro,
+including in Ro's own terminal) could match. Found the exact byte sequence via
+`os.listdir()` + `repr()` in Python, then addressed the file through Python's `subprocess` using
+that exact string rather than a shell-quoted path. Resized to 700px-max JPEG at 78% quality via
+`sips`, saved as `images/photo-paddock-card.jpg`.
+
+Also cleaned up `photo_paddock`'s now-dead fields while making this change: `imagePosition`
+("center 70%") and `hideCardImage` both only ever mattered while the Step 2 header band could
+still show a photo for this activity, but the PHOTO-GALLERY commit made that band never render for
+any `isPhotoshoot` activity, so both had been silently inert since that commit landed. Removed
+both rather than leaving stale, misleading fields in the data. The `.act-image` JSX's
+`!item.hideCardImage` check is left in place as a harmless no-op capability, not ripped out, since
+no activity uses it anymore but it costs nothing to keep available.
+
+3 assertions updated (2 rewritten as `missing()` guards for the removed fields), 1 new assertion
+added. 510/510 assertions and the jsdom smoke test pass. Verified live in Chrome: Paddock
+Photoshoot's Step 1 card now shows the bridal photo; all 5 photoshoot activities now have a real
+card image.
+
+## 21 Aug 2026 - Real photos populate all 5 photoshoot galleries
+
+Ro provided 5 folders (Beach, Cottage, Paddock, Ricefields, Stable photoshoot), 4 photos each,
+matching the gallery's 4-slot layout exactly. Previewed all 20 before wiring anything in, checked
+each against its activity's actual copy/purpose, not just the folder name.
+
+Two items flagged and confirmed with Ro before proceeding: one Paddock photo (a bikini-top fashion
+shot) stood out in tone from the other 3 wholesome family/couple shots there - kept as provided,
+per Ro's explicit choice. The 4 Ricefields photos read as candid ride/lesson snapshots rather than
+styled photoshoot marketing images like the other 4 categories - used anyway, per Ro's explicit
+choice, since they're the only Rice Field photos available and still show the real location.
+
+Resized/compressed all 20 (source files 65KB-2.7MB, mixed JPEG exports and PNG screenshots) to
+700px-max-dimension JPEGs at 75% quality via `sips`, saved as `images/gallery-{activity}-{1-4}.jpg`.
+Added a `gallery` array (4 paths) to each of the 5 photoshoot activities in `ACTIVITIES`, including
+`photo_ricefield`, which still has no header/card `image` (none provided for that) but now has a
+full gallery same as the other 4.
+
+`.gallery-thumb` and `.gallery-lightbox-photo` both now read `actObj.gallery[i]` as a
+background-image when present, falling back to the plain `--fog` placeholder otherwise (the
+fallback path is now purely theoretical, since all 5 photoshoot activities have a gallery, but kept
+for any future photoshoot activity added without one yet).
+
+7 assertions updated/added. 510/510 assertions and the jsdom smoke test pass. Verified live in
+Chrome: Beach Photoshoot's gallery row shows all 4 real photos, opening thumbnail 3 in the lightbox
+shows the matching full photo at the correct crop; Rice Field Photoshoot (previously placeholder-only
+everywhere) now has a populated gallery too, header card still correctly header-only underneath it.
+
 ## 21 Aug 2026 - Final total price added to the WhatsApp payload
 
 Deliberate exception to "never alter the payload shape" (Ro explicitly asked for it): added

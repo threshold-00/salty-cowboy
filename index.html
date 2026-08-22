@@ -408,37 +408,45 @@ const ACTIVITIES = [{
     perHorse: true,
     photoshoot: true,
     needsWeight: true,
-    image: "images/photo-beach.avif"
+    image: "images/photo-beach.avif",
+    gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-beach-3.jpg", "images/gallery-beach-4.jpg"]
   }, {
     id: "photo_stable",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
     photoshoot: true,
-    image: "images/photo-stable.avif"
+    image: "images/photo-stable.avif",
+    gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]
   }, {
     id: "photo_ricefield",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
-    photoshoot: true
+    photoshoot: true,
+    // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -
+    // it's the exact same sunset ricefield photo Ro pointed to as the card
+    // image, already processed and sitting in this folder for the gallery.
+    image: "images/gallery-ricefield-1.jpg",
+    gallery: ["images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg", "images/gallery-ricefield-3.jpg", "images/gallery-ricefield-4.jpg"]
   }, {
     id: "photo_paddock",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
     photoshoot: true,
-    image: "images/photo-paddock.avif",
-    imagePosition: "center 70%",
-    // PADDOCK-IMG commit: this photo (a bridal-style shoot) was pulled from
-    // the Step 1 card specifically, at Ro's request, while the Step 2
-    // header band keeps showing it (that band reads actObj.image directly,
-    // untouched by this flag). hideCardImage is the only thing that decouples
-    // the two, since both previously read the exact same `image` field.
-    hideCardImage: true
+    // Card image swapped to a new bridal-style photo (Ro's explicit pick).
+    // imagePosition and hideCardImage from the original PADDOCK-IMG commit
+    // are gone: both only ever mattered while the Step 2 header band could
+    // still show a photo for this activity, but the PHOTO-GALLERY commit
+    // made that band never render for any isPhotoshoot activity, so `image`
+    // is now purely the Step 1 card photo, same as every other photoshoot.
+    image: "images/photo-paddock-card.jpg",
+    gallery: ["images/gallery-paddock-1.jpg", "images/gallery-paddock-2.jpg", "images/gallery-paddock-3.jpg", "images/gallery-paddock-4.jpg"]
   }, {
     id: "photo_cottages",
     durations: ["3hr"],
     maxPeople: 6,
     photoshoot: true,
-    image: "images/photo-cottages.avif"
+    image: "images/photo-cottages.avif",
+    gallery: ["images/gallery-cottages-1.jpg", "images/gallery-cottages-2.jpg", "images/gallery-cottages-3.jpg", "images/gallery-cottages-4.jpg"]
   }]
 }, {
   category: "Lessons",
@@ -2948,6 +2956,11 @@ function App() {
   }, [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement("div", {
     key: i,
     className: "gallery-thumb",
+    style: actObj?.gallery?.[i] ? {
+      backgroundImage: "url(" + actObj.gallery[i] + ")",
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    } : undefined,
     onClick: () => setLightboxIndex(i)
   }))), lightboxIndex !== null && ReactDOM.createPortal(/* Portaled straight
      onto document.body: this component tree sits inside .body.fu, and the
@@ -2977,6 +2990,11 @@ function App() {
     }
   }, "‹"), /*#__PURE__*/React.createElement("div", {
     className: "gallery-lightbox-photo",
+    style: actObj?.gallery?.[lightboxIndex] ? {
+      backgroundImage: "url(" + actObj.gallery[lightboxIndex] + ")",
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    } : undefined,
     onClick: e => e.stopPropagation()
   }), /*#__PURE__*/React.createElement("button", {
     className: "gallery-lightbox-nav gallery-lightbox-next",
