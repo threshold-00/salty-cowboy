@@ -725,6 +725,14 @@ has('section 3\'s blocked-note sits right after the notice, before the funds car
 
 // ─── Duration auto-select (batch 10, re-added after an earlier revert) ────
 has('duration defaults to the first entry in actObj.durations once activity is set and duration is still null; depends on `activity` (primitive id), not `actObj` (re-derived every render via .find, which would refire this every render on reference inequality)', 'useEffect(() => {\n    if (actObj && actObj.durations && actObj.durations.length > 0 && duration === null) {\n      setDuration(actObj.durations[0]);\n    }\n  }, [activity]);');
+has('isPastDate helper compares calendar dates only (time stripped), so bookings can be made for today itself but not any earlier date', 'function isPastDate(year, month, day) {\n  const d = new Date(year, month, day);\n  d.setHours(0, 0, 0, 0);\n  const today = new Date();\n  today.setHours(0, 0, 0, 0);\n  return d < today;\n}');
+has('calMonth/calYear now default to the real current month/year via lazy useState initializers, not a hardcoded May 2026', 'const [calMonth, setCalMonth] = useState(() => new Date().getMonth());\n  const [calYear, setCalYear] = useState(() => new Date().getFullYear());');
+missing('old hardcoded May 2026 calendar default is gone', 'useState(4); // May (0-indexed)');
+has('isAvailableDay rejects any date before today, checked first so a past Monday still reads unavailable even though it would otherwise pass the day-of-week checks', 'function isAvailableDay(day) {\n    if (isPastDate(calYear, calMonth, day)) return false;');
+has('atCurrentMonth flag blocks paging the calendar back past the current month', 'const atCurrentMonth = calYear === nowForCal.getFullYear() && calMonth === nowForCal.getMonth();');
+has('changeMonth bails out on a back-navigation attempt once already at the current month', 'function changeMonth(delta) {\n    if (delta < 0) {\n      if (atCurrentMonth) return;');
+has('prev-month cal-nav button is disabled once atCurrentMonth is true, so it cannot be clicked into a fully-past month', 'onClick: () => changeMonth(-1),\n    disabled: atCurrentMonth');
+has('.cal-nav:disabled styling dims the button and drops the hover background so a disabled prev-month arrow reads as inert', '.cal-nav:disabled { opacity: 0.25; cursor: default; }\n.cal-nav:disabled:hover { background: none; }');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

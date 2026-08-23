@@ -1881,6 +1881,8 @@ html, body { background: #0a0a0a; }
   transition: background 0.15s;
 }
 .cal-nav:hover { background: rgba(255,255,255,0.1); }
+.cal-nav:disabled { opacity: 0.25; cursor: default; }
+.cal-nav:disabled:hover { background: none; }
 
 .cal-grid {
   padding: 16px 24px;
@@ -2377,6 +2379,16 @@ function getDaysInMonth(year, month) {
 function getFirstDay(year, month) {
   return new Date(year, month, 1).getDay();
 }
+// Bookings can only be made from today onwards, never for a date that has
+// already passed. Compares calendar dates only (time-of-day stripped), so
+// today itself still counts as bookable.
+function isPastDate(year, month, day) {
+  const d = new Date(year, month, day);
+  d.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return d < today;
+}
 // Stroke chevron for the Step 2 accordion headings (sections 1/2/3). Points
 // down when the section is closed, up when open; `open` flips a CSS
 // rotation rather than swapping path data.
@@ -2499,8 +2511,10 @@ function App() {
   const [duration, setDuration] = useState(null);
   const [numPeople, setNumPeople] = useState(null);
   const [riders, setRiders] = useState([]);
-  const [calMonth, setCalMonth] = useState(4); // May (0-indexed)
-  const [calYear, setCalYear] = useState(2026);
+  // Calendar opens on the current month/year, not a hardcoded one, so it
+  // always starts on the month the booker is actually in.
+  const [calMonth, setCalMonth] = useState(() => new Date().getMonth());
+  const [calYear, setCalYear] = useState(() => new Date().getFullYear());
   const [selectedDates, setSelectedDates] = useState([]); // array of { y, m, d }
   const [selectedTime, setSelectedTime] = useState(null);
   const [notes, setNotes] = useState("");
@@ -2644,12 +2658,17 @@ function App() {
   const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;
   const daysInMonth = getDaysInMonth(calYear, calMonth);
   const firstDay = getFirstDay(calYear, calMonth);
+  // Can't page back past the current month either, so the "‹" nav can't be
+  // used to reach a month that's entirely in the past.
+  const nowForCal = new Date();
+  const atCurrentMonth = calYear === nowForCal.getFullYear() && calMonth === nowForCal.getMonth();
   // The sanctuary runs Monday to Saturday; Sundays are closed. Saturday
   // afternoons are closed too, which is handled at the time-slot level.
   // The Horse Whisperer Course only runs Monday, Tuesday, Thursday and Friday
   // (no Wednesday or Saturday), and must sit inside one Mon–Sat week, so once
   // the first day is picked every day outside that week is greyed out.
   function isAvailableDay(day) {
+    if (isPastDate(calYear, calMonth, day)) return false;
     const d = new Date(calYear, calMonth, day);
     const dow = d.getDay();
     if (dow === 0) return false;
@@ -2686,6 +2705,7 @@ function App() {
   }
   function changeMonth(delta) {
     if (delta < 0) {
+      if (atCurrentMonth) return;
       if (calMonth === 0) {
         setCalMonth(11);
         setCalYear(y => y - 1);
@@ -3071,7 +3091,8 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("button", {
     className: "cal-nav",
-    onClick: () => changeMonth(-1)
+    onClick: () => changeMonth(-1),
+    disabled: atCurrentMonth
   }, "‹"), /*#__PURE__*/React.createElement("div", {
     className: "cal-month"
   }, MONTHS[calMonth], " ", calYear), /*#__PURE__*/React.createElement("button", {

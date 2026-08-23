@@ -2,6 +2,30 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 23 Aug 2026 - Calendar can no longer book a past date
+
+Two problems, both in the Step 2 date picker. First, `calMonth`/`calYear` were hardcoded to
+`4`/`2026` (May 2026), a leftover from whenever that state was first wired up, so the calendar
+opened on a fixed month regardless of the real date, drifting further out of date every month
+that passes. Second, `isAvailableDay` only ever checked day-of-week (Sunday closed, Wednesday/
+Saturday closed for the Horse Whisperer Course) with no floor at all, so any day of the week in
+any month, past or future, was clickable.
+
+Fixed both. `calMonth`/`calYear` now initialize from `new Date()` via lazy `useState` initializers,
+so the calendar always opens on the real current month. Added an `isPastDate(year, month, day)`
+helper (calendar-date comparison only, time-of-day stripped, so today itself still counts as
+bookable) and wired it into `isAvailableDay` as the first check, so a past date now renders
+greyed-out and unclickable exactly like a closed Sunday. Also added an `atCurrentMonth` flag that
+disables the "‹" prev-month nav button once the calendar is already on the current month, closing
+off the one remaining way to browse into a fully-past month. Applies uniformly to every activity,
+including the Horse Whisperer Course's multi-day week-locked picker, since all of them route
+through the same `isAvailableDay`/`changeMonth` functions.
+
+8 new assertions added covering the helper, the dynamic month/year init, the past-date gate, and
+the disabled prev-month button; one old assertion converted to a `missing()` guard confirming the
+hardcoded May 2026 default is gone. 521/521 assertions and the jsdom smoke test pass. No pricing
+or copy changed, so no TSV update needed.
+
 ## 22 Aug 2026 - Live WhatsApp number swapped in for Simone's real number
 
 `WA_NUMBER` and `WA_DISPLAY` (`index.html`, top-of-file constants) were still the placeholder test

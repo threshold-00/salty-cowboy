@@ -68,6 +68,8 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 **Wording:** "Morning" and "Golden hour" (not Sunrise/Sunset) used everywhere the time-of-day is mentioned, in all three languages.
 
+**Calendar range:** the Step 2 date picker opens on the real current month (derived from `new Date()`, not a hardcoded month), and every date before today is unavailable and unclickable, same greyed-out treatment as a closed Sunday. Today itself is bookable. The "‹" prev-month arrow disables once the calendar is already showing the current month, so there is no way to page back into a fully-past month either. Applies uniformly across every activity, including the Horse Whisperer Course's multi-day picker.
+
 ### Photoshoots
 
 | Shoot | Duration | Pricing | Time slots | Group cap |
