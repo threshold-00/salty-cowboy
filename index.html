@@ -378,7 +378,7 @@ const IMG_LESSONS = "data:image/webp;base64,UklGRvyTAABXRUJQVlA4IPCTAADwzQKdASoQ
 //   riding      — weight rules apply (rides + Dressage Masterclass)
 //   grooming    — offer the wet/dry sub-option (Horse grooming)
 //   course      — multi-day booking, must sit inside one Mon–Sat week (the
-//                 Horse Whisperer Course also restricts to Mon/Tue/Thu/Fri)
+//                 Horse Whisperer Course also restricts to Mon/Tue/Thu)
 const ACTIVITIES = [{
   category: "Rides",
   items: [{
@@ -462,7 +462,7 @@ const ACTIVITIES = [{
     maxPeople: 2,
     minAge: 8,
     course: true,
-    courseDays: 4,
+    courseDays: 3,
     experienceNeeded: "Beginner",
     image: "images/horse-whisperer.jpg"
   }, {
@@ -628,14 +628,14 @@ const T = {
     aboutRiders: "About the riders",
     participantDetails: "Participant details",
     matchHint: "We'll match each rider to their ideal horse.",
-    whisperHintPre: "The horse whisperer course goes over 4 days. ",
+    whisperHintPre: "The horse whisperer course goes over 3 days. ",
     whisperHintLink: "Click here",
     whisperHintPost: " to view more about this program.",
-    pickCourseDays: "Select 4 days for the course",
-    daysSelected: "of 4 days selected",
+    pickCourseDays: "Select 3 days for the course",
+    daysSelected: "of 3 days selected",
     courseDaysTitle: "Your course days",
-    courseWeekNote: "The course runs Monday, Tuesday, Thursday and Friday, all within a single week.",
-    sessionNote: "This course is a total of 10 hrs across 4 days: three 3 hr sessions plus a closing 1 hr session. Only one course booking is accepted per week.",
+    courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week.",
+    sessionNote: "The course runs a total of 10 hours across 3 days: two 3.5-hour sessions and one closing 3-hour session, including 2 hours choice of grooming or another related activity. Only one course booking is taken per week.",
     friendFree: "Bring a friend for free",
     rider: "Rider",
     personLabel: "Person",
@@ -765,7 +765,7 @@ const T = {
       photo_ricefield: "A private session with your horse framed by Bali's open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light.",
       photo_paddock: "Open paddock backdrop with grazing horses. Location only, photographer not included. Entering the paddocks and touching the horses is not permitted.",
       photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by session (linked to Airbnb blocking). Location only, no horses included. Photos are taken inside the cottage. Entering the paddocks and touching the horses is not permitted.",
-      whisper: "Four days, ten hours, one deep education in how horses think. Run across Monday, Tuesday, Thursday and Friday: three 3-hour sessions to build the foundation, then a closing 1-hour session to bring it all together. Each day you choose an 8:30 or 9:30am start. You will learn to read the horse, earn its trust and pick up the quiet cues that build a real partnership. Open to all rider levels, no experience required. Bring a friend for free.",
+      whisper: "Three days, ten hours, one deep education in how horses think. Run across Monday, Tuesday and Thursday: two 3.5-hour sessions to build the foundation, then a closing 3-hour session to bring it all together. Includes 2 hours choice of grooming or another related activity. Each day you choose an 8:30 or 9:30am start. You will learn to read the horse, earn its trust and pick up the quiet cues that build a real partnership. Open to all rider levels, no experience required. Bring a friend for free.",
       joinup: "An introduction to natural horsemanship. Learn to 'join up' a horse so it chooses to stay with you. Hands-on, no riding.",
       masterclass: "Learn the finer art of grooming, with tips for Bali's damp, hot climate, from the stable manager, plus Q&A.",
       groupclinic: "A hands-on session in leadership, communication and trust, taught through the horse. Working at liberty in the round pen, your group learns to read body language, hold presence and earn cooperation without force, the same skills that carry into any team or boardroom. Popular with women's groups, business teams and horse people alike. No riding experience needed. Up to 6 people, 1.5 hours, IDR 6,000,000 per session as a flat group rate.",
@@ -800,14 +800,14 @@ const T = {
     aboutRiders: "Tentang penunggang",
     participantDetails: "Detail peserta",
     matchHint: "Kami akan mencocokkan setiap penunggang dengan kuda yang ideal.",
-    whisperHintPre: "Kursus horse whisperer berlangsung selama 4 hari. ",
+    whisperHintPre: "Kursus horse whisperer berlangsung selama 3 hari. ",
     whisperHintLink: "Klik di sini",
     whisperHintPost: " untuk melihat lebih lanjut tentang program ini.",
-    pickCourseDays: "Pilih 4 hari untuk kursus",
-    daysSelected: "dari 4 hari dipilih",
+    pickCourseDays: "Pilih 3 hari untuk kursus",
+    daysSelected: "dari 3 hari dipilih",
     courseDaysTitle: "Hari kursus Anda",
-    courseWeekNote: "Kursus berlangsung Senin, Selasa, Kamis, dan Jumat, semuanya dalam satu minggu yang sama.",
-    sessionNote: "Kursus ini berdurasi total 10 jam selama 4 hari: tiga sesi 3 jam ditambah satu sesi penutup 1 jam. Hanya satu pemesanan kursus yang diterima per minggu.",
+    courseWeekNote: "Kursus berlangsung Senin, Selasa, dan Kamis, semuanya dalam satu minggu yang sama.",
+    sessionNote: "Kursus ini berdurasi total 10 jam selama 3 hari: dua sesi 3,5 jam dan satu sesi penutup 3 jam, termasuk 2 jam pilihan grooming atau kegiatan terkait lainnya. Hanya satu pemesanan kursus yang diterima per minggu.",
     friendFree: "Ajak teman gratis",
     rider: "Penunggang",
     personLabel: "Orang",
@@ -937,7 +937,7 @@ const T = {
       photo_ricefield: "Sesi privat bersama kuda Anda dengan latar terasering sawah Bali yang terbuka. Format sama seperti sesi foto Kandang kami, hanya berlokasi di area hijau, bukan di pekarangan kandang. Golden hour direkomendasikan untuk pencahayaan terbaik.",
       photo_paddock: "Latar padang terbuka dengan kuda yang merumput. Hanya lokasi, fotografer tidak termasuk. Dilarang memasuki padang dan menyentuh kuda.",
       photo_cottages: "Interior cottage kayu rustic untuk pemotretan fashion, prewedding, atau pribadi. Harga per sesi (terkait blocking Airbnb). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage. Dilarang memasuki padang dan menyentuh kuda.",
-      whisper: "Empat hari, sepuluh jam, satu pembelajaran mendalam tentang cara berpikir kuda. Berlangsung Senin, Selasa, Kamis, dan Jumat: tiga sesi 3 jam untuk membangun dasar, lalu satu sesi penutup 1 jam untuk merangkumnya. Setiap hari Anda memilih waktu mulai 8:30 atau 9:30 pagi. Anda akan belajar membaca kuda, mendapatkan kepercayaannya, dan menangkap isyarat halus yang membangun kemitraan sejati. Terbuka untuk semua tingkat penunggang, tanpa pengalaman yang diperlukan. Ajak teman gratis.",
+      whisper: "Tiga hari, sepuluh jam, satu pembelajaran mendalam tentang cara berpikir kuda. Berlangsung Senin, Selasa, dan Kamis: dua sesi 3,5 jam untuk membangun dasar, lalu satu sesi penutup 3 jam untuk merangkumnya. Termasuk 2 jam pilihan grooming atau kegiatan terkait lainnya. Setiap hari Anda memilih waktu mulai 8:30 atau 9:30 pagi. Anda akan belajar membaca kuda, mendapatkan kepercayaannya, dan menangkap isyarat halus yang membangun kemitraan sejati. Terbuka untuk semua tingkat penunggang, tanpa pengalaman yang diperlukan. Ajak teman gratis.",
       joinup: "Pengantar natural horsemanship. Belajar 'join up' agar kuda memilih untuk tetap bersama Anda. Praktik langsung, tanpa berkuda.",
       masterclass: "Pelajari seni grooming yang lebih halus, dengan tips untuk iklim Bali yang lembap dan panas, dari manajer kandang, plus tanya jawab.",
       groupclinic: "Sesi praktik tentang kepemimpinan, komunikasi, dan kepercayaan, diajarkan melalui kuda. Bekerja secara liberty di round pen, kelompok Anda belajar membaca bahasa tubuh, menjaga kehadiran diri, dan mendapatkan kerja sama tanpa paksaan, keterampilan yang sama yang berguna dalam tim atau ruang rapat mana pun. Populer di kalangan kelompok wanita, tim bisnis, maupun pecinta kuda. Tidak perlu pengalaman berkuda. Hingga 6 orang, 1,5 jam, IDR 6.000.000 per sesi sebagai tarif kelompok tetap.",
@@ -972,14 +972,14 @@ const T = {
     aboutRiders: "О наездниках",
     participantDetails: "Данные участника",
     matchHint: "Мы подберём каждому наезднику подходящую лошадь.",
-    whisperHintPre: "Курс «шепчущего с лошадьми» длится 4 дня. ",
+    whisperHintPre: "Курс «шепчущего с лошадьми» длится 3 дня. ",
     whisperHintLink: "Нажмите здесь",
     whisperHintPost: ", чтобы узнать больше об этой программе.",
-    pickCourseDays: "Выберите 4 дня для курса",
-    daysSelected: "из 4 дней выбрано",
+    pickCourseDays: "Выберите 3 дня для курса",
+    daysSelected: "из 3 дней выбрано",
     courseDaysTitle: "Дни вашего курса",
-    courseWeekNote: "Курс проходит по понедельникам, вторникам, четвергам и пятницам, всё в течение одной недели.",
-    sessionNote: "Курс длится в общей сложности 10 часов за 4 дня: три занятия по 3 часа и одно заключительное занятие на 1 час. В неделю принимается только одна бронь на курс.",
+    courseWeekNote: "Курс проходит по понедельникам, вторникам и четвергам, всё в течение одной недели.",
+    sessionNote: "Курс длится в общей сложности 10 часов за 3 дня: два занятия по 3,5 часа и одно заключительное занятие на 3 часа, включая 2 часа на выбор груминга или другой связанной активности. В неделю принимается только одна бронь на курс.",
     friendFree: "Приведите друга бесплатно",
     rider: "Наездник",
     personLabel: "Человек",
@@ -1109,7 +1109,7 @@ const T = {
       photo_ricefield: "Приватная съёмка с лошадью на фоне открытых рисовых террас Бали. Тот же формат, что и наша съёмка в конюшне, только на фоне зелени вместо двора конюшни. Для лучшего света рекомендуем золотой час.",
       photo_paddock: "Открытый загон с пасущимися лошадьми. Только локация, фотограф не входит. Заходить в загоны и трогать лошадей нельзя.",
       photo_cottages: "Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена за сессию (связано с блокировкой Airbnb). Только локация, без лошадей. Съёмка проходит внутри коттеджа. Заходить в загоны и трогать лошадей нельзя.",
-      whisper: "Четыре дня, десять часов, одно глубокое погружение в то, как мыслят лошади. Курс проходит по понедельникам, вторникам, четвергам и пятницам: три трёхчасовых занятия закладывают основу, а завершающее часовое занятие сводит всё воедино. Каждый день вы выбираете начало в 8:30 или 9:30 утра. Вы научитесь читать лошадь, заслуживать её доверие и улавливать тонкие сигналы, которые создают настоящее партнёрство. Открыт для наездников любого уровня, опыт не требуется. Приведите друга бесплатно.",
+      whisper: "Три дня, десять часов, одно глубокое погружение в то, как мыслят лошади. Курс проходит по понедельникам, вторникам и четвергам: два занятия по 3,5 часа закладывают основу, а завершающее занятие на 3 часа сводит всё воедино. Включает 2 часа на выбор груминга или другой связанной активности. Каждый день вы выбираете начало в 8:30 или 9:30 утра. Вы научитесь читать лошадь, заслуживать её доверие и улавливать тонкие сигналы, которые создают настоящее партнёрство. Открыт для наездников любого уровня, опыт не требуется. Приведите друга бесплатно.",
       joinup: "Введение в natural horsemanship. Научитесь делать join up, чтобы лошадь сама выбирала оставаться с вами. Практика, без верховой езды.",
       masterclass: "Освойте тонкое искусство груминга с советами для влажного и жаркого климата Бали, от менеджера конюшни, плюс вопросы и ответы.",
       groupclinic: "Практическое занятие по лидерству, коммуникации и доверию через работу с лошадью. Работая на свободе в круглом манеже, ваша группа учится читать язык тела, удерживать присутствие и добиваться сотрудничества без принуждения, те же навыки, что пригодятся в любой команде или на переговорах. Популярно среди женских групп, бизнес-команд и любителей лошадей. Опыт верховой езды не требуется. До 6 человек, 1,5 часа, IDR 6 000 000 за сессию как фиксированная групповая цена.",
@@ -2447,7 +2447,10 @@ function buildWhatsAppMessage({
   const lines = [];
   lines.push("🐴 *New Salty Cowboys booking request*");
   lines.push("");
-  if (actObj) lines.push("Activity: " + T.en.activities[actObj.id] + (durationLabel ? " (" + durationLabel + ")" : ""));
+  // The Horse Whisperer Course's three days aren't a flat "3hr" like the
+  // durationLabel says, so override just this line's suffix for it.
+  const activityDurationSuffix = actObj && actObj.id === "whisper" ? "3 to 3.5 hr/day" : durationLabel;
+  if (actObj) lines.push("Activity: " + T.en.activities[actObj.id] + (activityDurationSuffix ? " (" + activityDurationSuffix + ")" : ""));
   if (grooming) lines.push("Grooming: " + (grooming === "wet" ? "Wet" : "Dry"));
   if (photographerAddon) {
     const addon = photographerAddonPrice(durationLabel);
@@ -2482,7 +2485,7 @@ function buildWhatsAppMessage({
     const heavy = riders.filter(r => r.weight === "w3").length;
     if (heavy > 0) lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");
   }
-  if (isCourse) lines.push("Course runs Mon, Tue, Thu & Fri within one week");
+  if (isCourse) lines.push("Course runs Mon, Tue & Thu within one week");
   lines.push("");
   lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "None"));
   lines.push("");
@@ -2602,7 +2605,7 @@ function App() {
   const personNoun = actCategory === "Rides" ? t.rider : t.personLabel;
   const isCourse = actObj?.course === true;
   const needsGrooming = actObj?.grooming === true;
-  const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 4 days
+  const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 3 days
 
   function initRiders(n) {
     // Clamp up to the activity's minPeople (Group Clinic: 3), so a booking
@@ -2675,15 +2678,15 @@ function App() {
   const atCurrentMonth = calYear === nowForCal.getFullYear() && calMonth === nowForCal.getMonth();
   // The sanctuary runs Monday to Saturday; Sundays are closed. Saturday
   // afternoons are closed too, which is handled at the time-slot level.
-  // The Horse Whisperer Course only runs Monday, Tuesday, Thursday and Friday
-  // (no Wednesday or Saturday), and must sit inside one Mon–Sat week, so once
-  // the first day is picked every day outside that week is greyed out.
+  // The Horse Whisperer Course only runs Monday, Tuesday and Thursday
+  // (no Wednesday, Friday or Saturday), and must sit inside one Mon–Sat week,
+  // so once the first day is picked every day outside that week is greyed out.
   function isAvailableDay(day) {
     if (isPastDate(calYear, calMonth, day)) return false;
     const d = new Date(calYear, calMonth, day);
     const dow = d.getDay();
     if (dow === 0) return false;
-    if (isWhisper && (dow === 3 || dow === 6)) return false;
+    if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;
     if (isCourse && selectedDates.length > 0) {
       if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;
     }

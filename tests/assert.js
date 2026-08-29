@@ -50,7 +50,7 @@ has('groupclinic gains minPeople: 3 (29 Aug 2026 GROUPCLINIC)', 'maxPeople: 6,\n
 // entries starting at 3, so "1" and "2" are never offered as pills.
 has('peopleOptions reads both maxPeople and minPeople', 'function peopleOptions(actObj) {\n  const max = actObj && actObj.maxPeople ? actObj.maxPeople : 5;\n  const min = actObj && actObj.minPeople ? actObj.minPeople : 1;\n  return Array.from({ length: max - min + 1 }, (_, i) => String(i + min));\n}');
 has('initRiders clamps the starting count up to the activity\'s minPeople, defensively', 'const min = actObj && actObj.minPeople ? actObj.minPeople : 1;\n    const count = Math.max(parseInt(n, 10), min);');
-has('whisper courseDays now 4',    'id: "whisper",\n    durations: ["3hr"],\n    maxPeople: 2,\n    minAge: 8,\n    course: true,\n    courseDays: 4');
+has('whisper courseDays now 3 (29 Aug 2026 WHISPER-3DAY, down from 4)', 'id: "whisper",\n    durations: ["3hr"],\n    maxPeople: 2,\n    minAge: 8,\n    course: true,\n    courseDays: 3');
 missing('icon field removed from ACTIVITIES data as dead code (never rendered anywhere, Commit D emoji cleanup)', '    icon: "');
 missing('lunge activity removed',  'id: "lunge"');
 
@@ -92,7 +92,7 @@ has('Saturday filter still present (now a no-op for the new morning-only lesson 
 
 // ─── Horse Whisperer: 4-day Mon/Tue/Thu/Fri ────────────────────────────────
 has('WHISPER_SLOTS has 8:30 and 9:30am', 'const WHISPER_SLOTS = ["8:30am", "9:30am"];');
-has('isWhisper blocks Wed + Sat',    'if (isWhisper && (dow === 3 || dow === 6)) return false;');
+has('isWhisper blocks Wed + Fri + Sat (Friday added 29 Aug 2026 WHISPER-3DAY, runs Mon/Tue/Thu only)', 'if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;');
 
 // ─── slotsFor routes correctly ───────────────────────────────────────────
 has('slotsFor paddock/stable/cottages routing (ricefield split out 29 Aug 2026 RICEFIELD-8AM)', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS');
@@ -216,15 +216,23 @@ has('en ricefield label',          'photo_ricefield: "Rice Field Photoshoot"');
 has('id ricefield label',          'photo_ricefield: "Sesi Foto di Sawah"');
 has('ru ricefield label',          'photo_ricefield: "Фотосессия в рисовых полях"');
 
-// ─── Horse Whisperer Course: 4 days, given copy, all rider levels ─────────
-has('en whisper uses given copy',  'Four days, ten hours, one deep education in how horses think.');
+// ─── Horse Whisperer Course: 3 days (29 Aug 2026 WHISPER-3DAY, down from 4,
+// Friday dropped), given copy, all rider levels ────────────────────────────
+has('en whisper uses given copy',  'Three days, ten hours, one deep education in how horses think.');
 has('en whisper open to all levels', 'Open to all rider levels, no experience required.');
 missing('old "2 x 3hr and 1 x 3.5hr" line removed', '2 x 3 hr sessions and 1 x 3.5hr sessions');
-has('en sessionNote reflects new structure', 'three 3 hr sessions plus a closing 1 hr session');
-has('en pickCourseDays says 4',    'pickCourseDays: "Select 4 days for the course"');
-has('en daysSelected says 4',      'daysSelected: "of 4 days selected"');
-has('en courseWeekNote Mon/Tue/Thu/Fri', 'courseWeekNote: "The course runs Monday, Tuesday, Thursday and Friday, all within a single week."');
-has('WhatsApp course schedule line updated', 'lines.push("Course runs Mon, Tue, Thu & Fri within one week");');
+missing('old 4-day "three 3 hr + closing 1 hr" session structure is gone', 'three 3 hr sessions plus a closing 1 hr session');
+has('en whisper description includes the grooming-or-related-activity clause', 'Includes 2 hours choice of grooming or another related activity.');
+has('en sessionNote reflects new 2x3.5hr + 1x3hr structure', 'two 3.5-hour sessions and one closing 3-hour session, including 2 hours choice of grooming or another related activity');
+has('en pickCourseDays says 3',    'pickCourseDays: "Select 3 days for the course"');
+has('en daysSelected says 3',      'daysSelected: "of 3 days selected"');
+has('en courseWeekNote Mon/Tue/Thu (Friday dropped)', 'courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week."');
+has('en whisperHintPre says 3 days', 'whisperHintPre: "The horse whisperer course goes over 3 days. "');
+has('WhatsApp course schedule line updated to Mon/Tue/Thu', 'lines.push("Course runs Mon, Tue & Thu within one week");');
+has('WhatsApp activity line overrides whisper\'s duration suffix to "3 to 3.5 hr/day"', 'const activityDurationSuffix = actObj && actObj.id === "whisper" ? "3 to 3.5 hr/day" : durationLabel;');
+missing('no lang copy mentions Friday for whisper (en)', 'Monday, Tuesday, Thursday and Friday');
+missing('no lang copy mentions Friday for whisper (id)', 'Senin, Selasa, Kamis, dan Jumat');
+missing('no lang copy mentions Friday for whisper (ru)', 'понедельникам, вторникам, четвергам и пятницам');
 
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
 has('en byoPhotographer key (BYO-COPY commit: "BYO" spelled out to "Bring your own", key name itself untouched since renaming an identifier is not a copy change)',      'byoPhotographer: "Bring your own Photographer or add a Salty Cowboys photographer"');
@@ -255,7 +263,7 @@ has('en addon title',              'addonTitle: "Add a Salty Cowboy photographer
 has('id addon title',              'addonTitle: "Tambahkan fotografer Salty Cowboy:"');
 has('ru addon title',              'addonTitle: "Добавить фотографа Salty Cowboy:"');
 missing('old addonTiers translation arrays are gone (3 langs, no independent tier list anymore)', 'addonTiers: [');
-has('en sessionNote one per week', 'Only one course booking is accepted per week.');
+has('en sessionNote one per week ("accepted" -> "taken", 29 Aug 2026 WHISPER-3DAY wording)', 'Only one course booking is taken per week.');
 has('id sessionNote one per week', 'Hanya satu pemesanan kursus yang diterima per minggu.');
 has('ru sessionNote one per week', 'В неделю принимается только одна бронь на курс.');
 

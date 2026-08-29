@@ -2,6 +2,33 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - WHISPER-3DAY: Horse Whisperer Course shrinks from 4 days to 3, drops Friday
+
+The course now runs 10 hours across 3 days instead of 4: two 3.5-hour sessions to build the
+foundation, then a closing 3-hour session, including 2 hours choice of grooming or another
+related activity. The old shape was three 3-hour sessions plus a closing 1-hour session across
+4 days. Bookable days are now Monday, Tuesday and Thursday only, Friday moved from allowed to
+blocked (alongside the already-blocked Wednesday and Saturday).
+
+Copy updated in all three languages: the course description, `sessionNote`, `courseWeekNote`,
+`whisperHintPre`, `pickCourseDays` and `daysSelected` all drop Friday and change 4/four/empat/
+четыре to 3/three/tiga/три, and the description and `sessionNote` now mention the 2-hour
+grooming-or-related-activity inclusion. English `sessionNote`'s closing line also changed
+wording from "is accepted per week" to "is taken per week".
+
+WhatsApp payload changes (the only two intended deltas across this whole six-commit batch besides
+COMMIT 6's photographer line): the course-schedule line now reads "Course runs Mon, Tue & Thu
+within one week" (was "...Thu & Fri..."), and the Activity line's duration suffix is overridden
+to "3 to 3.5 hr/day" specifically when `actObj.id === "whisper"`, since `durations: ["3hr"]`
+doesn't reflect the actual per-day session lengths. Every other activity's payload line is
+untouched, since the override is gated on that exact id check.
+
+Code: `whisper.courseDays` 4 -> 3. `isAvailableDay` now blocks `dow === 3 || dow === 5 || dow ===
+6` (was `3 || 6`), so Friday (`5`) is blocked alongside Wednesday and Saturday. Updated the two
+comments describing the bookable-day pattern and the `requiredDates` comment.
+
+Isolated to its own branch (`whisper-3day`) for independent reversion; not yet merged to `main`.
+
 ## 29 Aug 2026 - GROUPCLINIC: minimum group size of 3, title gains a descriptor
 
 Group Clinic previously allowed group sizes from 1 to 6, even though it is designed as a group
