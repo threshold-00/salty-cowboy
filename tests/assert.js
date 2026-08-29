@@ -22,7 +22,7 @@ has('photo_stable 1-3hr',          'id: "photo_stable",\n    durations: ["1hr", 
 has('photo_ricefield clones stable config', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
 has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
 has('photo_cottages session, 6',   'id: "photo_cottages",\n    durations: ["3hr"],\n    maxPeople: 6');
-has('beach ride 1/1.5hr',          'id: "beach",\n    durations: ["1hr", "1.5hr"]');
+has('beach ride 1/1.5/2hr (2hr added 29 Aug 2026 BEACH-8AM)', 'id: "beach",\n    durations: ["1hr", "1.5hr", "2hr"]');
 has('beach ride carries a real image path (first activity to get one, per Ro), other activities still have no image field and fall back to the placeholder', 'experienceNeeded: "Beginner",\n    image: "images/beach-ride.jpg"');
 has('insta ride carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/insta-ride.avif"');
 has('photo_beach carries a real image path', 'needsWeight: true,\n    image: "images/photo-beach.avif"');
@@ -54,11 +54,16 @@ has('SESSION_SLOTS 1.5hr',         '"1.5hr": ["8:30am", "10:00am", "2:30pm", "4:
 has('SESSION_SLOTS 2hr',           '"2hr":   ["8:30am", "9:30am",  "2:30pm", "3:30pm"]');
 has('SESSION_SLOTS 3hr',           '"3hr":   ["8:30am", "2:30pm"]');
 
-// ─── Rides: fixed start-time + duration slots ─────────────────────────────
-has('RIDE_SLOTS 1hr fixed to 5pm',   '"1hr": ["5:00pm"]');
-has('RIDE_SLOTS 1.5hr fixed to 4:30pm', '"1.5hr": ["4:30pm"]');
-has('RIDE_SLOTS 2hr fixed to 4pm',   '"2hr": ["4:00pm"]');
-missing('RIDE_SLOTS no longer offers a morning option', 'const RIDE_SLOTS = {\n  "1hr": ["8:00am"');
+// ─── Rides: fixed 8am + one afternoon start per duration (29 Aug 2026 ─────
+// BEACH-8AM, corrected same day to give Insta Ride identical availability
+// to Beach & Rice Field Ride rather than a separate BEACH_SLOTS table).
+has('RIDE_SLOTS 1hr = 8am + 5pm',   '"1hr":   ["8:00am", "5:00pm"]');
+has('RIDE_SLOTS 1.5hr = 8am + 4:30pm', '"1.5hr": ["8:00am", "4:30pm"]');
+has('RIDE_SLOTS 2hr = 8am + 4pm',   '"2hr":   ["8:00am", "4:00pm"]');
+missing('old RIDE_SLOTS afternoon-only pattern is gone', 'const RIDE_SLOTS = {\n  "1hr": ["5:00pm"]');
+missing('separate BEACH_SLOTS table is gone (merged into RIDE_SLOTS so beach and insta share identical availability)', 'const BEACH_SLOTS = {');
+missing('no beach-specific slotsFor branch (beach now falls through the generic riding branch, same as insta)', 'actObj.id === "beach") list = BEACH_SLOTS');
+has('beach and insta both resolve through the single generic riding branch', 'else if (actObj.riding) list = RIDE_SLOTS[duration] || [];');
 
 // ─── Lessons: Join Up, Horse grooming, Group Clinic each get their own flat
 // slot table (29 Aug 2026 LESSON-SLOTS-SPLIT), replacing the shared
@@ -142,9 +147,12 @@ has('cottages 4.5M in ru',         'photo_cottages: [{ l: "сессия", v: "ID
 has('insta 1hr price still matches beach ride; 1.5hr and 2hr no longer do (beach ride\'s 1.5hr was later raised to 2,200,000, insta ride\'s stayed at 2,000,000; 2hr was repriced separately, PRICE-INSTARIDE commit)', 'insta: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,000,000" }, { l: "2 hr", v: "IDR 2,700,000" }]');
 has('insta 1hr price still matches beach ride; 1.5hr/2hr no longer do (id)', 'insta: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,000,000" }, { l: "2 jam", v: "IDR 2,700,000" }]');
 has('insta 1hr price still matches beach ride; 1.5hr/2hr no longer do (ru)', 'insta: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,000,000" }, { l: "2 ч", v: "IDR 2,700,000" }]');
-has('beach ride 1.5hr price raised to IDR 2,200,000 (en), no longer matches insta ride\'s 1.5hr', 'beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,200,000" }]');
-has('beach ride 1.5hr price raised to IDR 2,200,000 (id)', 'beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,200,000" }]');
-has('beach ride 1.5hr price raised to IDR 2,200,000 (ru)', 'beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,200,000" }]');
+// Beach ride's 1.5hr (2,200,000) still doesn't match insta's 1.5hr
+// (2,000,000), but the new 2hr price (2,700,000, added 29 Aug 2026
+// BEACH-8AM) was set equal to insta's 2hr price by spec.
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (en)', 'beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,200,000" }, { l: "2 hr", v: "IDR 2,700,000" }]');
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (id)', 'beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,200,000" }, { l: "2 jam", v: "IDR 2,700,000" }]');
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (ru)', 'beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,200,000" }, { l: "2 ч", v: "IDR 2,700,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr en', 'masterclass: [{ l: "1 hr", v: "IDR 1,250,000" }, { l: "1.5 hr", v: "IDR 1,875,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr id', 'masterclass: [{ l: "1 jam", v: "IDR 1,250,000" }, { l: "1,5 jam", v: "IDR 1,875,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr ru', 'masterclass: [{ l: "1 ч", v: "IDR 1,250,000" }, { l: "1,5 ч", v: "IDR 1,875,000" }]');

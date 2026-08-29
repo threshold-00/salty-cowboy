@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - BEACH-8AM: both rides gain an 8am start, Beach & Rice Field Ride gains a 2hr option
+
+Added a new 2hr duration to Beach & Rice Field Ride (previously 1hr/1.5hr only) at IDR 2,700,000,
+matching Insta Ride's own 2hr price exactly. Added an 8:00am morning start alongside the existing
+fixed afternoon slot for every duration: 1hr -> 8:00am/5:00pm, 1.5hr -> 8:00am/4:30pm, 2hr ->
+8:00am/4:00pm.
+
+First pass gave Beach & Rice Field Ride its own separate slot table with the new 8am start,
+leaving Insta Ride untouched. Ro corrected this same day: the two rides should keep identical
+availability, so Insta Ride gets the 8am start too. Both rides are now bookable on Saturdays
+again, at 8:00am only (Saturday afternoons are still closed sanctuary-wide, so each ride's
+afternoon slot still drops on a Saturday date).
+
+Code: `RIDE_SLOTS` itself now includes 8:00am for every duration (shared by both rides via the
+generic `actObj.riding` branch in `slotsFor`); the separate `BEACH_SLOTS` table and its dedicated
+`beach`-only branch from the first pass were removed as redundant. `beach.durations` gained
+`"2hr"`. Added the 2hr price entry to the `beach` price array in all three languages.
+
+Isolated to its own branch (`beach-8am`) for independent reversion; not yet merged to `main`.
+
 ## 29 Aug 2026 - LESSON-SLOTS-SPLIT: Join Up, Horse grooming, Group Clinic and Dressage each get their own start times
 
 Replaced the shared `LESSON_SLOTS[duration]` table (used identically by Join Up, Horse grooming
