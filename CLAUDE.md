@@ -76,9 +76,11 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 |---|---|---|---|---|
 | Beach | 1 or 1.5 hr | Per horse per hour (IDR 1,750,000 / 2,250,000) | Any start 08:00 to 16:00 | 3 people (2 mounted, 1 standing). Max 75kg per mounted rider |
 | Stable | 1, 1.5, 2 or 3 hr | Flat per hour (IDR 1,750,000 / 2,250,000 / 2,750,000 / 3,750,000) | Morning 08:30-11:30 or afternoon 14:30-17:30 | 5 people. No groomed horse included (team assistance only) |
-| Rice Field | Same as Stable (cloned config) | Same as Stable | Same as Stable | 5 people. Same "no groomed horse" copy as Stable |
+| Rice Field | 1, 1.5 or 2 hr | Flat per hour (IDR 1,750,000 / 2,250,000 / 2,750,000) | 8:00am, plus one fixed afternoon start per duration (1hr → 5:00pm, 1.5hr → 4:30pm, 2hr → 4:00pm) | 5 people. Same "no groomed horse" copy as Stable |
 | Paddock | 1, 1.5, 2 or 3 hr | Same as Stable | Same as Stable | 5 people. No horse-touching; no rice field view mentioned in copy |
 | Cottages | 1 session (3 hr) | IDR 4,500,000 per session | Morning 08:30-11:30 or afternoon 14:30-17:30 | 6 people per cottage |
+
+**Rice Field no longer clones Stable's config** (29 Aug 2026 RICEFIELD-8AM): it lost its 3hr duration (and the IDR 3,750,000 price that went with it, Stable and Paddock keep theirs unchanged) and moved off the shared morning-or-afternoon-window `SESSION_SLOTS` pattern onto its own `RICEFIELD_SLOTS` table, the same 8am-plus-one-fixed-afternoon-slot pattern used by the rides. Stable and Paddock are unaffected.
 
 Every photoshoot card and the step-2 detail screen show: "BYO Photographer or add a Salty Cowboys photographer" (descriptive text only, not a selectable). Riding-experience selector is never shown for photoshoots (unchanged).
 
@@ -130,7 +132,7 @@ Step 1 (the activity picker) opens directly on the "Choose an activity" heading,
 
 - **Both rides regained Saturday availability on 29 Aug 2026** (BEACH-8AM commit, corrected same day to cover Insta Ride too): the new shared 8:00am slot is bookable on Saturdays; each ride's afternoon slot still drops on a Saturday date, same as before. Previously both rides showed zero Saturday availability at all, confirmed acceptable by Ro at the time (consistent with the Horse Whisperer Course also having no Saturday availability); that constraint no longer applies now that both rides have a morning option.
 - **Weight selector added to Beach Photoshoot only** (not Stable/Rice Field/Paddock/Cottages), since it's the only photoshoot where riders mount a horse. Confirmed with Ro; flagging for Simone's awareness since it's a new behaviour (photoshoots previously never asked for weight).
-- **Paddock/Stable/Rice Field 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off.
+- **Paddock/Stable 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off. Rice Field no longer offers a 3hr option (removed 29 Aug 2026 RICEFIELD-8AM), so this no longer applies to it.
 - **Insta Ride 1hr/1.5hr prices** (IDR 1,600,000 / 2,000,000) were originally copied directly from Beach & Rice Field Ride, per Ro's explicit instruction. Beach & Rice Field Ride's own 1.5hr price has since been raised to IDR 2,200,000, so only the 1hr figure still matches; Insta Ride's 1.5hr price was not changed to follow it, since Ro's later price update named Beach & Rice Field Ride specifically, not Insta Ride. Awaiting Simone's sign-off, same as the other derived prices on this list.
 - **Horse grooming 1.5hr price** (IDR 1,875,000) was calculated as 1.5× the 1hr price, per Ro's explicit instruction. Awaiting Simone's sign-off.
 - **Photographer add-on now auto-matches the shoot's own duration** (29 Aug 2026 redesign, per Ro's explicit correction), replacing the old independent 4-tier picker. Awaiting Simone's sign-off on the new IDR 2,500,000-base formula, same as the other derived prices on this list.

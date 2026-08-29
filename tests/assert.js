@@ -19,7 +19,7 @@ has('Lessons is last category',       'category: "Lessons",\n  items: [{\n    id
 // ─── ACTIVITIES data structure ───────────────────────────────────────────
 has('photo_beach durations + needsWeight', 'id: "photo_beach",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 3,\n    perHorse: true,\n    photoshoot: true,\n    needsWeight: true');
 has('photo_stable 1-3hr',          'id: "photo_stable",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
-has('photo_ricefield clones stable config', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
+has('photo_ricefield 1-2hr (3hr removed 29 Aug 2026 RICEFIELD-8AM, no longer clones stable\'s duration set)', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5');
 has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
 has('photo_cottages session, 6',   'id: "photo_cottages",\n    durations: ["3hr"],\n    maxPeople: 6');
 has('beach ride 1/1.5/2hr (2hr added 29 Aug 2026 BEACH-8AM)', 'id: "beach",\n    durations: ["1hr", "1.5hr", "2hr"]');
@@ -27,7 +27,7 @@ has('beach ride carries a real image path (first activity to get one, per Ro), o
 has('insta ride carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/insta-ride.avif"');
 has('photo_beach carries a real image path', 'needsWeight: true,\n    image: "images/photo-beach.avif"');
 has('photo_stable carries a real image path', 'photoshoot: true,\n    image: "images/photo-stable.avif"');
-has('photo_ricefield now has a real card image (reuses gallery-ricefield-1.jpg, the same sunset photo Ro picked, not a duplicate copy) plus its gallery array of 4 real photos', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5,\n    photoshoot: true,\n    // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -\n    // it\'s the exact same sunset ricefield photo Ro pointed to as the card\n    // image, already processed and sitting in this folder for the gallery.\n    image: "images/gallery-ricefield-1.jpg",\n    gallery: ["images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg", "images/gallery-ricefield-3.jpg", "images/gallery-ricefield-4.jpg"]\n  }');
+has('photo_ricefield now has a real card image (reuses gallery-ricefield-1.jpg, the same sunset photo Ro picked, not a duplicate copy) plus its gallery array of 4 real photos', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5,\n    photoshoot: true,\n    // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -\n    // it\'s the exact same sunset ricefield photo Ro pointed to as the card\n    // image, already processed and sitting in this folder for the gallery.\n    image: "images/gallery-ricefield-1.jpg",\n    gallery: ["images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg", "images/gallery-ricefield-3.jpg", "images/gallery-ricefield-4.jpg"]\n  }');
 has('all 5 photoshoot activities carry a 4-item gallery array of real photos, all provided by Ro (real-photo-gallery commit)', 'gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-beach-3.jpg", "images/gallery-beach-4.jpg"]');
 has('gallery: ["images/gallery-stable', 'gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]');
 has('gallery: ["images/gallery-paddock', 'gallery: ["images/gallery-paddock-1.jpg", "images/gallery-paddock-2.jpg", "images/gallery-paddock-3.jpg", "images/gallery-paddock-4.jpg"]');
@@ -57,9 +57,9 @@ has('SESSION_SLOTS 3hr',           '"3hr":   ["8:30am", "2:30pm"]');
 // ─── Rides: fixed 8am + one afternoon start per duration (29 Aug 2026 ─────
 // BEACH-8AM, corrected same day to give Insta Ride identical availability
 // to Beach & Rice Field Ride rather than a separate BEACH_SLOTS table).
-has('RIDE_SLOTS 1hr = 8am + 5pm',   '"1hr":   ["8:00am", "5:00pm"]');
-has('RIDE_SLOTS 1.5hr = 8am + 4:30pm', '"1.5hr": ["8:00am", "4:30pm"]');
-has('RIDE_SLOTS 2hr = 8am + 4pm',   '"2hr":   ["8:00am", "4:00pm"]');
+// Needles include the const declaration since RICEFIELD_SLOTS (added 29 Aug
+// 2026 RICEFIELD-8AM) uses the identical 8am/afternoon values textually.
+has('RIDE_SLOTS declared with 8am + one afternoon slot per duration', 'const RIDE_SLOTS = {\n  "1hr":   ["8:00am", "5:00pm"],\n  "1.5hr": ["8:00am", "4:30pm"],\n  "2hr":   ["8:00am", "4:00pm"]\n};');
 missing('old RIDE_SLOTS afternoon-only pattern is gone', 'const RIDE_SLOTS = {\n  "1hr": ["5:00pm"]');
 missing('separate BEACH_SLOTS table is gone (merged into RIDE_SLOTS so beach and insta share identical availability)', 'const BEACH_SLOTS = {');
 missing('no beach-specific slotsFor branch (beach now falls through the generic riding branch, same as insta)', 'actObj.id === "beach") list = BEACH_SLOTS');
@@ -88,7 +88,17 @@ has('WHISPER_SLOTS has 8:30 and 9:30am', 'const WHISPER_SLOTS = ["8:30am", "9:30
 has('isWhisper blocks Wed + Sat',    'if (isWhisper && (dow === 3 || dow === 6)) return false;');
 
 // ─── slotsFor routes correctly ───────────────────────────────────────────
-has('slotsFor paddock/stable/cottages/ricefield routing', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages" || actObj.id === "photo_ricefield") list = SESSION_SLOTS');
+has('slotsFor paddock/stable/cottages routing (ricefield split out 29 Aug 2026 RICEFIELD-8AM)', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS');
+missing('ricefield no longer routes through SESSION_SLOTS', 'actObj.id === "photo_ricefield") list = SESSION_SLOTS');
+
+// ─── Rice Field Photoshoot gets its own 8am start (29 Aug 2026 RICEFIELD-8AM),
+// same pattern as the rides, and loses its 3hr option ──────────────────────
+has('RICEFIELD_SLOTS declared, same 8am + one-afternoon-slot pattern as RIDE_SLOTS', 'const RICEFIELD_SLOTS = {\n  "1hr":   ["8:00am", "5:00pm"],\n  "1.5hr": ["8:00am", "4:30pm"],\n  "2hr":   ["8:00am", "4:00pm"]\n};');
+has('slotsFor routes photo_ricefield to RICEFIELD_SLOTS before the SESSION_SLOTS branch', 'else if (actObj.id === "photo_ricefield") list = RICEFIELD_SLOTS[duration] || [];\n  else if (actObj.id === "photo_paddock"');
+missing('ricefield price array no longer has a 3hr entry (en); Stable/Paddock keep their own 3,750,000 3hr price untouched', 'photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr"');
+has('photo_ricefield price array capped at 2hr, no 3hr entry (en)', 'photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],');
+has('photo_ricefield price array capped at 2hr, no 3hr entry (id)', 'photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],');
+has('photo_ricefield price array capped at 2hr, no 3hr entry (ru)', 'photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],');
 
 // ─── Weight: 75kg universal max, incl. Beach Photoshoot (was 77kg) ────────
 missing('no more 78kg anywhere',   '78 kg');
@@ -161,7 +171,9 @@ has('groupclinic 6M flat id',      'groupclinic: [{ l: "1,5 jam", v: "IDR 6,000,
 has('groupclinic 6M flat ru',      'groupclinic: [{ l: "1,5 ч", v: "IDR 6,000,000" }]');
 missing('no lunge prices anywhere',   'lunge:');
 // paddock + stable + ricefield 3hr, × 3 langs = 9 hits
-has('3,750,000 = paddock/stable/ricefield 3hr × 3 langs', '3,750,000', 9);
+// paddock + stable 3hr × 3 langs = 6 hits (ricefield's own 3hr/3,750,000 was
+// removed 29 Aug 2026 RICEFIELD-8AM, so this count dropped from 9 to 6)
+has('3,750,000 = paddock/stable 3hr × 3 langs (ricefield no longer contributes)', '3,750,000', 6);
 
 // ─── Group / description copy updated ────────────────────────────────────
 has('en photo_beach per horse + weight cap', 'plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.');

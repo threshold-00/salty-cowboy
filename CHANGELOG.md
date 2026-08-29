@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - RICEFIELD-8AM: Rice Field Photoshoot gets its own 8am slot pattern, loses its 3hr option
+
+Rice Field previously cloned Stable's config exactly: same four durations (1/1.5/2/3hr), same
+prices, same `SESSION_SLOTS` morning-window-or-afternoon-window time pattern. It now diverges:
+
+- Removed the 3hr duration and its IDR 3,750,000 price (Stable and Paddock are unaffected, they
+  keep their own 3hr option and price unchanged).
+- Moved off `SESSION_SLOTS` onto a new `RICEFIELD_SLOTS` table using the same 8am-plus-one-fixed-
+  afternoon-slot pattern the rides use: 1hr -> 8:00am/5:00pm, 1.5hr -> 8:00am/4:30pm, 2hr ->
+  8:00am/4:00pm.
+
+Code: new `RICEFIELD_SLOTS` table. `slotsFor` gained a dedicated `photo_ricefield` branch, placed
+before the `SESSION_SLOTS` branch and removed from that branch's own condition (which now only
+covers `photo_paddock`/`photo_stable`/`photo_cottages`). `photo_ricefield.durations` dropped
+`"3hr"`; its 3hr price entry (IDR 3,750,000) removed from the price array in all three languages.
+
+Isolated to its own branch (`ricefield-8am`) for independent reversion; not yet merged to `main`.
+
 ## 29 Aug 2026 - BEACH-8AM: both rides gain an 8am start, Beach & Rice Field Ride gains a 2hr option
 
 Added a new 2hr duration to Beach & Rice Field Ride (previously 1hr/1.5hr only) at IDR 2,700,000,

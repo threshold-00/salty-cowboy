@@ -418,7 +418,7 @@ const ACTIVITIES = [{
     gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]
   }, {
     id: "photo_ricefield",
-    durations: ["1hr", "1.5hr", "2hr", "3hr"],
+    durations: ["1hr", "1.5hr", "2hr"],
     maxPeople: 5,
     photoshoot: true,
     // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -
@@ -523,6 +523,13 @@ const SESSION_SLOTS = {
   "2hr":   ["8:30am", "9:30am",  "2:30pm", "3:30pm"],
   "3hr":   ["8:30am", "2:30pm"]
 };
+// Rice Field Photoshoot gets its own 8am start alongside one fixed
+// afternoon start per duration, same pattern as the rides.
+const RICEFIELD_SLOTS = {
+  "1hr":   ["8:00am", "5:00pm"],
+  "1.5hr": ["8:00am", "4:30pm"],
+  "2hr":   ["8:00am", "4:00pm"]
+};
 
 // "4:30pm" -> 16.5, used to tell morning from afternoon.
 function slotHour(slot) {
@@ -543,7 +550,8 @@ function slotsFor(actObj, duration, dates) {
   let list;
   if (actObj.id === "dressage") list = DRESSAGE_SLOTS;
   else if (actObj.id === "whisper") list = WHISPER_SLOTS;
-  else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages" || actObj.id === "photo_ricefield") list = SESSION_SLOTS[duration] || [];
+  else if (actObj.id === "photo_ricefield") list = RICEFIELD_SLOTS[duration] || [];
+  else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS[duration] || [];
   else if (actObj.photoshoot) list = PHOTO_SLOTS;
   else if (actObj.riding) list = RIDE_SLOTS[duration] || [];
   else if (actObj.id === "joinup") list = JOINUP_SLOTS;
@@ -737,7 +745,7 @@ const T = {
       dressage: [{ l: "50 min", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "session", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
@@ -909,7 +917,7 @@ const T = {
       dressage: [{ l: "50 mnt", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "sesi", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
@@ -1081,7 +1089,7 @@ const T = {
       dressage: [{ l: "50 мин", v: "IDR 2,900,000" }],
       photo_beach: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }],
       photo_stable: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
+      photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "сессия", v: "IDR 4,500,000" }],
       whisper: [{ l: "всего", v: "IDR 22,500,000" }],
