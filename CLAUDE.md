@@ -82,7 +82,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 Every photoshoot card and the step-2 detail screen show: "BYO Photographer or add a Salty Cowboys photographer" (descriptive text only, not a selectable). Riding-experience selector is never shown for photoshoots (unchanged).
 
-**Photographer add-on** (all photoshoots): three tick boxes, one per tier, mutually exclusive (only one selectable at a time), independent of the shoot's own duration. Tick box labels show price and photo count only, no duration (e.g. "IDR 2,000,000 (20 photos)"); duration still appears in the price breakdown, confirm summary, and WhatsApp message. Tiers: 1hr = IDR 2,000,000 (20 photos), 1.5hr = IDR 3,000,000 (30 photos), 2hr = IDR 4,000,000 (40 photos). No tier above 2hr is offered, even for 3hr shoots. Selected tier's price is added to the displayed total and included in the WhatsApp message and booking summary.
+**Photographer add-on** (all photoshoots): a single checkbox, "Add a Salty Cowboy photographer:", not a tier picker. Price and photo count auto-match whichever duration the customer already picked for their own shoot, IDR 2,500,000 for the first hour, plus IDR 500,000 per additional 30 minutes (10 photos per IDR 1,000,000, same rate as before): 1hr = IDR 2,500,000 (25 photos), 1.5hr = IDR 3,000,000 (30 photos), 2hr = IDR 3,500,000 (35 photos), 3hr = IDR 4,500,000 (45 photos). There is no way to add a photographer package for a duration longer or shorter than the shoot itself. Checkbox label shows price and photo count only, no duration; duration still appears in the confirm summary and WhatsApp message. When checked, the computed price is added to the displayed total and included in the WhatsApp message and booking summary.
 
 ### Rides
 
@@ -126,7 +126,7 @@ Step 1 (the activity picker) opens directly on the "Choose an activity" heading,
 - **Paddock/Stable/Rice Field 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off.
 - **Insta Ride 1hr/1.5hr prices** (IDR 1,600,000 / 2,000,000) were originally copied directly from Beach & Rice Field Ride, per Ro's explicit instruction. Beach & Rice Field Ride's own 1.5hr price has since been raised to IDR 2,200,000, so only the 1hr figure still matches; Insta Ride's 1.5hr price was not changed to follow it, since Ro's later price update named Beach & Rice Field Ride specifically, not Insta Ride. Awaiting Simone's sign-off, same as the other derived prices on this list.
 - **Horse grooming 1.5hr price** (IDR 1,875,000) was calculated as 1.5× the 1hr price, per Ro's explicit instruction. Awaiting Simone's sign-off.
-- **Photographer add-on sold independent of shoot duration** (any tier up to 2 hr, regardless of how long the shoot itself is). Confirm with Simone that this matches her intent.
+- **Photographer add-on now auto-matches the shoot's own duration** (29 Aug 2026 redesign, per Ro's explicit correction), replacing the old independent 4-tier picker. Awaiting Simone's sign-off on the new IDR 2,500,000-base formula, same as the other derived prices on this list.
 - **Dressage Masterclass position:** the new Lessons order only specified 4 items; Dressage was appended at the end (5th position) per Ro's confirmation. No change to its pricing, copy, or slots.
 
 ## Working with Simone

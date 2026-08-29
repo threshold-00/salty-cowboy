@@ -2,6 +2,30 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - Photographer add-on now auto-matches the shoot's own duration
+
+Replaced the independent 4-tier photographer picker (pick any of 1hr/1.5hr/2hr/3hr regardless
+of how long the shoot itself was) with a single checkbox. Price and photo count now auto-match
+whichever duration the customer already selected for their photoshoot: IDR 2,500,000 for the
+first hour, plus IDR 500,000 per additional 30 minutes, at the same underlying rate as before
+(10 photos per IDR 1,000,000). New values: 1hr 2,500,000 (25 photos), 1.5hr 3,000,000
+(30 photos), 2hr 3,500,000 (35 photos), 3hr 4,500,000 (45 photos).
+
+This replaces the earlier "make these numbers make sense" tier repricing (28 Aug) and the
+"IDR 2,500,000 (1hr) + 500,000/30min across all photoshoots" change from earlier today, which
+had been applied to the shoots' own base prices. That base-price change is reverted in full
+(Beach/Stable/Rice Field/Paddock are back to their pre-28-Aug prices); Ro clarified the formula
+was always meant for the photographer add-on, tied to the shoot's own duration, not the shoot's
+base price.
+
+Code: removed `PHOTOGRAPHER_TIERS` and the `addonTiers` translation arrays (all three languages).
+Added `photographerAddonPrice(duration)` (the formula) and `durationHrLabel(duration)` (display
+formatting). Renamed state `photographerTier` (string tier key) to `photographerAddon` (boolean).
+WhatsApp payload field renamed `photographerTier` -> `photographerAddon`; when checked, the
+payload line now reads "Add-on: Salty Cowboy photographer (X hr · IDR ... · N edited images)"
+using the shoot's own duration instead of an independently chosen tier. Intro copy (all three
+languages) updated to describe the new duration-matched pricing.
+
 ## 23 Aug 2026 - Calendar can no longer book a past date
 
 Two problems, both in the Step 2 date picker. First, `calMonth`/`calYear` were hardcoded to
