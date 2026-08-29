@@ -103,7 +103,7 @@ Order: Join Up, Horse Whisperer Course, Horse grooming, Group Clinic, Dressage M
 | Join Up | 1.5 hr | Per person | IDR 2,500,000 (1hr) / IDR 3,150,000 (1.5hr) |
 | Horse Whisperer Course | 4 days | Flat, 1 or 2 people same price | IDR 22,500,000 total |
 | Horse grooming (wet or dry) | 1.5 hr | Per booking (flat) | IDR 1,250,000 (1hr) / IDR 1,875,000 (1.5hr) |
-| Group Clinic | 1.5 hr (fixed) | Flat per session, up to 6 people | IDR 6,000,000 |
+| Group Clinic (Leadership/horsemanship class) | 1.5 hr (fixed) | Flat per session, 3 to 6 people | IDR 6,000,000 |
 | Dressage Masterclass | 50 min | Per rider (private) | IDR 2,900,000 |
 
 Lunge Lesson has been removed entirely (activity, pricing, copy, all three languages).
@@ -116,7 +116,7 @@ Lunge Lesson has been removed entirely (activity, pricing, copy, all three langu
 
 These replace the old shared three-times table (9:30am/10:30am/3:00pm) that Join Up, Horse grooming and Group Clinic all used to draw from, and Dressage's old four-slot table (9:00am/10:00am/4:00pm/5:00pm). All the new slots sit before noon, so the existing Saturday-afternoon closure filter no longer removes anything from any of these four activities, Saturday availability now equals weekday availability for them. Horse grooming's 1.5hr price (IDR 1,875,000) is calculated as 1.5× the 1hr price, per Ro; awaiting Simone's sign-off like the other derived prices below.
 
-**Group Clinic** (new): the C31 leadership-through-horses copy. Up to 6 people, 1.5 hr fixed, IDR 6,000,000 flat per session, single 8:30am start time. No riding experience required (ground-based, no weight selector).
+**Group Clinic:** the C31 leadership-through-horses copy. 3 to 6 people, 1.5 hr fixed, IDR 6,000,000 flat per session, single 8:30am start time. No riding experience required (ground-based, no weight selector). Title is "Group Clinic (Leadership/horsemanship class)" in all three languages (29 Aug 2026 GROUPCLINIC commit; the parenthetical stays in English in every language). Minimum group size of 3 is enforced by `peopleOptions()`, which now reads a `minPeople` field alongside `maxPeople`, so "1" and "2" are never offered as selectable group-size pills for this activity; `initRiders()` also clamps defensively to the activity's `minPeople` when set.
 
 **Horse Whisperer Course:** 10 hrs total across 4 days (three 3 hr sessions + a closing 1 hr session). Bookable days restricted to Monday, Tuesday, Thursday, Friday only (no Wednesday, no Saturday), all inside a single week. Each day uses the same shared start-time choice (8:30am or 9:30am) applied across all four days. Open to all rider levels, explicitly stated in the copy. Only one course booking accepted per week. Minimum age 8. Mucking out is no longer listed as an inclusion. Simone rejects duplicate bookings on WhatsApp.
 

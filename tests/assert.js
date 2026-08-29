@@ -43,6 +43,13 @@ has('insta now offers 1hr/1.5hr/2hr (priced same as beach ride)', 'id: "insta",\
 has('joinup perPerson',            'id: "joinup",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2,\n    perPerson: true');
 has('masterclass now offers 1hr/1.5hr (1.5hr calculated as 1.5x 1hr)', 'id: "masterclass",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2');
 has('groupclinic 1.5hr, 6 people', 'id: "groupclinic",\n    durations: ["1.5hr"],\n    maxPeople: 6');
+has('groupclinic gains minPeople: 3 (29 Aug 2026 GROUPCLINIC)', 'maxPeople: 6,\n    minPeople: 3,\n    experienceNeeded: "Beginner",\n    image: "images/group-clinic.avif"');
+
+// ─── peopleOptions gains a minPeople floor (29 Aug 2026 GROUPCLINIC) ──────
+// peopleOptions(groupclinic) === ["3","4","5","6"]: max 6 - min 3 + 1 = 4
+// entries starting at 3, so "1" and "2" are never offered as pills.
+has('peopleOptions reads both maxPeople and minPeople', 'function peopleOptions(actObj) {\n  const max = actObj && actObj.maxPeople ? actObj.maxPeople : 5;\n  const min = actObj && actObj.minPeople ? actObj.minPeople : 1;\n  return Array.from({ length: max - min + 1 }, (_, i) => String(i + min));\n}');
+has('initRiders clamps the starting count up to the activity\'s minPeople, defensively', 'const min = actObj && actObj.minPeople ? actObj.minPeople : 1;\n    const count = Math.max(parseInt(n, 10), min);');
 has('whisper courseDays now 4',    'id: "whisper",\n    durations: ["3hr"],\n    maxPeople: 2,\n    minAge: 8,\n    course: true,\n    courseDays: 4');
 missing('icon field removed from ACTIVITIES data as dead code (never rendered anywhere, Commit D emoji cleanup)', '    icon: "');
 missing('lunge activity removed',  'id: "lunge"');
@@ -197,9 +204,11 @@ has('ru masterclass renamed',      'masterclass: "Груминг лошади (�
 missing('no "Masterclass Horse Care" label left', 'Masterclass Horse Care');
 
 // ─── Group Clinic activity present in all 3 languages ─────────────────────
-has('en groupclinic label',        'groupclinic: "Group Clinic"');
-has('id groupclinic label',        'groupclinic: "Klinik Kelompok"');
-has('ru groupclinic label',        'groupclinic: "Групповая клиника"');
+// Titles gained a "(Leadership/horsemanship class)" parenthetical, kept
+// verbatim in English across all three languages, 29 Aug 2026 GROUPCLINIC.
+has('en groupclinic label + parenthetical', 'groupclinic: "Group Clinic (Leadership/horsemanship class)"');
+has('id groupclinic label + parenthetical', 'groupclinic: "Klinik Kelompok (Leadership/horsemanship class)"');
+has('ru groupclinic label + parenthetical', 'groupclinic: "Групповая клиника (Leadership/horsemanship class)"');
 has('en groupclinic copy (C31)',   'A hands-on session in leadership, communication and trust, taught through the horse.');
 
 // ─── Rice Field Photoshoot activity present in all 3 languages ────────────

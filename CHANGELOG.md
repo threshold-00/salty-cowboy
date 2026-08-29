@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - GROUPCLINIC: minimum group size of 3, title gains a descriptor
+
+Group Clinic previously allowed group sizes from 1 to 6, even though it is designed as a group
+session. `peopleOptions()` now reads a `minPeople` field alongside the existing `maxPeople`, and
+Group Clinic sets `minPeople: 3`, so the group-size picker only offers 3, 4, 5 or 6, "1" and "2"
+are no longer selectable pills. `initRiders()` also clamps its starting count up to the activity's
+`minPeople` when set, defensively, on top of the picker already excluding those values.
+
+Title changed to "Group Clinic (Leadership/horsemanship class)" in all three languages, the
+parenthetical stays in English in every language, per Ro's instruction to keep the English
+descriptor verbatim.
+
+Code: `peopleOptions(actObj)` now computes `Array.from({ length: max - min + 1 }, ...)` starting
+at `min` instead of always starting at 1. `groupclinic` activity gained `minPeople: 3`. Title
+strings updated in `activities.groupclinic` for `en`/`id`/`ru`.
+
+Isolated to its own branch (`groupclinic`) for independent reversion; not yet merged to `main`.
+
 ## 29 Aug 2026 - RICEFIELD-8AM: Rice Field Photoshoot gets its own 8am slot pattern, loses its 3hr option
 
 Rice Field previously cloned Stable's config exactly: same four durations (1/1.5/2/3hr), same

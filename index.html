@@ -476,6 +476,7 @@ const ACTIVITIES = [{
     id: "groupclinic",
     durations: ["1.5hr"],
     maxPeople: 6,
+    minPeople: 3,
     experienceNeeded: "Beginner",
     image: "images/group-clinic.avif"
   }, {
@@ -575,9 +576,11 @@ function weekKey(s) {
 }
 
 // Group size caps are per activity now, so this is built from maxPeople.
+// minPeople sets a floor (Group Clinic: 3), defaulting to 1 for everything else.
 function peopleOptions(actObj) {
   const max = actObj && actObj.maxPeople ? actObj.maxPeople : 5;
-  return Array.from({ length: max }, (_, i) => String(i + 1));
+  const min = actObj && actObj.minPeople ? actObj.minPeople : 1;
+  return Array.from({ length: max - min + 1 }, (_, i) => String(i + min));
 }
 
 // ─── TRANSLATIONS ─────────────────────────────────────────────────────────────
@@ -710,7 +713,7 @@ const T = {
       whisper: "Horse Whisperer Intensive Course",
       joinup: "Join Up Lesson",
       masterclass: "Horse grooming (wet or dry)",
-      groupclinic: "Group Clinic",
+      groupclinic: "Group Clinic (Leadership/horsemanship class)",
     },
     categories: {
       "Photoshoots": "Photoshoots",
@@ -882,7 +885,7 @@ const T = {
       whisper: "Kursus Intensif Horse Whisperer",
       joinup: "Pelajaran Join Up",
       masterclass: "Grooming kuda (basah atau kering)",
-      groupclinic: "Klinik Kelompok",
+      groupclinic: "Klinik Kelompok (Leadership/horsemanship class)",
     },
     categories: {
       "Photoshoots": "Sesi foto",
@@ -1054,7 +1057,7 @@ const T = {
       whisper: "Интенсивный курс «шепчущего с лошадьми»",
       joinup: "Урок Join Up",
       masterclass: "Груминг лошади (влажный или сухой)",
-      groupclinic: "Групповая клиника",
+      groupclinic: "Групповая клиника (Leadership/horsemanship class)",
     },
     categories: {
       "Photoshoots": "Фотосессии",
@@ -2602,7 +2605,11 @@ function App() {
   const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 4 days
 
   function initRiders(n) {
-    const count = parseInt(n, 10);
+    // Clamp up to the activity's minPeople (Group Clinic: 3), so a booking
+    // can never start below the activity's own minimum, defensively, even
+    // though peopleOptions() already excludes anything under that floor.
+    const min = actObj && actObj.minPeople ? actObj.minPeople : 1;
+    const count = Math.max(parseInt(n, 10), min);
     setRiders(Array.from({
       length: count
     }, (_, i) => ({
@@ -2614,7 +2621,7 @@ function App() {
       weight: "",
       experience: ""
     })));
-    setNumPeople(n);
+    setNumPeople(String(count));
   }
   function updateRider(idx, field, val) {
     setRiders(prev => prev.map((r, i) => i === idx ? {
