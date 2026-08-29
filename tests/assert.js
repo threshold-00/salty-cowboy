@@ -60,10 +60,23 @@ has('RIDE_SLOTS 1.5hr fixed to 4:30pm', '"1.5hr": ["4:30pm"]');
 has('RIDE_SLOTS 2hr fixed to 4pm',   '"2hr": ["4:00pm"]');
 missing('RIDE_SLOTS no longer offers a morning option', 'const RIDE_SLOTS = {\n  "1hr": ["8:00am"');
 
-// ─── Lessons: Join Up + Horse grooming + Group Clinic share 3 fixed slots ──
-has('LESSON_SLOTS 1hr = 9:30/10:30/3pm', '"1hr": ["9:30am", "10:30am", "3:00pm"]');
-has('LESSON_SLOTS 1.5hr = 9:30/10:30/3pm', '"1.5hr": ["9:30am", "10:30am", "3:00pm"]');
-missing('LESSON_SLOTS no longer has old 8:30/4:30 pattern', 'const LESSON_SLOTS = {\n  "1hr": ["8:30am"');
+// ─── Lessons: Join Up, Horse grooming, Group Clinic each get their own flat
+// slot table (29 Aug 2026 LESSON-SLOTS-SPLIT), replacing the shared
+// LESSON_SLOTS[duration] table. Slots are duration-independent now.
+missing('shared LESSON_SLOTS table is gone', 'const LESSON_SLOTS = {');
+has('JOINUP_SLOTS = 8:30/9:30am',    'const JOINUP_SLOTS = ["8:30am", "9:30am"];');
+has('GROOMING_SLOTS = 8:30/9:30/10:30am', 'const GROOMING_SLOTS = ["8:30am", "9:30am", "10:30am"]; // masterclass = "Horse grooming"');
+has('GROUPCLINIC_SLOTS = 8:30am only', 'const GROUPCLINIC_SLOTS = ["8:30am"];');
+has('DRESSAGE_SLOTS narrowed to 8:30/9:30am', 'const DRESSAGE_SLOTS = ["8:30am", "9:30am"];');
+missing('old DRESSAGE_SLOTS 4-slot pattern is gone', 'const DRESSAGE_SLOTS = ["9:00am", "10:00am", "4:00pm", "5:00pm"];');
+has('slotsFor routes joinup to JOINUP_SLOTS',       'else if (actObj.id === "joinup") list = JOINUP_SLOTS;');
+has('slotsFor routes masterclass to GROOMING_SLOTS', 'else if (actObj.id === "masterclass") list = GROOMING_SLOTS;');
+has('slotsFor routes groupclinic to GROUPCLINIC_SLOTS', 'else if (actObj.id === "groupclinic") list = GROUPCLINIC_SLOTS;');
+has('slotsFor final fallback is an empty list, not a shared lesson table', 'else list = [];');
+// All four of joinup/masterclass/groupclinic/dressage's new slots sit before
+// noon, so the Saturday-afternoon filter (slotHour < 12) is a structural
+// no-op for them: Saturday-safe now equals weekday for these activities.
+has('Saturday filter still present (now a no-op for the new morning-only lesson slots)', 'if (dates && dates.length && dates.some(isSaturday)) {\n    list = list.filter(s => slotHour(s) < 12);\n  }');
 
 // ─── Horse Whisperer: 4-day Mon/Tue/Thu/Fri ────────────────────────────────
 has('WHISPER_SLOTS has 8:30 and 9:30am', 'const WHISPER_SLOTS = ["8:30am", "9:30am"];');

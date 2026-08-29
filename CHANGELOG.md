@@ -2,6 +2,30 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 29 Aug 2026 - LESSON-SLOTS-SPLIT: Join Up, Horse grooming, Group Clinic and Dressage each get their own start times
+
+Replaced the shared `LESSON_SLOTS[duration]` table (used identically by Join Up, Horse grooming
+and Group Clinic: 9:30am/10:30am/3:00pm regardless of duration) with a flat, duration-independent
+array per activity:
+
+- Join Up: 8:30am, 9:30am
+- Horse grooming: 8:30am, 9:30am, 10:30am
+- Group Clinic: 8:30am only
+- Dressage Masterclass: narrowed from 9:00am/10:00am/4:00pm/5:00pm to 8:30am, 9:30am
+
+All new slots sit before noon, so the existing Saturday-afternoon closure filter is now a
+structural no-op for these four activities, Saturday availability equals weekday availability
+for them going forward, where it previously dropped the 3:00pm slot (lessons) or the 4:00pm/
+5:00pm slots (Dressage).
+
+Code: removed the shared `LESSON_SLOTS` constant, added `JOINUP_SLOTS`, `GROOMING_SLOTS` and
+`GROUPCLINIC_SLOTS`, narrowed `DRESSAGE_SLOTS`. `slotsFor` gained explicit id-routed branches for
+`joinup`/`masterclass`/`groupclinic`; the old catch-all `else list = LESSON_SLOTS[duration] || []`
+is now `else list = []`.
+
+Isolated to its own branch (`lesson-slots-split`) for independent reversion; not yet merged to
+`main`.
+
 ## 29 Aug 2026 - Photographer add-on now auto-matches the shoot's own duration
 
 Replaced the independent 4-tier photographer picker (pick any of 1hr/1.5hr/2hr/3hr regardless

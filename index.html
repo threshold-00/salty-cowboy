@@ -501,13 +501,12 @@ const RIDE_SLOTS = {
   "1.5hr": ["4:30pm"],
   "2hr": ["4:00pm"]
 };
-// Join Up, Horse grooming and Group Clinic share the same three fixed start
-// times regardless of duration.
-const LESSON_SLOTS = {
-  "1hr": ["9:30am", "10:30am", "3:00pm"],
-  "1.5hr": ["9:30am", "10:30am", "3:00pm"]
-};
-const DRESSAGE_SLOTS = ["9:00am", "10:00am", "4:00pm", "5:00pm"];
+// Join Up, Horse grooming and Group Clinic each have their own fixed start
+// times, flat arrays independent of duration.
+const JOINUP_SLOTS = ["8:30am", "9:30am"];
+const GROOMING_SLOTS = ["8:30am", "9:30am", "10:30am"]; // masterclass = "Horse grooming"
+const GROUPCLINIC_SLOTS = ["8:30am"];
+const DRESSAGE_SLOTS = ["8:30am", "9:30am"];
 // The Horse Whisperer Course runs the same start-time choice (8:30 or 9:30am)
 // across all four days.
 const WHISPER_SLOTS = ["8:30am", "9:30am"];
@@ -546,7 +545,10 @@ function slotsFor(actObj, duration, dates) {
   else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages" || actObj.id === "photo_ricefield") list = SESSION_SLOTS[duration] || [];
   else if (actObj.photoshoot) list = PHOTO_SLOTS;
   else if (actObj.riding) list = RIDE_SLOTS[duration] || [];
-  else list = LESSON_SLOTS[duration] || [];
+  else if (actObj.id === "joinup") list = JOINUP_SLOTS;
+  else if (actObj.id === "masterclass") list = GROOMING_SLOTS;
+  else if (actObj.id === "groupclinic") list = GROUPCLINIC_SLOTS;
+  else list = [];
   // Closed Saturday afternoon. For a multi-day course, one Saturday in the set
   // is enough to restrict the whole course to a morning start.
   if (dates && dates.length && dates.some(isSaturday)) {

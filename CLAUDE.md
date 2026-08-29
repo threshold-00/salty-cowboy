@@ -105,9 +105,15 @@ Order: Join Up, Horse Whisperer Course, Horse grooming, Group Clinic, Dressage M
 
 Lunge Lesson has been removed entirely (activity, pricing, copy, all three languages).
 
-**Join Up and Horse grooming share three fixed start times:** 9:30am, 10:30am, 3:00pm. The old 5:00pm slot is gone. Horse grooming's 1.5hr price (IDR 1,875,000) is calculated as 1.5× the 1hr price, per Ro; awaiting Simone's sign-off like the other derived prices below.
+**Lesson start times (each activity has its own flat, duration-independent list, 29 Aug 2026 LESSON-SLOTS-SPLIT):**
+- Join Up: 8:30am, 9:30am
+- Horse grooming: 8:30am, 9:30am, 10:30am
+- Group Clinic: 8:30am only
+- Dressage Masterclass: 8:30am, 9:30am
 
-**Group Clinic** (new): the C31 leadership-through-horses copy. Up to 6 people, 1.5 hr fixed, IDR 6,000,000 flat per session, same three start times as Join Up/Horse grooming. No riding experience required (ground-based, no weight selector).
+These replace the old shared three-times table (9:30am/10:30am/3:00pm) that Join Up, Horse grooming and Group Clinic all used to draw from, and Dressage's old four-slot table (9:00am/10:00am/4:00pm/5:00pm). All the new slots sit before noon, so the existing Saturday-afternoon closure filter no longer removes anything from any of these four activities, Saturday availability now equals weekday availability for them. Horse grooming's 1.5hr price (IDR 1,875,000) is calculated as 1.5× the 1hr price, per Ro; awaiting Simone's sign-off like the other derived prices below.
+
+**Group Clinic** (new): the C31 leadership-through-horses copy. Up to 6 people, 1.5 hr fixed, IDR 6,000,000 flat per session, single 8:30am start time. No riding experience required (ground-based, no weight selector).
 
 **Horse Whisperer Course:** 10 hrs total across 4 days (three 3 hr sessions + a closing 1 hr session). Bookable days restricted to Monday, Tuesday, Thursday, Friday only (no Wednesday, no Saturday), all inside a single week. Each day uses the same shared start-time choice (8:30am or 9:30am) applied across all four days. Open to all rider levels, explicitly stated in the copy. Only one course booking accepted per week. Minimum age 8. Mucking out is no longer listed as an inclusion. Simone rejects duplicate bookings on WhatsApp.
 
@@ -127,7 +133,7 @@ Step 1 (the activity picker) opens directly on the "Choose an activity" heading,
 - **Insta Ride 1hr/1.5hr prices** (IDR 1,600,000 / 2,000,000) were originally copied directly from Beach & Rice Field Ride, per Ro's explicit instruction. Beach & Rice Field Ride's own 1.5hr price has since been raised to IDR 2,200,000, so only the 1hr figure still matches; Insta Ride's 1.5hr price was not changed to follow it, since Ro's later price update named Beach & Rice Field Ride specifically, not Insta Ride. Awaiting Simone's sign-off, same as the other derived prices on this list.
 - **Horse grooming 1.5hr price** (IDR 1,875,000) was calculated as 1.5× the 1hr price, per Ro's explicit instruction. Awaiting Simone's sign-off.
 - **Photographer add-on now auto-matches the shoot's own duration** (29 Aug 2026 redesign, per Ro's explicit correction), replacing the old independent 4-tier picker. Awaiting Simone's sign-off on the new IDR 2,500,000-base formula, same as the other derived prices on this list.
-- **Dressage Masterclass position:** the new Lessons order only specified 4 items; Dressage was appended at the end (5th position) per Ro's confirmation. No change to its pricing, copy, or slots.
+- **Dressage Masterclass position:** the new Lessons order only specified 4 items; Dressage was appended at the end (5th position) per Ro's confirmation. No change to its pricing or copy (its slots did change later, see LESSON-SLOTS-SPLIT above).
 
 ## Working with Simone
 
