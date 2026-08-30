@@ -2,6 +2,32 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 30 Aug 2026 - BOOKING-FOR-OTHER: "I'm booking for someone else" checkbox for rides
+
+Added a checkbox at the end of the "Who's coming?" section for every riding activity (Beach &
+Rice Field Ride, Insta Ride, Dressage Masterclass), letting a customer flag that they're booking
+on behalf of another rider. Not shown for photoshoots or non-riding lessons.
+
+When checked, reveals a note asking the booker to check the weight of the person they're booking
+for, reiterating the 75kg guideline and the no-refund policy if it's exceeded, styled like the
+existing weight-warning blocks. When checked, adds one line to the WhatsApp payload right after
+the "Group size" line: "Booking on behalf of another rider. 75kg weight guideline shown to the
+person booking." With the box unchecked, the payload is completely unaffected, this is the only
+other intended payload delta in this six-commit batch besides WHISPER-3DAY's course-line and
+duration-suffix changes.
+
+Code: new `bookingForOther` boolean state, reset to false on every existing activity-change reset
+path (category tab, card click, Book button, resetAll) plus a defensive `useEffect` that resets
+it whenever `isRiding` goes false. Rendered gated on `isRiding && riders.length > 0`, as a sibling
+right after the photographer add-on block, reusing the `addon-group`/`perm-row`/`perm-box` and
+`weight-warning`/`ww-header`/`ww-body` CSS patterns already in use elsewhere. New translation keys
+`bookingForOtherLabel` and `bookingForOtherNote` in all three languages. Threaded into
+`buildWhatsAppMessage` and `handleSend` the same way `photographerAddon` already is.
+
+Isolated to its own branch (`booking-for-other`) for independent reversion; not yet merged to
+`main`. This is the sixth and final commit in the batch: LESSON-SLOTS-SPLIT, BEACH-8AM,
+RICEFIELD-8AM, GROUPCLINIC, WHISPER-3DAY, BOOKING-FOR-OTHER.
+
 ## 29 Aug 2026 - WHISPER-3DAY: Horse Whisperer Course shrinks from 4 days to 3, drops Friday
 
 The course now runs 10 hours across 3 days instead of 4: two 3.5-hour sessions to build the

@@ -725,6 +725,8 @@ const T = {
     photosWord: "photos",
     sAddon: "Add-on",
     photographerShort: "Photographer",
+    bookingForOtherLabel: "I'm booking for someone else",
+    bookingForOtherNote: "Please check the weight of the person you're booking for. We know it's a slightly awkward thing to ask, but for the wellbeing of our horses we hold to a rider weight guideline of 75kg. It's what keeps every horse healthy and comfortable, so we can keep offering these rides for years to come. Please note we're unable to offer refunds where this limit is exceeded, and weight may be confirmed at the stables if needed.",
     perPerson: "Price is per person",
     perBooking: "Price is per booking, not per person",
     flatPrice: "Flat price, not per person",
@@ -897,6 +899,8 @@ const T = {
     photosWord: "foto",
     sAddon: "Tambahan",
     photographerShort: "Fotografer",
+    bookingForOtherLabel: "Saya memesan untuk orang lain",
+    bookingForOtherNote: "Mohon periksa berat badan orang yang Anda pesankan. Kami tahu ini sedikit canggung untuk ditanyakan, namun demi kesejahteraan kuda-kuda kami, kami menerapkan panduan berat penunggang maksimal 75kg. Ini yang menjaga setiap kuda tetap sehat dan nyaman, sehingga kami dapat terus menawarkan wahana berkuda ini selama bertahun-tahun ke depan. Mohon dicatat bahwa kami tidak dapat memberikan pengembalian dana jika batas ini terlampaui, dan berat badan mungkin akan dikonfirmasi ulang di kandang jika diperlukan.",
     perPerson: "Harga per orang",
     perBooking: "Harga per pemesanan, bukan per orang",
     flatPrice: "Harga tetap, bukan per orang",
@@ -1069,6 +1073,8 @@ const T = {
     photosWord: "фото",
     sAddon: "Доп. услуга",
     photographerShort: "Фотограф",
+    bookingForOtherLabel: "Я бронирую для другого человека",
+    bookingForOtherNote: "Пожалуйста, уточните вес человека, для которого вы бронируете. Мы понимаем, что об этом немного неловко спрашивать, но для благополучия наших лошадей мы придерживаемся рекомендации по весу наездника до 75 кг. Именно это позволяет каждой лошади оставаться здоровой и чувствовать себя комфортно, чтобы мы могли предлагать эти прогулки долгие годы. Обратите внимание, что мы не можем предложить возврат средств при превышении этого лимита, а вес при необходимости может быть уточнён в конюшне.",
     perPerson: "Цена за человека",
     perBooking: "Цена за бронирование, а не за человека",
     flatPrice: "Фиксированная цена, не за человека",
@@ -2441,6 +2447,7 @@ function buildWhatsAppMessage({
   showWeight,
   notes,
   photographerAddon,
+  bookingForOther,
   grooming,
   totalPriceStr
 }) {
@@ -2465,6 +2472,7 @@ function buildWhatsAppMessage({
     }
   }
   lines.push("Group size: " + numPeople);
+  if (bookingForOther) lines.push("Booking on behalf of another rider. 75kg weight guideline shown to the person booking.");
   if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);
   lines.push("");
   lines.push("*Riders:*");
@@ -2529,6 +2537,7 @@ function App() {
   const [selectedTime, setSelectedTime] = useState(null);
   const [notes, setNotes] = useState("");
   const [photographerAddon, setPhotographerAddon] = useState(false);
+  const [bookingForOther, setBookingForOther] = useState(false);
   const [grooming, setGrooming] = useState(null); // "wet" | "dry" — Master Class Horse Care only
   const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
@@ -2642,6 +2651,7 @@ function App() {
     setSelectedTime(null);
     setNotes("");
     setPhotographerAddon(false);
+    setBookingForOther(false);
     setGrooming(null);
     setSentMessage("");
     setCopied(false);
@@ -2812,6 +2822,11 @@ function App() {
       setDuration(actObj.durations[0]);
     }
   }, [activity]);
+  // Defensive on top of the setBookingForOther(false) reset calls on every
+  // activity-change path: never let this carry into a non-riding activity.
+  useEffect(() => {
+    if (!isRiding) setBookingForOther(false);
+  }, [isRiding]);
   function handleSend() {
     const message = buildWhatsAppMessage({
       actObj,
@@ -2824,6 +2839,7 @@ function App() {
       showWeight,
       notes,
       photographerAddon: isPhotoshoot ? photographerAddon : false,
+      bookingForOther: isRiding ? bookingForOther : false,
       grooming: needsGrooming ? grooming : null,
       totalPriceStr
     });
@@ -2899,6 +2915,7 @@ function App() {
       setDuration(null);
       setNumPeople(null);
       setPhotographerAddon(false);
+      setBookingForOther(false);
       setGrooming(null);
       setSelectedDates([]);
       setSelectedTime(null);
@@ -2918,6 +2935,7 @@ function App() {
       setNumPeople(null);
       setRiders([]);
       setPhotographerAddon(false);
+      setBookingForOther(false);
       setGrooming(null);
       setSelectedDates([]);
       setSelectedTime(null);
@@ -2963,6 +2981,7 @@ function App() {
       setNumPeople(null);
       setRiders([]);
       setPhotographerAddon(false);
+      setBookingForOther(false);
       setGrooming(null);
       // Clearing these here (not just duration/numPeople) matters: without
       // it, a date/time picked for a previous activity can still satisfy
@@ -3371,7 +3390,27 @@ function App() {
     className: "perm-box " + (photographerAddon ? "checked" : "")
   }, photographerAddon ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, "IDR " + addonForDuration.price.toLocaleString("en-US") + " (" + addonForDuration.photos + " " + t.photosWord + ")"))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {
+  }, "IDR " + addonForDuration.price.toLocaleString("en-US") + " (" + addonForDuration.photos + " " + t.photosWord + ")"))), isRiding && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "addon-group",
+    style: {
+      display: section2Collapsed ? "none" : undefined
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-row addon-row",
+    onClick: () => setBookingForOther(v => !v)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-box " + (bookingForOther ? "checked" : "")
+  }, bookingForOther ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+    className: "perm-text"
+  }, t.bookingForOtherLabel)), bookingForOther && /*#__PURE__*/React.createElement("div", {
+    className: "weight-warning"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ww-header"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ww-icon"
+  }, "⚠️"), /*#__PURE__*/React.createElement("div", {
+    className: "ww-body"
+  }, t.bookingForOtherNote)))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {
     className: "blocked-note"
   }, /*#__PURE__*/React.createElement("span", null, t.section2Blocked), /*#__PURE__*/React.createElement("button", {
     className: "blocked-note-close",
