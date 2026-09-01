@@ -2,6 +2,51 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 1 Sep 2026 - RIDER-INFO-MODAL: popup with rider info, ready to copy and forward
+
+The "I'm booking for someone else" checkbox now lives in its own card directly under "3. Your
+booking summary" (above the "What your booking cost funds" card), instead of inside the "Who's
+coming?" accordion, so it stays visible regardless of whether that section is collapsed. It also
+now opens a popup automatically the moment it's checked, instead of just revealing a static
+weight-only note. The popup carries everything the
+actual rider (not the booker) needs to know before they arrive: arrival time (new copy, "please
+arrive 15 minutes before the start time"), the 75kg weight guideline, and where the booking cost
+funds, reusing the existing "What your booking cost funds" copy rather than duplicating it. Below
+that sits a ready-to-copy message in the booker's own site language (English, Indonesian or
+Russian, whichever they currently have selected, unlike the WhatsApp message to Simone which is
+always English), opening with a greeting and a one-line activity/date/time summary, then the same
+three sections, then a closing line. A "Copy message" button copies it, using the same
+clipboard-then-textarea-fallback pattern already used for the WhatsApp message.
+
+Closing the popup (✕ button or backdrop click) does not uncheck the box. In its place, the old
+inline note's spot now shows a short reopen prompt ("We've prepared everything they need to
+know...") that reopens the same popup on click, so the booker can view or copy the message again
+without unchecking and rechecking the box. Unchecking the box removes the reopen prompt and closes
+the popup if it happens to be open.
+
+Code: two new state booleans, `showRiderInfoModal` and `riderInfoCopied`. The checkbox's onClick
+now sets `bookingForOther` and, only when turning it on, also opens the modal. A single
+`useEffect` keyed on `bookingForOther` closes the modal and resets the copy feedback whenever the
+box goes false, covering every existing reset path (activity change, category switch, the
+defensive `isRiding` effect) without touching each call site individually. New
+`buildRiderInfoMessage` function (mirrors `buildWhatsAppMessage`'s shape) builds the copyable text
+from ten new `riderInfo*` translation keys plus the existing `costFundsTitle`/`moneyGoesBody`,
+`sActivity`/`sDateTime`, and `copyBtn`/`copied` keys, so the money-goes and confirm-screen copy
+strings aren't duplicated. The modal itself is new markup (`.rider-info-backdrop`/
+`.rider-info-modal`, a `position: fixed` overlay matching the established `.gallery-lightbox`
+full-viewport pattern), rendered as the first child of `.app`; its copy box reuses the existing
+`.copy-box`/`.copy-heading`/`.copy-text`/`.copy-btn` classes from the confirm screen rather than
+inventing new ones. The reopen prompt reuses the existing `.weight-warning`/`.ww-header` classes
+from the old note, just with an added onClick and a swapped icon/body. The whole checkbox-plus-
+reopen-prompt block moved out of section 2's `addon-group` (which CSS-hides via
+`section2Collapsed`, since it no longer needs to) into its own `step2-section-box`, gated on
+`screen === "riders" && isRiding && riders.length > 0` and rendered as a new sibling between
+section 3's blocked-note and the cost-funds-card; the photographer add-on's `addon-group` is
+unaffected and still closes section 2 the same way it did before BOOKING-FOR-OTHER existed.
+
+No pricing or offering data changed, so there's no new `customer-offerings.tsv` paste block for
+this entry: the Google Sheet "Customer Offerings" tab is unaffected.
+
 ## 30 Aug 2026 - BOOKING-FOR-OTHER: "I'm booking for someone else" checkbox for rides
 
 Added a checkbox at the end of the "Who's coming?" section for every riding activity (Beach &
