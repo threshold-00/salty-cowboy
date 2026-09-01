@@ -22,7 +22,7 @@ has('photo_stable 1-3hr',          'id: "photo_stable",\n    durations: ["1hr", 
 has('photo_ricefield 1-2hr (3hr removed 29 Aug 2026 RICEFIELD-8AM, no longer clones stable\'s duration set)', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5');
 has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
 has('photo_cottages session, 6',   'id: "photo_cottages",\n    durations: ["3hr"],\n    maxPeople: 6');
-has('beach ride 1/1.5/2hr (2hr added 29 Aug 2026 BEACH-8AM)', 'id: "beach",\n    durations: ["1hr", "1.5hr", "2hr"]');
+has('beach ride 1/1.5hr only (2hr removed 1 Sep 2026 RIDE-DURATION-SPLIT, since Insta Ride became the sole 2hr option)', 'id: "beach",\n    durations: ["1hr", "1.5hr"]');
 has('beach ride carries a real image path (first activity to get one, per Ro), other activities still have no image field and fall back to the placeholder', 'experienceNeeded: "Beginner",\n    image: "images/beach-ride.jpg"');
 has('insta ride carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/insta-ride.avif"');
 has('photo_beach carries a real image path', 'needsWeight: true,\n    image: "images/photo-beach.avif"');
@@ -39,7 +39,7 @@ has('whisper (Horse Whisperer Course) carries a real image path, converted from 
 has('masterclass (Horse grooming, the id predates the display-name rename) carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/grooming.avif"');
 has('groupclinic carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/group-clinic.avif"');
 has('dressage carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/dressage.avif"');
-has('insta now offers 1hr/1.5hr/2hr (priced same as beach ride)', 'id: "insta",\n    durations: ["1hr", "1.5hr", "2hr"]');
+has('insta ride is now 2hr only (1 Sep 2026 RIDE-DURATION-SPLIT, dropped 1hr/1.5hr so it no longer overlaps with beach ride\'s duration set at all)', 'id: "insta",\n    durations: ["2hr"]');
 has('joinup perPerson',            'id: "joinup",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2,\n    perPerson: true');
 has('masterclass now offers 1hr/1.5hr (1.5hr calculated as 1.5x 1hr)', 'id: "masterclass",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2');
 has('groupclinic 1.5hr, 6 people', 'id: "groupclinic",\n    durations: ["1.5hr"],\n    maxPeople: 6');
@@ -139,7 +139,7 @@ missing('price-reveal-basis JSX span removed along with priceBasis', 'className:
 // formula off whichever duration the customer picked for the shoot itself.
 missing('old PHOTOGRAPHER_TIERS lookup table is gone', 'const PHOTOGRAPHER_TIERS = {');
 has('photographerAddonPrice formula declared', 'function photographerAddonPrice(duration) {');
-has('formula base rate: 2,500,000 for the first hour', 'return { price: 2500000 + blocks * 500000, photos: 25 + blocks * 5 };');
+has('formula flat rate: IDR 2,000,000 and 20 photos per hour (1 Sep 2026 PHOTOG-PRICE-FLAT, replaces the old 2,500,000-anchored block formula), giving 1hr 2,000,000/20, 1.5hr 3,000,000/30, 2hr 4,000,000/40, 3hr 6,000,000/60 (Ro\'s three given figures plus the 3hr extrapolation she approved)', 'return { price: hours * 2000000, photos: hours * 20 };');
 has('durationHrLabel helper declared',   'function durationHrLabel(duration) {');
 has('photographer addon boolean state', 'const [photographerAddon, setPhotographerAddon] = useState(false);');
 has('addon price computed off current duration', 'const addonForDuration = isPhotoshoot ? photographerAddonPrice(duration) : null;');
@@ -161,18 +161,28 @@ has('ru horses',                   'horses: "лошади"');
 has('cottages 4.5M in en',         'photo_cottages: [{ l: "session", v: "IDR 4,500,000" }]');
 has('cottages 4.5M in id',         'photo_cottages: [{ l: "sesi", v: "IDR 4,500,000" }]');
 has('cottages 4.5M in ru',         'photo_cottages: [{ l: "сессия", v: "IDR 4,500,000" }]');
-has('insta 1hr price still matches beach ride; 1.5hr and 2hr no longer do (beach ride\'s 1.5hr was later raised to 2,200,000, insta ride\'s stayed at 2,000,000; 2hr was repriced separately, PRICE-INSTARIDE commit)', 'insta: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,000,000" }, { l: "2 hr", v: "IDR 2,700,000" }]');
-has('insta 1hr price still matches beach ride; 1.5hr/2hr no longer do (id)', 'insta: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,000,000" }, { l: "2 jam", v: "IDR 2,700,000" }]');
-has('insta 1hr price still matches beach ride; 1.5hr/2hr no longer do (ru)', 'insta: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,000,000" }, { l: "2 ч", v: "IDR 2,700,000" }]');
-// Beach ride's 1.5hr (2,200,000) still doesn't match insta's 1.5hr
-// (2,000,000), but the new 2hr price (2,700,000, added 29 Aug 2026
-// BEACH-8AM) was set equal to insta's 2hr price by spec.
-has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (en)', 'beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,200,000" }, { l: "2 hr", v: "IDR 2,700,000" }]');
-has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (id)', 'beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,200,000" }, { l: "2 jam", v: "IDR 2,700,000" }]');
-has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000 / 2hr 2,700,000 (ru)', 'beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,200,000" }, { l: "2 ч", v: "IDR 2,700,000" }]');
+// Insta Ride became 2hr-only on 1 Sep 2026 (RIDE-DURATION-SPLIT); its single
+// remaining price (2,700,000) is unchanged from before the split, and still
+// happens to equal beach ride's old 2hr price (now removed from beach ride
+// entirely, so the two no longer share any duration to compare against).
+has('insta ride prices: 2hr only, 2,700,000 (en)', 'insta: [{ l: "2 hr", v: "IDR 2,700,000" }]');
+has('insta ride prices: 2hr only, 2,700,000 (id)', 'insta: [{ l: "2 jam", v: "IDR 2,700,000" }]');
+has('insta ride prices: 2hr only, 2,700,000 (ru)', 'insta: [{ l: "2 ч", v: "IDR 2,700,000" }]');
+// Beach ride lost its 2hr option on 1 Sep 2026 (RIDE-DURATION-SPLIT, since
+// Insta Ride became the sole 2hr ride); 1hr/1.5hr prices are unchanged.
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000, no 2hr (en)', 'beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,200,000" }]');
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000, no 2hr (id)', 'beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,200,000" }]');
+has('beach ride prices: 1hr 1,600,000 / 1.5hr 2,200,000, no 2hr (ru)', 'beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,200,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr en', 'masterclass: [{ l: "1 hr", v: "IDR 1,250,000" }, { l: "1.5 hr", v: "IDR 1,875,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr id', 'masterclass: [{ l: "1 jam", v: "IDR 1,250,000" }, { l: "1,5 jam", v: "IDR 1,875,000" }]');
 has('masterclass 1.5hr = 1.5x 1hr ru', 'masterclass: [{ l: "1 ч", v: "IDR 1,250,000" }, { l: "1,5 ч", v: "IDR 1,875,000" }]');
+
+// ─── RIDE-DURATION-SPLIT (1 Sep 2026): insta ride goes 2hr-only, emphasizes ─
+// its extra photo opportunities; beach ride loses its 2hr option so the two
+// rides no longer share any duration at all (previously identical slots).
+has('insta description emphasizes the full 2hr length and more photo opportunities (en)', 'insta: "A photo-focused ride through village, beach and rice fields near Kedungu, run at a full 2 hours, our longest ride, so there\'s more time and more stops to capture great photos along the way. Grooms guide you to the most scenic spots, best at Golden hour. Same inclusions as the standard ride.",');
+has('insta description emphasizes 2hr length and more photo opportunities (id)', 'insta: "Berkuda dengan fokus foto melewati desa, pantai, dan sawah dekat Kedungu, berlangsung penuh 2 jam, ride terpanjang kami, sehingga ada lebih banyak waktu dan lebih banyak titik henti untuk mengambil foto-foto terbaik di sepanjang perjalanan. Pemandu mengarahkan Anda ke spot terindah, paling pas saat golden hour. Termasuk yang sama seperti ride standar.",');
+has('insta description emphasizes 2hr length and more photo opportunities (ru)', 'insta: "Прогулка с акцентом на фото через деревню, пляж и рисовые поля возле Кедунгу, длится полных 2 часа, это самая длинная наша прогулка, поэтому у вас больше времени и больше остановок для отличных фотографий по пути. Грумы приводят вас к самым живописным местам, лучше всего в золотой час. Те же включения, что и в обычной прогулке.",');
 has('groupclinic 6M flat en',      'groupclinic: [{ l: "1.5 hr", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat id',      'groupclinic: [{ l: "1,5 jam", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat ru',      'groupclinic: [{ l: "1,5 ч", v: "IDR 6,000,000" }]');

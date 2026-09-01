@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboys booking engine, most recent first.
 
+## 1 Sep 2026 - RIDE-DURATION-SPLIT + PHOTOG-PRICE-FLAT: rides lose their shared durations, photographer add-on repriced
+
+The two rides no longer offer the same durations. Insta Ride is now 2 hours only (dropped 1hr and
+1.5hr); its description now emphasizes that the full 2 hours means more time and more stops to
+capture great photos along the way, since it's now the longest ride. Beach & Rice Field Ride is
+now 1 or 1.5 hours only (dropped 2hr, which it had only gained a few days earlier in the BEACH-8AM
+commit). Both rides still read start times from the same shared `RIDE_SLOTS` table (8:00am plus
+one fixed afternoon start per duration), but each activity's own `durations` array now points at a
+disjoint subset of it, so the two rides no longer share any duration option at all. Prices for the
+durations that remain are unchanged: Beach & Rice Field Ride 1hr IDR 1,600,000 / 1.5hr IDR
+2,200,000; Insta Ride 2hr IDR 2,700,000.
+
+The photographer add-on's price formula changed from an IDR 2,500,000-anchored, 500,000-per-30-min
+block formula to a flat IDR 2,000,000 and 20 photos per hour, across every photoshoot: 1hr IDR
+2,000,000 (20 photos), 1.5hr IDR 3,000,000 (30 photos), 2hr IDR 4,000,000 (40 photos), 3hr IDR
+6,000,000 (60 photos). The three shorter tiers are Ro's exact given figures; she didn't give a 3hr
+figure (needed for Stable, Paddock, and Cottages, whose only duration is 3hr), so the 3hr price
+extrapolates the same flat rate, per her explicit confirmation of that approach, awaiting Simone's
+sign-off same as the other derived prices in this file.
+
+Code: `photographerAddonPrice(duration)` simplified from a block-increment formula to `hours *
+2000000` / `hours * 20`, reusing the existing `DURATION_HOURS` lookup, no new duration keys added.
+`ACTIVITIES` entries for `beach` and `insta` had their `durations` arrays trimmed; each activity's
+`prices.*` array in all three languages was trimmed in parallel so indices still line up with the
+shorter `durations` array.
+
+Fresh Customer Offerings TSV generated reflecting the new ride durations/prices and photographer
+add-on prices (see chat).
+
 ## 1 Sep 2026 - RIDER-INFO-MODAL: popup with rider info, ready to copy and forward
 
 The "I'm booking for someone else" checkbox now lives in its own card directly under "3. Your
