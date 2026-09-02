@@ -274,8 +274,8 @@ has('ru notesTimeHint key ends "здесь" not "ниже" (Figma parity commit 
 has('notesTimeHint rendered near notes area, now display-gated with the rest of section 3 (batch 7: section 3 accordion)', 'className: "notes-time-hint",\n    style: {\n      display: section3Collapsed ? "none" : undefined\n    }\n  }, t.notesTimeHint), React.createElement("textarea"');
 
 // ─── Main page: "Where the money goes" bio copy (Step 2 cost-funds-card only, since batch 4 Commit 1 removed the Step 1 card) ─
-has('en moneyGoesBody excerpt (2 Sep 2026 CLIENT-COPY-FEEDBACK rewrite: still used by Step 2 cost-funds-card and reused by the rider-info modal)', 'Every booking goes straight back into the paddock: vet care, feed, farrier visits and the horses themselves.');
-has('en moneyGoesBody covers the two outcomes for a recovered horse: back to gentle riding funding the herd, or adopted out to a vetted family', 'Some return to gentle riding, helping fund care for the rest of the herd. Others go to a family we\'ve carefully chosen, who adopt them and give them the care they deserve.');
+has('en moneyGoesBody excerpt (3 Sep 2026 MONEYGOES-VERBATIM: switched to the client\'s exact given wording, still used by Step 2 cost-funds-card and reused by the rider-info modal)', 'Every booking goes straight back into the paddock; vet care, feed, farrier visits, and the horses themselves.');
+has('en moneyGoesBody covers the two outcomes for a recovered horse: back to gentle riding to make money for their friends, or adopted out to a family curated by Salty Cowboy', 'Some go back to gentle riding to make money for their friends, others can go to a family that is curated by us, that will adopt them and take care of them properly.');
 missing('moneyGoesTitle key removed as dead code (batch 4, Commit 1: Step 1 money-goes card deleted, Step 2 uses its own costFundsTitle)', 'moneyGoesTitle:');
 
 // ─── Wording: Sunrise → Morning, Sunset → Golden hour ─────────────────────

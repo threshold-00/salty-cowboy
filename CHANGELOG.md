@@ -2,6 +2,22 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 3 Sep 2026 - MONEYGOES-VERBATIM: funding copy switched to the client's exact given wording
+
+The 2 Sep 2026 CLIENT-COPY-FEEDBACK pass had rewritten the funding copy (`moneyGoesBody`) as an
+editorially-smoothed paraphrase of the client's suggestion. The client asked for the literal text
+instead, so `moneyGoesBody` (English) now reads: "Every booking goes straight back into the
+paddock; vet care, feed, farrier visits, and the horses themselves. Some come in underweight or
+scared of people. We give them time until they're ready. Some go back to gentle riding to make
+money for their friends, others can go to a family that is curated by us, that will adopt them and
+take care of them properly." Indonesian and Russian translated to match the same semicolon/comma
+structure and phrasing as closely as each language allows, rather than the smoother paraphrase used
+before. Still used by both the Step 2 cost-funds-card and the rider-info modal, no other copy or
+code touched.
+
+Updated `tests/assert.js` (604 assertions, all passing) and `CLAUDE.md` to match. No pricing or
+offering data changed, so no Google Sheet update needed.
+
 ## 3 Sep 2026 - BRAND-NAME-SINGULAR: "Salty Cowboys" reverted to "Salty Cowboy" everywhere
 
 Ro confirmed "Salty Cowboy" (singular) is the correct brand name, reversing part of yesterday's
