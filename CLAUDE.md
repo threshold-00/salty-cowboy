@@ -1,6 +1,6 @@
-# Salty Cowboys Booking Engine
+# Salty Cowboy Booking Engine
 
-Front-end booking engine for Salty Cowboys Bali, a horse rescue sanctuary and riding centre run by director Simone. Streamlines Simone's booking intake (previously WhatsApp/email/Instagram DMs) without disrupting her workflow. Simone approves all bookings on WhatsApp and is the source of truth for pricing and operational rules.
+Front-end booking engine for Salty Cowboy Bali, a horse rescue sanctuary and riding centre run by director Simone. Streamlines Simone's booking intake (previously WhatsApp/email/Instagram DMs) without disrupting her workflow. Simone approves all bookings on WhatsApp and is the source of truth for pricing and operational rules.
 
 ## Repo & file layout
 
@@ -66,7 +66,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 **Universal weight cap: 75 kg** (blanket max, max 2 riders/mounted people over 70 kg). Applies to every riding activity (Beach & Rice Field Ride, Insta Ride, Dressage Masterclass) and to Beach Photoshoot (the only photoshoot where riders mount a horse). No other photoshoot, and no ground-based lesson, asks for weight.
 
-**Wording:** "Morning" and "Golden hour" (not Sunrise/Sunset) used everywhere the time-of-day is mentioned, in all three languages.
+**Wording:** "Morning" and "golden hour" (not Sunrise/Sunset) used everywhere the time-of-day is mentioned, in all three languages. "Golden hour" is capitalized only when it starts a sentence (2 Sep 2026 CLIENT-COPY-FEEDBACK: the client's given copy for the Rides intro and Insta Ride used lowercase "golden hour" mid-sentence, so that's now the standard rather than treating it as a capitalized proper noun everywhere).
 
 **Calendar range:** the Step 2 date picker opens on the real current month (derived from `new Date()`, not a hardcoded month), and every date before today is unavailable and unclickable, same greyed-out treatment as a closed Sunday. Today itself is bookable. The "‹" prev-month arrow disables once the calendar is already showing the current month, so there is no way to page back into a fully-past month either. Applies uniformly across every activity, including the Horse Whisperer Course's multi-day picker.
 
@@ -82,7 +82,7 @@ node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readF
 
 **Rice Field no longer clones Stable's config** (29 Aug 2026 RICEFIELD-8AM): it lost its 3hr duration (and the IDR 3,750,000 price that went with it, Stable and Paddock keep theirs unchanged) and moved off the shared morning-or-afternoon-window `SESSION_SLOTS` pattern onto its own `RICEFIELD_SLOTS` table, the same 8am-plus-one-fixed-afternoon-slot pattern used by the rides. Stable and Paddock are unaffected.
 
-Every photoshoot card and the step-2 detail screen show: "BYO Photographer or add a Salty Cowboys photographer" (descriptive text only, not a selectable). Riding-experience selector is never shown for photoshoots (unchanged).
+Every photoshoot card and the step-2 detail screen show: "BYO Photographer or add a Salty Cowboy photographer" (descriptive text only, not a selectable). Riding-experience selector is never shown for photoshoots (unchanged).
 
 **Photographer add-on** (all photoshoots): a single checkbox, "Add a Salty Cowboy photographer:", not a tier picker. Price and photo count auto-match whichever duration the customer already picked for their own shoot. Flat rate of IDR 2,000,000 and 20 photos per hour (1 Sep 2026 PHOTOG-PRICE-FLAT, replacing the old IDR 2,500,000-anchored block formula): 1hr = IDR 2,000,000 (20 photos), 1.5hr = IDR 3,000,000 (30 photos), 2hr = IDR 4,000,000 (40 photos), 3hr = IDR 6,000,000 (60 photos). The 1/1.5/2hr figures are Ro's exact given values; the 3hr figure (Stable, Paddock, and Cottages' only duration) extrapolates the same flat rate, per Ro's explicit confirmation, awaiting Simone's sign-off like the other derived prices below. There is no way to add a photographer package for a duration longer or shorter than the shoot itself. Checkbox label shows price and photo count only, no duration; duration still appears in the confirm summary and WhatsApp message. When checked, the computed price is added to the displayed total and included in the WhatsApp message and booking summary.
 
@@ -124,6 +124,21 @@ These replace the old shared three-times table (9:30am/10:30am/3:00pm) that Join
 
 The WhatsApp payload reflects the new shape too: the course-schedule line now reads "Course runs Mon, Tue & Thu within one week" (was "...Thu & Fri..."), and the Activity line's duration suffix is overridden to "3 to 3.5 hr/day" specifically for this activity, since its `durations: ["3hr"]` value doesn't reflect the actual per-day session lengths. Every other activity's payload is unaffected, since the override only fires when `actObj.id === "whisper"`.
 
+### Client copy feedback (2 Sep 2026 CLIENT-COPY-FEEDBACK)
+
+A round of client feedback replaced several customer-facing copy blocks across all three languages, no operational rules (durations, prices, group caps, slots) changed as part of this pass:
+
+- **Rides intro** (`introRides`): dropped "emerald rice fields" and "especially magical" as too AI-sounding, in favor of plainer language. Still says Morning/golden hour, not Sunrise/Sunset.
+- **Insta Ride description** (`descs.insta`): rewritten to lead with "our longest ride at 2 hours" and "more stops for photos", client-supplied copy adopted closely to verbatim.
+- **"Who's coming?" subtitle** (`section2Subtitle`): now "A few details to help us prep for your group." (was "...so we can ensure you have the best experience").
+- **Funding copy** (`moneyGoesBody`, used by both the Step 2 cost-funds-card and the rider-info modal): rewritten to cover the two outcomes for a recovered horse, back to gentle riding to help fund the herd, or adopted out to a vetted family, dropping the "Salty Cowboys began as a rescue and it still is one" framing.
+- **Photoshoots intro** (`introPhotoshoots`): opening sentence simplified to "Photos with our rescue horses at our best spots around the property" (was "Beautiful, story-telling photos... most scenic backdrops"); rest of the paragraph (BYO/add-on note, per-horse pricing note) unchanged in substance. Caught and fixed in the same pass: this paragraph's stated photographer add-on price was still the old IDR 2,500,000/25-photo figure from before PHOTOG-PRICE-FLAT, now corrected to IDR 2,000,000/20.
+- **"Photographer" capitalization** (`byoPhotographer`, English only): lowercased the mid-sentence "Photographer" in "Bring your own Photographer or add a..." per the client's report of inconsistent capitalization in the photoshoot tab.
+- **Brand name consistency**: every remaining singular "Salty Cowboy [noun]" adjectival use (`addonTitle` in all 3 languages, `introPhotoshoots` in id/ru, the WhatsApp payload's add-on line) changed to "Salty Cowboys", matching `byoPhotographer` and the funding copy, which already said "Salty Cowboys". The client separately flagged that the hero logo image itself still reads "SALTY COWBOY" (singular). **Superseded 3 Sep 2026 (BRAND-NAME-SINGULAR):** Ro confirmed "Salty Cowboy" singular, not "Salty Cowboys", is the correct brand name, the logo was right all along. Every remaining "Salty Cowboys" in the app, the 6 changed by this bullet plus everywhere else it already said "Salty Cowboys" before this pass (page `<title>`, meta description, loading-screen label, `byoPhotographer`, `notesPlaceholder`, `notice`, `riderInfoMsgIntro`, `introPhotoshoots` in en, the WhatsApp message title, logo `alt` text), 24 occurrences total, was changed back to "Salty Cowboy". See Open Items.
+- **Lessons intro** (`introLessons`): simplified to two direct sentences, dropped the "natural horsemanship" flourish.
+- **Horse Whisperer Course description** (`descs.whisper`): rewritten in plainer, more direct language; the closing line changed from "Bring a friend for free" to "This course is for two people, so bring your friend!" (the `friendFree` gift-chip badge on the Step 1 card is unchanged and still accurate, since the course price is flat for 1 or 2 people either way).
+- **Group Clinic description** (`descs.groupclinic`): closing clause changed from "the same skills that carry into any team or boardroom... business teams and horse people alike" to "...any team setting... business teams, and friend groups that ride."
+
 ### Notes section
 
 Every activity's notes field shows a small hint above the textarea: "We want you to have a memorable experience. If the times are not suitable, or you have an additional request, please let us know here."
@@ -141,6 +156,7 @@ Step 1 (the activity picker) opens directly on the "Choose an activity" heading,
 - **Horse grooming 1.5hr price** (IDR 1,875,000) was calculated as 1.5× the 1hr price, per Ro's explicit instruction. Awaiting Simone's sign-off.
 - **Photographer add-on now auto-matches the shoot's own duration** (29 Aug 2026 redesign, per Ro's explicit correction), replacing the old independent 4-tier picker. The underlying rate moved from an IDR 2,500,000-anchored block formula to a flat IDR 2,000,000/20-photos per hour rate on 1 Sep 2026 (PHOTOG-PRICE-FLAT), per Ro's exact figures for 1/1.5/2hr. Awaiting Simone's sign-off on the 3hr figure (IDR 6,000,000, 60 photos), which extrapolates that same flat rate since Ro didn't give a 3hr figure directly, only confirmed the extrapolation approach; this is the only tier without a directly-given number.
 - **Dressage Masterclass position:** the new Lessons order only specified 4 items; Dressage was appended at the end (5th position) per Ro's confirmation. No change to its pricing or copy (its slots did change later, see LESSON-SLOTS-SPLIT above).
+- **RESOLVED 3 Sep 2026 (BRAND-NAME-SINGULAR):** the hero logo image reading "SALTY COWBOY" (singular) was flagged 2 Sep 2026 as a possible mismatch against copy that said "Salty Cowboys" elsewhere. Ro confirmed "Salty Cowboy" (singular) is the correct brand name, so the logo asset was right all along; every text instance of the plural was changed to match it instead (see CLIENT-COPY-FEEDBACK below), no image asset ever needed fixing.
 
 ## Working with Simone
 

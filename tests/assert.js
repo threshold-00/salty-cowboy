@@ -180,9 +180,9 @@ has('masterclass 1.5hr = 1.5x 1hr ru', 'masterclass: [{ l: "1 ч", v: "IDR 1,250
 // ─── RIDE-DURATION-SPLIT (1 Sep 2026): insta ride goes 2hr-only, emphasizes ─
 // its extra photo opportunities; beach ride loses its 2hr option so the two
 // rides no longer share any duration at all (previously identical slots).
-has('insta description emphasizes the full 2hr length and more photo opportunities (en)', 'insta: "A photo-focused ride through village, beach and rice fields near Kedungu, run at a full 2 hours, our longest ride, so there\'s more time and more stops to capture great photos along the way. Grooms guide you to the most scenic spots, best at Golden hour. Same inclusions as the standard ride.",');
-has('insta description emphasizes 2hr length and more photo opportunities (id)', 'insta: "Berkuda dengan fokus foto melewati desa, pantai, dan sawah dekat Kedungu, berlangsung penuh 2 jam, ride terpanjang kami, sehingga ada lebih banyak waktu dan lebih banyak titik henti untuk mengambil foto-foto terbaik di sepanjang perjalanan. Pemandu mengarahkan Anda ke spot terindah, paling pas saat golden hour. Termasuk yang sama seperti ride standar.",');
-has('insta description emphasizes 2hr length and more photo opportunities (ru)', 'insta: "Прогулка с акцентом на фото через деревню, пляж и рисовые поля возле Кедунгу, длится полных 2 часа, это самая длинная наша прогулка, поэтому у вас больше времени и больше остановок для отличных фотографий по пути. Грумы приводят вас к самым живописным местам, лучше всего в золотой час. Те же включения, что и в обычной прогулке.",');
+has('insta description uses the client-approved copy (2 Sep 2026 CLIENT-COPY-FEEDBACK), emphasizing longest ride + more photo stops, replacing the previous AI-sounding draft (en)', 'insta: "Our longest ride at 2 hours, with more stops for photos through the village, beach and rice fields. Grooms take you to the best spots: golden hour is ideal.",');
+has('insta description client-approved copy (id)', 'insta: "Ride terpanjang kami, 2 jam, dengan lebih banyak titik henti untuk foto melewati desa, pantai, dan sawah. Pemandu membawa Anda ke spot-spot terbaik: golden hour adalah waktu yang paling pas.",');
+has('insta description client-approved copy (ru)', 'insta: "Наша самая длинная прогулка, 2 часа, с большим количеством остановок для фото через деревню, пляж и рисовые поля. Грумы приводят вас в лучшие места, особенно хорошо в золотой час.",');
 has('groupclinic 6M flat en',      'groupclinic: [{ l: "1.5 hr", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat id',      'groupclinic: [{ l: "1,5 jam", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat ru',      'groupclinic: [{ l: "1,5 ч", v: "IDR 6,000,000" }]');
@@ -228,13 +228,30 @@ has('ru ricefield label',          'photo_ricefield: "Фотосессия в р
 
 // ─── Horse Whisperer Course: 3 days (29 Aug 2026 WHISPER-3DAY, down from 4,
 // Friday dropped), given copy, all rider levels ────────────────────────────
-has('en whisper uses given copy',  'Three days, ten hours, one deep education in how horses think.');
-has('en whisper open to all levels', 'Open to all rider levels, no experience required.');
+has('en whisper uses client-approved copy (2 Sep 2026 CLIENT-COPY-FEEDBACK), replacing the "deep education in how horses think" framing', 'A 3-day, 10-hour course spread over Monday, Tuesday and Thursday.');
+has('en whisper open to all levels', 'Open to all levels, no experience needed.');
 missing('old "2 x 3hr and 1 x 3.5hr" line removed', '2 x 3 hr sessions and 1 x 3.5hr sessions');
 missing('old 4-day "three 3 hr + closing 1 hr" session structure is gone', 'three 3 hr sessions plus a closing 1 hr session');
-has('en whisper description includes the grooming-or-related-activity clause', 'Includes 2 hours choice of grooming or another related activity.');
+has('en whisper description includes the grooming-or-related-activity clause', 'Includes 2 hours of grooming or choice of another related activity');
+has('en whisper closes with the client-given "for two people, bring your friend" line, replacing "Bring a friend for free"', 'This course is for two people, so bring your friend!');
 has('en sessionNote reflects new 2x3.5hr + 1x3hr structure', 'two 3.5-hour sessions and one closing 3-hour session, including 2 hours choice of grooming or another related activity');
+has('id whisper uses client-approved copy', 'Kursus 3 hari, 10 jam, berlangsung pada Senin, Selasa, dan Kamis.');
+has('id whisper closes with the "for two people" line', 'Kursus ini untuk dua orang, jadi ajak teman Anda!');
+has('ru whisper uses client-approved copy', 'Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг.');
+has('ru whisper closes with the "for two people" line', 'Курс рассчитан на двоих, так что берите с собой друга!');
 has('en pickCourseDays says 3',    'pickCourseDays: "Select 3 days for the course"');
+
+// ─── 2 Sep 2026 CLIENT-COPY-FEEDBACK: remaining copy notes from the client ─
+has('en introLessons uses client-approved copy, dropping the "natural horsemanship" flourish', 'introLessons: "Every session except the Dressage Masterclass is off-saddle. You\'ll be working hand in hand with our rescue horses to build trust and learn to read them."');
+has('id introLessons uses client-approved copy', 'introLessons: "Setiap sesi kecuali Dressage Masterclass dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka."');
+has('ru introLessons uses client-approved copy', 'introLessons: "Все занятия, кроме мастер-класса по выездке, проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать."');
+has('en groupclinic description ends with the client-given "team setting" / "friend groups that ride" phrasing, replacing "team or boardroom" / "horse people alike"', 'the same skills you\'d use in any team setting. Popular with women\'s groups, business teams, and friend groups that ride.');
+has('id groupclinic description ends with the client-given phrasing', 'keterampilan yang sama yang Anda gunakan dalam situasi tim apa pun. Populer di kalangan kelompok wanita, tim bisnis, dan kelompok pertemanan yang gemar berkuda.');
+has('ru groupclinic description ends with the client-given phrasing', 'те же навыки, что пригодятся в любой командной обстановке. Популярно среди женских групп, бизнес-команд и компаний друзей, которые катаются верхом.');
+has('en introPhotoshoots uses client-approved simpler opening line, replacing "Beautiful, story-telling photos... most scenic backdrops"', 'introPhotoshoots: "Photos with our rescue horses at our best spots around the property.');
+has('id introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami.');
+has('ru introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории.');
+missing('no leftover "Salty Cowboys" plural anywhere (3 Sep 2026 BRAND-NAME-SINGULAR: client confirmed "Salty Cowboy" singular is the correct brand name, reversing the previous CLIENT-COPY-FEEDBACK pass which had standardized on the plural)', 'Salty Cowboys');
 has('en daysSelected says 3',      'daysSelected: "of 3 days selected"');
 has('en courseWeekNote Mon/Tue/Thu (Friday dropped)', 'courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week."');
 has('en whisperHintPre says 3 days', 'whisperHintPre: "The horse whisperer course goes over 3 days. "');
@@ -245,7 +262,7 @@ missing('no lang copy mentions Friday for whisper (id)', 'Senin, Selasa, Kamis, 
 missing('no lang copy mentions Friday for whisper (ru)', 'понедельникам, вторникам, четвергам и пятницам');
 
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
-has('en byoPhotographer key (BYO-COPY commit: "BYO" spelled out to "Bring your own", key name itself untouched since renaming an identifier is not a copy change)',      'byoPhotographer: "Bring your own Photographer or add a Salty Cowboys photographer"');
+has('en byoPhotographer key (2 Sep 2026 CLIENT-COPY-FEEDBACK: lowercased "Photographer" mid-sentence, client-reported capitalization inconsistency in the photoshoot tab)',      'byoPhotographer: "Bring your own photographer or add a Salty Cowboy photographer"');
 missing('standalone "BYO" no longer appears anywhere (word-boundary, base64 image constants excluded since they can\'t coincidentally spell BYO as a standalone token)', 'BYO Photographer');
 has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.createElement("div", {\n    className: "byo-note"\n  }, t.byoPhotographer)');
 has('byo line on step2 now a static filled chip, not a paragraph (batch3 Commit 2, #2)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
@@ -257,21 +274,23 @@ has('ru notesTimeHint key ends "здесь" not "ниже" (Figma parity commit 
 has('notesTimeHint rendered near notes area, now display-gated with the rest of section 3 (batch 7: section 3 accordion)', 'className: "notes-time-hint",\n    style: {\n      display: section3Collapsed ? "none" : undefined\n    }\n  }, t.notesTimeHint), React.createElement("textarea"');
 
 // ─── Main page: "Where the money goes" bio copy (Step 2 cost-funds-card only, since batch 4 Commit 1 removed the Step 1 card) ─
-has('en moneyGoesBody excerpt (still used by Step 2 cost-funds-card)', 'Every booking helps a horse. Salty Cowboys began as a rescue and it still is one.');
+has('en moneyGoesBody excerpt (2 Sep 2026 CLIENT-COPY-FEEDBACK rewrite: still used by Step 2 cost-funds-card and reused by the rider-info modal)', 'Every booking goes straight back into the paddock: vet care, feed, farrier visits and the horses themselves.');
+has('en moneyGoesBody covers the two outcomes for a recovered horse: back to gentle riding funding the herd, or adopted out to a vetted family', 'Some return to gentle riding, helping fund care for the rest of the herd. Others go to a family we\'ve carefully chosen, who adopt them and give them the care they deserve.');
 missing('moneyGoesTitle key removed as dead code (batch 4, Commit 1: Step 1 money-goes card deleted, Step 2 uses its own costFundsTitle)', 'moneyGoesTitle:');
 
 // ─── Wording: Sunrise → Morning, Sunset → Golden hour ─────────────────────
 missing('no "Sunrise" anywhere',   'Sunrise');
 missing('no "Sunset" anywhere',    'Sunset');
-has('en introRides uses Morning/Golden hour', 'Morning and Golden hour rides are especially magical.');
-has('en insta desc uses Golden hour', 'best at Golden hour');
+has('en introRides uses client-approved plainer copy (2 Sep 2026 CLIENT-COPY-FEEDBACK, dropped "emerald rice fields"/"especially magical" as too AI-sounding), still says Morning/golden hour not Sunrise/Sunset', 'Ride out through the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Morning and golden hour rides are the best time to go.');
+has('en insta desc uses golden hour (lowercase mid-sentence, matching the client\'s given copy; still not Sunrise/Sunset)', 'golden hour is ideal');
 
 // ─── Intro / addon copy ───────────────────────────────────────────────────
-has('en intro photog matches shoot duration', 'from IDR 2,500,000, 25 edited photos, matching your shoot\'s own duration');
+has('en intro photog matches shoot duration, price corrected to the 1 Sep 2026 PHOTOG-PRICE-FLAT figures (was stale at the old 2,500,000/25 figures until this pass caught it)', 'from IDR 2,000,000, 20 edited photos, matching your shoot\'s own duration');
 has('en intro per horse',          'Beach shoots are priced per horse');
-has('en addon title',              'addonTitle: "Add a Salty Cowboy photographer:"');
-has('id addon title',              'addonTitle: "Tambahkan fotografer Salty Cowboy:"');
-has('ru addon title',              'addonTitle: "Добавить фотографа Salty Cowboy:"');
+has('en addon title (3 Sep 2026 BRAND-NAME-SINGULAR: reverted to "Salty Cowboy", the confirmed correct brand name)', 'addonTitle: "Add a Salty Cowboy photographer:"');
+has('id addon title', 'addonTitle: "Tambahkan fotografer Salty Cowboy:"');
+has('ru addon title', 'addonTitle: "Добавить фотографа Salty Cowboy:"');
+has('WhatsApp payload addon line also uses "Salty Cowboy" (always English, sent to Simone)', 'Add-on: Salty Cowboy photographer (');
 missing('old addonTiers translation arrays are gone (3 langs, no independent tier list anymore)', 'addonTiers: [');
 has('en sessionNote one per week ("accepted" -> "taken", 29 Aug 2026 WHISPER-3DAY wording)', 'Only one course booking is taken per week.');
 has('id sessionNote one per week', 'Hanya satu pemesanan kursus yang diterima per minggu.');
@@ -326,7 +345,7 @@ has('en igLink/airbnbLink keys', 'igLink: "Instagram",\n    airbnbLink: "Airbnb 
 has('id igLink/airbnbLink keys', 'igLink: "Instagram",\n    airbnbLink: "Daftar Airbnb",');
 has('ru igLink/airbnbLink keys', 'igLink: "Instagram",\n    airbnbLink: "Объявления на Airbnb",');
 has('both external links open in a new tab with noopener/noreferrer, not a same-tab navigation', 'target: "_blank",\n    rel: "noopener noreferrer"\n  }, t.igLink)', 1);
-has('clicking the Salty Cowboys logo takes the user back to the activity selection screen from any step, same setScreen("activity") call the Step 2 back-link already uses, no field resets - consistent with that existing back-link\'s behaviour', 'alt: "Salty Cowboys Bali",\n    onClick: () => setScreen("activity")');
+has('clicking the Salty Cowboy logo takes the user back to the activity selection screen from any step, same setScreen("activity") call the Step 2 back-link already uses, no field resets - consistent with that existing back-link\'s behaviour', 'alt: "Salty Cowboy Bali",\n    onClick: () => setScreen("activity")');
 has('.copy-btn ("Copy message") is regular weight, not the earlier semibold 600', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 400;');
 has('confirm-summary border 1px + 18.5 padding', '.confirm-summary {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 18.5px;');
 has('copy-box now carries the card look (was bare)', '.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }');
@@ -539,8 +558,8 @@ missing('no em-dashes left anywhere in translation copy, the meta description, o
 has('en sentTitle now reads as two sentences', 'sentTitle: "WhatsApp has opened in another window. Please hit send to make the booking request",');
 has('id sentTitle now reads as two sentences', 'sentTitle: "WhatsApp telah terbuka di jendela lain. Silakan tekan kirim untuk membuat permintaan pemesanan",');
 has('ru sentTitle now reads as two sentences', 'sentTitle: "WhatsApp открылся в другом окне. Нажмите «отправить», чтобы оформить запрос на бронирование",');
-has('meta description em-dash replaced with a natural appositive comma', '<meta name="description" content="Book a horse riding experience at Salty Cowboys, a Bali horse rescue sanctuary & riding centre." />');
-has('WhatsApp message title no longer uses an em-dash', 'lines.push("🐴 *New Salty Cowboys booking request*");');
+has('meta description em-dash replaced with a natural appositive comma', '<meta name="description" content="Book a horse riding experience at Salty Cowboy, a Bali horse rescue sanctuary & riding centre." />');
+has('WhatsApp message title no longer uses an em-dash', 'lines.push("🐴 *New Salty Cowboy booking request*");');
 has('WhatsApp rider tag line uses a comma, not an em-dash', 'if (parts.length) line += ", " + parts.join(", ");');
 has('WhatsApp heavy-rider warning uses a comma, not an em-dash', 'lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");');
 has('WhatsApp empty-notes placeholder reads "None", not a bare em-dash', 'lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "None"));');
@@ -591,9 +610,9 @@ has('section1Complete derived from existing dates/time state, no new click-toggl
 missing('no new expandedSection/activeSection click-toggle state introduced', 'expandedSection');
 has('toggleSection2/toggleSection3 helpers introduced deliberately this time (batch 10: blocked-note), so the open-ahead-of-sequence check lives in one place instead of duplicated across the heading and hint paragraph; toggleSection3\'s guard now checks section1Complete && detailsComplete (both sections 1 and 2), not just datesComplete', 'function toggleSection2() {\n    if (section2Collapsed && !section1Complete) {\n      setBlockedSection(2);\n    } else {\n      setSection2Override(!section2Collapsed);\n    }\n  }\n  function toggleSection3() {\n    if (section3Collapsed && !(section1Complete && detailsComplete)) {\n      setBlockedSection(3);\n    } else {\n      setSection3Override(!section3Collapsed);\n    }\n  }');
 has('handleEditClick forces sections 1 and 2 open directly (bypassing toggleSection2\'s precondition guard) since Edit is a deliberate review/change request, not sequential progression, then scrolls to top', 'function handleEditClick() {\n    setSection1Override(false);\n    setSection2Override(false);\n    window.scrollTo({ top: 0, behavior: "smooth" });\n  }');
-has('en notice carries the hourglass emoji (Ro asked it be put back), awaiting deliberately stays without one', 'notice: "⏳ Your selected date and time will be confirmed by Salty Cowboys through WhatsApp."');
-has('id notice carries the hourglass emoji', 'notice: "⏳ Tanggal dan waktu yang Anda pilih akan dikonfirmasi oleh Salty Cowboys melalui WhatsApp."');
-has('ru notice carries the hourglass emoji', 'notice: "⏳ Выбранные вами дата и время будут подтверждены Salty Cowboys через WhatsApp."');
+has('en notice carries the hourglass emoji (Ro asked it be put back), awaiting deliberately stays without one', 'notice: "⏳ Your selected date and time will be confirmed by Salty Cowboy through WhatsApp."');
+has('id notice carries the hourglass emoji', 'notice: "⏳ Tanggal dan waktu yang Anda pilih akan dikonfirmasi oleh Salty Cowboy melalui WhatsApp."');
+has('ru notice carries the hourglass emoji', 'notice: "⏳ Выбранные вами дата и время будут подтверждены Salty Cowboy через WhatsApp."');
 has('buildWhatsAppMessage takes formattedDates as a named param, not a DOM read', 'function buildWhatsAppMessage({\n  actObj,\n  durationLabel,\n  formattedDates,\n  isCourse,\n  selectedTime,\n  numPeople,\n  riders,');
 has('buildWhatsAppMessage now also takes totalPriceStr as a named param, same state-not-DOM pattern as every other field', 'grooming,\n  totalPriceStr\n}) {');
 has('final price line reads T.en.totalCostLabel ("Total cost"), matching the site\'s own English label text rather than a new hardcoded string, sits right after Group size (and the bookingForOther line, added 29 Aug 2026 BOOKING-FOR-OTHER) and before the blank line into *Riders:*, and is skipped entirely if totalPriceStr is falsy (e.g. duration/numPeople/selPrice not all chosen yet)', 'lines.push("Group size: " + numPeople);\n  if (bookingForOther) lines.push("Booking on behalf of another rider. 75kg weight guideline shown to the person booking.");\n  if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);\n  lines.push("");\n  lines.push("*Riders:*");');
@@ -807,9 +826,9 @@ has('.body.step2-block zeroes the shared 112px trailing padding for Step 2\'s in
 has('.step2-section-box > *:last-child zeroes whichever element ends up last (the heading alone, .section-hint, .cal-selection-panel, or a fuller state\'s control-card), so the box\'s own 25px bottom padding is always the sole source of bottom spacing, matching the 23px top', '.step2-section-box > *:last-child { margin-bottom: 0; }');
 
 // ─── Figma mockup: always-visible chevron, open/close any time (batch 8) ──
-has('en section2Subtitle key, new copy matching the Figma mockup exactly, flagged for review since it doesn\'t reuse the existing unused detailsHint key', 'section2Subtitle: "A few details so we can ensure you have the best experience"');
-has('id section2Subtitle key', 'section2Subtitle: "Beberapa detail agar kami dapat memastikan Anda mendapatkan pengalaman terbaik"');
-has('ru section2Subtitle key', 'section2Subtitle: "Несколько деталей, чтобы мы могли обеспечить вам лучший опыт"');
+has('en section2Subtitle key (2 Sep 2026 CLIENT-COPY-FEEDBACK)', 'section2Subtitle: "A few details to help us prep for your group."');
+has('id section2Subtitle key', 'section2Subtitle: "Beberapa detail untuk membantu kami mempersiapkan grup Anda."');
+has('ru section2Subtitle key', 'section2Subtitle: "Несколько деталей, чтобы помочь нам подготовиться к приёму вашей группы."');
 
 // ─── Sequential reveal + permanent hints (batch 9) ─────────────────────────
 // Section 2 now starts closed on Step 2 entry (section1Complete is false),

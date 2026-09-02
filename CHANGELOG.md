@@ -1,6 +1,73 @@
 # Changelog
 
-All notable changes to the Salty Cowboys booking engine, most recent first.
+All notable changes to the Salty Cowboy booking engine, most recent first.
+
+## 3 Sep 2026 - BRAND-NAME-SINGULAR: "Salty Cowboys" reverted to "Salty Cowboy" everywhere
+
+Ro confirmed "Salty Cowboy" (singular) is the correct brand name, reversing part of yesterday's
+CLIENT-COPY-FEEDBACK pass, which had standardized the app's mixed usage on "Salty Cowboys"
+(plural) after the client flagged the hero logo image as the odd one out. The logo was actually
+right all along: it reads "SALTY COWBOY", singular, and always has. Checked the archived source
+logo file too (`Images/Archieve/saltycowboylogofinal.avif`), same wording, further confirming
+singular is correct.
+
+Every occurrence of "Salty Cowboys" in `index.html` changed to "Salty Cowboy": the page `<title>`
+and meta description, the loading-screen label, the logo `alt` text, `byoPhotographer`,
+`addonTitle`, `introPhotoshoots`, `notesPlaceholder`, `notice`, `riderInfoMsgIntro` (all three
+languages where applicable), plus the WhatsApp message title and the photographer add-on line in
+`buildWhatsAppMessage` (always English). 24 occurrences total, a plain global find/replace, no
+other wording touched. `CLAUDE.md`'s own title and opening line updated to match ("Salty Cowboy
+Booking Engine" / "Salty Cowboy Bali"); the Open Items entry flagging the logo as needing a
+corrected asset is now marked resolved, no asset ever needed fixing, only the surrounding copy did.
+
+Code: `sed -i '' 's/Salty Cowboys/Salty Cowboy/g' index.html`, verified against a `node --check`
+syntax pass since the replacement touches JS string literals, not just markup. Updated
+`tests/assert.js` needles to match (604 assertions, all passing) and inverted the one regex-based
+assertion that had been checking for zero leftover singular uses into one checking for zero
+leftover plural uses. No pricing or offering data changed, so no Google Sheet update needed.
+
+## 2 Sep 2026 - CLIENT-COPY-FEEDBACK: intro/description copy rewritten across all three languages
+
+A round of client feedback on live copy. No operational rules changed (durations, prices, group
+caps, slots are all untouched); this is a copy-only pass across English, Indonesian and Russian.
+
+Rides intro dropped "emerald rice fields" and "especially magical" for plainer language. Insta
+Ride's description now leads with "our longest ride at 2 hours" and "more stops for photos",
+client-supplied copy adopted closely to verbatim. The "Who's coming?" subtitle is now "A few
+details to help us prep for your group." The funding copy (used by both the Step 2 cost-funds-card
+and the rider-info modal) was rewritten to cover the two outcomes for a recovered horse: back to
+gentle riding to help fund the herd, or adopted out to a vetted family, dropping the "began as a
+rescue and still is one" framing. Photoshoots intro opens with "Photos with our rescue horses at
+our best spots around the property" instead of "Beautiful, story-telling photos... most scenic
+backdrops." Lessons intro simplified to two direct sentences. Horse Whisperer Course description
+rewritten in plainer language, closing line changed from "Bring a friend for free" to "This course
+is for two people, so bring your friend!" (the separate gift-chip badge on the Step 1 card is
+unchanged, still accurate since the course price is flat for 1 or 2 people). Group Clinic's closing
+clause changed from "any team or boardroom... horse people alike" to "any team setting... friend
+groups that ride."
+
+Two smaller fixes caught in the same pass, not explicitly requested but adjacent to what was being
+edited: the mid-sentence "Photographer" in `byoPhotographer` was lowercased (client-reported
+capitalization inconsistency in the photoshoot tab), and every remaining singular "Salty Cowboy
+[noun]" adjectival use (`addonTitle` in all 3 languages, `introPhotoshoots` in id/ru, the WhatsApp
+payload's add-on line) was changed to "Salty Cowboys", matching `byoPhotographer` and the funding
+copy which already used the plural. Also caught: `introPhotoshoots` was still quoting the old
+photographer add-on price (IDR 2,500,000/25 photos) from before the 1 Sep 2026 PHOTOG-PRICE-FLAT
+change, corrected to IDR 2,000,000/20.
+
+"Golden hour" wording convention updated: capitalized only when it starts a sentence, not
+everywhere, since the client's given copy used it lowercase mid-sentence in two places.
+
+**Not fixed, flagged for Ro:** the client also reported the hero logo image still reads "SALTY
+COWBOY" (singular). It's a base64-encoded raster PNG baked into `index.html`, not text, so it can't
+be corrected with a code edit. Checked the archived source file in the parent project folder
+(`Images/Archieve/saltycowboylogofinal.avif`) for a ready fix; it has the identical wording, so
+there's no corrected asset anywhere in the project to swap in. Needs a regenerated logo file. See
+CLAUDE.md Open Items.
+
+Code: no structural changes, translation-object string edits only, across `T.en`, `T.id`, `T.ru`.
+Updated `tests/assert.js` (604 assertions, all passing) and `CLAUDE.md`/`CHANGELOG.md` to match. No
+pricing or offering data changed, so no Google Sheet update needed for this entry.
 
 ## 1 Sep 2026 - RIDE-DURATION-SPLIT + PHOTOG-PRICE-FLAT: rides lose their shared durations, photographer add-on repriced
 
