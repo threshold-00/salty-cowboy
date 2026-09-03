@@ -251,6 +251,10 @@ has('ru groupclinic description ends with the client-given phrasing', 'те же
 has('en introPhotoshoots uses client-approved simpler opening line, replacing "Beautiful, story-telling photos... most scenic backdrops"', 'introPhotoshoots: "Photos with our rescue horses at our best spots around the property.');
 has('id introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami.');
 has('ru introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории.');
+has('en introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand (3 Sep 2026 BEACH-SHOOT-MOUNTED, replacing "walk alongside your horse")', 'though for the Beach shoot you\'ll sit on your horse for the walk down to the sand.');
+has('id introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
+has('ru introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
+missing('no leftover "walk alongside your horse" beach-shoot wording', 'walk alongside your horse');
 missing('no leftover "Salty Cowboys" plural anywhere (3 Sep 2026 BRAND-NAME-SINGULAR: client confirmed "Salty Cowboy" singular is the correct brand name, reversing the previous CLIENT-COPY-FEEDBACK pass which had standardized on the plural)', 'Salty Cowboys');
 has('en daysSelected says 3',      'daysSelected: "of 3 days selected"');
 has('en courseWeekNote Mon/Tue/Thu (Friday dropped)', 'courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week."');

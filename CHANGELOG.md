@@ -2,6 +2,22 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 3 Sep 2026 - BEACH-SHOOT-MOUNTED: Beach photoshoot walk to the sand is now ridden, not led
+
+The Photoshoots intro paragraph (`introPhotoshoots`) said riders would "walk alongside your horse
+down to the sand" for the Beach shoot. Corrected to "sit on your horse for the walk down to the
+sand", so the copy matches what actually happens on the day. Indonesian and Russian updated to
+match ("menunggangi kuda saat berjalan menuju pasir", "проедете верхом на лошади по пути к воде").
+
+This is the only copy in the app that described the walk down, and it does not change any
+operational rule: the Beach shoot was already the one photoshoot where people mount a horse, which
+is why it is the only photoshoot with a weight selector (75 kg cap, up to 2 mounted). Nothing else
+in `index.html` touched.
+
+Added 4 assertions to `tests/assert.js` (608 assertions, all passing), including a `missing()` guard
+against the old wording. `tests/smoke.js` clean, 0 console errors. No pricing or offering data
+changed, so no Google Sheet update needed.
+
 ## 3 Sep 2026 - MONEYGOES-VERBATIM: funding copy switched to the client's exact given wording
 
 The 2 Sep 2026 CLIENT-COPY-FEEDBACK pass had rewritten the funding copy (`moneyGoesBody`) as an
