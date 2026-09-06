@@ -651,6 +651,7 @@ const T = {
     w4: "Over 75 kg",
     w3Title: "Protecting our horses' backs",
     w3Body: "Only 2 of our horses can carry riders over 70kg, so we can take at most 2 riders over 70kg per booking, up to 75kg each. If that's not right for your group, we have plenty of off-saddle activities under 'Lessons'.",
+    lessonsToken: "'Lessons'",
     w4Title: "Sorry, we can't accommodate this weight",
     w4Body: "It's nothing personal. We're committed to protecting our horses' backs from strain, so we're unable to safely match a horse for this weight. You're welcome to try our off-saddle activities under 'Lessons' instead. Unfortunately we do not refund bookings for people over 75kg.",
     minAgeTitle: "Minimum age is 8",
@@ -835,6 +836,7 @@ const T = {
     w4: "Di atas 75 kg",
     w3Title: "Melindungi punggung kuda kami",
     w3Body: "Hanya 2 kuda kami yang mampu membawa penunggang di atas 70kg, jadi maksimal 2 penunggang di atas 70kg per pemesanan, hingga 75kg per orang. Jika kurang cocok untuk grup Anda, kami punya banyak aktivitas tanpa berkuda di menu 'Pelajaran'.",
+    lessonsToken: "'Pelajaran'",
     w4Title: "Mohon maaf, kami tidak dapat menerima berat ini",
     w4Body: "Ini bukan hal pribadi. Kami berkomitmen melindungi punggung kuda kami dari ketegangan, sehingga kami tidak dapat mencocokkan kuda dengan aman untuk berat ini. Anda sangat kami persilakan mencoba aktivitas tanpa berkuda di menu 'Pelajaran'.",
     minAgeTitle: "Usia minimum 8 tahun",
@@ -1019,6 +1021,7 @@ const T = {
     w4: "Более 75 кг",
     w3Title: "Бережём спины наших лошадей",
     w3Body: "Только 2 наши лошади могут нести наездников тяжелее 70 кг, поэтому в одной броне не более 2 наездников тяжелее 70 кг, до 75 кг каждый. Если это не подходит вашей группе, у нас много занятий без седла в разделе «Уроки».",
+    lessonsToken: "«Уроки»",
     w4Title: "Извините, мы не можем принять этот вес",
     w4Body: "Ничего личного. Мы бережём спины наших лошадей от перегрузки, поэтому не можем безопасно подобрать лошадь для этого веса. Будем рады видеть вас на занятиях без седла в разделе «Уроки».",
     minAgeTitle: "Минимальный возраст: 8 лет",
@@ -2190,9 +2193,22 @@ html, body { background: #0a0a0a; }
 .ww-title {
   font-family: var(--display);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   color: #1f1f1f;
   margin-bottom: 4px;
+}
+.ww-link {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.ww-link:hover {
+  color: #1f1f1f;
 }
 .ww-body {
   font-size: 12.5px;
@@ -2639,6 +2655,21 @@ function fallbackCopy(text, done) {
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 
+// Splits a weight-warning body around its localised "Lessons" token and turns
+// that token into a button through to the Lessons category. Falls back to the
+// plain string if the token is not found, so a copy edit can never blank the body.
+function bodyWithLessonsLink(text, token, onGo) {
+  if (!token) return text;
+  const i = text.indexOf(token);
+  if (i === -1) return text;
+  return [text.slice(0, i), /*#__PURE__*/React.createElement("button", {
+    key: "lessons-link",
+    type: "button",
+    className: "ww-link",
+    onClick: onGo
+  }, token), text.slice(i + token.length)];
+}
+
 function App() {
   const [lang, setLang] = useState("en");
   const t = T[lang];
@@ -2656,6 +2687,21 @@ function App() {
   const [notes, setNotes] = useState("");
   const [photographerAddon, setPhotographerAddon] = useState(false);
   const [bookingForOther, setBookingForOther] = useState(false);
+
+  // Jump from a weight warning through to the off-saddle activities. Mirrors the
+  // category-tab reset so no stale duration/date/rider state carries across.
+  const goToLessons = () => {
+    setActiveCat("Lessons");
+    setActivity(null);
+    setDuration(null);
+    setNumPeople(null);
+    setPhotographerAddon(false);
+    setBookingForOther(false);
+    setGrooming(null);
+    setSelectedDates([]);
+    setSelectedTime(null);
+    setScreen("activity");
+  };
   // Popup with rider-facing info (arrival time, weight guideline, where the
   // money goes) for the person the booker is booking on behalf of. Opens
   // automatically the moment bookingForOther is checked; the "reopen" prompt
@@ -3543,7 +3589,7 @@ function App() {
       className: "ww-title"
     }, t.w3Title), /*#__PURE__*/React.createElement("div", {
       className: "ww-body"
-    }, t.w3Body)))), rider.weight === "w4" && /*#__PURE__*/React.createElement("div", {
+    }, bodyWithLessonsLink(t.w3Body, t.lessonsToken, goToLessons))))), rider.weight === "w4" && /*#__PURE__*/React.createElement("div", {
       className: "weight-warning"
     }, /*#__PURE__*/React.createElement("div", {
       className: "ww-header"
@@ -3553,7 +3599,7 @@ function App() {
       className: "ww-title"
     }, t.w4Title), /*#__PURE__*/React.createElement("div", {
       className: "ww-body"
-    }, t.w4Body))))), !isPhotoshoot && /*#__PURE__*/React.createElement("div", {
+    }, bodyWithLessonsLink(t.w4Body, t.lessonsToken, goToLessons)))))), !isPhotoshoot && /*#__PURE__*/React.createElement("div", {
       className: "rider-field"
     }, /*#__PURE__*/React.createElement("div", {
       className: "field-label"

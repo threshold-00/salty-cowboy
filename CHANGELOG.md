@@ -2,6 +2,29 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 6 Sep 2026 - WEIGHT-LESSONS-LINK: 'Lessons' in the weight warnings is now a link, lighter heading
+
+Both weight warnings (`w3`, over 70kg, and `w4`, over 75kg) told riders that off-saddle
+activities live under 'Lessons' but gave them no way to get there. The quoted word is now a
+button that switches to the Lessons category and returns to step 1.
+
+Each language gets a `lessonsToken` key holding the exact quoted substring in that language
+('Lessons', 'Pelajaran', and the guillemet form for Russian), since the word and its quote marks
+differ per language. A helper, `bodyWithLessonsLink`, splits the body around that token and
+renders the middle as a button. If the token is not found it returns the plain string unchanged,
+so a future copy edit can never blank out a warning body.
+
+`goToLessons` mirrors the existing category-tab reset (activity, duration, group size,
+photographer add-on, booking-for-other, grooming, dates, time) so no stale state carries across
+from the ride the customer was configuring.
+
+Also lightened `.ww-title` from font-weight 600 to 500, per Ro. Added `.ww-link` (inherits the
+body colour, underlined with a 2px offset, darkens on hover).
+
+The minimum-age warning is untouched: it does not mention Lessons. Added 10 assertions to
+`tests/assert.js` (618 passing, including a `missing()` guard against the old 600 weight).
+`tests/smoke.js` clean. No pricing or offering data changed, so no Google Sheet update needed.
+
 ## 3 Sep 2026 - BEACH-SHOOT-MOUNTED: Beach photoshoot walk to the sand is now ridden, not led
 
 The Photoshoots intro paragraph (`introPhotoshoots`) said riders would "walk alongside your horse

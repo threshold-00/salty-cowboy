@@ -255,6 +255,16 @@ has('en introPhotoshoots says the Beach shoot rider is mounted for the walk to t
 has('id introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
 has('ru introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
 missing('no leftover "walk alongside your horse" beach-shoot wording', 'walk alongside your horse');
+has('en lessonsToken matches the quoted word inside w3Body/w4Body (6 Sep 2026 WEIGHT-LESSONS-LINK)', 'lessonsToken: "\'Lessons\'"');
+has('id lessonsToken', 'lessonsToken: "\'Pelajaran\'"');
+has('ru lessonsToken', 'lessonsToken: "\u00abУроки\u00bb"');
+has('w3Body renders through the Lessons link helper', 'bodyWithLessonsLink(t.w3Body, t.lessonsToken, goToLessons)');
+has('w4Body renders through the Lessons link helper', 'bodyWithLessonsLink(t.w4Body, t.lessonsToken, goToLessons)');
+has('link helper falls back to the plain string when the token is absent', 'if (i === -1) return text;');
+has('goToLessons switches category and returns to step 1', 'setActiveCat("Lessons");');
+has('ww-link style exists', '.ww-link {');
+has('ww-title is weight 500, not 600', '.ww-title {\n  font-family: var(--display);\n  font-size: 15px;\n  font-weight: 500;');
+missing('ww-title no longer uses weight 600', '.ww-title {\n  font-family: var(--display);\n  font-size: 15px;\n  font-weight: 600;');
 missing('no leftover "Salty Cowboys" plural anywhere (3 Sep 2026 BRAND-NAME-SINGULAR: client confirmed "Salty Cowboy" singular is the correct brand name, reversing the previous CLIENT-COPY-FEEDBACK pass which had standardized on the plural)', 'Salty Cowboys');
 has('en daysSelected says 3',      'daysSelected: "of 3 days selected"');
 has('en courseWeekNote Mon/Tue/Thu (Friday dropped)', 'courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week."');
