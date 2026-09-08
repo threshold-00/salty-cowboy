@@ -21,7 +21,7 @@ Front-end booking engine for Salty Cowboy Bali, a horse rescue sanctuary and rid
 
 **Deploy:** GitHub Pages serves `main` at **`https://threshold-00.github.io/salty-cowboy/`**, singular, returning 200 on 8 Sep 2026. Every push to `main` deploys automatically. No build step, no bundler, no framework config. Note the plural `.github.io/salty-cowboys` URL is **not** a redirect, it is a hard 404, so the singular one is the only address that works.
 
-**Naming, in one place:** the brand, the repo and the live URL are all singular "Salty Cowboy". Only the local folder is still plural (`~/Documents/Salty Cowboys Booking Engine/salty-cowboys`), and the `salty-cowboys-tests` package name inside `tests/`.
+**Naming, in one place:** everything is singular "Salty Cowboy" as of 8 Sep 2026: the brand, the repo, the live URL, and the local folder `~/Documents/Salty Cowboy Booking Engine/salty-cowboy`. The single remaining plural is the `salty-cowboys-tests` package name in `tests/package.json`, left alone because renaming it would bust the CI npm cache key (`cache-dependency-path: tests/package.json`) for no benefit. Anything else plural is either a historical record or a mistake.
 
 **Site tech:** React 18 UMD is inlined at the top of `index.html`; JSX is pre-compiled to `React.createElement` calls (no runtime Babel). All styles are in a single `<style>` block. Trilingual UI (English, Indonesian, Russian). The WhatsApp message sent to Simone is always English so she can read every request consistently.
 

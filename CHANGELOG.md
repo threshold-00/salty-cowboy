@@ -2,6 +2,30 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Sep 2026 - FOLDER-SINGULAR: local folders renamed to match the singular brand
+
+Local environment change, no effect on the repo contents or the deployed site. Both local folders were
+still plural and were the last thing keeping the wrong name in circulation:
+
+```
+~/Documents/Salty Cowboys Booking Engine/salty-cowboys
+~/Documents/Salty Cowboy Booking Engine/salty-cowboy      <- now
+```
+
+The parent was renamed too, so the five sibling folders (`Archive`, `booking.info`, `Images`,
+`Product Offering`, `Salty Cowboy Skills`) moved with it. Three things were updated to follow:
+the 13 absolute paths in the gitignored `.claude/settings.local.json` (rewritten and re-validated as
+JSON, so Ro's permission allowlist keeps matching), Claude Code's project-history directory under
+`~/.claude/projects` (renamed to the new path slug so the five previous sessions still resolve), and
+the "Naming" line in this repo's `CLAUDE.md`.
+
+Verified after the move: `git status` clean, `origin` intact at `github.com/threshold-00/salty-cowboy`,
+HEAD still `1cb59d6`, tests 618/618 with a clean smoke run.
+
+Only `salty-cowboys-tests`, the package name in `tests/package.json`, is still plural. It is the CI npm
+cache key (`cache-dependency-path: tests/package.json`), so renaming it would invalidate the cache for
+no benefit.
+
 ## 8 Sep 2026 - GSTACK-REFERENCE: gstack skills documented in CLAUDE.md, one stale brand plural fixed
 
 Added a "gstack skills" section to `CLAUDE.md`, between "Commands" and "Business rules". gstack was
