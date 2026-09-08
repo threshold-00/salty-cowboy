@@ -2,6 +2,55 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Sep 2026 - GSTACK-REFERENCE: gstack skills documented in CLAUDE.md, one stale brand plural fixed
+
+Added a "gstack skills" section to `CLAUDE.md`, between "Commands" and "Business rules". gstack was
+installed globally on this machine the same day (`~/.claude/skills/gstack`, 52 skills, all prefixed
+`/gstack-*`). The section records which skills are worth using here (`/gstack-qa`, `/gstack-investigate`,
+`/gstack-review`, `/gstack-spec`), which do not apply (every `/gstack-ios-*` skill, and the deploy
+skills, since GitHub Pages already serves `main` on push with no build step), and states plainly that
+the "Default change workflow" steps 1 to 7 always take precedence: gstack never overrides the em-dash
+ban, the assert.js-plus-CHANGELOG pass, or the approval gate before commit and push. Also notes that
+the browser-driving skills run a bundled Chromium and are the first thing the OS kills on an 8GB Mac.
+
+Separately, `tests/package.json` still described itself as the "Salty Cowboys booking engine". Changed
+to the singular "Salty Cowboy", which the 3 Sep 2026 BRAND-NAME-SINGULAR pass established as the
+correct brand name. That pass cleaned `index.html` (0 plurals remaining, 24 singular) but missed this
+one line, which is prose rather than app copy so no assertion caught it.
+
+Deliberately left plural: every occurrence in `CHANGELOG.md` and the dated `docs/` briefs, which are
+historical records quoting copy as it stood at the time, the needle string in `tests/assert.js` line
+268, which has to contain the plural in order to search for it, and the `salty-cowboys` repo slug,
+directory name and package `name` field, since renaming those changes the deploy URL.
+
+Also corrected the test commands in `CLAUDE.md`, in both workflow step 6 and the "Commands" block.
+They said `node tests/assert.js` from the repo root, but both test files resolve `../index.html` and
+so fail with ENOENT unless run from inside `tests/`. The `node --check` line does read from the repo
+root, so an explicit `cd ..` was added ahead of it.
+
+Corrected the repo and deploy URLs in `CLAUDE.md`, which were wrong in two separate ways. The "Deploy"
+line named `pursuit-098.github.io/salty-cowboys`, a stale owner. Ro gave `github.com/threshold-00/salty-cowboys`
+as the correction, but that plural path returns a 301 from the GitHub API: the repo has been **renamed to
+the singular** `github.com/threshold-00/salty-cowboy`, matching the 3 Sep 2026 BRAND-NAME-SINGULAR decision.
+
+Verified on 8 Sep 2026 via the API (`full_name: threshold-00/salty-cowboy`, `has_pages: true`,
+`homepage: https://threshold-00.github.io/salty-cowboy/`) and by fetching the live site, which returns
+200 with the title "Salty Cowboy - Book your experience". The plural Pages URL is a hard 404 rather than
+a redirect, which is why both URLs failed the first check: one had a dead owner, the other a dead slug.
+
+`CLAUDE.md` now records the singular repo and live URL, notes that GitHub 301-redirects the old plural
+repo path (so plural links and pushes still work and the rename is easy to miss), and adds a short
+"Naming" line listing the only two places the plural legitimately survives: the local folder and the
+`salty-cowboys-tests` package name. The `origin` remote still points at the plural path and the local
+folder is still plural; both work via the redirect and were left for Ro to change. The stale
+`pursuit-098` URL also appears in `docs/step2-figma-parity-batch.md`, left as-is because that is a dated
+brief recording what was true when it was written.
+
+Tooling: `gh` 2.100.0 installed via Homebrew this session, not yet authenticated. The API checks above
+were done unauthenticated with curl.
+
+No change to `index.html`. Tests pass: 618 / 618 assertions, smoke render clean with 0 console errors.
+
 ## 6 Sep 2026 - WEIGHT-LESSONS-LINK: 'Lessons' in the weight warnings is now a link, lighter heading
 
 Both weight warnings (`w3`, over 70kg, and `w4`, over 75kg) told riders that off-saddle

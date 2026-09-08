@@ -2,7 +2,7 @@
   "name": "salty-cowboys-tests",
   "version": "1.0.0",
   "private": true,
-  "description": "Test suite for the Salty Cowboys booking engine",
+  "description": "Test suite for the Salty Cowboy booking engine",
   "scripts": {
     "test": "node assert.js && node smoke.js",
     "test:assert": "node assert.js",

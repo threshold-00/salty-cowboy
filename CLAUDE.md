@@ -17,7 +17,11 @@ Front-end booking engine for Salty Cowboy Bali, a horse rescue sanctuary and rid
     └── test.yml        # CI: runs tests on every push
 ```
 
-**Deploy:** GitHub Pages serves `main` at `pursuit-098.github.io/salty-cowboys`. Every push to `main` deploys automatically. No build step, no bundler, no framework config.
+**Repo:** `github.com/threshold-00/salty-cowboy`, **singular**, verified against the GitHub API on 8 Sep 2026. The repo was renamed from the plural at some point, matching the 3 Sep BRAND-NAME-SINGULAR decision. GitHub still 301-redirects the old plural path, so plural links and pushes keep working and the rename is easy to miss. An older `pursuit-098` owner reference in this file was stale.
+
+**Deploy:** GitHub Pages serves `main` at **`https://threshold-00.github.io/salty-cowboy/`**, singular, returning 200 on 8 Sep 2026. Every push to `main` deploys automatically. No build step, no bundler, no framework config. Note the plural `.github.io/salty-cowboys` URL is **not** a redirect, it is a hard 404, so the singular one is the only address that works.
+
+**Naming, in one place:** the brand, the repo and the live URL are all singular "Salty Cowboy". Only the local folder is still plural (`~/Documents/Salty Cowboys Booking Engine/salty-cowboys`), and the `salty-cowboys-tests` package name inside `tests/`.
 
 **Site tech:** React 18 UMD is inlined at the top of `index.html`; JSX is pre-compiled to `React.createElement` calls (no runtime Babel). All styles are in a single `<style>` block. Trilingual UI (English, Indonesian, Russian). The WhatsApp message sent to Simone is always English so she can read every request consistently.
 
@@ -45,7 +49,7 @@ For every spec or pricing change, always do ALL of the following steps in order 
 3. **Update the "Business rules" section of this file** to match the new spec.
 4. **Prepend a dated entry to `CHANGELOG.md`** summarising what changed and why.
 5. **Generate a fresh `customer-offerings.tsv` paste block** covering all current offerings, ready for Ro to paste into the Google Sheet "Customer Offerings" tab.
-6. **Run both tests** (`node tests/assert.js` and `node tests/smoke.js`). Stop and report if either fails; do not continue.
+6. **Run both tests** from inside `tests/` (`cd tests && node assert.js && node smoke.js`). Both resolve `../index.html`, so they fail with ENOENT if run from the repo root. Stop and report if either fails; do not continue.
 7. **Show a summary** of all changes made and wait for Ro's explicit approval before running `git commit` and `git push`.
 
 ## Commands
@@ -54,11 +58,35 @@ For every spec or pricing change, always do ALL of the following steps in order 
 # Install test deps (once)
 cd tests && npm install
 
-# Run tests
-node tests/assert.js     # string assertions
-node tests/smoke.js      # jsdom render check
+# Run tests (from inside tests/, both resolve ../index.html)
+cd tests
+node assert.js           # string assertions
+node smoke.js            # jsdom render check
+
+# Syntax-check the inlined JSX (from the repo root)
+cd ..
 node --check /dev/stdin < <(node -e "const fs=require('fs'); const html=fs.readFileSync('index.html','utf8'); const m=html.match(/<script>[\s\S]*?<\/script>[\s\S]*?<script>[\s\S]*?<\/script>[\s\S]*?<script>([\s\S]*?)<\/script>/); process.stdout.write(m[1])")
 ```
+
+## gstack skills (installed 8 Sep 2026)
+
+[gstack](https://github.com/garrytan/gstack) is installed globally at `~/.claude/skills/gstack`, prefixed, so every command is `/gstack-*` and never the bare name. It is an execution accelerator only. It has no opinion on whether the thing being built is right, and no user research skills, so it never decides product direction for this repo.
+
+**The "Default change workflow" above always wins.** gstack skills do not replace steps 1 to 7. In particular they do not override the em-dash ban, the "update assert.js and CHANGELOG.md in the same pass" rule, or the requirement to wait for Ro's explicit approval before `git commit` and `git push`. If a gstack skill wants to commit, push, or deploy on its own, stop and ask.
+
+Worth reaching for here:
+
+- `/gstack-qa` drives a real browser through the booking flow and fixes what it finds. The closest thing to a genuine end-to-end check, since `smoke.js` only does a jsdom render.
+- `/gstack-investigate` for tracing a bug through `index.html`, which is one large single file.
+- `/gstack-review` for a second pass on a change before it goes to Ro.
+- `/gstack-spec` for turning a new batch of client feedback into a written spec before touching code.
+
+Not applicable:
+
+- Every `/gstack-ios-*` skill. There is no iOS app.
+- `/gstack-setup-deploy` and `/gstack-land-and-deploy`. GitHub Pages already serves `main` on push, there is no build step, and nothing here needs a deploy pipeline.
+
+**Machine constraint:** the browser skills (`/gstack-qa`, `/gstack-browse`, `/gstack-scrape`, `/gstack-landing-report`) drive a bundled Chromium. Ro's Mac has 8GB of RAM and the OS kills these first under pressure. Run them with other apps closed, and expect to retry.
 
 ## Business rules (current, as of last CHANGELOG entry)
 
