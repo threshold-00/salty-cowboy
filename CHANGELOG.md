@@ -2,6 +2,54 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - BOOKING-LOG: write-only booking log, off until an endpoint is pasted in
+
+Phase 1 of the booking log designed in office hours (9 Sep) and reviewed in plan-eng-review (10 Sep).
+The site currently measures nothing: no `fetch`, no `localStorage`, no analytics of any kind. This adds
+a fire-and-forget row per Send click. Nothing is read back, no availability logic changes, and the site
+must keep working with the endpoint unreachable.
+
+No offering or pricing data changed, so no TSV block for the Google Sheet.
+
+**Off by default.** `LOG_ENDPOINT` ships as `""` and `logEvent` returns immediately when it is empty,
+so a fork of this repo can never post into Simone's spreadsheet. An assertion pins it empty.
+
+**`index.html`:**
+
+- `LOG_ENDPOINT`, `LOG_SCHEMA_V`, `newRef()`, `SESSION_ID` and `logEvent(type, build)` at module level.
+- `bookingLogRow(ref)` inside `App`. A whitelist: 25 named fields, no rider names, no ages, no notes
+  text. `notes` contributes only a `has_notes` boolean.
+- `handleSend` appends a short `Ref: SC-XXXXXX` to the outbound message and logs the same value, so a
+  sheet row can be matched back to Simone's WhatsApp thread. `buildWhatsAppMessage` and its call site
+  are byte-identical; the ref is appended to a separate value afterwards.
+- Send button latches on first click (`sending`), cleared by `resetAll` and by all three
+  activity-change handlers. Fixes an existing customer-facing bug: `window.open` often fails to take
+  focus on iOS, so a double tap sent Simone two identical messages.
+
+**`apps-script/Code.gs`:** new, not deployed from this repo, kept here so it stays version-controlled
+next to the schema it has to agree with. `doPost` takes a script lock, validates `activity_id` against
+the twelve real ids, stamps `ts_server`, and appends by header name rather than by position. Also
+`setupHeaders()` and `setupDeadLogTrigger()`.
+
+**Three things worth knowing:**
+
+1. `logEvent` takes a THUNK, not a built row. Calling it as `logEvent("booking", bookingLogRow(ref))`
+   would evaluate the builder as an argument, outside the try/catch, and a throw would land between
+   `openWhatsApp` and `setScreen("confirm")`: WhatsApp opens, the confirm screen never renders, the
+   copy fallback is never shown. Logging must not be able to cost a booking.
+2. `dates_iso` uses `s.m + 1`, because `sortedDates` months are zero-indexed (`MONTHS[s.m]`). Nothing
+   automated can catch an off-by-one here; it has to be read off the sheet by eye.
+3. The PII whitelist cannot be proven by any assertion. `tests/assert.js` counts substrings across the
+   whole file and cannot scope to a function body, so pinning `bookingLogRow`'s source is the only
+   defence and it only catches an edit to that function. Logged in `TODOS.md`.
+
+`tests/assert.js`: 618 to 639. Seven existing needles updated for the `sending` latch, 21 added.
+Both suites pass from inside `tests/`: 639 / 639, 0 console errors.
+
+**Not shipped yet:** the endpoint itself. `LOG_ENDPOINT` is empty, so nothing is logged until the
+spreadsheet exists and its `/exec` URL is pasted in. See the setup block at the top of `Code.gs`, and
+note step 6: "Who has access: Anyone", not "Anyone with a Google account". That one fails silently.
+
 ## 10 Sep 2026 - DOCS-ACCORDION-ACCURACY: fix drifted step 2 accordion docs, add TODOS.md
 
 Documentation only. No change to `index.html`, no change to the deployed site, no offering or pricing

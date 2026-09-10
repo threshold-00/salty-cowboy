@@ -1161,6 +1161,45 @@ const T = {
 const WEIGHT_KEYS = ["w1", "w2", "w3", "w4"];
 const EXPERIENCE_KEYS = ["e1", "e2", "e3", "e4"];
 
+// ─── BOOKING LOG (write-only) ────────────────────────────────────────────────
+// Paste the Apps Script /exec URL here to turn logging on. Empty means off, so
+// a fork of this repo can never post into Simone's spreadsheet.
+const LOG_ENDPOINT = "";
+const LOG_SCHEMA_V = 1;
+
+// Short, unambiguous booking reference. No I/O/0/1, because it gets read off a
+// phone screen. Printed at the bottom of the WhatsApp message AND logged, so a
+// row in the sheet can be matched back to Simone's thread later.
+function newRef() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 6; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)];
+  return "SC-" + s;
+}
+
+// One per page load. Several bookings can share it; each has its own ref.
+const SESSION_ID = newRef() + "-" + Date.now().toString(36);
+
+// Fire and forget. `build` is a THUNK and is called INSIDE the try on purpose.
+// Called as an argument instead (logEvent("booking", buildRow())) a throw would
+// escape this guard, land between openWhatsApp and setScreen("confirm"), and
+// leave the customer looking at a dead screen with no copy fallback. Logging
+// must never be able to cost a booking.
+function logEvent(type, build) {
+  if (!LOG_ENDPOINT) return;
+  try {
+    const row = build();
+    row.type = type;
+    row.v = LOG_SCHEMA_V;
+    const body = JSON.stringify(row);
+    const blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+    const ok = navigator.sendBeacon(LOG_ENDPOINT, blob);
+    if (!ok) console.warn("[log] sendBeacon refused the payload");
+  } catch (e) {
+    console.warn("[log] skipped:", e && e.message);
+  }
+}
+
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 
 const css = `
@@ -2713,6 +2752,10 @@ function App() {
   const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  // Latches on the first Send click. window.open often fails to take focus on
+  // iOS, so without this a nervous double tap sends Simone two identical
+  // messages and writes two rows.
+  const [sending, setSending] = useState(false);
   // Tri-state manual override per section: null = no manual interaction yet
   // (use the default auto behaviour), true/false = user has explicitly
   // toggled it open or closed. The chevron is clickable at all times, not
@@ -2826,6 +2869,7 @@ function App() {
     setGrooming(null);
     setSentMessage("");
     setCopied(false);
+    setSending(false);
   }
   const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;
 
@@ -3009,7 +3053,54 @@ function App() {
       setRiderInfoCopied(false);
     }
   }, [bookingForOther]);
+  // Write-only booking log row. This is a WHITELIST: every field is named
+  // explicitly, so rider names, ages and free-text notes cannot reach the sheet
+  // by accident. `notes` contributes a boolean and nothing else.
+  //
+  // NOTE: tests/assert.js counts substrings across the whole file and cannot
+  // scope an assertion to a function body, so no automated test can prove the
+  // absence of `riders` or `notes` here. The assertion that pins this block is
+  // the only defence, and it only catches an edit to this function.
+  function bookingLogRow(ref) {
+    const counts = {};
+    WEIGHT_KEYS.forEach(k => {
+      counts[k] = riders.filter(r => r.weight === k).length;
+    });
+    return {
+      ts_client: new Date().toISOString(),
+      ref: ref,
+      session_id: SESSION_ID,
+      lang: lang,
+      activity_id: actObj ? actObj.id : "",
+      duration: duration || "",
+      is_course: isCourse,
+      // sortedDates months are ZERO-INDEXED (see MONTHS[s.m] in formatOne), so
+      // ISO needs s.m + 1. Built from the structured dates, never from
+      // formattedDates, which is English prose.
+      dates_iso: sortedDates.map(s => s.y + "-" + String(s.m + 1).padStart(2, "0") + "-" + String(s.d).padStart(2, "0")).join(","),
+      date_count: sortedDates.length,
+      time: selectedTime || "",
+      num_people: numPeople || 0,
+      // Weight is only collected when showWeight. Without this flag, four zero
+      // counts on a photoshoot look identical to "asked, everyone was light".
+      weight_asked: showWeight,
+      w1: counts.w1,
+      w2: counts.w2,
+      w3: counts.w3,
+      w4: counts.w4,
+      photographer_addon: isPhotoshoot ? photographerAddon : false,
+      booking_for_other: isRiding ? bookingForOther : false,
+      grooming: needsGrooming ? grooming : null,
+      total_price: totalPrice,
+      has_notes: !!(notes && notes.trim()),
+      // Shipped empty on purpose. Adding a column to a live log is a migration;
+      // leaving two empty is free, and the ref above is what makes them fillable.
+      outcome: "",
+      horse: ""
+    };
+  }
   function handleSend() {
+    if (sending) return;
     const message = buildWhatsAppMessage({
       actObj,
       durationLabel: duration,
@@ -3025,9 +3116,13 @@ function App() {
       grooming: needsGrooming ? grooming : null,
       totalPriceStr
     });
-    setSentMessage(message);
+    setSending(true);
+    const ref = newRef();
+    const outbound = message + "\n_Ref: " + ref + "_";
+    setSentMessage(outbound);
     setCopied(false);
-    openWhatsApp(message);
+    openWhatsApp(outbound);
+    logEvent("booking", () => bookingLogRow(ref));
     setScreen("confirm");
   }
   function copyMessage() {
@@ -3153,6 +3248,7 @@ function App() {
       setGrooming(null);
       setSelectedDates([]);
       setSelectedTime(null);
+      setSending(false);
     }
   }, t.categories[cat.category]))), /*#__PURE__*/React.createElement("div", {
     className: "cat-intro"
@@ -3173,6 +3269,7 @@ function App() {
       setGrooming(null);
       setSelectedDates([]);
       setSelectedTime(null);
+      setSending(false);
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "act-left"
@@ -3224,6 +3321,7 @@ function App() {
       // auto-open on a booking the user never actually confirmed.
       setSelectedDates([]);
       setSelectedTime(null);
+      setSending(false);
       setScreen("riders");
     }
   }, t.bookActivity)), /*#__PURE__*/React.createElement("div", {
@@ -3740,7 +3838,7 @@ function App() {
       marginBottom: 22,
       display: section3Collapsed ? "none" : undefined
     },
-    disabled: !selectedTime || !detailsComplete,
+    disabled: !selectedTime || !detailsComplete || sending,
     onClick: handleSend
   }, t.sendBtn), React.createElement("div", {
     className: "notice",

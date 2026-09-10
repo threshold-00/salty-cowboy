@@ -7,6 +7,7 @@ Front-end booking engine for Salty Cowboy Bali, a horse rescue sanctuary and rid
 ```
 /
 ├── index.html          # the app (single file, no build step)
+├── apps-script/        # Apps Script for the booking log endpoint, NOT deployed from here
 ├── CLAUDE.md           # this file
 ├── CHANGELOG.md        # dated list of shipped changes
 ├── tests/
@@ -191,8 +192,51 @@ Every activity's notes field shows a small hint above the textarea: "We want you
 
 Step 1 (the activity picker) opens directly on the "Choose an activity" heading, no card or mission paragraph above it (batch 4, Commit 1 removed the dark "Where the money goes" card, since Step 2's own light "What your booking cost funds" card already carries that copy). Navigation off Step 1 is via each activity card's own "Book →" button only; the global bottom "Next" bar was removed as redundant (Book already sets the activity and advances the screen in one click). Tapping a card still just selects/previews it without navigating.
 
+## Booking log (10 Sep 2026 BOOKING-LOG)
+
+Write-only. One row per Send click, `navigator.sendBeacon` to an Apps Script `/exec` endpoint, into a
+**separate** spreadsheet from Simone's Customer Offerings sheet. Nothing is ever read back. No
+availability, capacity or pricing logic depends on it, and the site must keep working with the endpoint
+unreachable.
+
+**Off unless a URL is pasted in.** `LOG_ENDPOINT` (`index.html`) ships as `""` and `logEvent` returns
+immediately when empty, so a fork never posts into the real sheet. An assertion pins it empty; do not
+commit a live URL.
+
+**Rules that are easy to break by accident:**
+
+- `logEvent(type, build)` takes a **thunk**. Never `logEvent("booking", bookingLogRow(ref))`: that
+  evaluates the builder as an argument, outside the try/catch, and a throw lands between
+  `openWhatsApp` and `setScreen("confirm")`, stranding the customer on a dead screen with no copy
+  fallback. Logging must never be able to cost a booking.
+- `bookingLogRow` is a **whitelist**, not a filter. Rider names, ages and free-text notes must never
+  reach it; `notes` contributes only a `has_notes` boolean. `tests/assert.js` cannot scope an
+  assertion to a function body, so nothing automated can prove this. The pinned source block is the
+  only defence and it only catches an edit to that one function.
+- Dates come from `sortedDates` with `s.m + 1`, never from `formattedDates` (English prose).
+  `sortedDates` months are **zero-indexed**. No test can catch an off-by-one; read the sheet by eye.
+- `duration` logs the **raw** state value (`"3hr"`), not the WhatsApp display suffix
+  (`"3 to 3.5 hr/day"`), so the column stays groupable.
+- `weight_asked` exists because weight is only collected when `showWeight`. Without it, four zero
+  counts on a photoshoot are indistinguishable from "asked, everyone was light".
+- The `Ref: SC-XXXXXX` line appended in `handleSend` is the **join key** between a sheet row and
+  Simone's WhatsApp thread. `outcome` and `horse` ship as empty columns and are only fillable because
+  of it.
+- `apps-script/Code.gs` appends **by header name**, never by position, and its `VALID_ACTIVITY_IDS`
+  must be kept in sync with `ACTIVITIES` in `index.html`.
+
+**The two silent failure modes.** A deployment set to "Anyone with a Google account" instead of
+"Anyone" redirects the POST to a login page while `sendBeacon` still returns `true`. And creating a
+*new* deployment issues a *new* `/exec` URL, orphaning the old one. Both produce a spreadsheet
+identical to "no bookings", for weeks. `setupDeadLogTrigger()` is the only thing that tells them apart.
+
+**Phase 2 (funnel events on step 2) is designed but not built.** See the design doc in
+`~/.gstack/projects/rowenabaulch/`.
+
 ## Open items (not yet resolved)
 
+- **The booking log has no endpoint yet** (10 Sep 2026): `LOG_ENDPOINT` is empty, so nothing is being logged. The spreadsheet and Apps Script deployment still have to be created; setup steps are at the top of `apps-script/Code.gs`. Until then the log code is inert.
+- **Is Salty Cowboy supply-constrained or demand-constrained?** Unconfirmed and load-bearing for what the booking log is for. One question to Simone settles it: is she turning bookings away for lack of horse-hours, or does she have empty hours she wants filled?
 - **Both rides regained Saturday availability on 29 Aug 2026** (BEACH-8AM commit, corrected same day to cover Insta Ride too): the new shared 8:00am slot is bookable on Saturdays; each ride's afternoon slot still drops on a Saturday date, same as before. Previously both rides showed zero Saturday availability at all, confirmed acceptable by Ro at the time (consistent with the Horse Whisperer Course also having no Saturday availability); that constraint no longer applies now that both rides have a morning option.
 - **Weight selector added to Beach Photoshoot only** (not Stable/Rice Field/Paddock/Cottages), since it's the only photoshoot where riders mount a horse. Confirmed with Ro; flagging for Simone's awareness since it's a new behaviour (photoshoots previously never asked for weight).
 - **Paddock/Stable 3 hr price (IDR 3,750,000)** is derived from Simone's existing +500K per 30 min pattern. Awaiting her final sign-off. Rice Field no longer offers a 3hr option (removed 29 Aug 2026 RICEFIELD-8AM), so this no longer applies to it.
