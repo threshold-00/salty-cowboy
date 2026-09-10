@@ -2,6 +2,33 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - DOCS-ACCORDION-ACCURACY: fix drifted step 2 accordion docs, add TODOS.md
+
+Documentation only. No change to `index.html`, no change to the deployed site, no offering or pricing
+data changed, so no TSV block for the Google Sheet.
+
+`CLAUDE.md:30` had drifted from the code in five ways, all found while planning the booking log:
+
+- It named `section1ManualOpen` / `section2ManualOpen`. Those identifiers do not exist. The code uses
+  `section1Override`, `section2Override` and `section3Override` (`index.html:2725-2727`).
+- It called them booleans. They are three-state: `null` means never toggled, so the automatic default
+  applies; `true` or `false` is an explicit manual choice.
+- It gave one collapse formula for both sections ("same pattern for section 2"). Each section has a
+  different default. Section 2's is `!section1Complete || detailsComplete` (`2938`), a sequential
+  reveal, not a completion flag.
+- It said section 3 is not collapsible. Section 3 IS collapsible (`2951`), with an inverted default.
+- It did not document `blockedSection` at all (`toggleSection2` / `toggleSection3`, `2752-2766`),
+  which blocks opening a section ahead of sequence, shows a note for 3 seconds, and never blocks
+  closing. Nor the Edit link's deliberate bypass of that guard.
+
+`TODOS.md` is new: three verified open defects found in the same pass and deliberately not fixed here.
+`riders` is not reset by the category-tab handler (`3147-3155`) though every other activity-change path
+calls `setRiders([])`; the hero logo (`3112`) returns to the activity screen with all state intact,
+unlike `resetAll` (`2815`); and `tests/assert.js` (`5-14`) counts substrings across the whole file with
+no function-body scoping, so it cannot express "X does not appear inside function Y".
+
+Both suites pass unchanged: 618 / 618 on `assert.js`, 0 console errors on `smoke.js`.
+
 ## 8 Sep 2026 - FOLDER-SINGULAR: local folders renamed to match the singular brand
 
 Local environment change, no effect on the repo contents or the deployed site. Both local folders were
