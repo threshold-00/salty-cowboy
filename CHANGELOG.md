@@ -2,6 +2,41 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - COURSE-WEEK-PICKER: Horse Whisperer date picker books a week at a time
+
+Found by Ro on a real phone during the booking-log acceptance gate. Picking a course date could grey
+out every remaining date, leaving 1 of 3 selected, a disabled Send button, and nothing on screen
+explaining why. No offering or pricing data changed.
+
+**Two separate bugs, one symptom.**
+
+1. *The part-past week.* The course runs Mon, Tue and Thu. On a Thursday, that week's Monday and
+   Tuesday are already in the past, so the Thursday was still tappable but the booking could never be
+   completed. Reproduced exactly: today is Thu 10 Sep 2026, and Thu 9/10 was offered while Mon 9/7 and
+   Tue 9/8 were not.
+2. *The month straddle.* The week of Mon 28 Sep runs 9/28, 9/29 and **1 Oct**. Picking the Monday left
+   the only remaining valid days in a month the calendar was not showing, so September appeared
+   entirely greyed out. Not yet hit, but it recurs at the end of most months.
+
+**The fix follows from the real constraint.** Mon/Tue/Thu inside one week means there is exactly ONE
+valid set of days per week, so picking three dates was theatre; the only real choice is the week.
+
+- `COURSE_DOWS`, `courseWeekDates(s)` and `courseWeekBookable(s)` added at module level.
+  `courseWeekDates` walks from the containing Monday and lets `Date` normalise month and year
+  overflow, which is what makes the straddling week work.
+- `isAvailableDay` now greys out every day of a week that cannot be completed. Days in other bookable
+  weeks stay live on purpose, so tapping one moves the booking rather than forcing a clear first.
+- `handleDayClick` selects all three days of the week in one tap; tapping a selected day clears it.
+- `removeDate` drops the whole week rather than leaving 2 of 3 and a silently disabled Send button.
+- `pickCourseDays` copy updated in all three languages: it said "Select 3 days for the course", which
+  no longer describes the interaction.
+- `weekKey` deleted. The same-week lock was its only caller.
+
+Verified by simulation across September and October 2026: **zero dead-end days**, Thu 9/10 correctly
+no longer offered, and the 9/28 week selecting 9/28, 9/29 and 10/1 from any of its three days.
+
+`tests/assert.js`: 640 to 650. Both suites pass from inside `tests/`, 0 console errors.
+
 ## 10 Sep 2026 - BOOKING-LOG-ENDPOINT: log endpoint deployed and wired in
 
 Completes the previous entry. The spreadsheet, Apps Script deployment and `LOG_ENDPOINT` are now live.

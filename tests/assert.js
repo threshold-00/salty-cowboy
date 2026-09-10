@@ -239,7 +239,9 @@ has('id whisper uses client-approved copy', 'Kursus 3 hari, 10 jam, berlangsung 
 has('id whisper closes with the "for two people" line', 'Kursus ini untuk dua orang, jadi ajak teman Anda!');
 has('ru whisper uses client-approved copy', 'Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг.');
 has('ru whisper closes with the "for two people" line', 'Курс рассчитан на двоих, так что берите с собой друга!');
-has('en pickCourseDays says 3',    'pickCourseDays: "Select 3 days for the course"');
+has('en pickCourseDays tells the user a tap books the week, not that they pick 3 days (COURSE-WEEK-PICKER)', 'pickCourseDays: "Tap any available day to book that whole week"');
+has('id pickCourseDays matches the new interaction', 'pickCourseDays: "Ketuk hari yang tersedia untuk memesan minggu itu"');
+has('ru pickCourseDays matches the new interaction', 'pickCourseDays: "Нажмите любой доступный день, чтобы забронировать всю неделю"');
 
 // ─── 2 Sep 2026 CLIENT-COPY-FEEDBACK: remaining copy notes from the client ─
 has('en introLessons uses client-approved copy, dropping the "natural horsemanship" flourish', 'introLessons: "Every session except the Dressage Masterclass is off-saddle. You\'ll be working hand in hand with our rescue horses to build trust and learn to read them."');
@@ -420,7 +422,10 @@ has('font-style: italic only remains on the 3 non-display notes (loading label, 
 has('price-note keeps its own italic styling untouched (not a --display heading); weight 300 on var(--body) (was implicit 400, lightened by the body-copy weight sweep)', '.price-note { font-family: var(--body); font-size: 11px; font-weight: 300; color: var(--dusk); margin-top: 5px; font-style: italic; }');
 has('byo-note keeps its own italic styling untouched (not a --display heading); weight 300 on var(--body) (was implicit 400, lightened by the body-copy weight sweep)', '.byo-note { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-top: 6px; line-height: 1.45; font-style: italic; }');
 has('duration-to-slot filtering still reads duration + sortedDates, untouched by reorder', 'const availableSlots = slotsFor(actObj, duration, sortedDates);');
-has('Horse Whisperer multi-day week-lock logic untouched by reorder', 'if (isCourse && selectedDates.length > 0) {\n      if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;\n    }');
+// COURSE-WEEK-PICKER (10 Sep 2026) replaced the same-week lock. The old rule
+// let a part-past week stay tappable, which dead-ended the booking.
+has('a course day is only offered when its whole week is still bookable, so no tap can dead-end', 'if (isCourse && !courseWeekBookable({ y: calYear, m: calMonth, d: day })) return false;');
+missing('the old same-week lock is gone, along with weekKey, which nothing else used', 'weekKey');
 has('detailsComplete definition unchanged (still riders+duration+numPeople+grooming based)', 'const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;');
 missing('the old marginTop:22 spacer above the calendar is gone (large gap removed)', 'className: "fu",\n    style: {\n      marginTop: 22');
 
@@ -914,6 +919,19 @@ has('handleSend bails on a second click', 'function handleSend() {\n    if (send
 has('sending latches before the popup opens', 'setSending(true);\n    const ref = newRef();');
 has('Send button is disabled once sending latches, so a double tap on iOS cannot send Simone two identical messages', 'disabled: !selectedTime || !detailsComplete || sending,');
 has('resetAll clears the sending latch, so "Book another" is not permanently disabled', 'setCopied(false);\n    setSending(false);\n  }');
+
+// ─── COURSE-WEEK-PICKER (10 Sep 2026) ────────────────────────────────────
+// The Horse Whisperer Course runs Mon/Tue/Thu of one week, so there is exactly
+// one valid set of days per week. Two bugs fell out of pretending otherwise:
+// a part-past week could be tapped and never completed, and a week straddling
+// a month left the remaining days in a month the calendar was not showing.
+has('course days are Mon, Tue, Thu as a single source of truth', 'const COURSE_DOWS = [1, 2, 4];');
+has('courseWeekDates walks from the Monday of the containing week, letting Date normalise a month or year overflow', 'const monday = new Date(s.y, s.m, s.d + (dow === 0 ? -6 : 1 - dow));\n  return COURSE_DOWS.map(function (target) {');
+has('courseWeekBookable requires ALL THREE days to be ahead, which is what stops the dead end', 'return courseWeekDates(s).every(function (x) {\n    return !isPastDate(x.y, x.m, x.d);\n  });');
+has('one tap selects the whole course week; tapping a selected day clears it', 'if (isCourse) {\n      setSelectedDates(isDaySelected(day) ? [] : courseWeekDates(here));\n      setSelectedTime(null);\n      return;\n    }');
+has('removing one course day removes the week, rather than leaving 2 of 3 and a silently disabled Send button', 'if (isCourse) {\n      setSelectedDates([]);\n      setSelectedTime(null);\n      return;\n    }\n    setSelectedDates(prev => prev.filter(s => !(s.y === target.y');
+has('the past-date check still runs first, so a past Monday is rejected before any course logic', 'function isAvailableDay(day) {\n    if (isPastDate(calYear, calMonth, day)) return false;');
+has('Wed/Fri/Sat stay closed for the whisper course', 'if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

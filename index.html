@@ -567,14 +567,6 @@ function slotsFor(actObj, duration, dates) {
   return list;
 }
 
-// Monday of the week a date falls in, as a comparable key. Used to keep the
-// Horse Whisperer course inside a single Mon–Sat week.
-function weekKey(s) {
-  const dow = new Date(s.y, s.m, s.d).getDay();
-  const mon = new Date(s.y, s.m, s.d + (dow === 0 ? -6 : 1 - dow));
-  return mon.getFullYear() + "-" + mon.getMonth() + "-" + mon.getDate();
-}
-
 // Group size caps are per activity now, so this is built from maxPeople.
 // minPeople sets a floor (Group Clinic: 3), defaulting to 1 for everything else.
 function peopleOptions(actObj) {
@@ -631,7 +623,7 @@ const T = {
     whisperHintPre: "The horse whisperer course goes over 3 days. ",
     whisperHintLink: "Click here",
     whisperHintPost: " to view more about this program.",
-    pickCourseDays: "Select 3 days for the course",
+    pickCourseDays: "Tap any available day to book that whole week",
     daysSelected: "of 3 days selected",
     courseDaysTitle: "Your course days",
     courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week.",
@@ -816,7 +808,7 @@ const T = {
     whisperHintPre: "Kursus horse whisperer berlangsung selama 3 hari. ",
     whisperHintLink: "Klik di sini",
     whisperHintPost: " untuk melihat lebih lanjut tentang program ini.",
-    pickCourseDays: "Pilih 3 hari untuk kursus",
+    pickCourseDays: "Ketuk hari yang tersedia untuk memesan minggu itu",
     daysSelected: "dari 3 hari dipilih",
     courseDaysTitle: "Hari kursus Anda",
     courseWeekNote: "Kursus berlangsung Senin, Selasa, dan Kamis, semuanya dalam satu minggu yang sama.",
@@ -1001,7 +993,7 @@ const T = {
     whisperHintPre: "Курс «шепчущего с лошадьми» длится 3 дня. ",
     whisperHintLink: "Нажмите здесь",
     whisperHintPost: ", чтобы узнать больше об этой программе.",
-    pickCourseDays: "Выберите 3 дня для курса",
+    pickCourseDays: "Нажмите любой доступный день, чтобы забронировать всю неделю",
     daysSelected: "из 3 дней выбрано",
     courseDaysTitle: "Дни вашего курса",
     courseWeekNote: "Курс проходит по понедельникам, вторникам и четвергам, всё в течение одной недели.",
@@ -2549,6 +2541,34 @@ function isPastDate(year, month, day) {
   today.setHours(0, 0, 0, 0);
   return d < today;
 }
+
+// The Horse Whisperer Course runs Monday, Tuesday and Thursday of a single
+// Mon-Sat week, so there is exactly ONE valid set of days per week and the only
+// real choice is which week. Everything below follows from that.
+const COURSE_DOWS = [1, 2, 4];
+
+// The three course days of the week containing s, in order. Handles a week that
+// straddles a month or year boundary, since Date normalises the overflow.
+function courseWeekDates(s) {
+  const dow = new Date(s.y, s.m, s.d).getDay();
+  const monday = new Date(s.y, s.m, s.d + (dow === 0 ? -6 : 1 - dow));
+  return COURSE_DOWS.map(function (target) {
+    const d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + (target - 1));
+    return { y: d.getFullYear(), m: d.getMonth(), d: d.getDate() };
+  });
+}
+
+// A course week can only be offered if ALL THREE of its days are still ahead.
+// Without this, a part-past week stays tappable: picking the one remaining day
+// greys out everything else and the booking can never be completed, with
+// nothing on screen saying why. Found on 10 Sep 2026 during the booking-log
+// acceptance gate (a Thursday, with that week's Monday and Tuesday already
+// gone).
+function courseWeekBookable(s) {
+  return courseWeekDates(s).every(function (x) {
+    return !isPastDate(x.y, x.m, x.d);
+  });
+}
 // Stroke chevron for the Step 2 accordion headings (sections 1/2/3). Points
 // down when the section is closed, up when open; `open` flips a CSS
 // rotation rather than swapping path data.
@@ -2916,9 +2936,11 @@ function App() {
     const dow = d.getDay();
     if (dow === 0) return false;
     if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;
-    if (isCourse && selectedDates.length > 0) {
-      if (weekKey({ y: calYear, m: calMonth, d: day }) !== weekKey(selectedDates[0])) return false;
-    }
+    // A course is booked a week at a time. Every day of a week that cannot be
+    // completed is greyed out, so it is impossible to tap into a dead end.
+    // Days in OTHER bookable weeks stay live on purpose: tapping one moves the
+    // booking to that week rather than making the user clear the old one first.
+    if (isCourse && !courseWeekBookable({ y: calYear, m: calMonth, d: day })) return false;
     return true;
   }
   function isDaySelected(day) {
@@ -2931,6 +2953,15 @@ function App() {
       m: calMonth,
       d: day
     };
+    // One tap books the whole week. Three separate taps were theatre (there is
+    // only ever one valid combination) and broke outright when a week straddled
+    // a month, because the remaining days sat in a month the calendar was not
+    // showing. Tapping a day already selected clears the week.
+    if (isCourse) {
+      setSelectedDates(isDaySelected(day) ? [] : courseWeekDates(here));
+      setSelectedTime(null);
+      return;
+    }
     const already = isDaySelected(day);
     if (requiredDates === 1) {
       setSelectedDates(already ? [] : [here]);
@@ -2944,6 +2975,13 @@ function App() {
     }
   }
   function removeDate(target) {
+    // A course is all or nothing: dropping one day drops the week, rather than
+    // leaving 2 of 3 selected and the Send button quietly disabled.
+    if (isCourse) {
+      setSelectedDates([]);
+      setSelectedTime(null);
+      return;
+    }
     setSelectedDates(prev => prev.filter(s => !(s.y === target.y && s.m === target.m && s.d === target.d)));
   }
   function changeMonth(delta) {
