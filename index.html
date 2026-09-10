@@ -509,9 +509,16 @@ const JOINUP_SLOTS = ["8:30am", "9:30am"];
 const GROOMING_SLOTS = ["8:30am", "9:30am", "10:30am"]; // masterclass = "Horse grooming"
 const GROUPCLINIC_SLOTS = ["8:30am"];
 const DRESSAGE_SLOTS = ["8:30am", "9:30am"];
-// The Horse Whisperer Course runs the same start-time choice (8:30 or 9:30am)
-// across all four days.
-const WHISPER_SLOTS = ["8:30am", "9:30am"];
+// Simone's standard course schedule (her message, 10 Sep 2026):
+//   Monday    8:30 - 12:00
+//   Tuesday   8:30 - 12:00
+//   Thursday  9:00 - 12:00
+// FIXED, not chosen, which is why step 1 shows them read-only rather than as
+// pickable slots. Customers who need different times message her instead.
+// Kept as a one-entry slot list so availableSlots, the drop effect and
+// section1Complete keep working unchanged; the effect below auto-selects it.
+const WHISPER_TIME = "Mon & Tue 8:30am, Thu 9:00am";
+const WHISPER_SLOTS = [WHISPER_TIME];
 // Beach shoots run any time between 08:00 and 16:00. They carry slots so the
 // Saturday afternoon closure can apply to them too.
 const PHOTO_SLOTS = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm", "3:00pm", "4:00pm"];
@@ -663,6 +670,8 @@ const T = {
     unavailable: "Unavailable",
     pickDate: "Select an available date above to choose your time slot.",
     timeSlot: "Time slot",
+    whisperSchedule: [["Monday", "8:30am - 12:00pm"], ["Tuesday", "8:30am - 12:00pm"], ["Thursday", "9:00am - 12:00pm"]],
+    whisperCustomTimes: "These are our usual course times. Need something different? Message Simone and she will do her best to fit you in.",
     satNote: "We close on Saturday afternoons, so only morning times are shown.",
     fullDay: "Full day",
     matchedHorses: "Your matched horses",
@@ -770,7 +779,7 @@ const T = {
       photo_ricefield: "A private session with your horse framed by Bali's open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light.",
       photo_paddock: "Open paddock backdrop with grazing horses. Location only, photographer not included. Entering the paddocks and touching the horses is not permitted.",
       photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by session (linked to Airbnb blocking). Location only, no horses included. Photos are taken inside the cottage. Entering the paddocks and touching the horses is not permitted.",
-      whisper: "A 3-day, 10-hour course spread over Monday, Tuesday and Thursday. Two 3.5-hour sessions to build the basics, then a 3-hour session to bring it together. Includes 2 hours of grooming or choice of another related activity, with an 8:30 or 9:30am start each day. Open to all levels, no experience needed. This course is for two people, so bring your friend!",
+      whisper: "A 3-day, 10-hour course spread over Monday, Tuesday and Thursday. Two 3.5-hour sessions to build the basics, then a 3-hour session to bring it together. Includes 2 hours of grooming or choice of another related activity, starting 8:30am on Monday and Tuesday and 9:00am on Thursday, finishing at midday. Open to all levels, no experience needed. This course is for two people, so bring your friend!",
       joinup: "An introduction to natural horsemanship. Learn to 'join up' a horse so it chooses to stay with you. Hands-on, no riding.",
       masterclass: "Learn the finer art of grooming, with tips for Bali's damp, hot climate, from the stable manager, plus Q&A.",
       groupclinic: "A hands-on session in leadership, communication and trust, taught through the horse. Working at liberty in the round pen, your group learns to read body language, hold presence and earn cooperation without force, the same skills you'd use in any team setting. Popular with women's groups, business teams, and friend groups that ride. No riding experience needed. Up to 6 people, 1.5 hours, IDR 6,000,000 per session as a flat group rate.",
@@ -848,6 +857,8 @@ const T = {
     unavailable: "Tidak tersedia",
     pickDate: "Pilih tanggal yang tersedia di atas untuk memilih waktu.",
     timeSlot: "Waktu",
+    whisperSchedule: [["Senin", "08.30 - 12.00"], ["Selasa", "08.30 - 12.00"], ["Kamis", "09.00 - 12.00"]],
+    whisperCustomTimes: "Ini jadwal kursus kami yang biasa. Butuh waktu lain? Kirim pesan ke Simone dan dia akan berusaha menyesuaikan.",
     satNote: "Kami tutup pada Sabtu sore, jadi hanya waktu pagi yang ditampilkan.",
     fullDay: "Sepanjang hari",
     matchedHorses: "Kuda yang cocok untuk Anda",
@@ -955,7 +966,7 @@ const T = {
       photo_ricefield: "Sesi privat bersama kuda Anda dengan latar terasering sawah Bali yang terbuka. Format sama seperti sesi foto Kandang kami, hanya berlokasi di area hijau, bukan di pekarangan kandang. Golden hour direkomendasikan untuk pencahayaan terbaik.",
       photo_paddock: "Latar padang terbuka dengan kuda yang merumput. Hanya lokasi, fotografer tidak termasuk. Dilarang memasuki padang dan menyentuh kuda.",
       photo_cottages: "Interior cottage kayu rustic untuk pemotretan fashion, prewedding, atau pribadi. Harga per sesi (terkait blocking Airbnb). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage. Dilarang memasuki padang dan menyentuh kuda.",
-      whisper: "Kursus 3 hari, 10 jam, berlangsung pada Senin, Selasa, dan Kamis. Dua sesi 3,5 jam untuk membangun dasar-dasarnya, lalu satu sesi 3 jam untuk menyatukan semuanya. Termasuk 2 jam grooming atau pilihan aktivitas terkait lainnya, dengan pilihan mulai pukul 8:30 atau 9:30 pagi setiap harinya. Terbuka untuk semua level, tidak perlu pengalaman. Kursus ini untuk dua orang, jadi ajak teman Anda!",
+      whisper: "Kursus 3 hari, 10 jam, berlangsung pada Senin, Selasa, dan Kamis. Dua sesi 3,5 jam untuk membangun dasar-dasarnya, lalu satu sesi 3 jam untuk menyatukan semuanya. Termasuk 2 jam grooming atau pilihan aktivitas terkait lainnya, dimulai pukul 08.30 pada Senin dan Selasa, dan 09.00 pada Kamis, selesai pukul 12.00. Terbuka untuk semua level, tidak perlu pengalaman. Kursus ini untuk dua orang, jadi ajak teman Anda!",
       joinup: "Pengantar natural horsemanship. Belajar 'join up' agar kuda memilih untuk tetap bersama Anda. Praktik langsung, tanpa berkuda.",
       masterclass: "Pelajari seni grooming yang lebih halus, dengan tips untuk iklim Bali yang lembap dan panas, dari manajer kandang, plus tanya jawab.",
       groupclinic: "Sesi praktik tentang kepemimpinan, komunikasi, dan kepercayaan, diajarkan melalui kuda. Bekerja secara liberty di round pen, kelompok Anda belajar membaca bahasa tubuh, menjaga kehadiran diri, dan mendapatkan kerja sama tanpa paksaan, keterampilan yang sama yang Anda gunakan dalam situasi tim apa pun. Populer di kalangan kelompok wanita, tim bisnis, dan kelompok pertemanan yang gemar berkuda. Tidak perlu pengalaman berkuda. Hingga 6 orang, 1,5 jam, IDR 6.000.000 per sesi sebagai tarif kelompok tetap.",
@@ -1033,6 +1044,8 @@ const T = {
     unavailable: "Недоступно",
     pickDate: "Выберите доступную дату выше, чтобы выбрать время.",
     timeSlot: "Время",
+    whisperSchedule: [["Понедельник", "8:30 - 12:00"], ["Вторник", "8:30 - 12:00"], ["Четверг", "9:00 - 12:00"]],
+    whisperCustomTimes: "Это наше обычное расписание курса. Нужно другое время? Напишите Симоне, и она постарается подстроиться.",
     satNote: "По субботам во второй половине дня мы закрыты, поэтому показано только утреннее время.",
     fullDay: "Весь день",
     matchedHorses: "Подобранные лошади",
@@ -1140,7 +1153,7 @@ const T = {
       photo_ricefield: "Приватная съёмка с лошадью на фоне открытых рисовых террас Бали. Тот же формат, что и наша съёмка в конюшне, только на фоне зелени вместо двора конюшни. Для лучшего света рекомендуем золотой час.",
       photo_paddock: "Открытый загон с пасущимися лошадьми. Только локация, фотограф не входит. Заходить в загоны и трогать лошадей нельзя.",
       photo_cottages: "Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена за сессию (связано с блокировкой Airbnb). Только локация, без лошадей. Съёмка проходит внутри коттеджа. Заходить в загоны и трогать лошадей нельзя.",
-      whisper: "Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг. Два занятия по 3,5 часа для освоения основ, затем занятие на 3 часа, чтобы собрать всё воедино. Включает 2 часа грумминга или другой связанной активности на выбор, с началом в 8:30 или 9:30 утра каждый день. Подходит для любого уровня, опыт не требуется. Курс рассчитан на двоих, так что берите с собой друга!",
+      whisper: "Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг. Два занятия по 3,5 часа для освоения основ, затем занятие на 3 часа, чтобы собрать всё воедино. Включает 2 часа грумминга или другой связанной активности на выбор, начало в 8:30 в понедельник и вторник и в 9:00 в четверг, окончание в 12:00. Подходит для любого уровня, опыт не требуется. Курс рассчитан на двоих, так что берите с собой друга!",
       joinup: "Введение в natural horsemanship. Научитесь делать join up, чтобы лошадь сама выбирала оставаться с вами. Практика, без верховой езды.",
       masterclass: "Освойте тонкое искусство груминга с советами для влажного и жаркого климата Бали, от менеджера конюшни, плюс вопросы и ответы.",
       groupclinic: "Практическое занятие по лидерству, коммуникации и доверию через работу с лошадью. Работая на свободе в круглом манеже, ваша группа учится читать язык тела, удерживать присутствие и добиваться сотрудничества без принуждения, те же навыки, что пригодятся в любой командной обстановке. Популярно среди женских групп, бизнес-команд и компаний друзей, которые катаются верхом. Опыт верховой езды не требуется. До 6 человек, 1,5 часа, IDR 6 000 000 за сессию как фиксированная групповая цена.",
@@ -2035,6 +2048,33 @@ html, body { background: #0a0a0a; }
   padding: 12px 14px;
 }
 .time-cards { display: flex; gap: 10px; margin-bottom: 20px; }
+
+.whisper-schedule {
+  background: #fff;
+  border: 1.5px solid var(--fog);
+  border-radius: 12px;
+  padding: 14.5px;
+  margin-bottom: 20px;
+}
+.ws-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 5px 0;
+}
+.ws-day  { font-family: var(--body); font-size: 13px; font-weight: 300; color: var(--dusk); }
+.ws-time { font-size: 16px; font-weight: 500; color: var(--earth); }
+.ws-note {
+  font-family: var(--body);
+  font-size: 11.5px;
+  font-weight: 300;
+  color: #565656;
+  line-height: 1.45;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fog);
+}
 .time-card {
   flex: 1;
   padding: 14.5px;
@@ -2668,7 +2708,7 @@ function buildWhatsAppMessage({
     const heavy = riders.filter(r => r.weight === "w3").length;
     if (heavy > 0) lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");
   }
-  if (isCourse) lines.push("Course runs Mon, Tue & Thu within one week");
+  if (isCourse) lines.push("Course runs Mon 8:30am-12:00pm, Tue 8:30am-12:00pm, Thu 9:00am-12:00pm, all within one week");
   lines.push("");
   lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "None"));
   lines.push("");
@@ -3067,6 +3107,12 @@ function App() {
   useEffect(() => {
     if (selectedTime && availableSlots.indexOf(selectedTime) === -1) setSelectedTime(null);
   }, [selectedTime, availableSlots.join("|")]);
+  // The whisper course has one fixed schedule, so there is nothing to pick.
+  // Selecting it on the customer's behalf is what lets section1Complete, the
+  // WhatsApp payload and the booking log stay identical to every other activity.
+  useEffect(() => {
+    if (isWhisper && datesComplete && selectedTime !== WHISPER_TIME) setSelectedTime(WHISPER_TIME);
+  }, [isWhisper, datesComplete]);
   // Default duration to the first option whenever the activity changes and
   // nothing is picked yet. Depends on `activity` (the primitive id), not
   // `actObj` (re-derived every render via .find, so a reference-equality
@@ -3601,7 +3647,18 @@ function App() {
     }
   }, t.timeSlot), anySaturday && /*#__PURE__*/React.createElement("div", {
     className: "sat-note"
-  }, t.satNote), /*#__PURE__*/React.createElement("div", {
+  }, t.satNote), isWhisper ? /*#__PURE__*/React.createElement("div", {
+    className: "whisper-schedule"
+  }, t.whisperSchedule.map(row => /*#__PURE__*/React.createElement("div", {
+    key: row[0],
+    className: "ws-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "ws-day"
+  }, row[0]), /*#__PURE__*/React.createElement("span", {
+    className: "ws-time"
+  }, row[1]))), /*#__PURE__*/React.createElement("div", {
+    className: "ws-note"
+  }, t.whisperCustomTimes)) : /*#__PURE__*/React.createElement("div", {
     className: "time-cards"
   }, availableSlots.map(slot => /*#__PURE__*/React.createElement("div", {
     key: slot,

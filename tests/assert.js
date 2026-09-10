@@ -91,7 +91,24 @@ has('slotsFor final fallback is an empty list, not a shared lesson table', 'else
 has('Saturday filter still present (now a no-op for the new morning-only lesson slots)', 'if (dates && dates.length && dates.some(isSaturday)) {\n    list = list.filter(s => slotHour(s) < 12);\n  }');
 
 // ─── Horse Whisperer: 4-day Mon/Tue/Thu/Fri ────────────────────────────────
-has('WHISPER_SLOTS has 8:30 and 9:30am', 'const WHISPER_SLOTS = ["8:30am", "9:30am"];');
+// WHISPER-FIXED-SCHEDULE (10 Sep 2026). Simone's own words: "We usually
+// schedule a course on Monday 8.30-12.00, Tuesday 8.30-12.00, Thursday
+// 9.00-12.00. If people need to customize times they can text me." The old
+// 8:30/9:30am pair was a choice she does not offer, applied one time to all
+// three days, and hid that Thursday starts later.
+has('WHISPER_TIME is the single canonical value that reaches the WhatsApp payload, the summary line and the booking log', 'const WHISPER_TIME = "Mon & Tue 8:30am, Thu 9:00am";');
+has('WHISPER_SLOTS is that one value, so availableSlots, the drop effect and section1Complete keep working with no special cases', 'const WHISPER_SLOTS = [WHISPER_TIME];');
+has('the fixed time is auto-selected once the course week is picked, since there is nothing for the customer to choose', 'if (isWhisper && datesComplete && selectedTime !== WHISPER_TIME) setSelectedTime(WHISPER_TIME);');
+has('step 1 renders the schedule read-only for the whisper course instead of pickable slot cards', 'isWhisper ? /*#__PURE__*/React.createElement("div", {\n    className: "whisper-schedule"');
+has('en schedule carries Simone\'s real per-day times, with Thursday starting later', 'whisperSchedule: [["Monday", "8:30am - 12:00pm"], ["Tuesday", "8:30am - 12:00pm"], ["Thursday", "9:00am - 12:00pm"]]');
+has('id schedule uses 24h, matching local convention', 'whisperSchedule: [["Senin", "08.30 - 12.00"], ["Selasa", "08.30 - 12.00"], ["Kamis", "09.00 - 12.00"]]');
+has('ru schedule present', 'whisperSchedule: [["Понедельник", "8:30 - 12:00"], ["Вторник", "8:30 - 12:00"], ["Четверг", "9:00 - 12:00"]]');
+has('en copy tells the customer to message Simone for different times, which is her stated fallback', 'whisperCustomTimes: "These are our usual course times. Need something different? Message Simone and she will do her best to fit you in."');
+// NOTE: a bare missing('"9:30am"') is WRONG here and was caught failing.
+// Join Up and Dressage both legitimately run a 9:30am slot, and assert.js
+// counts substrings across the whole file with no function or const scoping
+// (see TODOS.md). Pin the old WHISPER_SLOTS line itself instead.
+missing('the old whisper 8:30/9:30am pair is gone; 9:30am survives elsewhere because Join Up and Dressage really do run it', 'const WHISPER_SLOTS = ["8:30am", "9:30am"]');
 has('isWhisper blocks Wed + Fri + Sat (Friday added 29 Aug 2026 WHISPER-3DAY, runs Mon/Tue/Thu only)', 'if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;');
 
 // ─── slotsFor routes correctly ───────────────────────────────────────────
@@ -271,7 +288,7 @@ missing('no leftover "Salty Cowboys" plural anywhere (3 Sep 2026 BRAND-NAME-SING
 has('en daysSelected says 3',      'daysSelected: "of 3 days selected"');
 has('en courseWeekNote Mon/Tue/Thu (Friday dropped)', 'courseWeekNote: "The course runs Monday, Tuesday and Thursday, all within a single week."');
 has('en whisperHintPre says 3 days', 'whisperHintPre: "The horse whisperer course goes over 3 days. "');
-has('WhatsApp course schedule line updated to Mon/Tue/Thu', 'lines.push("Course runs Mon, Tue & Thu within one week");');
+has('WhatsApp course line now carries the actual per-day times, so Simone can see at a glance whether a booking matches her standard schedule', 'lines.push("Course runs Mon 8:30am-12:00pm, Tue 8:30am-12:00pm, Thu 9:00am-12:00pm, all within one week");');
 has('WhatsApp activity line overrides whisper\'s duration suffix to "3 to 3.5 hr/day"', 'const activityDurationSuffix = actObj && actObj.id === "whisper" ? "3 to 3.5 hr/day" : durationLabel;');
 missing('no lang copy mentions Friday for whisper (en)', 'Monday, Tuesday, Thursday and Friday');
 missing('no lang copy mentions Friday for whisper (id)', 'Senin, Selasa, Kamis, dan Jumat');
@@ -934,6 +951,17 @@ has('one tap selects the whole course week; tapping a selected day clears it', '
 has('removing one course day removes the week, rather than leaving 2 of 3 and a silently disabled Send button', 'if (isCourse) {\n      setSelectedDates([]);\n      setSelectedTime(null);\n      return;\n    }\n    setSelectedDates(prev => prev.filter(s => !(s.y === target.y');
 has('the past-date check still runs first, so a past Monday is rejected before any course logic', 'function isAvailableDay(day) {\n    if (isPastDate(calYear, calMonth, day)) return false;');
 has('Wed/Fri/Sat stay closed for the whisper course', 'if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;');
+
+// ─── WHISPER-FIXED-SCHEDULE, customer-facing copy ────────────────────────
+// The activity description advertised a start time Simone does not offer, so
+// it had to change in all three languages alongside the picker.
+has('en whisper description states the real per-day starts and the midday finish', 'starting 8:30am on Monday and Tuesday and 9:00am on Thursday, finishing at midday');
+has('id whisper description updated', 'dimulai pukul 08.30 pada Senin dan Selasa, dan 09.00 pada Kamis, selesai pukul 12.00');
+has('ru whisper description updated', 'начало в 8:30 в понедельник и вторник и в 9:00 в четверг, окончание в 12:00');
+missing('en description no longer offers a 9:30am start', 'with an 8:30 or 9:30am start each day');
+missing('id description no longer offers a 9:30am start', 'pilihan mulai pukul 8:30 atau 9:30 pagi');
+missing('ru description no longer offers a 9:30am start', 'с началом в 8:30 или 9:30 утра');
+missing('the stale comment claiming one shared start across "all four days" is gone; the course has been 3 days since 29 Aug 2026', 'across all four days');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

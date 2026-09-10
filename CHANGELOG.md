@@ -2,6 +2,42 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - WHISPER-FIXED-SCHEDULE: course times match what Simone actually runs
+
+From Simone, via Ro: "We usually schedule a course on Monday 8.30-12.00, Tuesday 8.30-12.00, Thursday
+9.00-12.00. If people need to customize times they can text me."
+
+The app did not match that in three ways at once. It offered a **9:30am start she does not run**, it
+applied **one shared time to all three days**, and it therefore **hid that Thursday starts at 9:00**,
+half an hour later than Monday and Tuesday. No end time was shown anywhere. The 10-hour total in the
+copy (3.5 + 3.5 + 3) already agreed with her schedule, so only the times were wrong.
+
+Since the times are fixed, step 1 no longer offers a choice:
+
+- `WHISPER_TIME` = `"Mon & Tue 8:30am, Thu 9:00am"`, and `WHISPER_SLOTS` is that one value. Keeping it
+  a slot list means `availableSlots`, the slot-drop effect and `section1Complete` need no special
+  cases. An effect auto-selects it once the course week is picked, so the WhatsApp payload, the
+  summary line and the booking log's `time` column all behave exactly as for every other activity.
+- Step 1 renders the three real times read-only (`.whisper-schedule`), with a line telling the
+  customer to message Simone for anything different, which is her own stated fallback.
+- The WhatsApp course line now reads "Course runs Mon 8:30am-12:00pm, Tue 8:30am-12:00pm, Thu
+  9:00am-12:00pm, all within one week", so Simone can see at a glance whether a booking matches her
+  standard schedule.
+- The customer-facing activity description advertised "an 8:30 or 9:30am start each day" in **all
+  three languages**. Rewritten in each to state the real per-day starts and the midday finish.
+- Deleted a stale comment above the slots that described the shared start "across all four days". The
+  course has been 3 days since 29 Aug 2026, so that line had been wrong on two counts for a fortnight.
+
+**One test of mine was wrong and the suite caught it.** A `missing('"9:30am"')` failed with 4 hits:
+Join Up, Dressage, Horse grooming and the 2hr ride slots all legitimately run 9:30am. `assert.js`
+counts substrings across the whole file with no scoping (see `TODOS.md`), so it cannot express "not
+inside `WHISPER_SLOTS`". Replaced with a needle pinning the old `WHISPER_SLOTS` line itself.
+
+Verified in a browser: the schedule renders correctly, and the same booking exercised the
+month-straddling course week, one tap on 28 Sep selecting 28 Sep, 29 Sep and 1 Oct.
+
+`tests/assert.js`: 652 to 667. Both suites pass from inside `tests/`, 0 console errors.
+
 ## 10 Sep 2026 - CHECKBOXES-UNDER-WHOS-COMING: both optional-extra checkboxes into section 2
 
 Per Ro: "I'm booking for someone else" and "Add a Salty Cowboy photographer" both sit under
