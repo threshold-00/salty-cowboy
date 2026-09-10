@@ -199,9 +199,13 @@ Write-only. One row per Send click, `navigator.sendBeacon` to an Apps Script `/e
 availability, capacity or pricing logic depends on it, and the site must keep working with the endpoint
 unreachable.
 
-**Off unless a URL is pasted in.** `LOG_ENDPOINT` (`index.html`) ships as `""` and `logEvent` returns
-immediately when empty, so a fork never posts into the real sheet. An assertion pins it empty; do not
-commit a live URL.
+**The endpoint URL is committed, and public.** GitHub Pages serves `index.html` from a public repo, so
+the live page cannot log without it; it is also readable from the page source by anyone. `doPost`
+validates `activity_id` against the twelve real ids, so junk rows need a lucky guess and are cheap to
+delete. If it is ever abused, create a NEW deployment (which issues a new URL) and update
+`LOG_ENDPOINT`. Setting it to `""` turns logging off locally without touching anything else. An
+assertion pins the exact URL, so a typo or an accidental blanking fails loudly rather than silently
+logging nothing.
 
 **Rules that are easy to break by accident:**
 
@@ -235,7 +239,7 @@ identical to "no bookings", for weeks. `setupDeadLogTrigger()` is the only thing
 
 ## Open items (not yet resolved)
 
-- **The booking log has no endpoint yet** (10 Sep 2026): `LOG_ENDPOINT` is empty, so nothing is being logged. The spreadsheet and Apps Script deployment still have to be created; setup steps are at the top of `apps-script/Code.gs`. Until then the log code is inert.
+- **The booking log endpoint is live but unproven on a real device** (10 Sep 2026): spreadsheet, Apps Script deployment and `LOG_ENDPOINT` are all wired up and verified by curl, but no booking has been made from an actual phone yet. The acceptance gate (7 steps, including reading the date cell by eye for the zero-indexed month) has not been run.
 - **Is Salty Cowboy supply-constrained or demand-constrained?** Unconfirmed and load-bearing for what the booking log is for. One question to Simone settles it: is she turning bookings away for lack of horse-hours, or does she have empty hours she wants filled?
 - **Both rides regained Saturday availability on 29 Aug 2026** (BEACH-8AM commit, corrected same day to cover Insta Ride too): the new shared 8:00am slot is bookable on Saturdays; each ride's afternoon slot still drops on a Saturday date, same as before. Previously both rides showed zero Saturday availability at all, confirmed acceptable by Ro at the time (consistent with the Horse Whisperer Course also having no Saturday availability); that constraint no longer applies now that both rides have a morning option.
 - **Weight selector added to Beach Photoshoot only** (not Stable/Rice Field/Paddock/Cottages), since it's the only photoshoot where riders mount a horse. Confirmed with Ro; flagging for Simone's awareness since it's a new behaviour (photoshoots previously never asked for weight).

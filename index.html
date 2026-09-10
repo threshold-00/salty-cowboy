@@ -1162,9 +1162,13 @@ const WEIGHT_KEYS = ["w1", "w2", "w3", "w4"];
 const EXPERIENCE_KEYS = ["e1", "e2", "e3", "e4"];
 
 // ─── BOOKING LOG (write-only) ────────────────────────────────────────────────
-// Paste the Apps Script /exec URL here to turn logging on. Empty means off, so
-// a fork of this repo can never post into Simone's spreadsheet.
-const LOG_ENDPOINT = "";
+// Apps Script /exec URL for the booking log. This is public by necessity: the
+// site is served from a public repo via GitHub Pages, and anyone can read it out
+// of the live page's source anyway. doPost validates activity_id against the
+// twelve real ids, so junk rows need a lucky guess and are cheap to delete. If
+// it ever gets abused, create a new deployment (new URL) and update this line.
+// Set to "" to turn logging off locally without touching anything else.
+const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycby8gaUoE7nfhFFj6KfGKS7tjUEeuxGRj9IRdoGrWS4ynqgrUTVvCkXLL_ByYyNH9MeNWQ/exec";
 const LOG_SCHEMA_V = 1;
 
 // Short, unambiguous booking reference. No I/O/0/1, because it gets read off a

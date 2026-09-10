@@ -2,6 +2,32 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - BOOKING-LOG-ENDPOINT: log endpoint deployed and wired in
+
+Completes the previous entry. The spreadsheet, Apps Script deployment and `LOG_ENDPOINT` are now live.
+No offering or pricing data changed.
+
+- New spreadsheet "Salty Cowboy booking log", tab `log`, timezone `Asia/Makassar`, 26 headers written
+  by `setupHeaders()` and frozen. Separate from Simone's Customer Offerings sheet.
+- Web app deployed. First attempt returned HTTP 401 against an anonymous POST, which is exactly the
+  silent failure this project was built to detect: `sendBeacon` would have reported success, the
+  try/catch would have seen nothing, and the sheet would have stayed empty indefinitely looking like
+  "no bookings". Caught by curl before a single real booking. Redeployed with the access setting
+  corrected, same URL.
+- Verified end to end: a valid POST appends a row with all fields in the right columns, and a POST
+  with an unknown `activity_id` is dropped. Test rows deleted.
+- `LOG_ENDPOINT` now holds the `/exec` URL. It is public by necessity, since GitHub Pages serves this
+  file from a public repo and the URL is readable from the live page source either way. The earlier
+  assertion pinning it EMPTY was wrong, and is replaced by one pinning the exact URL, so a typo or an
+  accidental blanking fails loudly instead of silently logging nothing.
+- Checked statically that the 26 keys `bookingLogRow` sends match the 26 sheet columns exactly: no
+  field dropped, no column permanently blank, and no rider name, age or notes text in the payload.
+
+`tests/assert.js`: 639 to 640. Both suites pass from inside `tests/`, 0 console errors.
+
+**Still unproven:** no booking has been made from a real phone. The acceptance gate has not been run.
+Nothing automated can catch a zero-indexed month in `dates_iso`; that has to be read off the sheet.
+
 ## 10 Sep 2026 - BOOKING-LOG: write-only booking log, off until an endpoint is pasted in
 
 Phase 1 of the booking log designed in office hours (9 Sep) and reviewed in plan-eng-review (10 Sep).

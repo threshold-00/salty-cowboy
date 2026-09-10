@@ -880,9 +880,13 @@ has('prev-month cal-nav button is disabled once atCurrentMonth is true, so it ca
 has('.cal-nav:disabled styling dims the button and drops the hover background so a disabled prev-month arrow reads as inert', '.cal-nav:disabled { opacity: 0.25; cursor: default; }\n.cal-nav:disabled:hover { background: none; }');
 
 // ─── BOOKING-LOG (10 Sep 2026): write-only Apps Script log ────────────────
-// The endpoint must ship EMPTY. A real /exec URL committed here would make
-// every fork of this repo post into Simone's spreadsheet.
-has('LOG_ENDPOINT ships empty, so logging is off until a URL is pasted in locally', 'const LOG_ENDPOINT = "";');
+// The endpoint URL is public by necessity: GitHub Pages serves this file from a
+// public repo, so the live page cannot log without it being committed, and it is
+// readable from the page source regardless. Pinning the exact URL means a typo,
+// a truncation or an accidental blanking fails loudly instead of silently
+// logging nothing. If the deployment is ever replaced, this needle changes too.
+has('LOG_ENDPOINT holds the deployed /exec URL, exactly', 'const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycby8gaUoE7nfhFFj6KfGKS7tjUEeuxGRj9IRdoGrWS4ynqgrUTVvCkXLL_ByYyNH9MeNWQ/exec";');
+has('the endpoint is an /exec deployment, not a /dev test URL, which would only work while signed in as Ro', '/exec";');
 has('logEvent no-ops on an empty endpoint before touching anything else', 'function logEvent(type, build) {\n  if (!LOG_ENDPOINT) return;');
 has('logEvent calls the thunk INSIDE the try, so a throw in the row builder can never escape into handleSend and strand the user between openWhatsApp and setScreen("confirm")', 'try {\n    const row = build();\n    row.type = type;\n    row.v = LOG_SCHEMA_V;');
 has('sendBeacon return value is checked; it is the only in-page failure signal available', 'const ok = navigator.sendBeacon(LOG_ENDPOINT, blob);\n    if (!ok) console.warn("[log] sendBeacon refused the payload");');
