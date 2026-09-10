@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 10 Sep 2026 - CHECKBOXES-UNDER-WHOS-COMING: both optional-extra checkboxes into section 2
+
+Per Ro: "I'm booking for someone else" and "Add a Salty Cowboy photographer" both sit under
+"2. Who's coming?". No pricing, copy or offering data changed, so no TSV block.
+
+The photographer add-on was already the last thing in section 2 and stays there. The
+booking-for-other checkbox moves back in from its own `step2-section-box` card under the booking
+summary, where the 1 Sep 2026 RIDER-INFO-UNDER-SUMMARY change had put it, and now sits directly
+above the photographer group. Both use `addon-group` and hide with `section2Collapsed`.
+
+**The tradeoff this makes, stated plainly.** The 1 Sep move existed to keep the checkbox visible
+regardless of the accordion. Back inside section 2, it hides once the rider fields are complete and
+section 2 auto-collapses. Reopening is one tap on the section heading, or the summary card's Edit
+link, which reopens sections 1 and 2. Worth watching for on a real booking: a customer who decides
+they are booking for someone else only after filling in the rider details has to reopen the section
+to say so.
+
+No state logic changed. The rider-info popup still opens on check and closes on uncheck via the
+`bookingForOther` effect, which never depended on where the checkbox rendered. The two checkboxes
+are mutually exclusive on screen anyway, since `isRiding` and `isPhotoshoot` never overlap.
+
+- Gate simplified from `screen === "riders" && isRiding && riders.length > 0` to
+  `isRiding && riders.length > 0`, since section 2 already sits inside a `screen === "riders"` block.
+- `step2-section-box fu step2-block` now has one user again (the summary/total/notes/Send block).
+- The section-3 blocked-note now runs straight into `cost-funds-card`.
+
+`tests/assert.js`: 650 to 652. Six needles pinning the 1 Sep position updated, two added. Both suites
+pass from inside `tests/`, 0 console errors.
+
 ## 10 Sep 2026 - COURSE-WEEK-PICKER: Horse Whisperer date picker books a week at a time
 
 Found by Ro on a real phone during the booking-log acceptance gate. Picking a course date could grey

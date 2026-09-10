@@ -3750,7 +3750,35 @@ function App() {
       className: "field-pill " + (rider.experience === e ? "selected" : ""),
       onClick: () => updateRider(idx, "experience", e)
     }, t[e])))));
-  }), isPhotoshoot && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }), isRiding && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "addon-group",
+    style: {
+      display: section2Collapsed ? "none" : undefined
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-row addon-row",
+    onClick: () => {
+      const next = !bookingForOther;
+      setBookingForOther(next);
+      if (next) setShowRiderInfoModal(true);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-box " + (bookingForOther ? "checked" : "")
+  }, bookingForOther ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+    className: "perm-text"
+  }, t.bookingForOtherLabel)), bookingForOther && /*#__PURE__*/React.createElement("div", {
+    className: "weight-warning",
+    onClick: () => setShowRiderInfoModal(true),
+    style: {
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ww-header"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ww-icon"
+  }, "📋"), /*#__PURE__*/React.createElement("div", {
+    className: "ww-body"
+  }, t.riderInfoReopenNote)))), isPhotoshoot && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "addon-group",
     style: {
       display: section2Collapsed ? "none" : undefined
@@ -3893,32 +3921,7 @@ function App() {
     className: "blocked-note-close",
     type: "button",
     onClick: () => setBlockedSection(null)
-  }, "✕")), screen === "riders" && isRiding && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "step2-section-box fu step2-block"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "perm-row addon-row",
-    onClick: () => {
-      const next = !bookingForOther;
-      setBookingForOther(next);
-      if (next) setShowRiderInfoModal(true);
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "perm-box " + (bookingForOther ? "checked" : "")
-  }, bookingForOther ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
-    className: "perm-text"
-  }, t.bookingForOtherLabel)), bookingForOther && /*#__PURE__*/React.createElement("div", {
-    className: "weight-warning",
-    onClick: () => setShowRiderInfoModal(true),
-    style: {
-      cursor: "pointer"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "ww-header"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "ww-icon"
-  }, "📋"), /*#__PURE__*/React.createElement("div", {
-    className: "ww-body"
-  }, t.riderInfoReopenNote)))), screen === "riders" && /*#__PURE__*/React.createElement("div", {
+  }, "✕")), screen === "riders" && /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-card fu step2-block"
   }, /*#__PURE__*/React.createElement("div", {
     className: "cost-funds-title"
