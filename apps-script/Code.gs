@@ -3,7 +3,10 @@
  *
  * Not deployed from this repo. Kept here so it stays version-controlled next to
  * the schema in index.html that it has to agree with. To change it: open the
- * Apps Script editor bound to the log spreadsheet, paste, save, redeploy.
+ * Apps Script editor bound to the log spreadsheet, paste, save. Do NOT redeploy
+ * unless doPost itself changed; see the warning below about orphaned URLs.
+ * Changing COLUMNS alone needs no redeploy at all, because doPost reads the
+ * headers off the sheet at write time and never reads COLUMNS.
  *
  * SETUP, in order:
  *   1. Create a NEW spreadsheet. Not Simone's "Customer Offerings" sheet.
@@ -42,10 +45,8 @@ var COLUMNS = [
   'activity_id',
   'duration',
   'dates_iso',
-  'date_count',
   'time',
   'num_people',
-  'weight_asked',
   'w1',
   'w2',
   'w3',

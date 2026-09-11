@@ -3176,12 +3176,13 @@ function App() {
       // ISO needs s.m + 1. Built from the structured dates, never from
       // formattedDates, which is English prose.
       dates_iso: sortedDates.map(s => s.y + "-" + String(s.m + 1).padStart(2, "0") + "-" + String(s.d).padStart(2, "0")).join(","),
-      date_count: sortedDates.length,
       time: selectedTime || "",
       num_people: numPeople || 0,
-      // Weight is only collected when showWeight. Without this flag, four zero
-      // counts on a photoshoot look identical to "asked, everyone was light".
-      weight_asked: showWeight,
+      // date_count and weight_asked were dropped in schema v2. Both were derived:
+      // date_count is =COUNTA(SPLIT(dates_iso,",")), and weight_asked is
+      // =SUM(w1:w4)>0, because line 2958 makes r.weight mandatory for every rider
+      // whenever showWeight is on. Four zero counts therefore never meant "asked,
+      // everyone was light" (that is w1 = num_people); it only ever meant not asked.
       w1: counts.w1,
       w2: counts.w2,
       w3: counts.w3,

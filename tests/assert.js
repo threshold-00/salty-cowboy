@@ -925,7 +925,11 @@ has('bookingLogRow is a whitelist: rider NAMES and notes text are absent by cons
 // bare 'is_course' also matches the comment in index.html explaining the removal.
 missing('is_course is dropped in schema v2: it restated activity_id, since whisper is the only activity with course: true', 'is_course:');
 has('dates are built from sortedDates with s.m + 1, because sortedDates months are zero-indexed; formattedDates is English prose and must never be logged', 'dates_iso: sortedDates.map(s => s.y + "-" + String(s.m + 1).padStart(2, "0") + "-" + String(s.d).padStart(2, "0")).join(",")');
-has('weight_asked distinguishes "not asked" from "asked, everyone light", which four zero counts cannot', 'weight_asked: showWeight,\n      w1: counts.w1,');
+// Needles keep the colon: this file counts substrings across the whole file, so the
+// bare names also match the comment in index.html explaining the removal.
+missing('weight_asked is dropped in schema v2: r.weight is mandatory when showWeight, so =SUM(w1:w4)>0 recreates it and four zeros only ever meant "not asked"', 'weight_asked:');
+missing('date_count is dropped in schema v2: =COUNTA(SPLIT(dates_iso,",")) recreates it', 'date_count:');
+has('the weight counts follow num_people directly, with no derived column between them', 'num_people: numPeople || 0,');
 has('weight counts are computed from riders inside the log code, leaving buildWhatsAppMessage untouched', 'WEIGHT_KEYS.forEach(k => {\n      counts[k] = riders.filter(r => r.weight === k).length;\n    });');
 // Schema v2. riderList reads r[key] by name, so the only way a rider NAME reaches
 // the log is riderList("name") appearing in the row; assert it never does.

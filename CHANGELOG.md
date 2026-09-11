@@ -15,16 +15,19 @@ but not "is the advanced rider the same person as the 12-year-old". Three new co
   neither age nor experience, so those cells are genuinely empty rather than falsely present.
 - Names are still not logged and cannot be: `riderList` reads by key, so `riderList("name")` is the
   only way one could reach the row, and `missing('riderList("name")')` asserts it never appears.
-- `w1`-`w4` stay. They are now redundant with `weights`, but deleting a column from a live sheet
-  breaks every row already written.
-- **`is_course` is removed.** Ro spotted that it was derived, not measured: `whisper` is the only
-  activity with `course: true`, so the column was `=activity_id="whisper"` and nothing else. Four
-  columns in this sheet are derived (`is_course`, `date_count`, `weight_asked`, `w1`-`w4`); the one
-  that decides whether a derived column earns its place is how painful the derivation is as a sheet
-  formula. `is_course` was a one-cell comparison. `w1`-`w4` would mean splitting `"w2,w3,w1"` and
-  matching per row to answer "did anyone exceed 70kg", which is the question that tells Simone she
-  has a horse problem, so those stay. Removed now because nothing is deployed and the only rows in
-  the sheet are curl tests, which is the last moment it costs nothing.
+- **Three derived columns removed: `is_course`, `weight_asked`, `date_count`.** Ro spotted each in
+  turn. What decides whether a derived column earns its place is how painful the derivation is as a
+  sheet formula, not whether it is technically redundant:
+  - `is_course` was `=activity_id="whisper"`. `whisper` is the only activity with `course: true`.
+  - `weight_asked` was `=SUM(w1:w4)>0`, and is now also just an empty `weights`. The comment
+    justifying it claimed four zero counts could not be told apart from "asked, everyone was light".
+    That was **wrong**: index.html:2958 makes `r.weight` mandatory for every rider whenever
+    `showWeight` is on, so "everyone light" is `w1 = num_people`, and four zeros only ever meant not
+    asked. The column never earned its place, including on the day it was added.
+  - `date_count` was `=COUNTA(SPLIT(dates_iso,","))`.
+  `w1`-`w4` stay. Answering "did anyone exceed 70kg" from the string `"w2,w3,w1"` means splitting and
+  matching per row, and that is the question that tells Simone she has a horse problem.
+  Removed now because the sheet holds only test rows, which is the last moment it costs nothing.
 - `LOG_SCHEMA_V` goes 1 to 2, so the rows written before today stay readable as the shape they are.
 
 The three columns are appended at the **end** of `COLUMNS`, after `outcome` and `horse`, which reads
@@ -34,7 +37,8 @@ oddly and is deliberate: `setupHeaders()` rewrites row 1 and leaves the data row
 Deploying this is two steps, not one. `doPost` maps the payload onto whatever headers the sheet has
 right now, so until `setupHeaders()` is re-run the three new fields are **dropped in silence**.
 
-673 assertions pass (up from 667), smoke clean, 0 console errors.
+675 assertions pass (up from 667), smoke clean, 0 console errors. The sheet drops from 29 columns
+to 26.
 
 ## 10 Sep 2026 - WHISPER-FIXED-SCHEDULE: course times match what Simone actually runs
 

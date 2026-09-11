@@ -223,20 +223,25 @@ logging nothing.
   `sortedDates` months are **zero-indexed**. No test can catch an off-by-one; read the sheet by eye.
 - `duration` logs the **raw** state value (`"3hr"`), not the WhatsApp display suffix
   (`"3 to 3.5 hr/day"`), so the column stays groupable.
-- `weight_asked` exists because weight is only collected when `showWeight`. Without it, four zero
-  counts on a photoshoot are indistinguishable from "asked, everyone was light".
+- **There is no `weight_asked` column and there should not be one.** It existed from 10 Sep to 11 Sep
+  on the stated grounds that four zero counts could not be told apart from "asked, everyone was
+  light". That was false: `index.html:2958` makes `r.weight` mandatory for every rider whenever
+  `showWeight` is on, so "everyone light" is `w1 = num_people` and four zeros only ever meant not
+  asked. Do not re-add it.
 - **Schema v2 (11 Sep 2026 LOG-RIDER-PROFILE)** adds `ages`, `weights` and `experience`: comma-joined,
   **index-aligned** per-rider lists, so position `i` is the same person in all three. `riderList`
   returns `""` rather than `",,"` when a field was never asked (photoshoots collect neither age nor
   experience), so an empty cell reads as "not collected" and a populated one always has `num_people`
-  entries. It also **drops `is_course`**, which was true only for `whisper` and so just restated
-  `activity_id`. `w1`-`w4` stay, redundant with `weights` on purpose.
+  entries. It also **drops three derived columns**: `is_course` (true only for `whisper`, so it
+  restated `activity_id`), `weight_asked` and `date_count`. `w1`-`w4` stay, redundant with `weights`
+  on purpose.
 - **The test for a derived column is how painful the derivation is in a sheet formula**, not whether
-  it is technically redundant. `is_course` failed it (`=activity_id="whisper"`). `w1`-`w4` pass, because
-  counting "bookings with anyone over 70kg" from the string `"w2,w3,w1"` means splitting and matching
-  per row in Sheets, versus `=SUM(w3:w4)`, and that number is the one telling Simone she has a horse
-  problem. `weight_asked` passes because recreating it needs a lookup of which activities ride.
-  `date_count` is borderline and kept.
+  it is technically redundant. Only `w1`-`w4` pass it: counting "bookings with anyone over 70kg" from
+  the string `"w2,w3,w1"` means splitting and matching per row in Sheets, versus `=SUM(w3:w4)`, and
+  that number is the one telling Simone she has a horse problem. The three that failed and were
+  removed on 11 Sep: `is_course` (`=activity_id="whisper"`), `weight_asked` (`=SUM(w1:w4)>0`, or just
+  an empty `weights`), `date_count` (`=COUNTA(SPLIT(dates_iso,","))`). Apply this test to any column
+  proposed in future; two of those three were added by me without being asked for.
 - **New columns go at the END of `COLUMNS`.** `setupHeaders()` rewrites row 1 in place and does not
   touch the rows under it, so inserting mid-list shifts the headers off the data and silently
   mislabels every existing row. This is why `ages`/`weights`/`experience` sit after the manual
