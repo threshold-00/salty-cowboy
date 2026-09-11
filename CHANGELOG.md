@@ -2,6 +2,40 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 11 Sep 2026 - LOG-RIDER-PROFILE: age, weight and experience per rider, schema v2
+
+Ro asked for age, weight and riding experience in the log, names excluded so nothing in the sheet is
+linked PII. Weight was already there as `w1`-`w4` head counts, which answer "how heavy is this group"
+but not "is the advanced rider the same person as the 12-year-old". Three new columns answer that:
+
+- `ages` (`"34,29,12"`), `weights` (`"w2,w3,w1"`), `experience` (`"e3,e4,e1"`). **Index-aligned**:
+  position `i` is the same rider in all three. Raw values, not buckets, because raw can always be
+  aggregated later and buckets can never be recovered.
+- `riderList` returns `""` instead of `",,"` when a field was never collected. Photoshoots ask for
+  neither age nor experience, so those cells are genuinely empty rather than falsely present.
+- Names are still not logged and cannot be: `riderList` reads by key, so `riderList("name")` is the
+  only way one could reach the row, and `missing('riderList("name")')` asserts it never appears.
+- `w1`-`w4` stay. They are now redundant with `weights`, but deleting a column from a live sheet
+  breaks every row already written.
+- **`is_course` is removed.** Ro spotted that it was derived, not measured: `whisper` is the only
+  activity with `course: true`, so the column was `=activity_id="whisper"` and nothing else. Four
+  columns in this sheet are derived (`is_course`, `date_count`, `weight_asked`, `w1`-`w4`); the one
+  that decides whether a derived column earns its place is how painful the derivation is as a sheet
+  formula. `is_course` was a one-cell comparison. `w1`-`w4` would mean splitting `"w2,w3,w1"` and
+  matching per row to answer "did anyone exceed 70kg", which is the question that tells Simone she
+  has a horse problem, so those stay. Removed now because nothing is deployed and the only rows in
+  the sheet are curl tests, which is the last moment it costs nothing.
+- `LOG_SCHEMA_V` goes 1 to 2, so the rows written before today stay readable as the shape they are.
+
+The three columns are appended at the **end** of `COLUMNS`, after `outcome` and `horse`, which reads
+oddly and is deliberate: `setupHeaders()` rewrites row 1 and leaves the data rows alone, so inserting
+`ages` next to `w4` where it belongs would shift every header one place right of its own data.
+
+Deploying this is two steps, not one. `doPost` maps the payload onto whatever headers the sheet has
+right now, so until `setupHeaders()` is re-run the three new fields are **dropped in silence**.
+
+673 assertions pass (up from 667), smoke clean, 0 console errors.
+
 ## 10 Sep 2026 - WHISPER-FIXED-SCHEDULE: course times match what Simone actually runs
 
 From Simone, via Ro: "We usually schedule a course on Monday 8.30-12.00, Tuesday 8.30-12.00, Thursday

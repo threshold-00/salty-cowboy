@@ -213,16 +213,37 @@ logging nothing.
   evaluates the builder as an argument, outside the try/catch, and a throw lands between
   `openWhatsApp` and `setScreen("confirm")`, stranding the customer on a dead screen with no copy
   fallback. Logging must never be able to cost a booking.
-- `bookingLogRow` is a **whitelist**, not a filter. Rider names, ages and free-text notes must never
+- `bookingLogRow` is a **whitelist**, not a filter. Rider **names** and free-text notes must never
   reach it; `notes` contributes only a `has_notes` boolean. `tests/assert.js` cannot scope an
   assertion to a function body, so nothing automated can prove this. The pinned source block is the
-  only defence and it only catches an edit to that one function.
+  only defence and it only catches an edit to that one function. Ages, weights and experience ARE
+  logged as of schema v2 (11 Sep 2026), names still are not, and `missing('riderList("name")')` is
+  what keeps it that way.
 - Dates come from `sortedDates` with `s.m + 1`, never from `formattedDates` (English prose).
   `sortedDates` months are **zero-indexed**. No test can catch an off-by-one; read the sheet by eye.
 - `duration` logs the **raw** state value (`"3hr"`), not the WhatsApp display suffix
   (`"3 to 3.5 hr/day"`), so the column stays groupable.
 - `weight_asked` exists because weight is only collected when `showWeight`. Without it, four zero
   counts on a photoshoot are indistinguishable from "asked, everyone was light".
+- **Schema v2 (11 Sep 2026 LOG-RIDER-PROFILE)** adds `ages`, `weights` and `experience`: comma-joined,
+  **index-aligned** per-rider lists, so position `i` is the same person in all three. `riderList`
+  returns `""` rather than `",,"` when a field was never asked (photoshoots collect neither age nor
+  experience), so an empty cell reads as "not collected" and a populated one always has `num_people`
+  entries. It also **drops `is_course`**, which was true only for `whisper` and so just restated
+  `activity_id`. `w1`-`w4` stay, redundant with `weights` on purpose.
+- **The test for a derived column is how painful the derivation is in a sheet formula**, not whether
+  it is technically redundant. `is_course` failed it (`=activity_id="whisper"`). `w1`-`w4` pass, because
+  counting "bookings with anyone over 70kg" from the string `"w2,w3,w1"` means splitting and matching
+  per row in Sheets, versus `=SUM(w3:w4)`, and that number is the one telling Simone she has a horse
+  problem. `weight_asked` passes because recreating it needs a lookup of which activities ride.
+  `date_count` is borderline and kept.
+- **New columns go at the END of `COLUMNS`.** `setupHeaders()` rewrites row 1 in place and does not
+  touch the rows under it, so inserting mid-list shifts the headers off the data and silently
+  mislabels every existing row. This is why `ages`/`weights`/`experience` sit after the manual
+  `outcome` and `horse` columns rather than next to `w1`-`w4` where they belong logically.
+- **Changing `COLUMNS` is a two-part deploy.** `doPost` maps the payload onto whatever headers the
+  sheet currently has, so a client that sends a key with no matching header **drops it silently**.
+  Push the site and re-run `setupHeaders()`, or the new fields go nowhere and nothing reports it.
 - The `Ref: SC-XXXXXX` line appended in `handleSend` is the **join key** between a sheet row and
   Simone's WhatsApp thread. `outcome` and `horse` ship as empty columns and are only fillable because
   of it.

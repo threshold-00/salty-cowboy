@@ -41,7 +41,6 @@ var COLUMNS = [
   'lang',
   'activity_id',
   'duration',
-  'is_course',
   'dates_iso',
   'date_count',
   'time',
@@ -57,7 +56,15 @@ var COLUMNS = [
   'total_price',
   'has_notes',
   'outcome',
-  'horse'
+  'horse',
+  // Schema v2, added 11 Sep 2026. Appended at the END on purpose: setupHeaders()
+  // rewrites row 1 in place, so inserting mid-list would move the headers without
+  // moving the data rows under them and silently mislabel every existing row.
+  // Index-aligned per rider: ages[i], weights[i] and experience[i] are the same
+  // person. No names, by design.
+  'ages',
+  'weights',
+  'experience'
 ];
 
 // Anything not in this list is dropped. Cheap defence against a stray POST from

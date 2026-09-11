@@ -920,10 +920,20 @@ has('logEvent swallows everything else', '} catch (e) {\n    console.warn("[log]
 // across the whole file and cannot scope an assertion to a function body, so
 // nothing here can prove `riders` or `notes` never reach sendBeacon. Pinning
 // the exact source block catches an edit to bookingLogRow and nothing more.
-has('bookingLogRow is a whitelist: rider names, ages and notes text are absent by construction, notes contributes only a boolean', 'return {\n      ts_client: new Date().toISOString(),\n      ref: ref,\n      session_id: SESSION_ID,\n      lang: lang,\n      activity_id: actObj ? actObj.id : "",\n      duration: duration || "",\n      is_course: isCourse,');
+has('bookingLogRow is a whitelist: rider NAMES and notes text are absent by construction, notes contributes only a boolean', 'return {\n      ts_client: new Date().toISOString(),\n      ref: ref,\n      session_id: SESSION_ID,\n      lang: lang,\n      activity_id: actObj ? actObj.id : "",\n      duration: duration || "",');
+// Needle keeps the colon: this file counts substrings across the whole file, so a
+// bare 'is_course' also matches the comment in index.html explaining the removal.
+missing('is_course is dropped in schema v2: it restated activity_id, since whisper is the only activity with course: true', 'is_course:');
 has('dates are built from sortedDates with s.m + 1, because sortedDates months are zero-indexed; formattedDates is English prose and must never be logged', 'dates_iso: sortedDates.map(s => s.y + "-" + String(s.m + 1).padStart(2, "0") + "-" + String(s.d).padStart(2, "0")).join(",")');
 has('weight_asked distinguishes "not asked" from "asked, everyone light", which four zero counts cannot', 'weight_asked: showWeight,\n      w1: counts.w1,');
 has('weight counts are computed from riders inside the log code, leaving buildWhatsAppMessage untouched', 'WEIGHT_KEYS.forEach(k => {\n      counts[k] = riders.filter(r => r.weight === k).length;\n    });');
+// Schema v2. riderList reads r[key] by name, so the only way a rider NAME reaches
+// the log is riderList("name") appearing in the row; assert it never does.
+has('riderList emits index-aligned per-rider lists so ages[i], weights[i] and experience[i] are the same person', 'const riderList = key => {');
+has('riderList returns "" instead of ",," when a field was never asked, so an empty cell reads as "not collected"', 'return vals.some(v => v !== "") ? vals.join(",") : "";');
+has('the three per-rider lists sit next to the weight counts and are the only rider-level data logged', 'ages: riderList("age"),\n      weights: riderList("weight"),\n      experience: riderList("experience"),');
+missing('rider names are never passed to riderList', 'riderList("name")');
+has('the log schema version is bumped to 2 so v1 rows stay readable without the three new columns', 'const LOG_SCHEMA_V = 2;');
 has('numeric totalPrice is logged, not the "IDR 1,234" display string', 'total_price: totalPrice,\n      has_notes: !!(notes && notes.trim()),');
 has('outcome and horse ship as empty columns from day one; adding a column to a live log is a migration', 'outcome: "",\n      horse: ""');
 has('activity id is logged, not the whole activity object', 'activity_id: actObj ? actObj.id : "",');

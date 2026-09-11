@@ -1174,7 +1174,7 @@ const EXPERIENCE_KEYS = ["e1", "e2", "e3", "e4"];
 // it ever gets abused, create a new deployment (new URL) and update this line.
 // Set to "" to turn logging off locally without touching anything else.
 const LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycby8gaUoE7nfhFFj6KfGKS7tjUEeuxGRj9IRdoGrWS4ynqgrUTVvCkXLL_ByYyNH9MeNWQ/exec";
-const LOG_SCHEMA_V = 1;
+const LOG_SCHEMA_V = 2;
 
 // Short, unambiguous booking reference. No I/O/0/1, because it gets read off a
 // phone screen. Printed at the bottom of the WhatsApp message AND logged, so a
@@ -3154,6 +3154,14 @@ function App() {
     WEIGHT_KEYS.forEach(k => {
       counts[k] = riders.filter(r => r.weight === k).length;
     });
+    // Index-aligned per-rider lists: ages[i], weights[i] and experience[i] are
+    // the same person. Names are deliberately NOT logged, here or anywhere else.
+    // Returns "" rather than ",," when a field was never asked (photoshoots skip
+    // age and experience), so an empty cell reads as "not collected".
+    const riderList = key => {
+      const vals = riders.map(r => (r[key] === undefined || r[key] === null) ? "" : String(r[key]));
+      return vals.some(v => v !== "") ? vals.join(",") : "";
+    };
     return {
       ts_client: new Date().toISOString(),
       ref: ref,
@@ -3161,7 +3169,9 @@ function App() {
       lang: lang,
       activity_id: actObj ? actObj.id : "",
       duration: duration || "",
-      is_course: isCourse,
+      // is_course was dropped in schema v2: it was true only for `whisper` and so
+      // restated activity_id. A derived column earns its place only when the
+      // derivation is painful in a sheet formula; this one was `=activity_id="whisper"`.
       // sortedDates months are ZERO-INDEXED (see MONTHS[s.m] in formatOne), so
       // ISO needs s.m + 1. Built from the structured dates, never from
       // formattedDates, which is English prose.
@@ -3176,6 +3186,9 @@ function App() {
       w2: counts.w2,
       w3: counts.w3,
       w4: counts.w4,
+      ages: riderList("age"),
+      weights: riderList("weight"),
+      experience: riderList("experience"),
       photographer_addon: isPhotoshoot ? photographerAddon : false,
       booking_for_other: isRiding ? bookingForOther : false,
       grooming: needsGrooming ? grooming : null,
