@@ -2,6 +2,47 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 11 Sep 2026 - LESSONS-BOOK-FOR-OTHER: booking on someone's behalf opens to Lessons
+
+Ro: "the lessons should be able to get booked by someone else, much like the rides."
+
+`dressage` already had it, because it carries `riding: true`. This adds the other four Lessons:
+`joinup`, `whisper`, `masterclass`, `groupclinic`. New flag `canBookForOther = !isPhotoshoot`, which
+is exactly Rides plus Lessons today, replacing `isRiding` at all four gates (the render, the defensive
+reset effect, the log row and the WhatsApp payload). Photoshoots stay excluded, since Ro named Lessons
+and Rides only.
+
+The part that was not a gate change: **the flow it opens is written for riders.** Checking the box
+pops a modal whose middle section is a 75kg weight guideline, and the copyable message and the
+WhatsApp line to Simone both repeat it. Four of the five Lessons are groundwork and never collect
+weight at all, so shipping the gate alone would have told someone booking a Join Up session that their
+friend must weigh under 75kg. All three are now gated on `showWeight`:
+
+- `buildRiderInfoMessage` omits the weight block, so the message the booker copies has arrival, cost
+  and closing only. No new copy in any language, the section is simply absent.
+- The modal renders the same section conditionally, so what is on screen matches what gets copied.
+- The WhatsApp line reads "Booking on behalf of another rider. 75kg weight guideline shown..." where
+  weight was collected, and "Booking on behalf of someone else. Arrival and cost info shown..." where
+  it was not.
+
+One bug came with the gate and is fixed here. `buildRiderInfoMessage` built its date line from
+`formattedDates[0]` alone, which was safe while only `beach`, `insta` and `dressage` could reach it,
+all single-date. `whisper` carries three dates, so the person being booked for would have been told
+they were booked for **one day of a three-day course**. It now mirrors the course/single split that
+`buildWhatsAppMessage` already made, reusing `courseDaysTitle` and `timeSlot`, both of which already
+exist in all three languages, so again no new copy.
+
+Also renames the log column `grooming` to **`grooming_type`**, after Ro asked twice what it meant. It
+holds `wet`, `dry` or blank, and it is which grooming STYLE was picked on the one activity that offers
+one, not whether grooming happened. Horse Whispering includes 2 hours of grooming and is correctly
+blank in it. Same column position, so the sheet side is paste and re-run `setupHeaders()`, with no
+row clearing and no column deleting.
+
+Known and untouched: `bookingForOtherNote` is defined in all three languages and referenced nowhere.
+It is the old weight-warning copy, dead since the modal replaced it.
+
+686 assertions pass (up from 675), smoke clean, 0 console errors.
+
 ## 11 Sep 2026 - LOG-RIDER-PROFILE: age, weight and experience per rider, schema v2
 
 Ro asked for age, weight and riding experience in the log, names excluded so nothing in the sheet is

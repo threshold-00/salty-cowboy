@@ -53,7 +53,7 @@ var COLUMNS = [
   'w4',
   'photographer_addon',
   'booking_for_other',
-  'grooming',
+  'grooming_type',
   'total_price',
   'has_notes',
   'outcome',

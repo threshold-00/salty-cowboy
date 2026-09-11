@@ -2687,7 +2687,9 @@ function buildWhatsAppMessage({
     }
   }
   lines.push("Group size: " + numPeople);
-  if (bookingForOther) lines.push("Booking on behalf of another rider. 75kg weight guideline shown to the person booking.");
+  if (bookingForOther) lines.push(showWeight
+    ? "Booking on behalf of another rider. 75kg weight guideline shown to the person booking."
+    : "Booking on behalf of someone else. Arrival and cost info shown to the person booking.");
   if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);
   lines.push("");
   lines.push("*Riders:*");
@@ -2719,19 +2721,33 @@ function buildWhatsAppMessage({
 // checked "I'm booking for someone else". Written in the booker's own site
 // language (unlike buildWhatsAppMessage, which is always English for
 // Simone), since this one is read by the rider, not by Simone.
-function buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime }) {
+function buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime, showWeight }) {
   const lines = [];
   lines.push(t.riderInfoMsgIntro);
   lines.push("");
   if (actObj) lines.push(t.sActivity + ": " + t.activities[actObj.id]);
   if (formattedDates && formattedDates.length) {
-    lines.push(t.sDateTime + ": " + formattedDates[0] + (selectedTime ? " · " + selectedTime : ""));
+    // whisper reaches this flow as of 11 Sep 2026 (canBookForOther) and carries
+    // THREE dates. formattedDates[0] on its own would tell the person they are
+    // booked for one day of a three-day course. Mirrors the course/single split
+    // buildWhatsAppMessage already makes, using existing keys so no new copy is
+    // needed in any of the three languages.
+    if (formattedDates.length > 1) {
+      lines.push(t.courseDaysTitle + ": " + formattedDates.join(" · "));
+      if (selectedTime) lines.push(t.timeSlot + ": " + selectedTime);
+    } else {
+      lines.push(t.sDateTime + ": " + formattedDates[0] + (selectedTime ? " · " + selectedTime : ""));
+    }
   }
   lines.push("");
   lines.push(t.riderInfoArrivalTitle + ": " + t.riderInfoArrivalBody);
   lines.push("");
-  lines.push(t.riderInfoWeightTitle + ": " + t.riderInfoWeightBody);
-  lines.push("");
+  // Weight guidance only where weight is actually collected. Most Lessons are
+  // groundwork, so a 75kg rider limit in the message would be nonsense there.
+  if (showWeight) {
+    lines.push(t.riderInfoWeightTitle + ": " + t.riderInfoWeightBody);
+    lines.push("");
+  }
   lines.push(t.costFundsTitle + ": " + t.moneyGoesBody);
   lines.push("");
   lines.push(t.riderInfoMsgClosing);
@@ -2886,6 +2902,12 @@ function App() {
   // Weight rules apply to every riding activity, plus Beach Photoshoot since
   // riders mount a horse for that shoot. No other photoshoot involves mounting.
   const showWeight = isRiding || actObj?.needsWeight === true;
+  // Booking on someone else's behalf: Rides AND Lessons, never Photoshoots
+  // (11 Sep 2026, Ro asked for Lessons to match Rides). !isPhotoshoot is exactly
+  // those two categories. dressage already had this via riding: true; this adds
+  // joinup, whisper, masterclass and groupclinic. The weight guidance inside the
+  // flow is gated separately on showWeight, since most Lessons never ask weight.
+  const canBookForOther = !isPhotoshoot;
   const isWhisper = activity === "whisper";
   // "Rider" only for the Rides category; Photoshoots and Lessons say "Person".
   const actCategory = actObj ? (ACTIVITIES.find(c => c.items.some(it => it.id === actObj.id)) || {}).category : null;
@@ -3043,7 +3065,7 @@ function App() {
   }
   const sortedDates = [...selectedDates].sort((a, b) => a.y - b.y || a.m - b.m || a.d - b.d);
   const formattedDates = sortedDates.map(formatOne);
-  const riderInfoMessage = buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime });
+  const riderInfoMessage = buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime, showWeight });
   const datesComplete = selectedDates.length === requiredDates;
   // Section 1 ("Book a date and time") counts as done once both the date(s)
   // and a time slot are picked. Drives the accordion collapse below.
@@ -3127,10 +3149,10 @@ function App() {
     }
   }, [activity]);
   // Defensive on top of the setBookingForOther(false) reset calls on every
-  // activity-change path: never let this carry into a non-riding activity.
+  // activity-change path: never let this carry into a photoshoot.
   useEffect(() => {
-    if (!isRiding) setBookingForOther(false);
-  }, [isRiding]);
+    if (!canBookForOther) setBookingForOther(false);
+  }, [canBookForOther]);
   // Single source of truth for closing the rider-info popup: covers every
   // path that turns bookingForOther off (the effect above, the explicit
   // setBookingForOther(false) calls on activity change, and the box being
@@ -3191,8 +3213,11 @@ function App() {
       weights: riderList("weight"),
       experience: riderList("experience"),
       photographer_addon: isPhotoshoot ? photographerAddon : false,
-      booking_for_other: isRiding ? bookingForOther : false,
-      grooming: needsGrooming ? grooming : null,
+      booking_for_other: canBookForOther ? bookingForOther : false,
+      // Named grooming_type, not grooming: it is which STYLE (wet/dry) on the one
+      // activity that offers it, not whether grooming happened. Horse Whispering
+      // includes 2 hours of grooming and is correctly blank here.
+      grooming_type: needsGrooming ? grooming : null,
       total_price: totalPrice,
       has_notes: !!(notes && notes.trim()),
       // Shipped empty on purpose. Adding a column to a live log is a migration;
@@ -3214,7 +3239,7 @@ function App() {
       showWeight,
       notes,
       photographerAddon: isPhotoshoot ? photographerAddon : false,
-      bookingForOther: isRiding ? bookingForOther : false,
+      bookingForOther: canBookForOther ? bookingForOther : false,
       grooming: needsGrooming ? grooming : null,
       totalPriceStr
     });
@@ -3271,7 +3296,7 @@ function App() {
     className: "rider-info-section-title"
   }, t.riderInfoArrivalTitle), /*#__PURE__*/React.createElement("p", {
     className: "rider-info-section-body"
-  }, t.riderInfoArrivalBody)), /*#__PURE__*/React.createElement("div", {
+  }, t.riderInfoArrivalBody)), showWeight && /*#__PURE__*/React.createElement("div", {
     className: "rider-info-section"
   }, /*#__PURE__*/React.createElement("div", {
     className: "rider-info-section-title"
@@ -3821,7 +3846,7 @@ function App() {
       className: "field-pill " + (rider.experience === e ? "selected" : ""),
       onClick: () => updateRider(idx, "experience", e)
     }, t[e])))));
-  }), isRiding && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }), canBookForOther && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "addon-group",
     style: {
       display: section2Collapsed ? "none" : undefined

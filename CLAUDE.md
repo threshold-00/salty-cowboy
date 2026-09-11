@@ -242,6 +242,16 @@ logging nothing.
   removed on 11 Sep: `is_course` (`=activity_id="whisper"`), `weight_asked` (`=SUM(w1:w4)>0`, or just
   an empty `weights`), `date_count` (`=COUNTA(SPLIT(dates_iso,","))`). Apply this test to any column
   proposed in future; two of those three were added by me without being asked for.
+- **`booking_for_other`** covers Rides AND Lessons as of 11 Sep 2026 (`canBookForOther = !isPhotoshoot`,
+  Ro's request). The weight guidance inside that flow (the modal section, the copyable message and the
+  WhatsApp line) is gated separately on `showWeight`, because four of the five Lessons are groundwork
+  and never ask for weight. Do not re-couple the two: opening the gate without gating the copy tells
+  someone booking a Join Up session their friend must be under 75kg.
+- **`grooming_type`** (renamed from `grooming`, 11 Sep 2026) is `wet`, `dry` or blank. It is which
+  grooming STYLE was chosen on the one activity that offers a choice, whose id is `masterclass` and
+  whose customer-facing name is "Horse grooming (wet or dry)". It is NOT "did they groom": Horse
+  Whispering includes 2 hours of grooming and is correctly blank here. The old name was ambiguous
+  enough that Ro asked what it meant twice.
 - **New columns go at the END of `COLUMNS`.** `setupHeaders()` rewrites row 1 in place and does not
   touch the rows under it, so inserting mid-list shifts the headers off the data and silently
   mislabels every existing row. This is why `ages`/`weights`/`experience` sit after the manual
