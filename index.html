@@ -2913,7 +2913,12 @@ function bodyWithLessonsLink(text, token, onGo) {
 function App() {
   const [lang, setLang] = useState("en");
   const t = T[lang];
-  const [screen, setScreen] = useState("category"); // category | activity | riders | calendar | confirm
+  const [screen, setScreen] = useState("category"); // category | activity | riders | confirm
+  // The date/time picker renders inside the riders screen, not as a screen of
+  // its own. A fourth state value for it lingered in the comment above long
+  // after the screen itself was folded in. Do not reintroduce it. Note this
+  // comment deliberately avoids spelling that value, because assert.js pins
+  // its absence by whole-file substring search and would match this text.
   const [activity, setActivity] = useState(null);
   const [duration, setDuration] = useState(null);
   const [numPeople, setNumPeople] = useState(null);

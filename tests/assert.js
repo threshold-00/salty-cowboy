@@ -850,7 +850,12 @@ has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom paddin
 
 // ─── 13 Sep 2026 CATEGORY-STEP-ONE (user testing: testers scrolled straight
 // past the Rides/Photoshoots/Lessons tabs and never saw them) ────────────────
-has('category is now the entry screen, not activity', 'useState("category"); // category | activity | riders | calendar | confirm');
+// Pins the entry screen only. The previous version of this assertion pinned the
+// whole trailing comment, which included a "calendar" screen that has not existed
+// for some time, so correcting the comment broke the test. Assert the behaviour,
+// not the prose next to it.
+has('category is now the entry screen, not activity', 'useState("category")');
+missing('no dead fourth screen value in the state comment', 'riders | cal' + 'endar');
 has('"Book another" restarts from the category chooser rather than dropping into a pre-chosen category', 'function resetAll() {\n    setScreen("category");');
 has('picking a category sets it and advances, and does NOT reset the booking state (nothing is chosen yet at this point)', 'onClick: () => {\n      setActiveCat(cat.category);\n      setScreen("activity");\n    }');
 has('the activity screen keeps a way back to the categories', 'onClick: () => setScreen("category")\n  }, t.backToCategories)');
