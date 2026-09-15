@@ -217,7 +217,57 @@ has('en groupclinic group desc',   'groupclinic: "Up to 6 people. Flat price per
 has('en cottages inside',          'Photos are taken inside the cottage');
 has('en stable no groomed horse',  'photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included."');
 missing('no groomed horse text on stable/paddock', 'One groomed horse plus team assistance');
-has('en paddock no rice field mention', 'photo_paddock: "Open paddock backdrop with grazing horses. Location only, photographer not included. Entering the paddocks and touching the horses is not permitted."');
+has('en paddock no rice field mention', 'photo_paddock: "Open paddock backdrop with grazing horses, shot from outside the fence. Entering the paddocks and touching the horses is not permitted."');
+
+// ─── 13 Sep 2026 INCLUDES-BLOCK (user testing) ───────────────────────────────
+has('inclusionBlock returns null for an activity with no entry, so covering a new activity is a copy change only', 'if (!inc && !not) return null;');
+
+// ─── 13 Sep 2026 COLLAPSED-SIGNIFIERS (user testing) ─────────────────────────
+// Reverses the earlier "hint line is permanent" call. Testers read a collapsed
+// section showing only its hint as a section they had not filled in yet.
+has('section 1 collapsed shows duration/dates/time', 'const section1Summary = [duration, formattedDates.join(" \u00b7 "), selectedTime].filter(Boolean).join(" \u00b7 ");');
+has('section 2 collapsed shows people count and, where it applies, the grooming choice', 'numPeople ? numPeople + " " + (numPeople === "1" ? t.person : t.people) : "",');
+has('an empty section says so explicitly rather than falling back to its hint, which is the half of the request that is easy to miss. Once per section, sections 1 and 2', '|| t.nothingSelected', 2);
+has('nothingSelected exists in all three languages', 'nothingSelected:', 3);
+// Section 3 already had a signifier (total cost when collapsed, pending hint
+// otherwise). Pinned so the three sections stay consistent with each other.
+has('section 3 keeps its existing collapsed signifier', 'section3Complete ? (totalPriceStr ? t.totalCostLabel + ": " + totalPriceStr : t.stepHeading3) : t.summaryPendingHint');
+has('the card renders the read-more toggle then the includes block under the description, before the price tags', 't.descs[item.id]) : null, t.descs[item.id] ? readToggle("act-" + item.id) : null, inclusionBlock(t, item.id))');
+
+// ─── 13 Sep 2026 READ-MORE (Ro) ──────────────────────────────────────────────
+has('clampedDescs records which descriptions ACTUALLY overflow, so a short one does not get a "Read more" that reveals nothing', 'const over = el.scrollHeight > el.clientHeight + 1;');
+has('the measurement is skipped while expanded, since an expanded element never reports an overflow and the toggle would vanish on first click', 'if (!el || expandedDescs[key]) return;');
+has('the toggle renders when the text is clamped OR already expanded, so Read less survives the expansion', 'const readToggle = key => (clampedDescs[key] || expandedDescs[key]) ?');
+// Both clamped descriptions sit inside a card whose own click navigates away.
+has('toggleDesc stops propagation, or "Read more" would read more and then leave the page', 'const toggleDesc = (key, e) => {\n    e.stopPropagation();');
+has('the category card description gets the same toggle', 'readToggle("cat-" + cat.category)');
+has('.expanded leaves -webkit-box layout entirely; unsetting line-clamp alone does not reliably reflow', '.act-desc.expanded, .cat-card-desc.expanded { display: block; -webkit-line-clamp: unset; overflow: visible; }');
+has('readMore in all three languages', 'readMore:', 3);
+has('readLess in all three languages', 'readLess:', 3);
+has('expanding one category card does not stretch the other two: grid-auto-rows goes auto while any card is expanded, otherwise 1fr equalises them all to the tallest and leaves a dead gap above the other Next buttons', '.cat-grid.any-expanded { grid-auto-rows: auto; }');
+has('the grid carries that class from state', 'className: "cat-grid" + (ACTIVITIES.some(c => expandedDescs["cat-" + c.category]) ? " any-expanded" : "")');
+has('the activity detail panel renders the same block, so the answer survives the click into the booking flow', 't.descs[actObj?.id]), inclusionBlock(t, actObj?.id))');
+has('includes exists in all three languages', 'includes: {', 3);
+has('notIncluded exists in all three languages', 'notIncluded: {', 3);
+has('includesLabel in all three languages', 'includesLabel:', 3);
+has('notIncludedLabel in all three languages', 'notIncludedLabel:', 3);
+// The exclusions moved out of the paddock prose and into the structured block.
+// Assert they still reach the customer, in all three languages, or the change
+// quietly deletes a real restriction rather than relocating it.
+// Ro removed the Not-included band from photoshoots on 13 Sep 2026. The paddock
+// band was the ONLY place carrying "do not enter the paddock / do not touch the
+// horses" after the morning's change moved it out of the description, so the
+// restriction went back into the description rather than disappearing with it.
+missing('no Not-included entries remain for any photoshoot', 'Photographer (add one below)');
+has('paddock keeps its entry/touching restriction, back in the description (en)', 'Entering the paddocks and touching the horses is not permitted.\",\n      photo_cottages');
+has('the entry/touching restriction survives in Indonesian, twice: paddock and cottages both carry it', 'Dilarang memasuki padang dan menyentuh kuda.', 2);
+has('the same restriction survives in Russian, twice: paddock and cottages', 'Заходить в загоны и трогать лошадей нельзя.', 2);
+has('whisper KEEPS its Not-included line: it is the one answering "is this riding?", and Ro\'s instruction was "across all photoshoots"', 'whisper: "Riding. This course is groundwork, not ridden work"');
+has('notIncluded now holds whisper and nothing else, in all three languages', 'notIncluded: {\n      whisper:', 3);
+has('whisper answers "is this riding?" directly, which is what the tester asked (en)', 'whisper: "Riding. This course is groundwork, not ridden work"');
+missing('no loose "photographer not included" prose left in any language', 'photographer not included');
+missing('no loose Indonesian equivalent left', 'fotografer tidak termasuk');
+missing('no loose Russian equivalent left', 'фотограф не входит');
 has("en ricefield uses given copy", 'photo_ricefield: "A private session with your horse framed by Bali\'s open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light."');
 has('id photo_beach per horse',    'Harga per kuda.');
 has('id cottages max 6',           'Maks 6 orang per cottage');
@@ -297,7 +347,11 @@ missing('no lang copy mentions Friday for whisper (ru)', 'понедельник
 // ─── BYO photographer descriptor (all photoshoots, card + step 2) ─────────
 has('en byoPhotographer key (2 Sep 2026 CLIENT-COPY-FEEDBACK: lowercased "Photographer" mid-sentence, client-reported capitalization inconsistency in the photoshoot tab)',      'byoPhotographer: "Bring your own photographer or add a Salty Cowboy photographer"');
 missing('standalone "BYO" no longer appears anywhere (word-boundary, base64 image constants excluded since they can\'t coincidentally spell BYO as a standalone token)', 'BYO Photographer');
-has('byo note on step1 card',      'item.photoshoot && /*#__PURE__*/React.createElement("div", {\n    className: "byo-note"\n  }, t.byoPhotographer)');
+// Removed 13 Sep 2026 at Ro's request ("remove supplementary text boxes under
+// each of the activities"). byoPhotographer survives as the category intro; the
+// whisper sessionNote survives on the activity detail panel.
+missing('no byo-note box under the step 1 cards', 'className: "byo-note"');
+missing('no session-note box under the step 1 cards', 'className: "session-note"');
 has('byo line on step2 now a static filled chip, not a paragraph (batch3 Commit 2, #2)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
 
 // ─── Notes section: "times not suitable" hint, all activities ────────────
@@ -318,8 +372,16 @@ has('en introRides uses client-approved plainer copy (2 Sep 2026 CLIENT-COPY-FEE
 has('en insta desc uses golden hour (lowercase mid-sentence, matching the client\'s given copy; still not Sunrise/Sunset)', 'golden hour is ideal');
 
 // ─── Intro / addon copy ───────────────────────────────────────────────────
-has('en intro photog matches shoot duration, price corrected to the 1 Sep 2026 PHOTOG-PRICE-FLAT figures (was stale at the old 2,500,000/25 figures until this pass caught it)', 'from IDR 2,000,000, 20 edited photos, matching your shoot\'s own duration');
-has('en intro per horse',          'Beach shoots are priced per horse');
+// Removed 13 Sep 2026 at Ro's request. The add-on price and image count still
+// live on the photographer add-on itself inside the booking flow, which is where
+// they are actionable; repeating them in the category intro made it the longest
+// of the three cards for information nobody could act on yet.
+missing('the add-on price/photo-count sentence is gone from the photoshoot intro (en)', 'from IDR 2,000,000, 20 edited photos, matching your shoot\'s own duration');
+missing('gone from the Indonesian intro too', 'mulai IDR 2,000,000, 20 foto hasil edit');
+missing('gone from the Russian intro too', 'от IDR 2,000,000, 20 обработанных фото');
+missing('the per-horse/location pricing sentence is gone from the photoshoot intro (en)', 'Beach shoots are priced per horse');
+missing('gone from the Indonesian intro too', 'Sesi Pantai dihitung per kuda');
+missing('gone from the Russian intro too', 'Съёмка на пляже, цена за лошадь');
 has('en addon title (3 Sep 2026 BRAND-NAME-SINGULAR: reverted to "Salty Cowboy", the confirmed correct brand name)', 'addonTitle: "Add a Salty Cowboy photographer:"');
 has('id addon title', 'addonTitle: "Tambahkan fotografer Salty Cowboy:"');
 has('ru addon title', 'addonTitle: "Добавить фотографа Salty Cowboy:"');
@@ -330,8 +392,8 @@ has('id sessionNote one per week', 'Hanya satu pemesanan kursus yang diterima pe
 has('ru sessionNote one per week', 'В неделю принимается только одна бронь на курс.');
 
 // ─── Step 2 now includes the calendar (no separate "calendar" screen) ─────
-has('step calc collapses to 3 screens', 'const step = screen === "activity" ? 1 : screen === "riders" ? 2 : 3;');
-has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box"\n  }, /*#__PURE__*/React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: () => setSection1Override(!section1Collapsed)\n  }, t.stepHeading1, SectionChevron(!section1Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, t.dateTimeHint), React.createElement("div", {\n    className: "fu",\n    style: {\n      marginBottom: 22,\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0,\n      marginBottom: 14\n    }\n  }, t.duration)');
+has('step calc still collapses to 3 dots: the new category screen shares dot 1 with the activity screen, so promoting it to its own screen did not add a fourth step to the indicator', 'const step = (screen === "category" || screen === "activity") ? 1 : screen === "riders" ? 2 : 3;');
+has('heading 1 sits above duration pills, calendar shows unconditionally (Commit C)', 't.byoPhotographer), /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box"\n  }, /*#__PURE__*/React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: () => setSection1Override(!section1Collapsed)\n  }, t.stepHeading1, SectionChevron(!section1Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, section1Collapsed ? (section1Summary || t.nothingSelected) : t.dateTimeHint), React.createElement("div", {\n    className: "fu",\n    style: {\n      marginBottom: 22,\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0,\n      marginBottom: 14\n    }\n  }, t.duration)');
 missing('calendar no longer gated on detailsComplete', 'screen === "riders" && detailsComplete && /*#__PURE__*/React.createElement("div", {\n    className: "fu",\n    style: {\n      marginTop: 22');
 has('calendar (cal-header) sits immediately after duration pills close, still within section 1', 'd)))), React.createElement("div", {\n    className: "cal-header",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  },');
 missing('no separate calendar screen state left', '"calendar"');
@@ -349,7 +411,7 @@ has('cal-legend bottom radius',    '.cal-legend {\n  padding: 12px 24px;\n  back
 has('cal-day.selected is white with dark text', '.cal-day.selected {\n  background: #fff !important;\n  color: var(--earth) !important;\n  border-color: rgba(255,255,255,0.3) !important;\n}');
 has('time-card padding precision', '.time-card {\n  flex: 1;\n  padding: 14.5px;');
 has('time-card selected sub is legible', '.time-card.selected .time-sub  { color: var(--sand); font-size: 14px; }');
-has('notes-area placeholder now var(--body) (Century Gothic/Outfit, no Futura, so a lightened weight actually renders lighter), weight 400', ".notes-area::placeholder { font-family: var(--body); font-weight: 400; color: #999999; font-size: 11.5px; }");
+has('notes-area placeholder now var(--body) (Century Gothic/Outfit, no Futura, so a lightened weight actually renders lighter), weight 400', ".notes-area::placeholder { font-family: var(--body); font-weight: 400; color: #999999; font-size: 14px; }");
 has('price-reveal is a light bordered card, now stacked label-over-value (Figma parity Commit 5, diff #8)', '.price-reveal {\n  display: flex; flex-direction: column; gap: 4px;\n  margin-bottom: 22px; padding: 14px 16px; border-radius: 12px;\n  background: #fff; border: 1.5px solid var(--fog);');
 has('price-reveal-value is dark text, weight 500 not 600 (styling parity sub-step 1)', '.price-reveal-value { font-family: var(--display); font-size: 22px; font-weight: 500; color: var(--earth); }');
 has('price-reveal-label replaces price-reveal-basis, reads TOTAL COST, Futura 500 (diff #8)', '.price-reveal-label { font-family: var(--display); font-weight: 500; font-size: 10px; color: var(--dusk); text-transform: uppercase; letter-spacing: 2px; }');
@@ -360,13 +422,14 @@ has('cat-tab uses shared pill pattern (fallback, Figma unverified)', '.cat-tab {
 has('cat-tab.active uses earth/sand', '.cat-tab.active { background: var(--earth); border-color: var(--earth); color: var(--sand); }');
 has('cat-intro-text no longer needs its own top margin (header photo band above it removed, batch 6: intro image removal); horizontal inset now comes from the restored .cat-intro box padding instead', '.cat-intro-text {\n  font-family: var(--body);\n  font-size: 12.5px;');
 has('cat-intro-text weight 400 (was 500, lightened by the body-copy weight sweep); size 12.5px and line-height 1.6 (=20px) still match Figma, untouched; uses var(--body) not var(--display) so the weight actually renders (no Futura clamp)', '.cat-intro-text {\n  font-family: var(--body);\n  font-size: 12.5px;\n  font-weight: 400;\n  line-height: 1.6;');
-has('act-card border 1px + generous padding, matching the locked Step 2 card padding (Figma spacing audit)', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;');
+// SUPERSEDED 13 Sep 2026 (Ro: activity cards in the same format as the first page).
+has('act-card is a borderless-padding shell now: the padding moved onto .act-info so the image sits flush to the card edge, exactly as on the category cards', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;');
 has('act-name is 16px, bumped up slightly from the 14px Figma typography pass per Ro\'s follow-up ask (was 22px originally, oversized relative to the card)', '.act-name { font-size: 16px; font-weight: 500; color: var(--earth); }');
 missing('act-name did not gain a new font-family (rule: change size/weight/colour only)', '.act-name { font-size: 22px; font-weight: 500; color: var(--earth); font-family');
-has('act-desc weight 300, reverted from a brief 200 experiment (Ro tried 200, decided against it); on var(--body) not var(--display), since macOS system Futura only ships Medium/Bold and was silently clamping every lighter weight back to Medium; 14px/18 line-height untouched', '.act-desc  { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 18px; }');
+has('act-desc weight 300, reverted from a brief 200 experiment (Ro tried 200, decided against it); on var(--body) not var(--display), since macOS system Futura only ships Medium/Bold and was silently clamping every lighter weight back to Medium; 14px/18 line-height untouched', '.act-desc  { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 3;');
 has('price-tag is a light pill, captured grey #eeeeee not the --fog token (Figma card rebuild, greys stay as captured)', '.price-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 10px; border-radius: 300px; background: #eeeeee; border: 1px solid var(--fog); }');
-has('pt-label uses near-black at 60% opacity via our token, not Figma\'s fractional-channel rgba(0.11,0.11,0.11,0.60) export glitch (Figma card rebuild landmine); 10.5px per the Figma typography pass (was 11px)', '.pt-label { font-size: 10.5px; color: rgba(20, 20, 20, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }');
-has('pt-value weight is 500 (was 700), matching the title/value/heading/Book weight hierarchy (Figma card rebuild)', '.pt-value { font-size: 13px; color: var(--earth); font-weight: 500; white-space: nowrap; }');
+has('pt-label uses near-black at 60% opacity via our token, not Figma\'s fractional-channel rgba(0.11,0.11,0.11,0.60) export glitch (Figma card rebuild landmine); back to 11px on 13 Sep 2026, when Ro asked for one 14px body size across the cards and the price tags with it', '.pt-label { font-size: 11px; color: rgba(20, 20, 20, 0.6); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }');
+has('pt-value weight is 500 (was 700), matching the title/value/heading/Book weight hierarchy (Figma card rebuild)', '.pt-value { font-size: 14px; color: var(--earth); font-weight: 500; white-space: nowrap; }');
 
 // ─── Step 3 restyle (docs/booking-engine-restyle-spec.md) — look only ─────
 has('confirm-title is 22px (was 21px)', '.confirm-title {\n  font-family: var(--display);\n  font-size: 22px;');
@@ -383,7 +446,7 @@ has('.copy-btn ("Copy message") is regular weight, not the earlier semibold 600'
 has('confirm-summary border 1px + 18.5 padding', '.confirm-summary {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 18.5px;');
 has('copy-box now carries the card look (was bare)', '.copy-box { margin: 8px 0 22px; text-align: left; background: #f7f7f7; border: 1px solid #dcdcdc; border-radius: 12px; padding: 15px; }');
 has('copy-heading letter-spacing aligned to shared uppercase-label convention', '.copy-heading { font-size: 11px; font-weight: 600; color: var(--dusk); text-transform: uppercase; letter-spacing: 1.5px;');
-has('copy-text lost its own box now that copy-box carries it; weight 300 on var(--body) (was inheriting the implicit 400 default on var(--display), lightened by the body-copy weight sweep)', '.copy-text { white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: 13px; font-weight: 300; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }');
+has('copy-text lost its own box now that copy-box carries it; weight 300 on var(--body) (was inheriting the implicit 400 default on var(--display), lightened by the body-copy weight sweep)', '.copy-text { white-space: pre-wrap; word-break: break-word; font-family: var(--body); font-size: 14px; font-weight: 300; line-height: 19px; color: #444444; max-height: 210px; overflow-y: auto; }');
 has('copy-btn is compact outline (was full-width tinted)', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth);');
 missing('clipboard emoji removed from copy button label', '"📋 " + t.copyBtn');
 has('reset-link class exists (Make another booking no longer shares .cta)', '.reset-link {\n  background: none;\n  border: none;\n  color: var(--dusk);\n  font-size: 14px;');
@@ -395,19 +458,32 @@ missing('hourglass emoji not glued onto the awaiting value specifically (it now 
 
 // ─── Commit A (docs/booking-engine-structural-spec.md): act-card rebuild ──
 missing('act-icon element removed', 'className: "act-icon"');
-has('act-image sits in the act-right column, above the Book button (Figma card rebuild); now conditionally styled with a per-activity background-image, item.image undefined OR item.hideCardImage true falls back to the plain grey placeholder (PADDOCK-IMG commit decouples the card image from the Step 2 header band)', '/*#__PURE__*/React.createElement("div", {\n    className: "act-right"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-image",\n    style: item.image && !item.hideCardImage ? {\n      backgroundImage: "url(" + item.image + ")",\n      backgroundSize: "cover",\n      backgroundPosition: "center"\n    } : undefined\n  }), /*#__PURE__*/React.createElement("button", {\n    className: "act-book-btn"');
+has('act-image is now the sole child of act-media, the FIRST column, so the image sits left on desktop (13 Sep 2026, Ro). Still conditionally styled: item.image undefined OR item.hideCardImage true falls back to the plain grey placeholder', 'className: "act-media"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-image",\n    style: item.image && !item.hideCardImage ? {');
 missing('hideCardImage removed entirely (no activity carries it anymore) - it stopped doing anything once PHOTO-GALLERY made the Step 2 header band never render for photoshoot activities, so decoupling card vs. header images was no longer meaningful; the .act-image JSX check for it is a separate, harmless no-op left in place rather than ripped out', 'hideCardImage: true');
-has('.act-image is 233px tall, captured grey #d9d9d9 not the --fog token (Figma card rebuild, greys stay as captured)', '.act-image { width: 100%; height: 233px; border-radius: 14px; background: #d9d9d9; }');
-has('act-card base is a mobile-first stacked column (locked Step 2 padding, 12px gap); the Figma two-column row only applies at the 900px desktop breakpoint (Figma card rebuild)', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 8px;\n  cursor: pointer;\n  transition: all 0.2s;\n  display: flex;\n  flex-direction: column;\n  align-items: stretch;\n  gap: 12px;\n  position: relative;\n}');
-has('at 900px+, act-card becomes a row with nowrap (not wrap, see the comment: wrap would decide line-breaks on un-shrunk basis and always drop the image), left/right basis 316/284 so the image shrinks to fit the 623px column (Figma card rebuild)', '.act-card { flex-direction: row; flex-wrap: nowrap; align-items: flex-start; }\n  .act-left { flex: 0 1 316px; min-width: 220px; }\n  .act-right { flex: 1 1 284px; min-width: 160px; }');
-has('.act-left base (mobile): title+desc and price pills stacked, 22px inner gap', '.act-left {\n  display: flex;\n  flex-direction: column;\n  gap: 22px;\n}');
+has('.act-image fills its column rather than sitting at a fixed 233px; captured grey #d9d9d9 kept, and the corner rounding now comes from the card overflow:hidden', '.act-image { width: 100%; height: 100%; min-height: 180px; background: #d9d9d9; }');
+// SUPERSEDED 13 Sep 2026 (Ro: activity cards in the same format as the first page).
+has('act-card is a row at EVERY width now, not a mobile-first stacked column', '.act-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;\n  margin-bottom: 8px;\n  cursor: pointer;\n  transition: all 0.2s;\n  display: flex;\n  flex-direction: row;\n  align-items: stretch;');
+has('the 900px breakpoint now only widens the image column and the text padding: the row layout itself applies at every width', '@media (min-width: 900px) {\n  .act-media { flex: 0 0 260px; }\n  .act-info { padding: 20px 22px 22px; gap: 18px; }\n}');
+has('.act-media is a fixed-width left column at every width, same shape as .cat-card-media', '.act-media { flex: 0 0 118px; background: #d9d9d9; align-self: stretch; }');
+// 13 Sep 2026 CARD-IMAGE-LEFT. Book moved out of the image column and into the
+// text column, so it now reads as part of the text block, not under the photo.
+has('Book is the last child of act-info, now immediately after the price tags since the two note boxes are gone', 'pt.v)))), /*#__PURE__*/React.createElement("button", {\n    className: "act-book-btn"');
+missing('the old act-left/act-right column names are gone entirely, so nothing still reads as "image on the right"', '.act-right');
+missing('no act-left left either', 'act-left');
+has('Book is pinned to the bottom of the text column at every width, not only desktop', '.act-info .act-book-btn { margin-top: auto; }');
+has('desktop: Book pinned to the bottom of the text column', '.act-info .act-book-btn { margin-top: auto; }');
 has('.act-titledesc gives title and description their own tighter 9px gap, nested inside act-left\'s 22px rhythm (Figma card rebuild)', '.act-titledesc { display: flex; flex-direction: column; gap: 9px; }');
-has('.act-right base (mobile): image and Book button stacked, right-aligned', '.act-right {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-end;\n}');
-has('price pills stack vertically, one per duration, instead of wrapping in a row (Figma card rebuild)', '.price-tags { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }');
-has('Book button font-weight is 500 (was 600), matching the title/value/heading/Book weight hierarchy (Figma card rebuild); size 18px per the Figma typography pass (was 13px)', 'font-family: var(--display);\n  font-size: 18px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: background 0.15s;\n}\n.act-book-btn:hover');
+has('.act-info carries the card padding now, so the image can sit flush left; 10px inner gap since 13 Sep 2026, tightened to fit more cards on screen', '.act-info {\n  flex: 1 1 auto;\n  min-width: 0;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  padding: 14px 15px 15px;\n}');
+// SUPERSEDED 13 Sep 2026. Ro: shorter cards so more options are visible. One
+// pill per row cost a row per duration; the Horse Whisperer's four durations
+// were four rows on their own.
+has('price pills wrap in a row now, so a 4-duration activity is not 4 rows tall', '.price-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }');
+has('the card description is clamped to 3 lines on the list; the full text is on the activity detail panel one tap away', '.act-desc  { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 3;');
+has('Book button font-weight 500, size now 14px to match the first page\'s Next pill (was 18px on the old full-width bar)', 'font-family: var(--display);\n  font-size: 14px;\n  font-weight: 500;\n  cursor: pointer;\n  transition: background 0.15s;\n}');
 has('act-check repositioned absolute (was margin-left:auto)', '.act-check {\n  position: absolute;\n  top: 14px;\n  right: 14px;');
 missing('act-check no longer uses margin-left:auto', 'margin-left: auto;\n  width: 20px; height: 20px;\n  border-radius: 50%;\n  background: var(--clay);\n  color: #fff;\n  display: flex; align-items: center; justify-content: center;\n  font-size: 11px;\n  flex-shrink: 0;\n  opacity: 0;\n  transform: scale(0.6);\n  transition: all 0.2s;\n}\n.act-card.selected .act-check');
-has('category tab click also clears selectedDates/selectedTime alongside duration/numPeople, same stale-date fix as the card click and Book button', 'setActiveCat(cat.category);\n      setActivity(null);\n      setDuration(null);\n      setNumPeople(null);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n    }\n  }, t.categories[cat.category])');
+has('TODOS #1 (13 Sep 2026): riders is cleared on a category-tab click. It was the only payload field with no reset on this path, and the booking log reads weight counts off it', 'setNumPeople(null);\n      // TODOS #1, fixed 13 Sep 2026');
+has('category tab click also clears selectedDates/selectedTime alongside duration/numPeople, same stale-date fix as the card click and Book button', 'setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n    }\n  }, t.categories[cat.category])');
 has('per-card Book button reuses existing state setters, not a new handler', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      // Clearing these here (not just duration/numPeople) matters: without\n      // it, a date/time picked for a previous activity can still satisfy\n      // section1Complete for the new one (same requiredDates, slot still\n      // valid), so section 1 would land pre-collapsed and section 2 would\n      // auto-open on a booking the user never actually confirmed.\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 has('en bookActivity label', 'bookActivity: "Book →"');
 has('id bookActivity label', 'bookActivity: "Pesan →"');
@@ -421,7 +497,7 @@ has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
-has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection2\n  }, t.stepHeading2, SectionChevron(!section2Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, t.section2Subtitle), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection2\n  }, t.stepHeading2, SectionChevron(!section2Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, section2Collapsed ? (section2Summary || t.nothingSelected) : t.section2Subtitle), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
 has('section 3 (summary/total/notes/Send/notice) always renders on the riders screen now (batch 7: section 3 accordion); its content is display-gated on section3Collapsed instead of the whole block being conditionally rendered on datesComplete', 'screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box fu step2-block"\n  }, React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection3\n  }, t.stepHeading3');
 has('en sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sStatus: "Status"');
 has('id sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sStatus: "Status"');
@@ -448,7 +524,7 @@ missing('the old marginTop:22 spacer above the calendar is gone (large gap remov
 
 // ─── docs/step2-figma-parity-batch.md, Commit 1: copy and labels ──────────
 has('en dateTimeHint key added under stepHeading1 (diff #3)', 'dateTimeHint: "Select an available date below to choose your time slot."');
-has('dateTimeHint rendered as a section-hint right after heading 1, now permanent (Ro asked section 1 to keep its hint visible even collapsed, like sections 2/3); marginBottom conditionally zeroed only while collapsed (it\'s followed by display:none siblings then, same bug pattern as section 3\'s hint, caught from a second uneven-spacing report)', 't.stepHeading1, SectionChevron(!section1Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, t.dateTimeHint)');
+has('the section-hint slot right after heading 1 shows the SELECTION when collapsed and the hint when open (13 Sep 2026, user testing; reverses the earlier permanent-hint call); marginBottom conditionally zeroed only while collapsed (it\'s followed by display:none siblings then, same bug pattern as section 3\'s hint, caught from a second uneven-spacing report)', 't.stepHeading1, SectionChevron(!section1Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, section1Collapsed ? (section1Summary || t.nothingSelected) : t.dateTimeHint)');
 has('en participantDetails key added (diff #7)', 'participantDetails: "Participant details"');
 missing('aboutYou key removed (folded into participantDetails for the single-rider case)', 'aboutYou:');
 missing('yourDetails key removed (folded into participantDetails for the single-rider case)', 'yourDetails:');
@@ -489,7 +565,7 @@ has('.gallery-lightbox is a solid var(--earth) backdrop, not a new color, matchi
 has('.gallery-lightbox-nav mirrors .cal-nav\'s existing circular icon-button pattern (border, --sand color, hover fill) rather than inventing a new button style', '.gallery-lightbox-nav {\n  background: none;\n  border: 1px solid rgba(255,255,255,0.2);\n  color: var(--sand);\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;');
 missing('gallery-row/gallery-thumb never reference a color or font token that isn\'t already defined elsewhere in the stylesheet (no new token sprawl)', '--gallery');
 missing('back-link no longer lives inside detail-header-card (moved above the image band, batch 5, Commit 3)', 'className: "detail-header-card"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link"');
-has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]))');
+has('description now sits inside the header card, directly under the title (diff #2)', 't.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]), inclusionBlock(t, actObj?.id))');
 missing('detail-intro wrapper removed (description no longer a separate sibling block)', 'className: "detail-intro"');
 missing('detail-emoji (wave/sunrise icon prefix on the description) removed (diff #2)', 'className: "detail-emoji"');
 missing('Step 1 category intro no longer renders a header photo band (batch 6: intro image removal, Figma has no image above the intro copy); IMG_PHOTOSHOOTS/IMG_RIDES/IMG_LESSONS constants are now unreferenced dead code, left in place pending a decision on trimming them', 'src: activeCat === "Photoshoots" ? IMG_PHOTOSHOOTS : activeCat === "Rides" ? IMG_RIDES : IMG_LESSONS,');
@@ -526,29 +602,29 @@ has('totalPrice / totalPriceStr computation itself untouched, only its rendering
 // ─── docs/step2-styling-parity.md, sub-step 1: weights to Futura 500 ──────
 // Weight/family only. No size, colour, spacing or logic touched.
 has('section-title (activity title / section headings) now explicitly weight 500, was bold by h2/h3 default', '.section-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 22px;');
-has('section-hint (Step 1 helper line + Step 2 hints) now on var(--body), weight 400 (was 500 on var(--display), lightened by the body-copy weight sweep; moved off var(--display) since macOS Futura has no face lighter than Medium)', '.section-hint {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 12px;');
-has('back-link is Futura 500, plain text link with no button chrome (batch 5, Commit 3 reverses the bordered-pill treatment)', '.back-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: var(--earth);\n  cursor: pointer;\n  margin-bottom: 14px;\n  width: fit-content;\n}');
-missing('back-link no longer has its own padding/border/background/radius (button chrome removed)', '.back-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 12px;\n  color: var(--earth);\n  cursor: pointer;\n  margin-bottom: 14px;\n  width: fit-content;\n  padding');
-has('detail-desc (activity description) weight 300, matching act-desc (was 500, then 400, then 300, briefly 200, reverted back to 300); on var(--body) not var(--display), since macOS Futura has no face lighter than Medium and was clamping every one of those weights back to the same rendering', '.detail-desc { font-family: var(--body); font-weight: 300; font-size: 13px;');
+has('section-hint (Step 1 helper line + Step 2 hints) now on var(--body), weight 400 (was 500 on var(--display), lightened by the body-copy weight sweep; moved off var(--display) since macOS Futura has no face lighter than Medium)', '.section-hint {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 14px;');
+has('back-link is Futura 500, plain text link with no button chrome (batch 5, Commit 3 reverses the bordered-pill treatment)', '.back-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 11px;\n  color: var(--earth);\n  cursor: pointer;\n  margin-bottom: 14px;\n  width: fit-content;\n}');
+missing('back-link no longer has its own padding/border/background/radius (button chrome removed)', '.back-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 11px;\n  color: var(--earth);\n  cursor: pointer;\n  margin-bottom: 14px;\n  width: fit-content;\n  padding');
+has('detail-desc (activity description) weight 300, matching act-desc (was 500, then 400, then 300, briefly 200, reverted back to 300); on var(--body) not var(--display), since macOS Futura has no face lighter than Medium and was clamping every one of those weights back to the same rendering', '.detail-desc { font-family: var(--body); font-weight: 300; font-size: 14px;');
 has('act-category (eyebrow labels: Duration, Number of people, Participant details, Time slot, Total cost) now Futura, weight already 500', '.act-category {\n  font-family: var(--display);\n  font-size: 10px;');
 has('rider-label (Participant details eyebrow) now Futura, weight already 500', '.rider-label {\n  font-family: var(--display);\n  font-size: 11px;\n  letter-spacing: 1.5px;');
 has('field-label (Name/Age/Weight range/Riding experience) now Futura, weight already 500', '.field-label {\n  font-family: var(--display);\n  font-size: 11px;\n  color: var(--dusk);');
 has('text-input (field value) now Futura 500, was Outfit at default weight', '.text-input {\n  width: 100%;\n  padding: 11.5px 13.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 10px;\n  font-family: var(--display);\n  font-weight: 500;');
-has('pill (duration/people) now Futura 500, was Outfit at default weight', '.pill {\n  padding: 9.5px 16.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 24px;\n  font-size: 13px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.18s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
-has('field-pill (weight/experience) now Futura 500, was Outfit at default weight', '.field-pill {\n  padding: 7.5px 13.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 20px;\n  font-size: 12px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.15s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
+has('pill (duration/people) now Futura 500, was Outfit at default weight', '.pill {\n  padding: 9.5px 16.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 24px;\n  font-size: 11px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.18s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
+has('field-pill (weight/experience) now Futura 500, was Outfit at default weight', '.field-pill {\n  padding: 7.5px 13.5px;\n  border: 1.5px solid var(--fog);\n  border-radius: 20px;\n  font-size: 11px;\n  cursor: pointer;\n  background: #fff;\n  color: var(--earth);\n  transition: all 0.15s;\n  font-family: var(--display);\n  font-weight: 500;\n}');
 has('sel-title (date readout) now explicitly weight 500', '.sel-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 16px;');
 has('cal-month now explicitly weight 500', '.cal-month {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 18px;');
 has('cal-day-name (calendar weekday) now Futura 500', '.cal-day-name {\n  font-family: var(--display);\n  font-weight: 500;\n  text-align: center;');
-has('cal-day (calendar day number) now Futura 500, was weight 400', '.cal-day {\n  font-family: var(--display);\n  aspect-ratio: 1;\n  display: flex; align-items: center; justify-content: center;\n  border-radius: 8px;\n  font-size: 13px;\n  font-weight: 500;');
+has('cal-day (calendar day number) now Futura 500, was weight 400', '.cal-day {\n  font-family: var(--display);\n  aspect-ratio: 1;\n  display: flex; align-items: center; justify-content: center;\n  border-radius: 8px;\n  font-size: 11px;\n  font-weight: 500;');
 has('legend-item (calendar legend) now Futura 500', '.legend-item { font-family: var(--display); font-weight: 500; display: flex;');
 has('sum-key (summary row label) now Futura 500, was inheriting Outfit at default weight', '.sum-key { font-family: var(--display); font-weight: 500; color: var(--dusk); }');
 has('sum-val (summary row value, incl. Status) now Futura, weight already 500', '.sum-val { font-family: var(--display); color: var(--earth); font-weight: 500;');
 has('hint-link (Edit link) now Futura, weight already 500', '.hint-link {\n  font-family: var(--display);\n  color: var(--clay);\n  font-weight: 500;');
-has('perm-text (consent checkbox text) now Futura 500, was inheriting Outfit at default weight', '.perm-text { font-family: var(--display); font-weight: 500; font-size: 12px; color: #444444;');
+has('perm-text (consent checkbox text) now Futura 500, was inheriting Outfit at default weight', '.perm-text { font-family: var(--display); font-weight: 500; font-size: 14px; color: #444444;');
 has('notice (confirmation note) now on var(--body), weight 400 (was 500 on var(--display), lightened by the body-copy weight sweep)', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--body);\n  font-weight: 400;');
 has('cta (WhatsApp button) now explicitly weight 500', '.cta {\n  display: block;\n  width: 100%;\n  padding: 16px;\n  background: var(--clay);\n  color: #fff;\n  border: none;\n  border-radius: 14px;\n  font-family: var(--display);\n  font-weight: 500;');
 has('cost-funds-title now explicitly weight 500', '.cost-funds-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 18px;');
-has('cost-funds-body now on var(--body), weight 400 (was 500 on var(--display), lightened by the body-copy weight sweep)', '.cost-funds-body {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 12.5px;');
+has('cost-funds-body now on var(--body), weight 400 (was 500 on var(--display), lightened by the body-copy weight sweep)', '.cost-funds-body {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 14px;');
 // Batch 5, Commit 1 reversed the two named exceptions above: the time-slot
 // card now also renders in Futura. time-main/time-sub declare no font-family
 // of their own, so they inherit it from .app (now var(--display)); only the
@@ -570,7 +646,7 @@ has('EXPR_A (details block) tagged step2-block', 'className: "body fu step2-bloc
 has('step2-section-box fu step2-block wrapper now used ONLY by EXPR_B (summary/total/notes/Send/notice block); the rider-info card lost its own wrapper when it moved back inside section 2 (10 Sep 2026 CHECKBOXES-UNDER-WHOS-COMING)', 'className: "step2-section-box fu step2-block"', 1);
 has('cost-funds block tagged step2-block', 'className: "cost-funds-card fu step2-block"');
 has('detail-header-card trailing gap now the uniform 22px (was 18px)', '.detail-header-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 20px 20px 18px;\n  margin-top: -48px;\n  margin-bottom: 22px;\n}');
-has('section-hint trailing gap now the uniform 22px (was 20px), covers isWhisper/BYO/dateTimeHint', '.section-hint {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 12px;\n  color: var(--dusk);\n  margin-bottom: 22px;');
+has('section-hint trailing gap now the uniform 22px (was 20px), covers isWhisper/BYO/dateTimeHint', '.section-hint {\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 14px;\n  color: var(--dusk);\n  margin-bottom: 22px;');
 missing('isWhisper hint no longer uses the negative-margin jam-against-heading hack', 'isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
 missing('isPhotoshoot (BYO Photographer) hint no longer uses the negative-margin hack, now gets a real defined slot', 'isPhotoshoot && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style:');
 missing('section 1\'s old collapsed-summary paragraph (duration/date/time) is gone - dateTimeHint is now the permanent line shown regardless of collapse state', '}, t.dateTimeHint), section1Collapsed && /*#__PURE__*/React.createElement("p", {');
@@ -584,10 +660,10 @@ has('confirm-summary gets its trailing 22px via inline style scoped to the Step 
 has('Step 3 confirm screen summary card has no margin override (only Step 2\'s in-page copy was touched)', 'React.createElement("div", {\n    className: "confirm-summary"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "sum-row"');
 has('addon-group now uses trailing margin-bottom (22px) instead of a leading margin-top nudge', '.addon-group { margin-bottom: 22px; }');
 missing('addon-group no longer uses margin-top', '.addon-group { margin-top');
-has('notes-time-hint negative-margin hack removed, kept as a small heading-to-hint gap (not part of the 22px block rhythm); weight 300 on var(--body) (was implicit 400, lightened by the body-copy weight sweep)', '.notes-time-hint { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }');
+has('notes-time-hint negative-margin hack removed, kept as a small heading-to-hint gap (not part of the 22px block rhythm); weight 300 on var(--body) (was implicit 400, lightened by the body-copy weight sweep)', '.notes-time-hint { font-family: var(--body); font-size: 14px; font-weight: 300; color: var(--dusk); margin-bottom: 8px; line-height: 1.4; }');
 has('notes-area trailing gap now the uniform 22px (was 16px)', 'transition: border 0.18s;\n  margin-bottom: 22px;\n}');
 has('Send button (Step 2 instance) overrides the shared .cta margin locally: 0 top, 22 bottom', 'className: "cta",\n    style: {\n      marginTop: 0,\n      marginBottom: 22,\n      display: section3Collapsed ? "none" : undefined\n    },\n    disabled: !selectedTime || !detailsComplete');
-has('notice trailing gap now the uniform 22px (was 16px), sits last before the always-visible cost-funds block', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 12px;\n  color: #444444;\n  line-height: 1.5;\n  margin-bottom: 22px;');
+has('notice trailing gap now the uniform 22px (was 16px), sits last before the always-visible cost-funds block', '.notice {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 12px 14px;\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 14px;\n  color: #444444;\n  line-height: 1.5;\n  margin-bottom: 22px;');
 
 // ─── docs/booking-engine-structural-spec.md, Commit D: copy cleanup ───────
 missing('no em-dashes left anywhere in translation copy, the meta description, or the WhatsApp message builder (standing CLAUDE.md rule)', 'sentTitle: "WhatsApp has opened in another window —');
@@ -618,7 +694,7 @@ has('cost-funds-card already tagged step2-block from the styling-parity commit, 
 // ─── docs/step2-batch3.md, Commit 2: BYO line as a filled chip (#2) ───────
 // Ro's override: filled/selected-pill visual, static (no button, no onClick),
 // photoshoot activities only.
-has('.byo-chip now a hairline chip (thin light border, no fill) per Ro, less visually loud than the dark filled pill', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;\n  padding: 9.5px 16.5px;\n  border: 1px solid var(--fog);\n  border-radius: 24px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 13px;\n  background: #fff;\n  color: var(--earth);\n}');
+has('.byo-chip now a hairline chip (thin light border, no fill) per Ro, less visually loud than the dark filled pill', '.byo-chip {\n  display: inline-block;\n  margin-bottom: 22px;\n  padding: 9.5px 16.5px;\n  border: 1px solid var(--fog);\n  border-radius: 24px;\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 11px;\n  background: #fff;\n  color: var(--earth);\n}');
 missing('byo-chip JSX has no onClick (static, not a button, per Ro\'s explicit override)', 'className: "byo-chip",\n    onClick');
 has('byo-chip still gated on isPhotoshoot only, same conditional as before (rides/lessons never render it)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer)');
 missing('old section-hint paragraph treatment for the BYO line is gone', 'isPhotoshoot && /*#__PURE__*/React.createElement("p"');
@@ -658,7 +734,11 @@ has('section 1 calendar block (cal-header) CSS-hidden on completion, not unmount
 has('section 1 cal-grid CSS-hidden on completion, still mounted', 'className: "cal-grid",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
 has('section 1 cal-legend CSS-hidden on completion, still mounted', 'className: "cal-legend",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
 has('section 1 cal-selection-panel (date+time readout) CSS-hidden on completion, still mounted', 'className: "cal-selection-panel",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  }');
-missing('section 1\'s old duration/date/time collapsed-summary line is gone entirely (Ro asked dateTimeHint to be the permanent line instead, doing double duty as the click-to-reopen affordance when collapsed)', '[duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")');
+// SUPERSEDED 13 Sep 2026. This used to assert the duration/date/time summary was
+// gone, because Ro asked for the hint line to be permanent instead. User testing
+// reversed that: a collapsed section showing only its hint reads as unfilled.
+// The summary is back, now as a collapsed-only line with an explicit empty state.
+has('section 1\'s collapsed summary is back, as a collapsed-only line (reverses the earlier permanent-hint call)', '[duration, formattedDates.join(" · "), selectedTime].filter(Boolean).join(" · ")');
 has('section 2 rider-card keeps its key/animationDelay AND gains a display toggle, proving it stays mounted (not conditionally removed)', 'className: "rider-card fu",\n      style: {\n        animationDelay: idx * 0.06 + "s",\n        display: section2Collapsed ? "none" : undefined\n      }');
 // Only the photographer add-on still uses the "addon-group" CSS-hide-on-
 // completion pattern; booking-for-other moved out of section 2's accordion
@@ -676,10 +756,10 @@ has('booking-for-other sits ahead of the photographer add-on, both as the last c
 missing('no standalone rider-info card left under the booking summary', 'screen === "riders" && isRiding && riders.length > 0');
 has('checkbox toggles bookingForOther, checked state reflected in perm-box', 'className: "perm-box " + (bookingForOther ? "checked" : "")\n  }, bookingForOther ? "✓" : ""), /*#__PURE__*/React.createElement("div", {\n    className: "perm-text"\n  }, t.bookingForOtherLabel)');
 has('reopen prompt only rendered when bookingForOther is checked, reuses the weight-warning visual pattern and opens the rider-info modal on click (1 Sep 2026 RIDER-INFO-MODAL, replaced the old static note)', 'bookingForOther && /*#__PURE__*/React.createElement("div", {\n    className: "weight-warning",\n    onClick: () => setShowRiderInfoModal(true),\n    style: {\n      cursor: "pointer"\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "ww-header"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "ww-icon"\n  }, "📋"), /*#__PURE__*/React.createElement("div", {\n    className: "ww-body"\n  }, t.riderInfoReopenNote)');
-has('en bookingForOtherLabel', 'bookingForOtherLabel: "I\'m booking for someone else"');
+has('en bookingForOtherLabel', 'bookingForOtherLabel: "I\'m booking for someone else, or I\'m an agent booking for a customer"');
 has('en bookingForOtherNote', 'bookingForOtherNote: "Please check the weight of the person you\'re booking for. We know it\'s a slightly awkward thing to ask, but for the wellbeing of our horses we hold to a rider weight guideline of 75kg. It\'s what keeps every horse healthy and comfortable, so we can keep offering these rides for years to come. Please note we\'re unable to offer refunds where this limit is exceeded, and weight may be confirmed at the stables if needed."');
-has('id bookingForOtherLabel', 'bookingForOtherLabel: "Saya memesan untuk orang lain"');
-has('ru bookingForOtherLabel', 'bookingForOtherLabel: "Я бронирую для другого человека"');
+has('id bookingForOtherLabel', 'bookingForOtherLabel: "Saya memesan untuk orang lain, atau saya agen yang memesan untuk pelanggan"');
+has('ru bookingForOtherLabel', 'bookingForOtherLabel: "Я бронирую для другого человека или я агент, бронирующий для клиента"');
 has('bookingForOtherLabel/Note declared exactly 3 times (once per language)', 'bookingForOtherLabel:', 3);
 has('bookingForOther threaded into buildWhatsAppMessage params', 'notes,\n  photographerAddon,\n  bookingForOther,\n  grooming,\n  totalPriceStr\n}) {');
 has('bookingForOther payload line, additive after Group size', 'if (bookingForOther) lines.push(showWeight');
@@ -707,7 +787,10 @@ missing('no bare grooming key is left in the log row', 'grooming: needsGrooming 
 // weight guideline, where the money goes), plus a message the booker can
 // copy and forward. Opens automatically on check; the reopen prompt above
 // (tests around line 609) lets the booker view/copy it again after closing.
-has('showRiderInfoModal and riderInfoCopied state', 'const [showRiderInfoModal, setShowRiderInfoModal] = useState(false);\n  const [riderInfoCopied, setRiderInfoCopied] = useState(false);');
+// Split 13 Sep 2026: the read-more state block now sits between these two, so
+// they are no longer adjacent lines. Both still have to exist.
+has('showRiderInfoModal state', 'const [showRiderInfoModal, setShowRiderInfoModal] = useState(false);');
+has('riderInfoCopied state', 'const [riderInfoCopied, setRiderInfoCopied] = useState(false);');
 has('checkbox opens the modal only when turning the box on, not when turning it off', 'onClick: () => {\n      const next = !bookingForOther;\n      setBookingForOther(next);\n      if (next) setShowRiderInfoModal(true);\n    }');
 has('single defensive effect closes the modal (and resets its copy feedback) whenever bookingForOther goes false, covering every reset path without touching each call site', 'useEffect(() => {\n    if (!bookingForOther) {\n      setShowRiderInfoModal(false);\n      setRiderInfoCopied(false);\n    }\n  }, [bookingForOther]);');
 has('buildRiderInfoMessage builds the copyable message in the booker\'s own site language (t), unlike buildWhatsAppMessage which is always English', 'function buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime, showWeight }) {');
@@ -740,8 +823,8 @@ missing('no parallel/duplicate completeness calculation introduced for the accor
 has('section 1 heading is always clickable now (Ro asked for open/close at any time, not gated behind completion)', 'className: "section-title section-title-toggle",\n    onClick: () => setSection1Override(!section1Collapsed)');
 has('section 2 heading always clickable now, routed through toggleSection2 (blocks opening early with the note instead, but never blocks closing)', 'className: "section-title section-title-toggle",\n    onClick: toggleSection2');
 has('section 1 heading toggle-flip handler (the permanent dateTimeHint paragraph now reuses the same setSection1Override call inline in its own conditional onClick, not this exact string, since it\'s only wired up while collapsed)', 'onClick: () => setSection1Override(!section1Collapsed)', 1);
-has('section 1\'s permanent hint is clickable to reopen only while collapsed, reusing the same override toggle', 'style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, t.dateTimeHint)');
-has('section 2\'s permanent subtitle is always clickable (open or collapsed), routed through toggleSection2 same as the heading', 'style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, t.section2Subtitle)');
+has('section 1\'s permanent hint is clickable to reopen only while collapsed, reusing the same override toggle', 'style: {\n      cursor: section1Collapsed ? "pointer" : undefined,\n      marginBottom: section1Collapsed ? 0 : undefined\n    },\n    onClick: section1Collapsed ? () => setSection1Override(!section1Collapsed) : undefined\n  }, section1Collapsed ? (section1Summary || t.nothingSelected) : t.dateTimeHint)');
+has('section 2\'s permanent subtitle is always clickable (open or collapsed), routed through toggleSection2 same as the heading', 'style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, section2Collapsed ? (section2Summary || t.nothingSelected) : t.section2Subtitle)');
 has('.section-title-toggle CSS lays the header out flex space-between so the chevron sits far right, opposite the section number (Figma mockup)', '.section-title-toggle {\n  cursor: pointer;\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}');
 has('.section-toggle-arrow is an inline SVG stroke chevron (currentColor), not a text glyph', '.section-toggle-arrow {\n  flex-shrink: 0;\n  margin-left: 8px;\n  color: var(--dusk);\n  transition: transform 0.15s;\n}');
 has('SectionChevron helper draws a single 1.5px-stroke currentColor path, rotated 180deg when open rather than swapping glyphs, 16x16', 'function SectionChevron(open) {\n  return /*#__PURE__*/React.createElement("svg", {\n    className: "section-toggle-arrow",\n    width: 16,\n    height: 16,');
@@ -763,7 +846,47 @@ missing('.cta-dock CSS rule removed as dead code', '.cta-dock {');
 missing('.has-dock CSS rule removed as dead code (only consumer was the deleted cta-dock spacer)', '.has-dock {');
 missing('has-dock class no longer applied to the Step 1 body wrapper', '"body fu has-dock"');
 missing('next translation key removed from all three languages as dead code', 'next: "Next →"');
-has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom padding for a dock that no longer exists', 'screen === "activity" && /*#__PURE__*/React.createElement("div", {\n    className: "body fu"\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.chooseActivity)');
+has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom padding for a dock that no longer exists. The activity screen now opens with a back link to the categories, so the heading is no longer its first child', 'screen === "activity" && /*#__PURE__*/React.createElement("div", {\n    className: "body fu"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "back-link"');
+
+// ─── 13 Sep 2026 CATEGORY-STEP-ONE (user testing: testers scrolled straight
+// past the Rides/Photoshoots/Lessons tabs and never saw them) ────────────────
+has('category is now the entry screen, not activity', 'useState("category"); // category | activity | riders | calendar | confirm');
+has('"Book another" restarts from the category chooser rather than dropping into a pre-chosen category', 'function resetAll() {\n    setScreen("category");');
+has('picking a category sets it and advances, and does NOT reset the booking state (nothing is chosen yet at this point)', 'onClick: () => {\n      setActiveCat(cat.category);\n      setScreen("activity");\n    }');
+has('the activity screen keeps a way back to the categories', 'onClick: () => setScreen("category")\n  }, t.backToCategories)');
+has('the cat-tabs survive on the activity screen, so switching category does not need a trip back', 'className: "cat-tabs"');
+missing('the intro card is gone from the activity screen (Ro, 13 Sep 2026: "remove intro card from rides, lessons photoshoots"). The same copy still sits on the category card one screen back', 'className: "cat-intro"');
+has('chooseCategory heading in all three languages', 'chooseCategory:', 3);
+has('backToCategories in all three languages', 'backToCategories:', 3);
+has('each category card previews the activity NAMES inside it (13 Sep 2026, Ro), which the tabs never communicated and a bare count only hinted at', 'cat.items.map(i => t.activities[i.id]).join(" · ")');
+missing('the bare option count it replaced is gone, along with its now-unused copy keys', 'optionMany');
+has('each category card carries an explicit Next button rather than relying on the whole card being clickable', 'className: "cat-next-btn"');
+has('nextStep label exists in all three languages, or the button renders empty (it did, and smoke caught it)', 'nextStep:', 3);
+// Ro, 13 Sep 2026: horizontal at every width, not just desktop, and all three
+// cards the same height regardless of how long their intro copy is.
+has('category cards are a row at every width, not stacked on mobile', '.cat-card { display: flex; flex-direction: row; align-items: stretch;');
+has('grid-auto-rows:1fr is what makes the three cards equal height', 'grid-auto-rows: 1fr;');
+// ─── 13 Sep 2026: one body size across the cards. Ro: "reduce all body copy
+// text to 14px, including on the price tags". The aim is shorter cards so more
+// options fit on screen, so sizes went DOWN elsewhere and UP here only where a
+// smaller value was the odd one out.
+has('price tag value is 14px, same as every other body string on the card', '.pt-value { font-size: 14px;');
+has('act-price is 14px, was 12.5px', '.act-price { font-size: 14px;');
+has('the includes text is 14px, with the label stacked above it rather than beside it: in a ~280px mobile column an inline label stole a third of every line and pushed the text to five of them', '.inc-row { display: flex; flex-direction: column; gap: 4px; font-family: var(--body); font-size: 14px; line-height: 19px; }');
+has('the category card activity list is 14px', '.cat-card-list { font-family: var(--body); font-size: 14px;');
+// Ro: "for the includes part, have all text within a card for this."
+has('the includes block is a contained card, not a label floating next to loose text', '.inc-block { display: flex; flex-direction: column; gap: 5px; background: #f5f4f1; border: 1px solid var(--fog); border-radius: 10px; padding: 9px 11px; }');
+// The beach description dropped "One groomed horse plus staff" because the
+// Includes line directly under it already says exactly that. The cultural
+// request and the billing clause both stay: one is a real request, the other is
+// what the customer is charged for.
+has('beach description condensed, and does not repeat what the Includes line says', 'photo_beach: "Static shoot for fashion, pre-wedding or private sessions, along a 900m route through the rice fields. Time starts when you leave the stables. Out of respect for local culture, please no swimwear shoots."');
+has('the no-swimwear request survives the condensing in all three languages', 'swimwear shoots');
+has('and in Indonesian', 'mohon tidak ada pemotretan berpakaian renang');
+has('and in Russian', 'просим не снимать в купальниках');
+has('the beach Includes line still carries the horse and staff the description stopped mentioning', 'photo_beach: "One groomed horse, staff with you, 900m route through the rice fields"');
+
+has('the category intro is clamped to 2 lines at 14px body copy (Ro, 13 Sep 2026: cards were too tall), so one long paragraph cannot set the height for all three', '.cat-card-desc { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 2;');
 has('"Book →" is the sole navigation path off Step 1: sets activity plus every dependent reset AND advances the screen in one click, a strict superset of what tap-card-then-Next used to do', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      // Clearing these here (not just duration/numPeople) matters: without\n      // it, a date/time picked for a previous activity can still satisfy\n      // section1Complete for the new one (same requiredDates, slot still\n      // valid), so section 1 would land pre-collapsed and section 2 would\n      // auto-open on a booking the user never actually confirmed.\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 has('tapping an act-card still only selects (sets state, no screen transition), the preview affordance was not removed, only the redundant global Next button was', 'className: "act-card " + (activity === item.id ? "selected" : ""),\n    onClick: () => {\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n    }\n  }');
 
@@ -776,9 +899,9 @@ missing('no explicit font-family: \'Outfit\' declarations remain anywhere (the -
 has('--display token itself is untouched: Futura first, Century Gothic and Outfit kept only as the sanctioned fallback chain', "--display: 'Futura', 'Century Gothic', 'Outfit', sans-serif;");
 has('Google Fonts Outfit import back to wght@300;400;500;600 (the 200 weight added for the brief card-description experiment is no longer used by any rule, so it was dropped again)', "family=Outfit:wght@300;400;500;600");
 has('.lang-btn (EN/ID/RU toggle) now Futura via var(--display)', '.lang-btn {\n  padding: 5px 12px;\n  border: 1px solid rgba(255,255,255,0.22);\n  background: transparent;\n  color: rgba(255,255,255,0.55);\n  border-radius: 20px;\n  font-size: 11px;\n  font-family: var(--display);');
-has('.date-chip (Horse Whisperer day picker) now Futura via var(--display)', '.date-chip {\n  padding: 8px 14px;\n  border: 1.5px solid var(--earth);\n  background: var(--earth);\n  color: var(--sand);\n  border-radius: 24px;\n  font-size: 12px;\n  font-family: var(--display);');
+has('.date-chip (Horse Whisperer day picker) now Futura via var(--display)', '.date-chip {\n  padding: 8px 14px;\n  border: 1.5px solid var(--earth);\n  background: var(--earth);\n  color: var(--sand);\n  border-radius: 24px;\n  font-size: 11px;\n  font-family: var(--display);');
 has('.cat-tab (Rides/Photoshoots/Lessons tabs) now Futura via var(--display)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth); font-family: var(--display);');
-has('.act-book-btn ("Book ->") now Futura via var(--display)', '.act-book-btn {');
+has('.act-book-btn ("Book ->") now Futura via var(--display). Two hits since 13 Sep 2026: the base rule and the desktop margin-top:auto that pins it to the bottom of the text column', '.act-book-btn {', 2);
 has('.notes-area (notes textarea) now Futura via var(--display)', '.notes-area {\n  width: 100%;\n  min-height: 84px;\n  padding: 12px 14px;\n  border: 1.5px solid var(--fog);\n  border-radius: 12px;\n  font-family: var(--display);');
 has('.copy-btn (confirm screen Copy button) now Futura via var(--display)', '.copy-btn { margin-top: 10px; width: auto; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--earth); background: #fff; color: var(--earth); font-family: var(--display);');
 has('.reset-link (Make another booking) now Futura via var(--display)', '.reset-link {\n  background: none;\n  border: none;\n  color: var(--dusk);\n  font-size: 14px;\n  font-family: var(--display);');
@@ -790,8 +913,9 @@ has('.cat-intro card background restored (batch 6: intro image removal reverses 
 has('.cat-intro border restored, 16px radius per Figma (not the old 14px card radius)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 16px;');
 missing('.cat-intro no longer clips with overflow: hidden (no image to clip now)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  overflow: hidden;');
 missing('.cat-intro-img CSS rule removed, no image left to style (batch 6: intro image removal)', '.cat-intro-img {\n  display: block;\n  width: calc(100% + 48px);\n  margin: 0 -24px;');
-has('.act-book-btn ("Book ->") is now full width (display: block, width: 100%), no longer align-self: flex-start sized to its own text', '.act-book-btn {\n  display: block;\n  width: 100%;');
-missing('.act-book-btn no longer uses align-self: flex-start (superseded by display:block/width:100%)', '.act-book-btn {\n  align-self: flex-start;');
+// SUPERSEDED 13 Sep 2026 (Ro: activity cards in the same format as the first page).
+has('.act-book-btn is a pill sized to its own text, matching .cat-next-btn on the first page, instead of the old full-width bar', '.act-book-btn {\n  align-self: flex-start;');
+missing('the old full-width Book bar is gone', '.act-book-btn {\n  display: block;\n  width: 100%;');
 has('"Book ->" handler is untouched by the width change: still sets activity, resets every dependent field, and advances to Step 2 in one click', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      // Clearing these here (not just duration/numPeople) matters: without\n      // it, a date/time picked for a previous activity can still satisfy\n      // section1Complete for the new one (same requiredDates, slot still\n      // valid), so section 1 would land pre-collapsed and section 2 would\n      // auto-open on a booking the user never actually confirmed.\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 
 // ─── docs/batch5-futura-headers-gate.md, Commit 3: Step 2 boxing + destructure ─
@@ -804,7 +928,7 @@ has('.step2-section-box CSS matches the card system (same border/radius/padding 
 has('section 1 box wraps heading1 through cal-selection-panel (grooming and heading2 sit outside it, correctly starting section 2\'s box instead)', 'isPhotoshoot && /*#__PURE__*/React.createElement("span", {\n    className: "byo-chip"\n  }, t.byoPhotographer), /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box"\n  }, /*#__PURE__*/React.createElement("h3", {\n    className: "section-title section-title-toggle"');
 has('section 1 box closes and section 2 box opens at the cal-selection-panel/grooming boundary, grooming is the first child inside section 2\'s box even though it renders before heading2', 'React.createElement("div", {\n    className: "step2-section-box"\n  }, needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",');
 has('section 2 box closes right after the photographer addon-group (1 Sep 2026 RIDER-INFO-UNDER-SUMMARY: booking-for-other moved out from here to its own card under the booking summary, restoring the pre-BOOKING-FOR-OTHER adjacency), then the section-2 blocked-note, immediately before section 3\'s own top-level div begins', '")"))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {\n    className: "blocked-note"\n  }, /*#__PURE__*/React.createElement("span", null, t.section2Blocked), /*#__PURE__*/React.createElement("button", {\n    className: "blocked-note-close",\n    type: "button",\n    onClick: () => setBlockedSection(null)\n  }, "✕")), screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box fu step2-block"');
-has('header material (image band, header card, isWhisper hint, byo-chip) stays outside/above both section boxes, not swept into section 1\'s box', 'className: "detail-header-card",\n    style: isPhotoshoot ? { marginTop: 0 } : undefined\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id])), isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"');
+has('header material (image band, header card, isWhisper hint, byo-chip) stays outside/above both section boxes, not swept into section 1\'s box', 'className: "detail-header-card",\n    style: isPhotoshoot ? { marginTop: 0 } : undefined\n  }, /*#__PURE__*/React.createElement("h2", {\n    className: "section-title"\n  }, t.activities[actObj?.id]), /*#__PURE__*/React.createElement("p", {\n    className: "detail-desc"\n  }, t.descs[actObj?.id]), inclusionBlock(t, actObj?.id)), isWhisper && /*#__PURE__*/React.createElement("p", {\n    className: "section-hint"');
 
 // ─── Figma spacing audit, Step 1 (activity picker) ────────────────────────
 // Applies the non-flagged resolved values from the export audit: content
@@ -818,15 +942,15 @@ has('.body bottom padding now 112px per Figma content-column spec, sides/top sta
 has('Step 1 heading gets a 22px block-rhythm gap before the category tabs, scoped off Step 2 sections', '.body:not(.step2-block) > .section-title { margin-bottom: 22px; }');
 has('.cat-tabs row spacing rebuilt around the 22px block gap (was 4px/14px padding + 2px margin)', '.cat-tabs { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 0 22px; margin: 0; scrollbar-width: none; }');
 has('.cat-intro trailing gap stays 22px, completing the block-rhythm chain into the first act-category; padding 14px/17px and 16px radius per Figma\'s bordered-box spec (batch 6: intro image removal)', '.cat-intro {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 16px;\n  padding: 14px 17px;\n  margin-bottom: 22px;\n  animation: fadeUp 0.3s ease both;\n}');
-has('.act-book-btn padding now flat 16px and radius 14px, matching the Figma CTA spec and the site\'s other 14px-radius cards', '.act-book-btn {\n  display: block;\n  width: 100%;\n  margin-top: 10px;\n  padding: 16px;\n  border-radius: 14px;');
+has('.act-book-btn padding 9px/18px and a 999px radius, same pill geometry as .cat-next-btn', '.act-book-btn {\n  align-self: flex-start;\n  padding: 9px 18px;\n  border-radius: 999px;');
 
 // ─── Body-copy weight sweep (descriptions/intro/hints/notes lightened one
 // step: 500→400, 400→300; headings, tabs, prices, chips, labels, links and
 // buttons excluded) ─────────────────────────────────────────────────────
 has('session-note gets explicit weight 300 on var(--body) (was implicit 400 on inherited var(--display))', '.session-note { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-top: 6px; line-height: 1.45; }');
-has('sat-note gets explicit weight 300 on var(--body) (was implicit 400 on inherited var(--display))', '.sat-note {\n  font-family: var(--body);\n  font-size: 11.5px;\n  font-weight: 300;\n  color: #565656;');
-has('confirm-sub gets explicit weight 300 on var(--body) (was implicit 400 on inherited var(--display))', '.confirm-sub {\n  font-family: var(--body);\n  font-size: 13px;\n  font-weight: 300;\n  color: var(--dusk);');
-has('days-count weight 400 on var(--body) (was 500 on inherited var(--display), lightened by the body-copy weight sweep)', '.days-count {\n  font-family: var(--body);\n  font-size: 12px;\n  color: var(--dusk);\n  margin: 4px 0 18px;\n  font-weight: 400;\n}');
+has('sat-note gets explicit weight 300 on var(--body) (was implicit 400 on inherited var(--display))', '.sat-note {\n  font-family: var(--body);\n  font-size: 14px;\n  font-weight: 300;\n  color: #565656;');
+has('confirm-sub gets explicit weight 300 on var(--body) (was implicit 400 on inherited var(--display))', '.confirm-sub {\n  font-family: var(--body);\n  font-size: 14px;\n  font-weight: 300;\n  color: var(--dusk);');
+has('days-count weight 400 on var(--body) (was 500 on inherited var(--display), lightened by the body-copy weight sweep)', '.days-count {\n  font-family: var(--body);\n  font-size: 11px;\n  color: var(--dusk);\n  margin: 4px 0 18px;\n  font-weight: 400;\n}');
 missing('labels, tabs, prices, chips, links and buttons excluded from the body-copy weight sweep: act-category eyebrow untouched', '.act-category {\n  font-family: var(--display);\n  font-size: 10px;\n  letter-spacing: 2px;\n  text-transform: uppercase;\n  color: var(--dusk);\n  margin-bottom: 10px;\n  margin-top: 18px;\n  font-weight: 300;');
 missing('cat-tab weight untouched by the body-copy weight sweep (excluded: tabs)', '.cat-tab { flex: 0 0 auto; white-space: nowrap; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--fog); background: #fff; color: var(--earth); font-family: var(--display); font-size: 14px; font-weight: 300;');
 missing('hint-link weight untouched by the body-copy weight sweep (excluded: interactive link)', '.hint-link {\n  font-family: var(--display);\n  color: var(--clay);\n  font-weight: 400;');
@@ -905,7 +1029,7 @@ has('blockedSection state (null | 2 | 3) tracks which section\'s note is showing
 has('en section2Blocked/section3Blocked keys are precise to each section\'s actual gate: section 2 needs dates AND time (section1Complete), section 3 now needs both section 1 and every section 2 field (section1Complete && detailsComplete), not just a date', 'section2Blocked: "Please pick a date and time first",\n    section3Blocked: "Please complete steps 1 and 2 first",');
 has('id section2Blocked/section3Blocked keys', 'section2Blocked: "Silakan pilih tanggal dan waktu terlebih dahulu",\n    section3Blocked: "Silakan selesaikan langkah 1 dan 2 terlebih dahulu",');
 has('ru section2Blocked/section3Blocked keys', 'section2Blocked: "Пожалуйста, сначала выберите дату и время",\n    section3Blocked: "Пожалуйста, сначала завершите шаги 1 и 2",');
-has('.blocked-note CSS has no animation - an earlier pass used the shared fadeUp keyframe, but this component re-renders often enough (many useState/useEffect hooks in one monolithic App function) that the animation kept restarting from frame zero, leaving the note stuck at opacity 0 for its entire visible lifetime. Verified live: with the animation removed, opacity reads 1 immediately', '.blocked-note {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 10px 14px;\n  margin-top: -2px;\n  margin-bottom: 22px;\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 12px;\n  color: #444444;\n  line-height: 1.5;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n}');
+has('.blocked-note CSS has no animation - an earlier pass used the shared fadeUp keyframe, but this component re-renders often enough (many useState/useEffect hooks in one monolithic App function) that the animation kept restarting from frame zero, leaving the note stuck at opacity 0 for its entire visible lifetime. Verified live: with the animation removed, opacity reads 1 immediately', '.blocked-note {\n  background: #f7f7f7;\n  border: 1px solid #dcdcdc;\n  border-radius: 10px;\n  padding: 10px 14px;\n  margin-top: -2px;\n  margin-bottom: 22px;\n  font-family: var(--body);\n  font-weight: 400;\n  font-size: 14px;\n  color: #444444;\n  line-height: 1.5;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n}');
 has('.blocked-note-close is a plain unstyled button (background none, border none) styled to look like inline text, not a real button, matching the dusk color of other small close/dismiss affordances', '.blocked-note-close {\n  flex-shrink: 0;\n  background: none;\n  border: none;\n  padding: 0;\n  font-size: 15px;\n  line-height: 1;\n  color: var(--dusk);\n  cursor: pointer;\n}');
 has('section 3\'s blocked-note sits right after the notice, before the funds card, so it always appears directly under section 3\'s own box regardless of whether the funds card renders', 'blockedSection === 3 && /*#__PURE__*/React.createElement("div", {\n    className: "blocked-note"\n  }, /*#__PURE__*/React.createElement("span", null, t.section3Blocked)');
 

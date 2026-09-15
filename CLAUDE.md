@@ -192,6 +192,64 @@ Every activity's notes field shows a small hint above the textarea: "We want you
 
 Step 1 (the activity picker) opens directly on the "Choose an activity" heading, no card or mission paragraph above it (batch 4, Commit 1 removed the dark "Where the money goes" card, since Step 2's own light "What your booking cost funds" card already carries that copy). Navigation off Step 1 is via each activity card's own "Book →" button only; the global bottom "Next" bar was removed as redundant (Book already sets the activity and advances the screen in one click). Tapping a card still just selects/previews it without navigating.
 
+## Activity browsing (13 Sep 2026 USER-TESTING-ROUND-1)
+
+**`screen` starts at `"category"`, not `"activity"`.** Choosing a category is its own step, because a
+watched tester scrolled straight past the Rides/Photoshoots/Lessons tabs. The tabs still exist on the
+activity screen for switching. Both screens are step 1 in the indicator, so there are still three dots.
+
+**Activity cards and category cards share one format, at every width:** a fixed-width image column
+flush against the card edge (`.act-media` / `.cat-card-media`), then a text column carrying the card's
+padding (`.act-info` / `.cat-card-body`) and ending in a pill button pinned to the bottom
+(`.act-book-btn` / `.cat-next-btn`). The old `act-left`/`act-right` names are gone and asserted gone,
+since they described the opposite layout, and the pre-13-Sep Figma card spec (233px image, full-width
+Book bar, mobile-first stacked column) is superseded: those assertions are marked SUPERSEDED in place
+rather than deleted, so the old spec is not restored from an old note.
+
+**Category cards are horizontal at every width and equal height.** `grid-auto-rows: 1fr` does the
+equalising; the 3-line clamp on `.cat-card-desc` stops one long intro setting that height for all
+three. Each card previews the activity names inside it and carries its own Next button.
+
+**`inclusionBlock(t, id)` renders Includes / Not included** from `t.includes[id]` / `t.notIncluded[id]`,
+and returns null when an id has no entry, so covering a new activity is a copy change only. Currently
+`includes` covers the five photoshoots and `whisper`; `notIncluded` covers **`whisper` only**, since Ro
+removed the Not-included band from photoshoots on 13 Sep 2026.
+
+**Before deleting anything from a description or a band, check it is stated somewhere else.** The
+paddock "do not enter, do not touch the horses" restriction existed in exactly one place at the moment
+the band was removed, and would have vanished from the site with it. It now lives in the paddock
+description, asserted in all three languages. This is a safety restriction, not marketing copy.
+
+**Every line in that block is sourced from the activity description that already existed.** Do not add
+a line asserting what a package contains without checking with Simone first: it is commercial
+information, and a customer who turns up expecting a horse that is not there is a real cost. Where the
+existing copy did not say, the line was left out rather than guessed. `photo_stable` in particular does
+not state whether a horse is included, so its Includes line does not claim one.
+
+**Collapsed sections 1 and 2 show their selection, or `t.nothingSelected`.** This reverses the earlier
+"hint line is permanent" decision; see the superseded-assertion comment in `tests/assert.js`. Section 3
+already behaved this way.
+
+**`tests/smoke.js` reads `#root`, never `document.body`.** body.innerHTML contains the inline script
+source, so substring checks against it match the JavaScript text and pass no matter what renders. That
+bug hid in the suite until the first screen changed and the checks did not notice.
+
+**Type scale (13 Sep 2026).** Three tiers, and new CSS should pick one rather than inventing a size:
+**14px** for body copy, meaning any prose sentence a customer reads. **11px** for everything that is
+not body copy and not a heading: chips, pills, tag labels, counts, chrome. Headings keep their own
+sizes (16/18/20, plus `.rider-info-section-title` at 13). Before adding a rule, check the audit
+one-liner in the CHANGELOG entry: several classes carrying font sizes are dead CSS with no JSX user
+(`.session-note`, `.byo-note`, `.act-meta`, `.price-note`, `.match-rider-name`, `.cat-intro-text`).
+
+**Read more / Read less** lives on `.act-desc` and `.cat-card-desc`. The toggle renders only where the
+text actually overflows, measured per element in a ref callback rather than guessed from a character
+count, because a character threshold is wrong the moment the column width or the language changes.
+Two things will break it if touched carelessly: the measurement must stay skipped while expanded (an
+expanded element reports no overflow, so the toggle would remove itself on first click), and
+`toggleDesc` must keep `stopPropagation` (both descriptions sit inside a card whose click navigates).
+`.cat-grid` also has to drop `grid-auto-rows: 1fr` while anything is expanded, or one expansion
+stretches every card.
+
 ## Booking log (10 Sep 2026 BOOKING-LOG)
 
 Write-only. One row per Send click, `navigator.sendBeacon` to an Apps Script `/exec` endpoint, into a

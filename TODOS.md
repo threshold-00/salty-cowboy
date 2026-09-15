@@ -2,13 +2,9 @@
 
 Open defects found during review, out of scope for the current change. Each was verified against the source, not assumed.
 
-## 1. `riders` survives a category-tab click
+## 1. ~~`riders` survives a category-tab click~~ FIXED 13 Sep 2026
 
-`index.html:3147-3155` resets `activity`, `duration`, `numPeople`, `photographerAddon`, `bookingForOther`, `grooming`, `selectedDates` and `selectedTime`, but not `riders`. `setRiders([])` exists at 2820 (`resetAll`), 3170 and 3216, so every other path that changes activity does clear it.
-
-Not currently exploitable: `detailsComplete` requires `numPeople`, which the tab handler does reset, so stale riders cannot reach a send. But `riders` is the only payload field without a reset on every activity-change path, and the booking log reads weight counts off it.
-
-**Fix:** add `setRiders([]);` to the category-tab handler.
+Closed as part of USER-TESTING-ROUND-1, which rewrote that handler anyway. `setRiders([])` added; asserted in `tests/assert.js`.
 
 ## 2. Hero logo returns to the activity screen with all state intact
 

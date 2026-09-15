@@ -21,22 +21,38 @@ setTimeout(() => {
   const { window } = dom;
   const doc = window.document;
 
-  // Poke at the app
-  const activityCards = doc.querySelectorAll('.activity-card, .a-card, [data-activity]');
-  const anyContent = doc.body.innerHTML.length;
-  const hasBeach = doc.body.innerHTML.includes('Beach');
-  const hasCottages = doc.body.innerHTML.includes('Cottages');
-  const hasInsta = doc.body.innerHTML.includes('Insta');
-  const hasDressage = doc.body.innerHTML.includes('Dressage');
+  // Read the React root, NOT document.body. body.innerHTML contains the inline
+  // <script> source, so every substring check against it matched the JS text
+  // rather than anything rendered, and passed no matter what the app did.
+  // Found 13 Sep 2026 when the first screen changed and the old checks did not.
+  const root = doc.getElementById('root');
+  const text = root ? root.textContent : '';
 
-  console.log('Body innerHTML length:', anyContent);
-  console.log('Contains "Beach":', hasBeach);
-  console.log('Contains "Cottages":', hasCottages);
-  console.log('Contains "Insta":', hasInsta);
-  console.log('Contains "Dressage":', hasDressage);
+  console.log('Rendered root text length:', text.length);
+  if (!root || text.length < 50) {
+    console.log('FAIL: the app rendered nothing into #root');
+    process.exit(1);
+  }
+
+  // First screen is the category chooser. Category names are on it, and since
+  // 13 Sep 2026 so are the activity names, as a preview of what is inside each
+  // one. Prices and the Book button are still one click deeper, so those are the
+  // discriminator for "we are on the category screen, not the activity list".
+  const checks = [
+    ['Rides', true], ['Photoshoots', true], ['Lessons', true],
+    ['Beach & Rice Field Ride', true], ['Next', true],
+    ['IDR 1,600,000', false], ['Book \u2192', false],
+  ];
+  let bad = 0;
+  checks.forEach(([needle, want]) => {
+    const got = text.includes(needle);
+    if (got !== want) { bad++; console.log(`FAIL: "${needle}" expected ${want}, got ${got}`); }
+    else console.log(`  ok  "${needle}" ${want ? 'present' : 'absent'}`);
+  });
+
   console.log('Console errors:', consoleErrs.length);
   if (consoleErrs.length) {
     consoleErrs.slice(0, 10).forEach((e) => console.log('  ' + e.slice(0, 200)));
   }
-  process.exit(consoleErrs.filter(e => !e.includes('warn')).length > 0 ? 1 : 0);
+  process.exit(bad > 0 || consoleErrs.filter(e => !e.includes('warn')).length > 0 ? 1 : 0);
 }, 1500);

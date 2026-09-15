@@ -2,6 +2,119 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 13 Sep 2026 - USER-TESTING-ROUND-1: six changes off a watched session
+
+Ro ran a user test and brought back observations plus proposed fixes. All six are here.
+
+**Category selection is its own step.** The tester scrolled straight past the Rides / Photoshoots /
+Lessons tabs and never saw them. `screen` now starts at `"category"`, which renders three cards with
+the category name, its existing intro copy and a count of what is inside it. The tabs stay on the
+activity screen so switching does not need a trip back, and the step indicator still shows three dots,
+since choosing a category and choosing an activity are both step 1. "Book another" now restarts here.
+
+**Cards are image-left.** `act-left`/`act-right` are gone, replaced by `act-media` (image) and
+`act-info` (text, price, and now the Book button, which moved out of the image column). On desktop the
+image column stretches to full card height; Book is pinned to the bottom of the text column so buttons
+line up with the bottom of their own image.
+
+**Includes / Not included on every photoshoot, plus the whisper course.** Two separate comments,
+"What am I getting extra for these additional prices?" and "Horses not included? Photographer not
+included?", were one problem: the cards never said what you get. `inclusionBlock` renders a structured
+two-row block on the card and on the activity detail panel, in all three languages. **Every line is
+sourced from the description that already existed. Nothing about what is in a package was invented.**
+The paddock description no longer carries its exclusions inline, because the block states them; the
+exclusions themselves are asserted in all three languages so relocating them cannot quietly drop them.
+
+The whisper course was not in Ro's fix list, but her own notes record a tester asking "Is this riding?
+What is included in this package to justify the higher price tag", so it gets the same block. Its
+"not included" line answers the riding question directly, which is sound rather than invented:
+`whisper` carries no `riding: true`, which is exactly why the form never asks its riders for weight.
+
+**Collapsed sections say what is in them.** Sections 1 and 2 now show their selection when collapsed,
+and `nothingSelected` when there is nothing to show. Section 3 already did this. **This REVERSES an
+earlier call of Ro's**, recorded at `assert.js:661` and `:728`, that the hint lines should be permanent
+instead of collapsed summaries; testers read a closed section showing only its hint as unfilled.
+
+**The tickbox covers both readings.** The tester assumed "I'm booking for someone else" meant a group
+of more than two. It now reads "I'm booking for someone else, or I'm an agent booking for a customer",
+which removes the group-size misreading without dropping the friend-booking-for-a-friend case the flow
+was built for.
+
+**Also fixed:** TODOS #1, `riders` surviving a category-tab click, since that handler was being
+rewritten anyway. And `tests/smoke.js` was checking `document.body.innerHTML`, which contains the
+inline `<script>` source, so every "Contains X" assertion matched the JavaScript text rather than
+anything rendered and passed regardless of what the app did. It now reads the React root, and asserts
+the category screen renders first with the activity names one click deeper.
+
+**Second pass, same day, off Ro's review of the preview:**
+
+- Category cards are horizontal at **every** width, not just desktop, all three the same height
+  (`grid-auto-rows: 1fr` plus a 3-line clamp on the intro, so one long paragraph cannot set the height
+  for all of them), and each now previews the activity NAMES inside it rather than a bare count.
+- Each category card carries an explicit **Next** button instead of relying on the whole card being
+  clickable. `nextStep` had to be added in all three languages; the first attempt shipped the button
+  with an undefined label, which rendered empty, and the rewritten smoke test caught it.
+- The photoshoot intro loses "(from IDR 2,000,000, 20 edited photos...)" and the per-horse/location
+  pricing sentence. Both still live on the add-on inside the booking flow, where they are actionable.
+- **Not included** bands removed from all five photoshoots. `whisper` keeps its line, since that is the
+  one answering "is this riding?" and the instruction was "across all photoshoots".
+- The two supplementary boxes under the step 1 cards (`byo-note`, `session-note`) are gone.
+
+One thing did not simply get deleted. The paddock Not-included band was, after this morning's change,
+the **only** place carrying "entering the paddocks and touching the horses is not permitted". Removing
+the band would have removed the restriction from the site. It went back into the paddock description
+in all three languages instead, and is asserted there.
+
+**Third pass, same day:**
+
+- Category card body copy to **14px**, clamped to 2 lines rather than 3, which is what actually
+  shortens the cards ("the vertical width of these cards are pretty long").
+- **Activity cards now use the same format as the first page** at every width: flush image column on
+  the left, text and Book on the right. The card's padding moved onto `.act-info` so the image can sit
+  against the card edge, and `.act-book-btn` became the same pill as `.cat-next-btn` instead of a
+  full-width bar. This supersedes several Figma-era card assertions, each marked SUPERSEDED in place.
+- **The category intro card is gone from the activity screen**, which was missed in the previous pass.
+  The same copy still sits on the category card one screen back, so nothing is lost.
+
+**Fourth pass, same day. Aim: shorter cards so more options fit on screen.**
+
+- One body size, **14px**, across card copy, the includes text, the category card activity list, the
+  detail description and the price tag values. `.pt-label` back to 11px from 10.5.
+- **Beach description condensed**, all three languages. It dropped "One groomed horse plus staff"
+  because the Includes line directly under it already says exactly that. The no-swimwear request and
+  the "time starts when you leave the stables" billing clause both stay, and both are asserted.
+- **Includes is now a contained card**, and its label sits above the text rather than beside it. In a
+  ~280px mobile text column an inline label was stealing a third of every line and pushing the text to
+  five of them.
+- **Card description clamped to 3 lines** on the list. The full text is on the activity detail panel
+  one tap away, so nothing is lost. This is the single biggest lever on card height.
+- Price pills **wrap** instead of one per row, and `.act-info`'s inner gap tightened 14px to 10px.
+
+Measured on a 430px viewport: the five photoshoot cards went from 433/415/433/434/413px to
+355/409/372/409/299px.
+
+**Fifth pass, same day: one type scale, and Read more.**
+
+Audited every `font-size` in the file first. The answer to "is the body copy 14px?" was no, but not in
+the expected direction: **nothing body-copy was above 14px**, the range ran 10px to 14px. So this pass
+raises sizes rather than reducing them.
+
+- **Body copy (prose sentences) is 14px everywhere.** 20 rules raised, from 11.5px/12px/12.5px/13px.
+- **Everything that is not body copy and not a heading is 11px**, per Ro's mid-turn correction
+  ("keep body copy, anything else to below 12px not 14"). That covers every chip, pill, tag label,
+  count and piece of chrome. `.rider-info-section-title` went to 13px as a sub-heading, neither.
+- **Read more / Read less** on both clamped descriptions. Three details that are easy to get wrong:
+  the toggle only renders where the text *actually* overflows (measured per element via
+  `scrollHeight > clientHeight`, not guessed from a character count, so a short description gets no
+  toggle that reveals nothing); the measurement is skipped while expanded, since an expanded element
+  reports no overflow and the toggle would vanish on its own first click; and `toggleDesc` stops
+  propagation, because both descriptions sit inside a card whose own click navigates away.
+- `.cat-grid` drops `grid-auto-rows: 1fr` while any card is expanded. Without that, expanding one card
+  stretched the other two to match it and left a dead gap above their Next buttons. Measured: three
+  cards at 207px each collapsed, 188/340/207 with the middle one expanded.
+
+756 assertions pass (up from 687), smoke rewritten and passing, 0 console errors.
+
 ## 11 Sep 2026 - LESSONS-BOOK-FOR-OTHER: booking on someone's behalf opens to Lessons
 
 Ro: "the lessons should be able to get booked by someone else, much like the rides."
