@@ -2603,13 +2603,18 @@ html, body { background: #0a0a0a; }
 .group-note .gn-icon { flex-shrink: 0; opacity: 0.7; }
 .price-note { font-family: var(--body); font-size: 11px; font-weight: 300; color: var(--dusk); margin-top: 5px; font-style: italic; }
 .free-chip {
+  /* align-self, not just inline-block: the parent .act-titledesc is a flex
+     column, so the default align-items: stretch widened this chip to the full
+     card regardless of its display value. It has to hug its own text. */
   display: inline-block;
+  align-self: flex-start;
+  max-width: 100%;
   padding: 4px 10px;
   border-radius: 999px;
   background: var(--leaf);
   color: #fff;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.2px;
 }
 .session-note { font-family: var(--body); font-size: 11.5px; font-weight: 300; color: var(--dusk); margin-top: 6px; line-height: 1.45; }

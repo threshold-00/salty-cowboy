@@ -1167,6 +1167,18 @@ missing('note is NOT gated on riding alone', 'isRiding && rider.experience');
 // e1/e2 get the lead rope, e3/e4 get the pace rules. Pinning the split.
 has('beginner levels get the lead-rope line', '(rider.experience === "e1" || rider.experience === "e2") ? t.expLedBody : t.expPaceBody');
 
+// ─── .free-chip hugs its text (15 Sep 2026) ──────────────────────────────
+// It was rendering as a full-width bar. display: inline-block was already set
+// and was NOT enough: .act-titledesc is a flex column, so align-items: stretch
+// overrode it. align-self is what actually constrains it, so pin that, not the
+// display value, or this regresses silently.
+has('free-chip constrained by align-self, not just display', '.free-chip {\n  /* align-self, not just inline-block');
+// Scoped to the .free-chip rule itself; align-self: flex-start appears 6 times
+// elsewhere in the sheet, so a bare needle would pass with the chip broken.
+has('free-chip aligns to the start of the flex column', 'display: inline-block;\n  align-self: flex-start;\n  max-width: 100%;');
+has('free-chip text is not bold', '.free-chip', 1);
+missing('free-chip no longer semibold', 'font-size: 11px;\n  font-weight: 600;\n  letter-spacing: 0.2px;');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);
