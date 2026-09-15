@@ -2,6 +2,19 @@
 
 Front-end booking engine for Salty Cowboy Bali, a horse rescue sanctuary and riding centre run by director Simone. Streamlines Simone's booking intake (previously WhatsApp/email/Instagram DMs) without disrupting her workflow. Simone approves all bookings on WhatsApp and is the source of truth for pricing and operational rules.
 
+## Handing Ro text to paste elsewhere
+
+**Put it on the clipboard with `pbcopy`, never in the terminal for Ro to copy by hand.** Long lines are
+rendered wrapped at the terminal width, and copying from that view silently drops the wrapped portions.
+It is not obvious: the result still reads as sentences, so it can be pasted and sent before anyone
+notices. A real example, a message for Simone that arrived as "Every photoshoot now shows a shoe
+photographer add-on states how" instead of "shows a short \"Includes\" line, and the photographer add-on
+states how many edited images you get at each length".
+
+Write the text to a file, `pbcopy < file`, then verify with `pbpaste | wc -c` against the file's own byte
+count and grep a few phrases from the middle of the long lines. Say it is on the clipboard rather than
+printing it again. This applies to any generated text meant for another app, not just WhatsApp.
+
 ## Repo & file layout
 
 ```
@@ -238,6 +251,16 @@ three. Each card previews the activity names inside it and carries its own Next 
 and returns null when an id has no entry, so covering a new activity is a copy change only. Currently
 `includes` covers the five photoshoots and `whisper`; `notIncluded` covers **`whisper` only**, since Ro
 removed the Not-included band from photoshoots on 13 Sep 2026.
+
+**`guidedRide: true` scopes ride-specific copy, and is NOT the same as `riding: true`.** Three
+activities are `riding: true` (`beach`, `insta`, `dressage`); only the first two are guided beach rides.
+The lead-rope / trot / canter / no-gallop note and the ride Includes line are gated on `guidedRide`,
+because Simone's wording describes staff walking alongside and assessing riders at the beach, which is
+not what a dressage masterclass is. Widening the gate to `riding` would put invented claims on dressage.
+
+**The weight limit is unresolved as of 15 Sep 2026.** Simone's WhatsApp template says max 70kg; the page
+says 75kg with at most two riders over 70kg (`w3Body`). Nobody has reconciled them yet. It is a welfare
+rule, so it needs Simone, not a judgement call here.
 
 **Before deleting anything from a description or a band, check it is stated somewhere else.** The
 paddock "do not enter, do not touch the horses" restriction existed in exactly one place at the moment

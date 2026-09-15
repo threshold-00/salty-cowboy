@@ -386,6 +386,11 @@ const ACTIVITIES = [{
     durations: ["1hr", "1.5hr"],
     maxPeople: 5,
     riding: true,
+    // guidedRide marks the two beach/ricefield rides that Simone's WhatsApp
+    // template describes: led on foot, assessed at the beach, lead rope for
+    // beginners. Deliberately NOT on dressage, which is also riding: true but
+    // is an arena masterclass her copy says nothing about.
+    guidedRide: true,
     experienceNeeded: "Beginner",
     image: "images/beach-ride.jpg",
     imagePosition: "center 28%"
@@ -394,6 +399,7 @@ const ACTIVITIES = [{
     durations: ["2hr"],
     maxPeople: 5,
     riding: true,
+    guidedRide: true,
     experienceNeeded: "Beginner",
     image: "images/insta-ride.avif",
     imagePosition: "center 80%"
@@ -669,6 +675,10 @@ const T = {
     e2: "Beginner",
     e3: "Intermediate",
     e4: "Advanced",
+    // Shown under the experience pills on guided rides only. Sourced from the
+    // WhatsApp template Simone already sends by hand; nothing here is new.
+    expLedBody: "Your horse will be led on a lead rope by our staff for the whole ride, so no experience is needed.",
+    expPaceBody: "You can trot and canter in moderation. We don't allow galloping, and your guide will assess you when you reach the beach.",
     seeAvailability: "See availability →",
     back: "← Back",
     available: "Available",
@@ -736,6 +746,8 @@ const T = {
     includesLabel: "Includes",
     notIncludedLabel: "Not included",
     includes: {
+      beach: "Helmets and boots, staff guiding on foot the whole way, and photos taken on your phone by our team. Price includes service tax.",
+      insta: "Helmets and boots, staff guiding on foot the whole way, and photos taken on your phone by our team. Price includes service tax.",
       photo_beach: "One groomed horse, staff with you, 900m route through the rice fields",
       photo_stable: "Western-style stable backdrop, team assistance",
       photo_ricefield: "One horse, team assistance, rice terrace location",
@@ -879,6 +891,8 @@ const T = {
     e2: "Pemula",
     e3: "Menengah",
     e4: "Mahir",
+    expLedBody: "Kuda Anda akan dituntun dengan tali oleh staf kami sepanjang perjalanan, jadi tidak perlu pengalaman.",
+    expPaceBody: "Anda dapat melakukan trot dan canter secukupnya. Kami tidak mengizinkan gallop, dan pemandu Anda akan menilai kemampuan Anda setibanya di pantai.",
     seeAvailability: "Lihat ketersediaan →",
     back: "← Kembali",
     available: "Tersedia",
@@ -942,6 +956,8 @@ const T = {
     includesLabel: "Termasuk",
     notIncludedLabel: "Tidak termasuk",
     includes: {
+      beach: "Helm dan sepatu bot, staf mendampingi dengan berjalan kaki sepanjang perjalanan, dan foto diambil dengan ponsel Anda oleh tim kami. Harga sudah termasuk pajak layanan.",
+      insta: "Helm dan sepatu bot, staf mendampingi dengan berjalan kaki sepanjang perjalanan, dan foto diambil dengan ponsel Anda oleh tim kami. Harga sudah termasuk pajak layanan.",
       photo_beach: "Satu kuda yang sudah dirawat, staf mendampingi, rute 900m melewati sawah",
       photo_stable: "Latar kandang bergaya Western, bantuan tim",
       photo_ricefield: "Satu kuda, bantuan tim, lokasi terasering sawah",
@@ -1085,6 +1101,8 @@ const T = {
     e2: "Начинающий",
     e3: "Средний",
     e4: "Продвинутый",
+    expLedBody: "Вашу лошадь будет вести в поводу наш сотрудник на протяжении всей прогулки, поэтому опыт не требуется.",
+    expPaceBody: "Вы сможете ехать рысью и лёгким галопом в умеренном темпе. Быстрый галоп мы не разрешаем, и ваш гид оценит вашу подготовку по прибытии на пляж.",
     seeAvailability: "Посмотреть доступность →",
     back: "← Назад",
     available: "Доступно",
@@ -1148,6 +1166,8 @@ const T = {
     includesLabel: "Входит в стоимость",
     notIncludedLabel: "Не входит",
     includes: {
+      beach: "Шлемы и сапоги, сопровождение персонала пешком на протяжении всей прогулки и фотографии на ваш телефон, которые сделает наша команда. Цена включает сервисный сбор.",
+      insta: "Шлемы и сапоги, сопровождение персонала пешком на протяжении всей прогулки и фотографии на ваш телефон, которые сделает наша команда. Цена включает сервисный сбор.",
       photo_beach: "Одна ухоженная лошадь, сопровождение персонала, маршрут 900 м через рисовые поля",
       photo_stable: "Конюшня в западном стиле как фон, помощь команды",
       photo_ricefield: "Одна лошадь, помощь команды, локация на рисовых террасах",
@@ -2549,6 +2569,9 @@ html, body { background: #0a0a0a; }
 .act-desc  { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .addon-row { margin-top: 6px; }
 .addon-group { margin-bottom: 22px; }
+/* Answer to the experience question, shown inline the moment a level is
+   picked. Sits at the non-body scale like every other supporting line. */
+.exp-note { margin-top: 9px; font-size: 11.5px; line-height: 1.5; color: #6b6257; }
 .addon-title { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
 
 /* ── ANIMATIONS ── */
@@ -3050,6 +3073,8 @@ function App() {
   // Weight rules apply to every riding activity, plus Beach Photoshoot since
   // riders mount a horse for that shoot. No other photoshoot involves mounting.
   const showWeight = isRiding || actObj?.needsWeight === true;
+  // Only the two guided beach/ricefield rides get the pace-and-lead-rope note.
+  const isGuidedRide = actObj?.guidedRide === true;
   // Booking on someone else's behalf: Rides AND Lessons, never Photoshoots
   // (11 Sep 2026, Ro asked for Lessons to match Rides). !isPhotoshoot is exactly
   // those two categories. dressage already had this via riding: true; this adds
@@ -4032,7 +4057,9 @@ function App() {
       key: e,
       className: "field-pill " + (rider.experience === e ? "selected" : ""),
       onClick: () => updateRider(idx, "experience", e)
-    }, t[e])))));
+    }, t[e]))), isGuidedRide && rider.experience && /*#__PURE__*/React.createElement("div", {
+      className: "exp-note"
+    }, (rider.experience === "e1" || rider.experience === "e2") ? t.expLedBody : t.expPaceBody)));
   }), canBookForOther && riders.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "addon-group",
     style: {

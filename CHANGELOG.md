@@ -2,6 +2,33 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 15 Sep 2026 - Simone's WhatsApp template, folded into the page
+
+Simone sends four messages by hand whenever someone asks about rides. Comparing them line by line
+against the page turned up three things.
+
+**Two facts the page had and her template did not.** Her prices are stale on every ride: she quotes
+1.200.000 / 1.600.000 / 2.000.000 where the page charges 1.600.000 / 2.200.000 / 2.700.000, a gap of
+400k to 700k per booking. Ro confirmed the page is current, so the template is what needs updating;
+nothing changed here. Her weight limit reads "max. 70 kg" against the page's 75kg with at most two
+riders over 70kg. **Unresolved, and deliberately not changed**, because it is a horse welfare rule and
+Simone is the source of truth. Do not reconcile it without her.
+
+**Six facts her template had and the page did not**, all now in: helmets and boots included, price
+includes service tax, staff photograph on your phone free of charge, trot and canter for experienced
+riders only, no galloping, beginners led on a lead rope, guide assesses riders at the beach.
+
+**The experience question is now answered rather than silently collected.** The page has always asked
+each rider for a level and done nothing with it. Picking one now returns the relevant half of her
+Message 2: e1/e2 get the lead rope, e3/e4 get the pace rules and the beach assessment. This is the same
+answer-at-the-point-of-asking pattern as the photoshoot Includes lines, and for the same reason. The
+tester evidence says a wall of general information gets scrolled past.
+
+**Scoped by a new `guidedRide` flag, not by `riding: true`.** Three activities are `riding: true`, but
+dressage is an arena masterclass and Simone's copy describes a beach ride, guided on foot and assessed
+at the beach. Applying it there would be inventing. Verified in a render that dressage still asks for
+experience, so the gate is doing real work, and shows neither the note nor the ride Includes line.
+
 ## 13 Sep 2026 - USER-TESTING-ROUND-1: six changes off a watched session
 
 Ro ran a user test and brought back observations plus proposed fixes. All six are here.

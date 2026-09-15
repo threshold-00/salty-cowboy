@@ -1123,6 +1123,50 @@ missing('id description no longer offers a 9:30am start', 'pilihan mulai pukul 8
 missing('ru description no longer offers a 9:30am start', 'с началом в 8:30 или 9:30 утра');
 missing('the stale comment claiming one shared start across "all four days" is gone; the course has been 3 days since 29 Aug 2026', 'across all four days');
 
+// ---------------------------------------------------------------------------
+// Simone's WhatsApp template, folded into the page (15 Sep 2026)
+// Source: the four messages she sends by hand when someone asks about rides.
+// Every line below is her wording. Nothing about what a ride includes was
+// invented, which is the standing rule for commercial information.
+// ---------------------------------------------------------------------------
+
+// The Includes block already existed for photoshoots; these extend it to the
+// two rides. Three languages each.
+has('beach Includes line, en', 'beach: "Helmets and boots, staff guiding on foot');
+has('insta Includes line, en', 'insta: "Helmets and boots, staff guiding on foot');
+has('beach Includes line, id', 'beach: "Helm dan sepatu bot');
+has('insta Includes line, id', 'insta: "Helm dan sepatu bot');
+has('beach Includes line, ru', 'beach: "Шлемы и сапоги');
+has('insta Includes line, ru', 'insta: "Шлемы и сапоги');
+
+// Service tax was stated in her template and nowhere on the page before this.
+// Twice per language: the beach ride and the instaride carry the same line,
+// because they are the same product at different lengths. If these ever drop
+// to 1, one of the two rides has silently lost it.
+has('service tax stated, en', 'Price includes service tax.', 2);
+has('service tax stated, id', 'Harga sudah termasuk pajak layanan.', 2);
+has('service tax stated, ru', 'Цена включает сервисный сбор.', 2);
+
+// The experience question is now answered instead of silently collected.
+has('lead-rope answer for beginners, en', 'led on a lead rope by our staff');
+has('pace answer for experienced riders, en', "We don't allow galloping");
+has('lead-rope answer, id', 'dituntun dengan tali oleh staf kami');
+has('pace answer, id', 'Kami tidak mengizinkan gallop');
+has('lead-rope answer, ru', 'вести в поводу наш сотрудник');
+has('pace answer, ru', 'Быстрый галоп мы не разрешаем');
+
+// Scoping. guidedRide is what gates the note, NOT riding: true. Dressage is
+// riding: true but is an arena masterclass, and Simone's copy describes a
+// beach ride: staff on foot, assessed at the beach. Applying it to dressage
+// would be inventing. Two activities carry the flag, and the gate reads it.
+has('guidedRide flag set twice, beach and insta', 'guidedRide: true,', 2);
+has('gate derives from guidedRide', 'actObj?.guidedRide === true');
+has('note gated on the flag and a picked level', 'isGuidedRide && rider.experience');
+missing('note is NOT gated on riding alone', 'isRiding && rider.experience');
+
+// e1/e2 get the lead rope, e3/e4 get the pace rules. Pinning the split.
+has('beginner levels get the lead-rope line', '(rider.experience === "e1" || rider.experience === "e2") ? t.expLedBody : t.expPaceBody');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);
