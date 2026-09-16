@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 16 Sep 2026 - Weight policy hardened to Simone's wording
+
+Settles the 70-vs-75 discrepancy found the day before: **75kg is correct**, and Simone's WhatsApp
+template quoting 70kg is the stale side. Her wording now runs through all four weight keys in all three
+languages, at Ro's direction.
+
+Two changes beyond the number, both substantive. The limit is now stated as **with clothes on**, which
+appeared nowhere on the page before and matters because people quote their unclothed weight. And
+weighing at the stables is now **certain** rather than conditional: the old copy said weight "may be
+confirmed at the stables if needed", which reads as a spot check rather than a policy.
+
+Tone moves from warm guidance to a stated limit, deliberately. Over 75kg cannot ride, and is not
+refunded. The off-saddle Lessons alternative is kept in both tier messages, so the firm version still
+offers somewhere to go.
+
+Two existing assertions pinned the old strings and are marked SUPERSEDED in place rather than deleted,
+per the standing rule that a reversed decision leaves a trail.
+
 ## 15 Sep 2026 - Simone's WhatsApp template, folded into the page
 
 Simone sends four messages by hand whenever someone asks about rides. Comparing them line by line

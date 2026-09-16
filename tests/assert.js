@@ -135,7 +135,11 @@ has('w4 band is over 75kg',        'w4: "Over 75 kg"');
 
 // ─── REJECT-COPY commit: weight-rejection title/body reworded ────────────
 has('en w4Title reworded ("So sorry" -> "Sorry")', 'w4Title: "Sorry, we can\'t accommodate this weight",');
-has('en w4Body reworded, adds no-refund sentence', 'w4Body: "It\'s nothing personal. We\'re committed to protecting our horses\' backs from strain, so we\'re unable to safely match a horse for this weight. You\'re welcome to try our off-saddle activities under \'Lessons\' instead. Unfortunately we do not refund bookings for people over 75kg.",');
+// SUPERSEDED 16 Sep 2026 by the weight-policy hardening below. Simone supplied
+// firmer wording ("100%% sure", "with clothes", "we will weigh you") and Ro chose
+// to apply it across all four weight keys. The old string is kept here, commented,
+// so the previous copy is not silently restored from an old note.
+// has('en w4Body reworded, adds no-refund sentence', 'w4Body: "It\'s nothing personal. We\'re committed to protecting our horses\' backs from strain, so we\'re unable to safely match a horse for this weight. You\'re welcome to try our off-saddle activities under \'Lessons\' instead. Unfortunately we do not refund bookings for people over 75kg.",');
 missing('old "So sorry" phrasing gone', 'So sorry, we can\'t accommodate this weight');
 missing('old "You\'d be very welcome" phrasing gone', 'You\'d be very welcome');
 has('id/ru w4Title/w4Body untouched by the English-only REJECT-COPY find/replace', 'w4Title: "Mohon maaf, kami tidak dapat menerima berat ini",');
@@ -757,7 +761,11 @@ missing('no standalone rider-info card left under the booking summary', 'screen 
 has('checkbox toggles bookingForOther, checked state reflected in perm-box', 'className: "perm-box " + (bookingForOther ? "checked" : "")\n  }, bookingForOther ? "✓" : ""), /*#__PURE__*/React.createElement("div", {\n    className: "perm-text"\n  }, t.bookingForOtherLabel)');
 has('reopen prompt only rendered when bookingForOther is checked, reuses the weight-warning visual pattern and opens the rider-info modal on click (1 Sep 2026 RIDER-INFO-MODAL, replaced the old static note)', 'bookingForOther && /*#__PURE__*/React.createElement("div", {\n    className: "weight-warning",\n    onClick: () => setShowRiderInfoModal(true),\n    style: {\n      cursor: "pointer"\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "ww-header"\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "ww-icon"\n  }, "📋"), /*#__PURE__*/React.createElement("div", {\n    className: "ww-body"\n  }, t.riderInfoReopenNote)');
 has('en bookingForOtherLabel', 'bookingForOtherLabel: "I\'m booking for someone else, or I\'m an agent booking for a customer"');
-has('en bookingForOtherNote', 'bookingForOtherNote: "Please check the weight of the person you\'re booking for. We know it\'s a slightly awkward thing to ask, but for the wellbeing of our horses we hold to a rider weight guideline of 75kg. It\'s what keeps every horse healthy and comfortable, so we can keep offering these rides for years to come. Please note we\'re unable to offer refunds where this limit is exceeded, and weight may be confirmed at the stables if needed."');
+// SUPERSEDED 16 Sep 2026 by the weight-policy hardening below. Simone supplied
+// firmer wording ("100%% sure", "with clothes", "we will weigh you") and Ro chose
+// to apply it across all four weight keys. The old string is kept here, commented,
+// so the previous copy is not silently restored from an old note.
+// has('en bookingForOtherNote', 'bookingForOtherNote: "Please check the weight of the person you\'re booking for. We know it\'s a slightly awkward thing to ask, but for the wellbeing of our horses we hold to a rider weight guideline of 75kg. It\'s what keeps every horse healthy and comfortable, so we can keep offering these rides for years to come. Please note we\'re unable to offer refunds where this limit is exceeded, and weight may be confirmed at the stables if needed."');
 has('id bookingForOtherLabel', 'bookingForOtherLabel: "Saya memesan untuk orang lain, atau saya agen yang memesan untuk pelanggan"');
 has('ru bookingForOtherLabel', 'bookingForOtherLabel: "Я бронирую для другого человека или я агент, бронирующий для клиента"');
 has('bookingForOtherLabel/Note declared exactly 3 times (once per language)', 'bookingForOtherLabel:', 3);
@@ -1178,6 +1186,31 @@ has('free-chip constrained by align-self, not just display', '.free-chip {\n  /*
 has('free-chip aligns to the start of the flex column', 'display: inline-block;\n  align-self: flex-start;\n  max-width: 100%;');
 has('free-chip text is not bold', '.free-chip', 1);
 missing('free-chip no longer semibold', 'font-size: 11px;\n  font-weight: 600;\n  letter-spacing: 0.2px;');
+
+// ─── Weight policy hardened (16 Sep 2026) ────────────────────────────────
+// Simone's wording, replacing the softer copy in all four keys x3 languages.
+// This RESOLVES the 70kg-vs-75kg discrepancy recorded on 15 Sep: 75kg is
+// correct, and her WhatsApp template saying 70kg is the thing that is wrong.
+// Two substantive changes beyond the number: weight is "with clothes", and
+// weighing at the stables is now stated as certain, not conditional.
+
+// "with clothes" was absent from the page entirely before this. Four keys.
+has('weight stated as with-clothes, en', 'with clothes on', 4);
+has('weight stated as with-clothes, id', 'dengan pakaian', 4);
+has('weight stated as with-clothes, ru', 'в одежде', 4);
+
+// The softer predecessors must not survive anywhere; a single leftover would
+// contradict the firm copy on the very next screen.
+missing('no conditional weighing, en', 'may be confirmed at the stables');
+missing('no conditional weighing, id', 'mungkin akan dikonfirmasi ulang');
+missing('no conditional weighing, ru', 'может быть уточнён в конюшне');
+missing('75kg is a limit, not a guideline, en', 'weight guideline of 75kg');
+
+// The three policy consequences, stated wherever weight is discussed.
+has('cannot ride over 75kg, en', 'over 75kg cannot ride', 3);
+has('not refunded over 75kg, en', 'bookings over 75kg are not refunded', 4);
+has('weighing is certain, en', 'weigh riders at the stables', 3);
+has('rider-facing message says you will be weighed', 'You will be weighed at the stables.');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

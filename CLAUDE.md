@@ -258,9 +258,15 @@ The lead-rope / trot / canter / no-gallop note and the ride Includes line are ga
 because Simone's wording describes staff walking alongside and assessing riders at the beach, which is
 not what a dressage masterclass is. Widening the gate to `riding` would put invented claims on dressage.
 
-**The weight limit is unresolved as of 15 Sep 2026.** Simone's WhatsApp template says max 70kg; the page
-says 75kg with at most two riders over 70kg (`w3Body`). Nobody has reconciled them yet. It is a welfare
-rule, so it needs Simone, not a judgement call here.
+**The weight limit is RESOLVED at 75kg (16 Sep 2026).** Simone's WhatsApp template saying "max. 70 kg"
+is the stale side; the page was right. Her supplied wording now runs through all four weight keys
+(`w3Body`, `w4Body`, `bookingForOtherNote`, `riderInfoWeightBody`) in all three languages, and hardens
+two things beyond the number: the limit is **with clothes on**, and riders **will** be weighed at the
+stables rather than "may be confirmed if needed". Over 75kg cannot ride, and is not refunded.
+
+Keep these four in step. They are the same policy stated to four different audiences, and softening one
+of them puts a contradiction one screen away from the firm version. The previous softer strings are kept
+as SUPERSEDED comments in `tests/assert.js` so they are not restored from an old note.
 
 **Before deleting anything from a description or a band, check it is stated somewhere else.** The
 paddock "do not enter, do not touch the horses" restriction existed in exactly one place at the moment
