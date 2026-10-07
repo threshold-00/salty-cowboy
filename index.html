@@ -409,13 +409,18 @@ const ACTIVITIES = [{
   category: "Photoshoots",
   items: [{
     id: "photo_beach",
-    durations: ["1hr", "1.5hr"],
-    maxPeople: 3,
-    perHorse: true,
+    // Merged with the former standalone "photo_ricefield" activity (7 Oct
+    // 2026 BEACH-RICEFIELD-MERGE, at Ro's direction): one activity now
+    // covers the whole walk from the stables through the rice fields to the
+    // beach. Duration set and flat pricing carried over from the old
+    // Rice Field activity (adds the 2hr tier Beach didn't have); perHorse
+    // and needsWeight are dropped since the new copy no longer caps by
+    // horse count or rider weight. maxPeople raised from 3 to 5 to match.
+    durations: ["1hr", "1.5hr", "2hr"],
+    maxPeople: 5,
     photoshoot: true,
-    needsWeight: true,
     image: "images/photo-beach.jpg",
-    gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-beach-3.jpg", "images/gallery-beach-4.jpg"]
+    gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg"]
   }, {
     id: "photo_stable",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
@@ -423,16 +428,6 @@ const ACTIVITIES = [{
     photoshoot: true,
     image: "images/photo-stable.jpg",
     gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]
-  }, {
-    id: "photo_ricefield",
-    durations: ["1hr", "1.5hr", "2hr"],
-    maxPeople: 5,
-    photoshoot: true,
-    // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -
-    // it's the exact same sunset ricefield photo Ro pointed to as the card
-    // image, already processed and sitting in this folder for the gallery.
-    image: "images/gallery-ricefield-1.jpg",
-    gallery: ["images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg", "images/gallery-ricefield-3.jpg", "images/gallery-ricefield-4.jpg"]
   }, {
     id: "photo_paddock",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
@@ -546,14 +541,6 @@ const SESSION_SLOTS = {
   "2hr":   ["8:30am", "9:30am",  "2:30pm", "3:30pm"],
   "3hr":   ["8:30am", "2:30pm"]
 };
-// Rice Field Photoshoot gets its own 8am start alongside one fixed
-// afternoon start per duration, same pattern as the rides.
-const RICEFIELD_SLOTS = {
-  "1hr":   ["8:00am", "5:00pm"],
-  "1.5hr": ["8:00am", "4:30pm"],
-  "2hr":   ["8:00am", "4:00pm"]
-};
-
 // "4:30pm" -> 16.5, used to tell morning from afternoon.
 function slotHour(slot) {
   const m = /^(\d+):(\d+)(am|pm)$/.exec(slot);
@@ -573,7 +560,6 @@ function slotsFor(actObj, duration, dates) {
   let list;
   if (actObj.id === "dressage") list = DRESSAGE_SLOTS;
   else if (actObj.id === "whisper") list = WHISPER_SLOTS;
-  else if (actObj.id === "photo_ricefield") list = RICEFIELD_SLOTS[duration] || [];
   else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS[duration] || [];
   else if (actObj.photoshoot) list = PHOTO_SLOTS;
   else if (actObj.riding) list = RIDE_SLOTS[duration] || [];
@@ -621,7 +607,7 @@ const T = {
     airbnbLink: "Airbnb Listings",
     moneyGoesBody: "Every booking goes straight back into the paddock; vet care, feed, farrier visits, and the horses themselves. Some come in underweight or scared of people. We give them time until they're ready. Some go back to gentle riding to make money for their friends, others can go to a family that is curated by us, that will adopt them and take care of them properly.",
     costFundsTitle: "What your booking cost funds",
-    introPhotoshoots: "Photos with our rescue horses at our best spots around the property. Sessions are static, so riding isn't included, though for the Beach shoot you'll sit on your horse for the walk down to the sand. Bring your own photographer, or add a Salty Cowboy photographer with your booking.",
+    introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!",
     introRides: "Ride out through the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Morning and golden hour rides are the best time to go. Price is per person.",
     introLessons: "Every session except the Dressage Masterclass is off-saddle. You'll be working hand in hand with our rescue horses to build trust and learn to read them.",
     chooseActivity: "Choose an activity",
@@ -732,9 +718,8 @@ const T = {
       beach: "Beach & Rice Field Ride",
       insta: "Insta Ride",
       dressage: "Dressage Masterclass (Private lesson)",
-      photo_beach: "Beach Photoshoot",
+      photo_beach: "Beach & Ricefields Photoshoot",
       photo_stable: "Stable Photoshoot",
-      photo_ricefield: "Rice Field Photoshoot",
       photo_paddock: "Paddock Photoshoot",
       photo_cottages: "Cottages Photoshoot",
       whisper: "Horse Whisperer Intensive Course",
@@ -757,9 +742,8 @@ const T = {
     includes: {
       beach: "Helmets and boots, staff guiding on foot the whole way, and photos taken on your phone by our team. Price includes service tax.",
       insta: "Helmets and boots, staff guiding on foot the whole way, and photos taken on your phone by our team. Price includes service tax.",
-      photo_beach: "One groomed horse, staff with you, 900m route through the rice fields",
+      photo_beach: "Beautifully groomed model horse and staff to assist, for the 900m walk through the village and rice fields to the beach",
       photo_stable: "Western-style stable backdrop, team assistance",
-      photo_ricefield: "One horse, team assistance, rice terrace location",
       photo_paddock: "Paddock location, grazing horses in view",
       photo_cottages: "Cottage interior, whole session (Airbnb blocked for you)",
       whisper: "10 hours over 3 days, 2 hours of grooming or another related activity, all levels welcome"
@@ -794,19 +778,17 @@ const T = {
       masterclass: "Max 2 people.",
       groupclinic: "Up to 6 people. Flat price per session, not per person.",
       whisper: "Max 2 people.",
-      photo_beach: "Max 3 people total: up to 2 on horses (one horse each), plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.",
-      photo_stable: "Max 5 people total, including all crew and models.",
-      photo_ricefield: "Max 5 people total, including all crew and models.",
-      photo_paddock: "Max 5 people total, including all crew and models.",
-      photo_cottages: "Max 6 people per cottage. Choice of cottage upon availability.",
+      photo_beach: "Max 5 people on the team. Helmets required on the walk to and from the beach. No swimwear or bikinis, out of respect for local culture.",
+      photo_stable: "Max 5 people on the team.",
+      photo_paddock: "Max 5 people on the team.",
+      photo_cottages: "Max 6 people on the team. Choice of cottage upon availability.",
     },
     prices: {
       beach: [{ l: "1 hr", v: "IDR 1,600,000" }, { l: "1.5 hr", v: "IDR 2,200,000" }],
       insta: [{ l: "2 hr", v: "IDR 2,700,000" }],
       dressage: [{ l: "50 min", v: "IDR 2,900,000" }],
-      photo_beach: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }],
+      photo_beach: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],
       photo_stable: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "session", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
@@ -818,11 +800,10 @@ const T = {
       beach: "A guided ride out through the rice fields to the beach.",
       insta: "Our longest ride at 2 hours, with more stops for photos through the village, beach and rice fields. Grooms take you to the best spots: golden hour is ideal.",
       dressage: "Private lessons for all levels. Learn dressage or polish up your skills.",
-      photo_beach: "Static shoot for fashion, pre-wedding or private sessions, along a 900m route through the rice fields. Time starts when you leave the stables. Out of respect for local culture, please no swimwear shoots.",
-      photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included.",
-      photo_ricefield: "A private session with your horse framed by Bali's open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light.",
-      photo_paddock: "Open paddock backdrop with grazing horses, shot from outside the fence. Entering the paddocks and touching the horses is not permitted.",
-      photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by session (linked to Airbnb blocking). Location only, no horses included. Photos are taken inside the cottage. Entering the paddocks and touching the horses is not permitted.",
+      photo_beach: "Beautifully groomed model horse and staff to assist. The shoot starts when you leave the stables: a 900m walk through the village and rice fields to the beach, with beautiful spots to stop for photos along the way. Helmets are required on the way to and from the beach. Please share your shoot purpose, brand/client and outfit plans with us beforehand so we can prepare accordingly. Out of respect for local culture, please no swimwear or bikini shoots.",
+      photo_stable: "Shoot in our stable with the horses in the background. The horses stay in their stables; private horses are not available for pictures.",
+      photo_paddock: "Green and lush, with a view of horses in the paddock and the cottages in the background. You can also shoot outside the paddock in designated areas with beautiful backdrops. Entering the paddocks and touching the horses is not permitted.",
+      photo_cottages: "Use one of our cottages for your shoot: the garden, pool and inside area are all yours. Choice of cottage depends on availability, or use our designated photoshoot area. Location only, no horses included.",
       whisper: "A 3-day, 10-hour course spread over Monday, Tuesday and Thursday. Two 3.5-hour sessions to build the basics, then a 3-hour session to bring it together. Includes 2 hours of grooming or choice of another related activity, starting 8:30am on Monday and Tuesday and 9:00am on Thursday, finishing at midday. Open to all levels, no experience needed. This course is for two people, so bring your friend!",
       joinup: "An introduction to natural horsemanship. Learn to 'join up' a horse so it chooses to stay with you. Hands-on, no riding.",
       masterclass: "Learn the finer art of grooming, with tips for Bali's damp, hot climate, from the stable manager, plus Q&A.",
@@ -837,7 +818,7 @@ const T = {
     airbnbLink: "Daftar Airbnb",
     moneyGoesBody: "Setiap pemesanan kembali langsung untuk kebutuhan paddock; perawatan dokter hewan, pakan, pemasangan sepatu kuda, dan kuda-kudanya sendiri. Beberapa datang dalam kondisi kurus atau takut pada manusia. Kami memberi mereka waktu hingga siap. Sebagian kembali menjalani ride dengan lembut untuk mencari dana bagi teman-teman mereka, sebagian lagi bisa pindah ke keluarga pilihan kami, yang akan mengadopsi dan merawat mereka dengan baik.",
     costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan",
-    introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami. Sesi bersifat statis, jadi berkuda tidak termasuk, meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir. Bawa fotografer Anda sendiri, atau tambahkan fotografer Salty Cowboy pada pemesanan.",
+    introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!",
     introRides: "Susuri sawah, jalan desa, hingga ke pantai. Pemandu kami mendampingi Anda sepanjang perjalanan. Waktu terbaik untuk berkuda adalah pagi hari atau golden hour. Harga per orang.",
     introLessons: "Setiap sesi kecuali Dressage Masterclass dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka.",
     chooseActivity: "Pilih aktivitas",
@@ -946,9 +927,8 @@ const T = {
       beach: "Berkuda Pantai & Sawah",
       insta: "Insta Ride",
       dressage: "Masterclass Dressage (Les privat)",
-      photo_beach: "Sesi Foto di Pantai",
+      photo_beach: "Sesi Foto Pantai & Sawah",
       photo_stable: "Sesi Foto di Kandang",
-      photo_ricefield: "Sesi Foto di Sawah",
       photo_paddock: "Sesi Foto di Padang",
       photo_cottages: "Sesi Foto di Cottages",
       whisper: "Kursus Intensif Horse Whisperer",
@@ -967,9 +947,8 @@ const T = {
     includes: {
       beach: "Helm dan sepatu bot, staf mendampingi dengan berjalan kaki sepanjang perjalanan, dan foto diambil dengan ponsel Anda oleh tim kami. Harga sudah termasuk pajak layanan.",
       insta: "Helm dan sepatu bot, staf mendampingi dengan berjalan kaki sepanjang perjalanan, dan foto diambil dengan ponsel Anda oleh tim kami. Harga sudah termasuk pajak layanan.",
-      photo_beach: "Satu kuda yang sudah dirawat, staf mendampingi, rute 900m melewati sawah",
+      photo_beach: "Kuda model yang terawat rapi dan staf pendamping, untuk perjalanan 900m melewati desa dan sawah menuju pantai",
       photo_stable: "Latar kandang bergaya Western, bantuan tim",
-      photo_ricefield: "Satu kuda, bantuan tim, lokasi terasering sawah",
       photo_paddock: "Lokasi padang, kuda-kuda merumput terlihat",
       photo_cottages: "Interior pondok, satu sesi penuh (Airbnb dikosongkan untuk Anda)",
       whisper: "10 jam selama 3 hari, 2 jam perawatan kuda atau kegiatan terkait lainnya, terbuka untuk semua level"
@@ -1004,19 +983,17 @@ const T = {
       masterclass: "Maks 2 orang.",
       groupclinic: "Hingga 6 orang. Harga tetap per sesi, bukan per orang.",
       whisper: "Maks 2 orang.",
-      photo_beach: "Maks 3 orang total: hingga 2 orang menunggang kuda (satu kuda per orang), plus 1 orang berdiri di samping kuda. Maks 75 kg per penunggang. Harga per kuda.",
-      photo_stable: "Maks 5 orang total, termasuk seluruh kru dan model.",
-      photo_ricefield: "Maks 5 orang total, termasuk seluruh kru dan model.",
-      photo_paddock: "Maks 5 orang total, termasuk seluruh kru dan model.",
-      photo_cottages: "Maks 6 orang per cottage. Pilihan cottage sesuai ketersediaan.",
+      photo_beach: "Maks 5 orang dalam tim. Helm wajib dipakai saat perjalanan menuju dan dari pantai. Tidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat.",
+      photo_stable: "Maks 5 orang dalam tim.",
+      photo_paddock: "Maks 5 orang dalam tim.",
+      photo_cottages: "Maks 6 orang dalam tim. Pilihan cottage sesuai ketersediaan.",
     },
     prices: {
       beach: [{ l: "1 jam", v: "IDR 1,600,000" }, { l: "1,5 jam", v: "IDR 2,200,000" }],
       insta: [{ l: "2 jam", v: "IDR 2,700,000" }],
       dressage: [{ l: "50 mnt", v: "IDR 2,900,000" }],
-      photo_beach: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }],
+      photo_beach: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],
       photo_stable: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }, { l: "3 jam", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "sesi", v: "IDR 4,500,000" }],
       whisper: [{ l: "total", v: "IDR 22,500,000" }],
@@ -1028,11 +1005,10 @@ const T = {
       beach: "Berkuda dengan pemandu melewati sawah menuju pantai.",
       insta: "Ride terpanjang kami, 2 jam, dengan lebih banyak titik henti untuk foto melewati desa, pantai, dan sawah. Pemandu membawa Anda ke spot-spot terbaik: golden hour adalah waktu yang paling pas.",
       dressage: "Pelajaran privat untuk semua tingkat. Belajar dressage atau mengasah kemampuan Anda.",
-      photo_beach: "Sesi foto statis untuk fashion, prewedding, atau pribadi, menyusuri rute 900m melewati sawah. Waktu dihitung sejak meninggalkan kandang. Demi menghormati budaya setempat, mohon tidak ada pemotretan berpakaian renang.",
-      photo_stable: "Latar kandang bergaya Western yang rustic untuk fashion, prewedding, atau sesi pribadi. Termasuk bantuan tim.",
-      photo_ricefield: "Sesi privat bersama kuda Anda dengan latar terasering sawah Bali yang terbuka. Format sama seperti sesi foto Kandang kami, hanya berlokasi di area hijau, bukan di pekarangan kandang. Golden hour direkomendasikan untuk pencahayaan terbaik.",
-      photo_paddock: "Latar padang terbuka dengan kuda yang merumput, difoto dari luar pagar. Dilarang memasuki padang dan menyentuh kuda.",
-      photo_cottages: "Interior cottage kayu rustic untuk pemotretan fashion, prewedding, atau pribadi. Harga per sesi (terkait blocking Airbnb). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage. Dilarang memasuki padang dan menyentuh kuda.",
+      photo_beach: "Kuda model yang terawat rapi dan staf pendamping. Sesi dimulai saat Anda meninggalkan kandang: perjalanan 900m melewati desa dan sawah menuju pantai, dengan titik-titik indah untuk berhenti berfoto di sepanjang jalan. Helm wajib dipakai saat perjalanan menuju dan dari pantai. Mohon beri tahu kami tujuan pemotretan, merek/klien, dan rencana busana sebelumnya agar kami dapat mempersiapkan. Demi menghormati budaya setempat, mohon tidak ada pemotretan berpakaian renang atau bikini.",
+      photo_stable: "Pemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya; kuda pribadi tidak tersedia untuk difoto.",
+      photo_paddock: "Hijau dan rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang. Anda juga dapat memotret di luar padang di area yang ditentukan dengan latar yang indah. Dilarang memasuki padang dan menyentuh kuda.",
+      photo_cottages: "Gunakan salah satu cottage kami untuk pemotretan Anda: taman, kolam renang, dan area dalam ruangan semuanya dapat digunakan. Pilihan cottage tergantung ketersediaan, atau gunakan area pemotretan khusus kami. Hanya lokasi, tanpa kuda.",
       whisper: "Kursus 3 hari, 10 jam, berlangsung pada Senin, Selasa, dan Kamis. Dua sesi 3,5 jam untuk membangun dasar-dasarnya, lalu satu sesi 3 jam untuk menyatukan semuanya. Termasuk 2 jam grooming atau pilihan aktivitas terkait lainnya, dimulai pukul 08.30 pada Senin dan Selasa, dan 09.00 pada Kamis, selesai pukul 12.00. Terbuka untuk semua level, tidak perlu pengalaman. Kursus ini untuk dua orang, jadi ajak teman Anda!",
       joinup: "Pengantar natural horsemanship. Belajar 'join up' agar kuda memilih untuk tetap bersama Anda. Praktik langsung, tanpa berkuda.",
       masterclass: "Pelajari seni grooming yang lebih halus, dengan tips untuk iklim Bali yang lembap dan panas, dari manajer kandang, plus tanya jawab.",
@@ -1047,7 +1023,7 @@ const T = {
     airbnbLink: "Объявления на Airbnb",
     moneyGoesBody: "Каждое бронирование идёт напрямую на нужды пастбища; ветеринарный уход, корм, ковку и самих лошадей. Некоторые прибывают истощёнными или напуганными людьми. Мы даём им время, пока они не будут готовы. Некоторые возвращаются к спокойным прогулкам, чтобы зарабатывать на своих друзей, другие могут перейти в семью, тщательно отобранную нами, которая удочерит их и позаботится о них как следует.",
     costFundsTitle: "На что идёт стоимость вашего бронирования",
-    introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории. Съёмки статичные, поэтому верховая езда не входит, хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде. Приходите со своим фотографом или добавьте фотографа Salty Cowboy к брони.",
+    introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!",
     introRides: "Прогулка через рисовые поля, деревенские дороги и к пляжу. Наши грумы сопровождают вас на всём пути. Прогулки лучше всего идут утром или в золотой час. Цена за человека.",
     introLessons: "Все занятия, кроме мастер-класса по выездке, проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать.",
     chooseActivity: "Выберите занятие",
@@ -1156,9 +1132,8 @@ const T = {
       beach: "Прогулка к пляжу и рисовым полям",
       insta: "Инста-прогулка",
       dressage: "Мастер-класс по выездке (частный урок)",
-      photo_beach: "Фотосессия на пляже",
+      photo_beach: "Фотосессия на пляже и рисовых полях",
       photo_stable: "Фотосессия в конюшне",
-      photo_ricefield: "Фотосессия в рисовых полях",
       photo_paddock: "Фотосессия в загоне",
       photo_cottages: "Фотосессия у коттеджей",
       whisper: "Интенсивный курс «шепчущего с лошадьми»",
@@ -1177,9 +1152,8 @@ const T = {
     includes: {
       beach: "Шлемы и сапоги, сопровождение персонала пешком на протяжении всей прогулки и фотографии на ваш телефон, которые сделает наша команда. Цена включает сервисный сбор.",
       insta: "Шлемы и сапоги, сопровождение персонала пешком на протяжении всей прогулки и фотографии на ваш телефон, которые сделает наша команда. Цена включает сервисный сбор.",
-      photo_beach: "Одна ухоженная лошадь, сопровождение персонала, маршрут 900 м через рисовые поля",
+      photo_beach: "Ухоженная лошадь-модель и помощь персонала, маршрут 900 м через деревню и рисовые поля к пляжу",
       photo_stable: "Конюшня в западном стиле как фон, помощь команды",
-      photo_ricefield: "Одна лошадь, помощь команды, локация на рисовых террасах",
       photo_paddock: "Локация у загона, пасущиеся лошади в кадре",
       photo_cottages: "Интерьер коттеджа, вся сессия (Airbnb освобождён для вас)",
       whisper: "10 часов за 3 дня, 2 часа груминга или другого связанного занятия, для любого уровня"
@@ -1214,19 +1188,17 @@ const T = {
       masterclass: "Максимум 2 человека.",
       groupclinic: "До 6 человек. Фиксированная цена за сессию, не за человека.",
       whisper: "Максимум 2 человека.",
-      photo_beach: "Максимум 3 человека: до 2 верхом (по одной лошади на каждого) плюс 1 человек рядом с лошадью. Максимум 75 кг на верхового. Цена за лошадь.",
-      photo_stable: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
-      photo_ricefield: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
-      photo_paddock: "Максимум 5 человек, включая всю съёмочную группу и моделей.",
-      photo_cottages: "Максимум 6 человек на коттедж. Выбор коттеджа по наличию.",
+      photo_beach: "Максимум 5 человек в команде. На пути к пляжу и обратно обязательны шлемы. Из уважения к местной культуре купальники и бикини не допускаются.",
+      photo_stable: "Максимум 5 человек в команде.",
+      photo_paddock: "Максимум 5 человек в команде.",
+      photo_cottages: "Максимум 6 человек в команде. Выбор коттеджа по наличию.",
     },
     prices: {
       beach: [{ l: "1 ч", v: "IDR 1,600,000" }, { l: "1,5 ч", v: "IDR 2,200,000" }],
       insta: [{ l: "2 ч", v: "IDR 2,700,000" }],
       dressage: [{ l: "50 мин", v: "IDR 2,900,000" }],
-      photo_beach: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }],
+      photo_beach: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],
       photo_stable: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
-      photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],
       photo_paddock: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }, { l: "3 ч", v: "IDR 3,750,000" }],
       photo_cottages: [{ l: "сессия", v: "IDR 4,500,000" }],
       whisper: [{ l: "всего", v: "IDR 22,500,000" }],
@@ -1238,11 +1210,10 @@ const T = {
       beach: "Прогулка с сопровождающим через рисовые поля к пляжу.",
       insta: "Наша самая длинная прогулка, 2 часа, с большим количеством остановок для фото через деревню, пляж и рисовые поля. Грумы приводят вас в лучшие места, особенно хорошо в золотой час.",
       dressage: "Индивидуальные занятия для любого уровня. Освойте выездку или отточите навыки.",
-      photo_beach: "Статичная съёмка для fashion, love story или личных сессий, маршрут 900 м через рисовые поля. Время отсчитывается с момента выхода из конюшни. Из уважения к местной культуре просим не снимать в купальниках.",
-      photo_stable: "Рустикальный фон конюшни в western-стиле для fashion, love story или личных съёмок. Включает помощь команды.",
-      photo_ricefield: "Приватная съёмка с лошадью на фоне открытых рисовых террас Бали. Тот же формат, что и наша съёмка в конюшне, только на фоне зелени вместо двора конюшни. Для лучшего света рекомендуем золотой час.",
-      photo_paddock: "Открытый загон с пасущимися лошадьми, съёмка из-за ограды. Заходить в загоны и трогать лошадей нельзя.",
-      photo_cottages: "Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена за сессию (связано с блокировкой Airbnb). Только локация, без лошадей. Съёмка проходит внутри коттеджа. Заходить в загоны и трогать лошадей нельзя.",
+      photo_beach: "Ухоженная лошадь-модель и помощь персонала. Съёмка начинается у конюшни: маршрут 900 м через деревню и рисовые поля к пляжу, с красивыми точками для остановки и фото по пути. На пути к пляжу и обратно обязательны шлемы. Пожалуйста, заранее расскажите нам о цели съёмки, бренде/клиенте и планах по образам, чтобы мы могли подготовиться. Из уважения к местной культуре просим не снимать в купальниках или бикини.",
+      photo_stable: "Съёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах; частные лошади для съёмки недоступны.",
+      photo_paddock: "Зелёный, живописный вид на лошадь в загоне с коттеджами на фоне. Можно снимать и за пределами загона в специально отведённых местах с красивыми видами. Заходить в загоны и трогать лошадей нельзя.",
+      photo_cottages: "Используйте один из наших коттеджей для съёмки: сад, бассейн и внутреннее пространство в вашем распоряжении. Выбор коттеджа зависит от наличия, либо используйте нашу специальную зону для съёмок. Только локация, без лошадей.",
       whisper: "Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг. Два занятия по 3,5 часа для освоения основ, затем занятие на 3 часа, чтобы собрать всё воедино. Включает 2 часа грумминга или другой связанной активности на выбор, начало в 8:30 в понедельник и вторник и в 9:00 в четверг, окончание в 12:00. Подходит для любого уровня, опыт не требуется. Курс рассчитан на двоих, так что берите с собой друга!",
       joinup: "Введение в natural horsemanship. Научитесь делать join up, чтобы лошадь сама выбирала оставаться с вами. Практика, без верховой езды.",
       masterclass: "Освойте тонкое искусство груминга с советами для влажного и жаркого климата Бали, от менеджера конюшни, плюс вопросы и ответы.",

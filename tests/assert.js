@@ -17,18 +17,21 @@ has('Photoshoots follows Rides',      'category: "Rides",\n  items: [{\n    id: 
 has('Lessons is last category',       'category: "Lessons",\n  // categoryImage is the Lessons category card\'s own thumbnail');
 
 // ─── ACTIVITIES data structure ───────────────────────────────────────────
-has('photo_beach durations + needsWeight', 'id: "photo_beach",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 3,\n    perHorse: true,\n    photoshoot: true,\n    needsWeight: true');
+// photo_beach absorbed photo_ricefield on 7 Oct 2026 (BEACH-RICEFIELD-MERGE,
+// at Ro's direction): one activity now covers the stables-through-ricefields
+// walk to the beach. perHorse/needsWeight dropped, maxPeople 3 -> 5, duration
+// set and flat pricing carried over from the old standalone ricefield
+// activity (adds the 2hr tier beach didn't have). See CHANGELOG.
+has('photo_beach durations, no perHorse/needsWeight, maxPeople 5 (merged with ricefield)', 'id: "photo_beach",\n    // Merged with the former standalone "photo_ricefield" activity (7 Oct\n    // 2026 BEACH-RICEFIELD-MERGE, at Ro\'s direction): one activity now\n    // covers the whole walk from the stables through the rice fields to the\n    // beach. Duration set and flat pricing carried over from the old\n    // Rice Field activity (adds the 2hr tier Beach didn\'t have); perHorse\n    // and needsWeight are dropped since the new copy no longer caps by\n    // horse count or rider weight. maxPeople raised from 3 to 5 to match.\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5,\n    photoshoot: true,\n    image: "images/photo-beach.jpg"');
+missing('photo_ricefield no longer exists as its own activity', 'id: "photo_ricefield"');
 has('photo_stable 1-3hr',          'id: "photo_stable",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
-has('photo_ricefield 1-2hr (3hr removed 29 Aug 2026 RICEFIELD-8AM, no longer clones stable\'s duration set)', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5');
 has('photo_paddock 1-3hr',         'id: "photo_paddock",\n    durations: ["1hr", "1.5hr", "2hr", "3hr"],\n    maxPeople: 5');
 has('photo_cottages session, 6',   'id: "photo_cottages",\n    durations: ["3hr"],\n    maxPeople: 6');
 has('beach ride 1/1.5hr only (2hr removed 1 Sep 2026 RIDE-DURATION-SPLIT, since Insta Ride became the sole 2hr option)', 'id: "beach",\n    durations: ["1hr", "1.5hr"]');
 has('beach ride carries a real image path (first activity to get one, per Ro), other activities still have no image field and fall back to the placeholder', 'experienceNeeded: "Beginner",\n    image: "images/beach-ride.jpg"');
 has('insta ride carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/insta-ride.avif"');
-has('photo_beach carries a real image path (swapped to the client\'s new JPEG, 6 Oct 2026, no AVIF encoder available locally to re-encode)', 'needsWeight: true,\n    image: "images/photo-beach.jpg"');
 has('photo_stable carries a real image path (swapped to the client\'s new JPEG, 6 Oct 2026, no AVIF encoder available locally to re-encode)', 'photoshoot: true,\n    image: "images/photo-stable.jpg"');
-has('photo_ricefield now has a real card image (reuses gallery-ricefield-1.jpg, the same sunset photo Ro picked, not a duplicate copy) plus its gallery array of 4 real photos', 'id: "photo_ricefield",\n    durations: ["1hr", "1.5hr", "2hr"],\n    maxPeople: 5,\n    photoshoot: true,\n    // Card image reuses gallery-ricefield-1.jpg rather than a separate copy -\n    // it\'s the exact same sunset ricefield photo Ro pointed to as the card\n    // image, already processed and sitting in this folder for the gallery.\n    image: "images/gallery-ricefield-1.jpg",\n    gallery: ["images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg", "images/gallery-ricefield-3.jpg", "images/gallery-ricefield-4.jpg"]\n  }');
-has('all 5 photoshoot activities carry a 4-item gallery array of real photos, all provided by Ro (real-photo-gallery commit)', 'gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-beach-3.jpg", "images/gallery-beach-4.jpg"]');
+has('photo_beach gallery now mixes 2 beach + 2 ricefield photos (7 Oct 2026 BEACH-RICEFIELD-MERGE, gallery UI only ever shows 4)', 'gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-ricefield-1.jpg", "images/gallery-ricefield-2.jpg"]');
 has('gallery: ["images/gallery-stable', 'gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]');
 has('gallery: ["images/gallery-paddock', 'gallery: ["images/gallery-paddock-1.jpg", "images/gallery-paddock-2.jpg", "images/gallery-paddock-3.jpg", "images/gallery-paddock-4.jpg"]');
 has('gallery: ["images/gallery-cottages', 'gallery: ["images/gallery-cottages-1.jpg", "images/gallery-cottages-2.jpg", "images/gallery-cottages-3.jpg", "images/gallery-cottages-4.jpg"]');
@@ -112,17 +115,20 @@ missing('the old whisper 8:30/9:30am pair is gone; 9:30am survives elsewhere bec
 has('isWhisper blocks Wed + Fri + Sat (Friday added 29 Aug 2026 WHISPER-3DAY, runs Mon/Tue/Thu only)', 'if (isWhisper && (dow === 3 || dow === 5 || dow === 6)) return false;');
 
 // ─── slotsFor routes correctly ───────────────────────────────────────────
-has('slotsFor paddock/stable/cottages routing (ricefield split out 29 Aug 2026 RICEFIELD-8AM)', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS');
-missing('ricefield no longer routes through SESSION_SLOTS', 'actObj.id === "photo_ricefield") list = SESSION_SLOTS');
+has('slotsFor paddock/stable/cottages routing', 'photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS');
+missing('ricefield no longer routes through SESSION_SLOTS (id retired entirely, 7 Oct 2026 BEACH-RICEFIELD-MERGE)', 'actObj.id === "photo_ricefield") list = SESSION_SLOTS');
 
-// ─── Rice Field Photoshoot gets its own 8am start (29 Aug 2026 RICEFIELD-8AM),
-// same pattern as the rides, and loses its 3hr option ──────────────────────
-has('RICEFIELD_SLOTS declared, same 8am + one-afternoon-slot pattern as RIDE_SLOTS', 'const RICEFIELD_SLOTS = {\n  "1hr":   ["8:00am", "5:00pm"],\n  "1.5hr": ["8:00am", "4:30pm"],\n  "2hr":   ["8:00am", "4:00pm"]\n};');
-has('slotsFor routes photo_ricefield to RICEFIELD_SLOTS before the SESSION_SLOTS branch', 'else if (actObj.id === "photo_ricefield") list = RICEFIELD_SLOTS[duration] || [];\n  else if (actObj.id === "photo_paddock"');
-missing('ricefield price array no longer has a 3hr entry (en); Stable/Paddock keep their own 3,750,000 3hr price untouched', 'photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }, { l: "3 hr"');
-has('photo_ricefield price array capped at 2hr, no 3hr entry (en)', 'photo_ricefield: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],');
-has('photo_ricefield price array capped at 2hr, no 3hr entry (id)', 'photo_ricefield: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],');
-has('photo_ricefield price array capped at 2hr, no 3hr entry (ru)', 'photo_ricefield: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],');
+// ─── Beach & Ricefields Photoshoot: merged activity, 1-2hr, flat pricing ──
+// (7 Oct 2026 BEACH-RICEFIELD-MERGE). Beach now falls through the generic
+// `actObj.photoshoot` branch to PHOTO_SLOTS (any start 8am-4pm), same as it
+// always did; the old standalone RICEFIELD_SLOTS table and its dedicated
+// slotsFor branch are both gone, since there is no longer a ricefield-only
+// activity to route.
+missing('RICEFIELD_SLOTS constant is gone', 'const RICEFIELD_SLOTS = {');
+missing('no dedicated photo_ricefield routing branch remains', 'else if (actObj.id === "photo_ricefield") list = RICEFIELD_SLOTS');
+has('photo_beach price array now goes to 2hr, carried over from the old ricefield table (en)', 'photo_beach: [{ l: "1 hr", v: "IDR 1,750,000" }, { l: "1.5 hr", v: "IDR 2,250,000" }, { l: "2 hr", v: "IDR 2,750,000" }],');
+has('photo_beach price array now goes to 2hr (id)', 'photo_beach: [{ l: "1 jam", v: "IDR 1,750,000" }, { l: "1,5 jam", v: "IDR 2,250,000" }, { l: "2 jam", v: "IDR 2,750,000" }],');
+has('photo_beach price array now goes to 2hr (ru)', 'photo_beach: [{ l: "1 ч", v: "IDR 1,750,000" }, { l: "1,5 ч", v: "IDR 2,250,000" }, { l: "2 ч", v: "IDR 2,750,000" }],');
 
 // ─── Weight: 75kg universal max, incl. Beach Photoshoot (was 77kg) ────────
 missing('no more 78kg anywhere',   '78 kg');
@@ -214,14 +220,21 @@ missing('no lunge prices anywhere',   'lunge:');
 has('3,750,000 = paddock/stable 3hr × 3 langs (ricefield no longer contributes)', '3,750,000', 6);
 
 // ─── Group / description copy updated ────────────────────────────────────
-has('en photo_beach per horse + weight cap', 'plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.');
-has('en cottages max 6',           'Max 6 people per cottage. Choice of cottage upon availability.');
+// photo_beach's per-horse/weight-cap group text is retired along with the
+// perHorse/needsWeight flags (7 Oct 2026 BEACH-RICEFIELD-MERGE); it now
+// carries the new client copy instead (team cap, helmets, no swimwear).
+missing('old photo_beach per-horse + weight cap text is gone', 'plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.');
+has('en photo_beach new group copy: 5-person team, helmets, no swimwear', 'photo_beach: "Max 5 people on the team. Helmets required on the walk to and from the beach. No swimwear or bikinis, out of respect for local culture."');
+missing('en cottages old "per cottage" group copy is gone', 'Max 6 people per cottage. Choice of cottage upon availability.');
+has('en cottages new group copy', 'photo_cottages: "Max 6 people on the team. Choice of cottage upon availability."');
 has('en joinup per person',        'joinup: "Max 2 people. Price is per person."');
 has('en groupclinic group desc',   'groupclinic: "Up to 6 people. Flat price per session, not per person."');
-has('en cottages inside',          'Photos are taken inside the cottage');
-has('en stable no groomed horse',  'photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included."');
+missing('old "Photos are taken inside the cottage" prose is gone (condensed 7 Oct 2026)', 'Photos are taken inside the cottage');
+missing('en stable old description is gone', 'photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included."');
+has('en stable new description: horses in background, private horses unavailable', 'photo_stable: "Shoot in our stable with the horses in the background. The horses stay in their stables; private horses are not available for pictures."');
 missing('no groomed horse text on stable/paddock', 'One groomed horse plus team assistance');
-has('en paddock no rice field mention', 'photo_paddock: "Open paddock backdrop with grazing horses, shot from outside the fence. Entering the paddocks and touching the horses is not permitted."');
+missing('en paddock old description is gone', 'photo_paddock: "Open paddock backdrop with grazing horses, shot from outside the fence. Entering the paddocks and touching the horses is not permitted."');
+has('en paddock new description keeps the entry/touching restriction', 'photo_paddock: "Green and lush, with a view of horses in the paddock and the cottages in the background. You can also shoot outside the paddock in designated areas with beautiful backdrops. Entering the paddocks and touching the horses is not permitted."');
 
 // ─── 13 Sep 2026 INCLUDES-BLOCK (user testing) ───────────────────────────────
 has('inclusionBlock returns null for an activity with no entry, so covering a new activity is a copy change only', 'if (!inc && !not) return null;');
@@ -264,19 +277,27 @@ has('notIncludedLabel in all three languages', 'notIncludedLabel:', 3);
 // restriction went back into the description rather than disappearing with it.
 missing('no Not-included entries remain for any photoshoot', 'Photographer (add one below)');
 has('paddock keeps its entry/touching restriction, back in the description (en)', 'Entering the paddocks and touching the horses is not permitted.\",\n      photo_cottages');
-has('the entry/touching restriction survives in Indonesian, twice: paddock and cottages both carry it', 'Dilarang memasuki padang dan menyentuh kuda.', 2);
-has('the same restriction survives in Russian, twice: paddock and cottages', 'Заходить в загоны и трогать лошадей нельзя.', 2);
+// Cottages dropped its own copy of the restriction in the 7 Oct 2026
+// BEACH-RICEFIELD-MERGE copy pass (the client's new cottages text is about
+// the garden/pool/indoor area, not horses), so paddock is now the only
+// place carrying it, in all three languages.
+has('the entry/touching restriction now survives once, on paddock only (Indonesian)', 'Dilarang memasuki padang dan menyentuh kuda.', 1);
+has('the entry/touching restriction now survives once, on paddock only (Russian)', 'Заходить в загоны и трогать лошадей нельзя.', 1);
 has('whisper KEEPS its Not-included line: it is the one answering "is this riding?", and Ro\'s instruction was "across all photoshoots"', 'whisper: "Riding. This course is groundwork, not ridden work"');
 has('notIncluded now holds whisper and nothing else, in all three languages', 'notIncluded: {\n      whisper:', 3);
 has('whisper answers "is this riding?" directly, which is what the tester asked (en)', 'whisper: "Riding. This course is groundwork, not ridden work"');
 missing('no loose "photographer not included" prose left in any language', 'photographer not included');
 missing('no loose Indonesian equivalent left', 'fotografer tidak termasuk');
 missing('no loose Russian equivalent left', 'фотограф не входит');
-has("en ricefield uses given copy", 'photo_ricefield: "A private session with your horse framed by Bali\'s open rice terraces. Same format as our stable shoot, set out in the green instead of the yards. Golden hour recommended for the best light."');
-has('id photo_beach per horse',    'Harga per kuda.');
-has('id cottages max 6',           'Maks 6 orang per cottage');
-has('ru photo_beach per horse',    'Цена за лошадь.');
-has('ru cottages max 6',           'Максимум 6 человек на коттедж');
+missing('old ricefield-only copy is gone, id no longer exists', 'photo_ricefield: "A private session with your horse framed by Bali\'s open rice terraces.');
+missing('id photo_beach old per-horse group copy is gone', 'Harga per kuda.');
+missing('id cottages old "per cottage" group copy is gone', 'Maks 6 orang per cottage');
+missing('ru photo_beach old per-horse group copy is gone', 'Цена за лошадь.');
+missing('ru cottages old "per coffee" group copy is gone', 'Максимум 6 человек на коттедж');
+has('id photo_beach new group copy', 'photo_beach: "Maks 5 orang dalam tim. Helm wajib dipakai saat perjalanan menuju dan dari pantai. Tidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat."');
+has('ru photo_beach new group copy', 'photo_beach: "Максимум 5 человек в команде. На пути к пляжу и обратно обязательны шлемы. Из уважения к местной культуре купальники и бикини не допускаются."');
+has('id cottages new group copy',  'photo_cottages: "Maks 6 orang dalam tim. Pilihan cottage sesuai ketersediaan."');
+has('ru cottages new group copy',  'photo_cottages: "Максимум 6 человек в команде. Выбор коттеджа по наличию."');
 
 // ─── Masterclass renamed to Horse grooming, Lunge fully removed ──────────
 has('en masterclass renamed',      'masterclass: "Horse grooming (wet or dry)"');
@@ -292,10 +313,13 @@ has('id groupclinic label + parenthetical', 'groupclinic: "Klinik Kelompok (Lead
 has('ru groupclinic label + parenthetical', 'groupclinic: "Групповая клиника (Leadership/horsemanship class)"');
 has('en groupclinic copy (C31)',   'A hands-on session in leadership, communication and trust, taught through the horse.');
 
-// ─── Rice Field Photoshoot activity present in all 3 languages ────────────
-has('en ricefield label',          'photo_ricefield: "Rice Field Photoshoot"');
-has('id ricefield label',          'photo_ricefield: "Sesi Foto di Sawah"');
-has('ru ricefield label',          'photo_ricefield: "Фотосессия в рисовых полях"');
+// ─── Rice Field Photoshoot merged into Beach, 7 Oct 2026 BEACH-RICEFIELD-MERGE
+missing('en ricefield label is gone, no longer a standalone activity', 'photo_ricefield: "Rice Field Photoshoot"');
+missing('id ricefield label is gone', 'photo_ricefield: "Sesi Foto di Sawah"');
+missing('ru ricefield label is gone', 'photo_ricefield: "Фотосессия в рисовых полях"');
+has('en beach & ricefields label', 'photo_beach: "Beach & Ricefields Photoshoot"');
+has('id beach & ricefields label', 'photo_beach: "Sesi Foto Pantai & Sawah"');
+has('ru beach & ricefields label', 'photo_beach: "Фотосессия на пляже и рисовых полях"');
 
 // ─── Horse Whisperer Course: 3 days (29 Aug 2026 WHISPER-3DAY, down from 4,
 // Friday dropped), given copy, all rider levels ────────────────────────────
@@ -321,12 +345,19 @@ has('ru introLessons uses client-approved copy', 'introLessons: "Все заня
 has('en groupclinic description ends with the client-given "team setting" / "friend groups that ride" phrasing, replacing "team or boardroom" / "horse people alike"', 'the same skills you\'d use in any team setting. Popular with women\'s groups, business teams, and friend groups that ride.');
 has('id groupclinic description ends with the client-given phrasing', 'keterampilan yang sama yang Anda gunakan dalam situasi tim apa pun. Populer di kalangan kelompok wanita, tim bisnis, dan kelompok pertemanan yang gemar berkuda.');
 has('ru groupclinic description ends with the client-given phrasing', 'те же навыки, что пригодятся в любой командной обстановке. Популярно среди женских групп, бизнес-команд и компаний друзей, которые катаются верхом.');
-has('en introPhotoshoots uses client-approved simpler opening line, replacing "Beautiful, story-telling photos... most scenic backdrops"', 'introPhotoshoots: "Photos with our rescue horses at our best spots around the property.');
-has('id introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami.');
-has('ru introPhotoshoots uses client-approved simpler opening line', 'introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории.');
-has('en introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand (3 Sep 2026 BEACH-SHOOT-MOUNTED, replacing "walk alongside your horse")', 'though for the Beach shoot you\'ll sit on your horse for the walk down to the sand.');
-has('id introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
-has('ru introPhotoshoots says the Beach shoot rider is mounted for the walk to the sand', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
+// introPhotoshoots condensed to a one-line hook on 7 Oct 2026
+// (BEACH-RICEFIELD-MERGE copy pass, client-given): the rest of what it used
+// to say (rescue horses, static sessions, the beach-shoot mount detail) now
+// lives in each activity's own description instead of the category intro.
+missing('old introPhotoshoots opening line is gone (en)', 'introPhotoshoots: "Photos with our rescue horses at our best spots around the property.');
+missing('old introPhotoshoots opening line is gone (id)', 'introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami.');
+missing('old introPhotoshoots opening line is gone (ru)', 'introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории.');
+has('en introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!"');
+has('id introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!"');
+has('ru introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!"');
+missing('old "sit on your horse for the walk down to the sand" wording is gone (en), that detail now lives in photo_beach\'s own desc', 'though for the Beach shoot you\'ll sit on your horse for the walk down to the sand.');
+missing('old mounted-beach-shoot wording is gone (id)', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
+missing('old mounted-beach-shoot wording is gone (ru)', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
 missing('no leftover "walk alongside your horse" beach-shoot wording', 'walk alongside your horse');
 has('en lessonsToken matches the quoted word inside w3Body/w4Body (6 Sep 2026 WEIGHT-LESSONS-LINK)', 'lessonsToken: "\'Lessons\'"');
 has('id lessonsToken', 'lessonsToken: "\'Pelajaran\'"');
@@ -889,15 +920,16 @@ has('the includes text is 14px, with the label stacked above it rather than besi
 has('the category card activity list is 14px', '.cat-card-list { font-family: var(--body); font-size: 14px;');
 // Ro: "for the includes part, have all text within a card for this."
 has('the includes block is a contained card, not a label floating next to loose text', '.inc-block { display: flex; flex-direction: column; gap: 5px; background: #f5f4f1; border: 1px solid var(--fog); border-radius: 10px; padding: 9px 11px; }');
-// The beach description dropped "One groomed horse plus staff" because the
-// Includes line directly under it already says exactly that. The cultural
-// request and the billing clause both stay: one is a real request, the other is
-// what the customer is charged for.
-has('beach description condensed, and does not repeat what the Includes line says', 'photo_beach: "Static shoot for fashion, pre-wedding or private sessions, along a 900m route through the rice fields. Time starts when you leave the stables. Out of respect for local culture, please no swimwear shoots."');
-has('the no-swimwear request survives the condensing in all three languages', 'swimwear shoots');
+// 7 Oct 2026 BEACH-RICEFIELD-MERGE rewrote the beach description entirely
+// (client copy): it now covers the walk, helmets, and briefing request, with
+// the horse/staff detail living in the Includes line instead. The no-
+// swimwear/bikini request still survives in all three languages.
+missing('old beach description is gone', 'photo_beach: "Static shoot for fashion, pre-wedding or private sessions, along a 900m route through the rice fields. Time starts when you leave the stables. Out of respect for local culture, please no swimwear shoots."');
+has('beach description now covers the client\'s walk/helmets/briefing copy (en)', 'photo_beach: "Beautifully groomed model horse and staff to assist. The shoot starts when you leave the stables');
+has('the no-swimwear/bikini request survives in the new copy (en)', 'no swimwear or bikini shoots');
 has('and in Indonesian', 'mohon tidak ada pemotretan berpakaian renang');
 has('and in Russian', 'просим не снимать в купальниках');
-has('the beach Includes line still carries the horse and staff the description stopped mentioning', 'photo_beach: "One groomed horse, staff with you, 900m route through the rice fields"');
+has('the beach Includes line still carries the horse and staff the description no longer leads with', 'photo_beach: "Beautifully groomed model horse and staff to assist, for the 900m walk through the village and rice fields to the beach"');
 
 has('the category intro is clamped to 2 lines at 14px body copy (Ro, 13 Sep 2026: cards were too tall), so one long paragraph cannot set the height for all three', '.cat-card-desc { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 2;');
 has('"Book →" is the sole navigation path off Step 1: sets activity plus every dependent reset AND advances the screen in one click, a strict superset of what tap-card-then-Next used to do', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      // Clearing these here (not just duration/numPeople) matters: without\n      // it, a date/time picked for a previous activity can still satisfy\n      // section1Complete for the new one (same requiredDates, slot still\n      // valid), so section 1 would land pre-collapsed and section 2 would\n      // auto-open on a booking the user never actually confirmed.\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');

@@ -2,6 +2,47 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Photoshoots copy rewritten, Beach merges with Rice Field (BEACH-RICEFIELD-MERGE)
+
+Client gave new, shorter copy for the whole Photoshoots category: a one-line category intro, and
+new descriptions for Beach, Paddock, Stable and Cottages, all pasted in by Ro. The Beach text
+("Beach & Ricefields Photoshoot... Max. 5 people on the team") describes the same stables-to-beach
+walk the standalone Rice Field activity never did on its own, and no longer mentions mounting a
+horse, a weight limit, or per-horse pricing, all real conflicts with Beach's existing spec (max 3,
+per-horse, 75kg cap). Ro confirmed: merge Beach and Rice Field into one activity rather than keep
+them separate or leave Rice Field's old copy untouched.
+
+**What changed in the data:**
+- `photo_ricefield` no longer exists as its own activity.
+- `photo_beach` absorbed it: `perHorse` and `needsWeight` dropped, `maxPeople` 3 → 5, `durations`
+  now `["1hr", "1.5hr", "2hr"]` (picking up Rice Field's old 2hr tier), pricing now flat at
+  IDR 1,750,000 / 2,250,000 / 2,750,000 (Rice Field's old table; it already matched Beach's 1hr/1.5hr
+  numbers once the per-horse multiplier is dropped, so no new price was invented).
+- Beach's card gallery now mixes 2 of its own photos with 2 of the former ricefield gallery's
+  (the gallery UI only ever renders 4 thumbnails, so all 8 couldn't fit).
+- Beach now resolves through the generic `actObj.photoshoot` → `PHOTO_SLOTS` branch (any start
+  08:00-16:00) that it always used; Rice Field's dedicated `RICEFIELD_SLOTS` table and its
+  `slotsFor` branch are removed, since there's no longer an activity to route through them.
+
+**What changed in the copy**, English given directly by the client, Indonesian and Russian are
+Claude's own machine translation and have **not** been checked by a native speaker, same caveat as
+every other recent translation pass in this file:
+- `introPhotoshoots` (the category card) condensed from a multi-sentence description down to one
+  line: "Bring your own photoshoot or use one from Salty Cowboy!"
+- Beach & Ricefields: new description covers the walk, helmets required both ways, a request to
+  share shoot purpose/brand/outfit plans beforehand, and the no-swimwear/bikini rule (carried over
+  from the old copy). The old "one groomed horse, staff with you" line moved to the Includes block
+  so the description doesn't repeat it.
+- Stable: now says the horses stay in their stables and private horses aren't available for photos.
+- Paddock: now mentions the cottages visible in the background and designated outside-paddock
+  shooting areas; keeps the existing "no entering the paddock, no touching the horses" restriction,
+  which is now the only surviving copy of that restriction (Cottages' new copy no longer repeats
+  it, since it's about the garden/pool/indoor area rather than horses).
+- Cottages: now explicitly lists the garden, pool and indoor area as included.
+
+CLAUDE.md's Photoshoots business-rules table, the universal-weight-cap note, and the photographer
+add-on's "all five photoshoots" line are all updated to match (four photoshoots now, not five).
+
 ## 7 Oct 2026 - Dressage Masterclass card gets a new photo
 
 Swapped the Dressage Masterclass activity's card image for a new client photo (horse with an
