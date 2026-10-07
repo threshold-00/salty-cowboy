@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Rides intro, Cottages description and Group Clinic description updated (client copy)
+
+Three more client-given copy changes, same pattern as the rest of this week's updates: English given
+verbatim by Ro, Indonesian and Russian are Claude's own machine translation, not yet checked by a
+native speaker.
+
+**Rides intro (`introRides`):** "through" -> "along", drops the "Morning and golden hour rides are
+the best time to go" sentence, adds "Weight limit: 70kg" at the end.
+
+**Flagging explicitly:** this reopens a resolved conflict. This file's 16 Sep 2026 entry settled a
+70-vs-75kg discrepancy in favor of 75kg, calling Simone's old "max. 70 kg" WhatsApp wording "the
+stale side." 75kg is still what the booking flow actually enforces everywhere, the weight selector,
+the rejection screens, every `groups` line. Ro was told this before confirming the 70kg wording for
+the card anyway, so it's pinned as given rather than silently corrected to 75kg. The Rides category
+card and the booking flow a customer reaches moments later now state two different numbers. See the
+"Known inconsistency" note under Business rules above; this needs Ro/Simone to resolve, not Claude.
+
+**Cottages description (`descs.photo_cottages`):** reverted from the 7 Oct 2026 BEACH-RICEFIELD-MERGE
+condensed wording back to a fuller version closer to the pre-merge original, with two real changes:
+pricing language now reads "by availability of cottage, or you can choose our designated photoshoot
+cottage (with no pool)" (previously just "choice of cottage depends on availability"), and "Photos
+are taken inside the cottage or the private garden" is back, along with the entry/touching
+restriction. That restriction is no longer unique to Paddock, it's back on both Paddock and
+Cottages, reversing what the BEACH-RICEFIELD-MERGE entry said a few hours earlier.
+
+**Group Clinic description (`descs.groupclinic`):** "round pen" -> "arena", "friend groups that
+ride" -> "friend groups that love horses", and the no-riding-experience line now gives a reason:
+"since this is also only groundwork."
+
 ## 7 Oct 2026 - Photoshoots category card expanded to the full combined copy (PHOTOSHOOTS-INTRO-EXPAND)
 
 Ro flagged the earlier BEACH-RICEFIELD-MERGE pass as incomplete: the Photoshoots category card still

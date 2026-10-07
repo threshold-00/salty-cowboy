@@ -229,7 +229,10 @@ missing('en cottages old "per cottage" group copy is gone', 'Max 6 people per co
 has('en cottages new group copy', 'photo_cottages: "Max 6 people on the team. Choice of cottage upon availability."');
 has('en joinup per person',        'joinup: "Max 2 people. Price is per person."');
 has('en groupclinic group desc',   'groupclinic: "Up to 6 people. Flat price per session, not per person."');
-missing('old "Photos are taken inside the cottage" prose is gone (condensed 7 Oct 2026)', 'Photos are taken inside the cottage');
+// 7 Oct 2026 same-day follow-up: cottages reverted to the client's fuller
+// wording (Ro: cottage card copy must read exactly this), which brings back
+// "Photos are taken inside the cottage" and the paddock/cottages restriction.
+has('cottages description restored to the client\'s fuller wording, including "Photos are taken inside the cottage or the private garden"', 'photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by availability of cottage, or you can choose our designated photoshoot cottage (with no pool). Location only, no horses included. Photos are taken inside the cottage or the private garden. Entering the paddocks and touching the horses is not permitted."');
 missing('en stable old description is gone', 'photo_stable: "Rustic Western-style stable backdrop for fashion, pre-wedding or personal shoots. Team assistance included."');
 has('en stable new description: horses in background, private horses unavailable', 'photo_stable: "Shoot in our stable with the horses in the background. The horses stay in their stables; private horses are not available for pictures."');
 missing('no groomed horse text on stable/paddock', 'One groomed horse plus team assistance');
@@ -281,8 +284,8 @@ has('paddock keeps its entry/touching restriction, back in the description (en)'
 // BEACH-RICEFIELD-MERGE copy pass (the client's new cottages text is about
 // the garden/pool/indoor area, not horses), so paddock is now the only
 // place carrying it, in all three languages.
-has('the entry/touching restriction now survives once, on paddock only (Indonesian)', 'Dilarang memasuki padang dan menyentuh kuda.', 1);
-has('the entry/touching restriction now survives once, on paddock only (Russian)', 'Заходить в загоны и трогать лошадей нельзя.', 1);
+has('the entry/touching restriction survives on both paddock and cottages again, in Indonesian (cottages reverted to fuller copy, same-day follow-up)', 'Dilarang memasuki padang dan menyentuh kuda.', 2);
+has('the entry/touching restriction survives on both paddock and cottages again, in Russian', 'Заходить в загоны и трогать лошадей нельзя.', 2);
 has('whisper KEEPS its Not-included line: it is the one answering "is this riding?", and Ro\'s instruction was "across all photoshoots"', 'whisper: "Riding. This course is groundwork, not ridden work"');
 has('notIncluded now holds whisper and nothing else, in all three languages', 'notIncluded: {\n      whisper:', 3);
 has('whisper answers "is this riding?" directly, which is what the tester asked (en)', 'whisper: "Riding. This course is groundwork, not ridden work"');
@@ -342,9 +345,13 @@ has('ru pickCourseDays matches the new interaction', 'pickCourseDays: "Нажм�
 has('en introLessons uses client-approved copy, dropping the "natural horsemanship" flourish', 'introLessons: "Every session except the Dressage Masterclass is off-saddle. You\'ll be working hand in hand with our rescue horses to build trust and learn to read them."');
 has('id introLessons uses client-approved copy', 'introLessons: "Setiap sesi kecuali Dressage Masterclass dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka."');
 has('ru introLessons uses client-approved copy', 'introLessons: "Все занятия, кроме мастер-класса по выездке, проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать."');
-has('en groupclinic description ends with the client-given "team setting" / "friend groups that ride" phrasing, replacing "team or boardroom" / "horse people alike"', 'the same skills you\'d use in any team setting. Popular with women\'s groups, business teams, and friend groups that ride.');
-has('id groupclinic description ends with the client-given phrasing', 'keterampilan yang sama yang Anda gunakan dalam situasi tim apa pun. Populer di kalangan kelompok wanita, tim bisnis, dan kelompok pertemanan yang gemar berkuda.');
-has('ru groupclinic description ends with the client-given phrasing', 'те же навыки, что пригодятся в любой командной обстановке. Популярно среди женских групп, бизнес-команд и компаний друзей, которые катаются верхом.');
+// 7 Oct 2026: groupclinic copy updated again (client-given), "round pen"
+// -> "arena", "friend groups that ride" -> "friend groups that love horses",
+// and the no-riding-experience line now explains why ("since this is also
+// only groundwork").
+has('en groupclinic uses the arena/love-horses/groundwork phrasing', 'Working in the arena, your group learns to read body language, hold presence and earn cooperation without force, the same skills you\'d use in any team setting. Popular with women\'s groups, business teams, and friend groups that love horses. No riding experience needed, since this is also only groundwork.');
+has('id groupclinic uses the arena/love-horses/groundwork phrasing', 'Bekerja di arena, kelompok Anda belajar membaca bahasa tubuh, menjaga kehadiran diri, dan mendapatkan kerja sama tanpa paksaan, keterampilan yang sama yang Anda gunakan dalam situasi tim apa pun. Populer di kalangan kelompok wanita, tim bisnis, dan kelompok pertemanan yang menyukai kuda. Tidak perlu pengalaman berkuda, karena ini juga hanya groundwork.');
+has('ru groupclinic uses the arena/love-horses/groundwork phrasing', 'Работая на арене, ваша группа учится читать язык тела, удерживать присутствие и добиваться сотрудничества без принуждения, те же навыки, что пригодятся в любой командной обстановке. Популярно среди женских групп, бизнес-команд и компаний друзей, которые любят лошадей. Опыт верховой езды не требуется, так как это тоже только работа с земли.');
 // introPhotoshoots condensed to a one-line hook on 7 Oct 2026
 // (BEACH-RICEFIELD-MERGE copy pass, client-given): the rest of what it used
 // to say (rescue horses, static sessions, the beach-shoot mount detail) now
@@ -414,7 +421,15 @@ missing('moneyGoesTitle key removed as dead code (batch 4, Commit 1: Step 1 mone
 // ─── Wording: Sunrise → Morning, Sunset → Golden hour ─────────────────────
 missing('no "Sunrise" anywhere',   'Sunrise');
 missing('no "Sunset" anywhere',    'Sunset');
-has('en introRides uses client-approved plainer copy (2 Sep 2026 CLIENT-COPY-FEEDBACK, dropped "emerald rice fields"/"especially magical" as too AI-sounding), still says Morning/golden hour not Sunrise/Sunset', 'Ride out through the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Morning and golden hour rides are the best time to go.');
+// 7 Oct 2026: introRides updated again (client-given), "through" -> "along",
+// drops the Morning/golden-hour sentence, adds "Weight limit: 70kg".
+// KNOWN INCONSISTENCY, see CLAUDE.md: 70kg here conflicts with the 75kg cap
+// enforced everywhere else in the booking flow. Ro chose 70kg explicitly
+// after being told this, so it's pinned as given, not "corrected" to 75kg.
+has('en introRides uses "along", drops golden-hour sentence, states 70kg', 'introRides: "Ride out along the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Price is per person. Weight limit: 70kg"');
+has('id introRides matches', 'introRides: "Susuri sawah, jalan desa, hingga ke pantai. Pemandu kami mendampingi Anda sepanjang perjalanan. Harga per orang. Batas berat badan: 70kg"');
+has('ru introRides matches', 'introRides: "Прогулка вдоль рисовых полей, деревенских дорог и к пляжу. Наши грумы сопровождают вас на всём пути. Цена за человека. Ограничение по весу: 70 кг"');
+missing('old introRides Morning/golden-hour sentence is gone', 'Morning and golden hour rides are the best time to go.');
 has('en insta desc uses golden hour (lowercase mid-sentence, matching the client\'s given copy; still not Sunrise/Sunset)', 'golden hour is ideal');
 
 // ─── Intro / addon copy ───────────────────────────────────────────────────
