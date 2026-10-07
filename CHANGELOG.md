@@ -2,6 +2,16 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Beach & Ricefields and Insta Ride card photos swapped (PHOTO-INSTA-PHOTO-SWAP)
+
+Ro asked to revert the Photoshoots category card (which falls back to Beach & Ricefields' own
+`items[0].image`) to its previous photo, restored from git history as `images/photo-beach.avif`, and
+move the sunset-rider-in-white-dress photo that had been there onto the Insta Ride card instead.
+
+`images/insta-ride.avif` is removed from the repo. The sunset-rider photo is saved as
+`images/insta-ride.jpg`, same AVIF-to-JPEG workaround used elsewhere in this repo since no local AVIF
+encoder is available.
+
 ## 7 Oct 2026 - Group Clinic and Horse Whisperer card photos swapped (GROUPCLINIC-PHOTO-SWAP)
 
 Ro asked to revert the Horse Whisperer card to its previous photo (stable-doorway shot of the brown
