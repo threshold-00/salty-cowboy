@@ -2,6 +2,16 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Group Clinic and Horse Whisperer card photos swapped (GROUPCLINIC-PHOTO-SWAP)
+
+Ro asked to revert the Horse Whisperer card to its previous photo (stable-doorway shot of the brown
+and white pony, restored from git history at commit `2e65516`'s parent) and move the photo that had
+been on it (groundwork in the arena) onto the Group Clinic card instead.
+
+`images/group-clinic.avif` is removed from the repo. The groundwork photo is saved as
+`images/group-clinic.jpg`, same AVIF-to-JPEG workaround used elsewhere in this repo since no local
+AVIF encoder is available.
+
 ## 7 Oct 2026 - Rides intro, Cottages description and Group Clinic description updated (client copy)
 
 Three more client-given copy changes, same pattern as the rest of this week's updates: English given

@@ -40,13 +40,13 @@ has('photo_cottages carries a real image path (swapped to the client\'s new JPEG
 has('joinup carries a real image path (swapped to the client\'s new JPEG, now distinct from the Lessons category thumbnail, 6 Oct 2026, no AVIF encoder available locally to re-encode)', 'experienceNeeded: "Beginner",\n    image: "images/join-up.jpg"');
 has('whisper (Horse Whisperer Course) carries a real image path, converted from the source PNG to JPEG for size', 'experienceNeeded: "Beginner",\n    image: "images/horse-whisperer.jpg"');
 has('masterclass (Horse grooming, the id predates the display-name rename) carries a real image path (swapped to the client\'s new JPEG, 6 Oct 2026, no AVIF encoder available locally to re-encode)', 'experienceNeeded: "Beginner",\n    image: "images/grooming.jpg"');
-has('groupclinic carries a real image path', 'experienceNeeded: "Beginner",\n    image: "images/group-clinic.avif"');
+has('groupclinic carries a real image path, now the photo previously on the Horse Whisperer card (7 Oct 2026 GROUPCLINIC-PHOTO-SWAP), converted to JPEG', 'experienceNeeded: "Beginner",\n    image: "images/group-clinic.jpg"');
 has('dressage carries a real image path (swapped to the client\'s new JPEG, 7 Oct 2026, no AVIF encoder available locally to re-encode)', 'experienceNeeded: "Beginner",\n    image: "images/dressage.jpg"');
 has('insta ride is now 2hr only (1 Sep 2026 RIDE-DURATION-SPLIT, dropped 1hr/1.5hr so it no longer overlaps with beach ride\'s duration set at all)', 'id: "insta",\n    durations: ["2hr"]');
 has('joinup perPerson',            'id: "joinup",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2,\n    perPerson: true');
 has('masterclass now offers 1hr/1.5hr (1.5hr calculated as 1.5x 1hr)', 'id: "masterclass",\n    durations: ["1hr", "1.5hr"],\n    maxPeople: 2');
 has('groupclinic 1.5hr, 6 people', 'id: "groupclinic",\n    durations: ["1.5hr"],\n    maxPeople: 6');
-has('groupclinic gains minPeople: 3 (29 Aug 2026 GROUPCLINIC)', 'maxPeople: 6,\n    minPeople: 3,\n    experienceNeeded: "Beginner",\n    image: "images/group-clinic.avif"');
+has('groupclinic gains minPeople: 3 (29 Aug 2026 GROUPCLINIC)', 'maxPeople: 6,\n    minPeople: 3,\n    experienceNeeded: "Beginner",\n    image: "images/group-clinic.jpg"');
 
 // ─── peopleOptions gains a minPeople floor (29 Aug 2026 GROUPCLINIC) ──────
 // peopleOptions(groupclinic) === ["3","4","5","6"]: max 6 - min 3 + 1 = 4
