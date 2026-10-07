@@ -2,6 +2,13 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Dressage Masterclass card gets a new photo
+
+Swapped the Dressage Masterclass activity's card image for a new client photo (horse with an
+orange exercise ball, replacing the old `dressage.avif`). Saved as `images/dressage.jpg`, same
+AVIF-encoder limitation as the other recent image swaps: no local encoder available to produce
+it in that format, so it's a JPEG for now.
+
 ## 7 Oct 2026 - Lessons card gets its own photo, mobile back button fixed
 
 The Lessons category card and the Join Up Lesson activity card shared one image field,
