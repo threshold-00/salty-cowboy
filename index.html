@@ -345,7 +345,8 @@ function(a,b,c){if(!Vd(b))throw Error(m(200));return Wd(null,a,b,!1,c)};Q.unmoun
   <script>
 const {
   useState,
-  useEffect
+  useEffect,
+  useRef
 } = React;
 
 // ─── WHATSAPP DESTINATION ────────────────────────────────────────────────────
@@ -413,14 +414,14 @@ const ACTIVITIES = [{
     perHorse: true,
     photoshoot: true,
     needsWeight: true,
-    image: "images/photo-beach.avif",
+    image: "images/photo-beach.jpg",
     gallery: ["images/gallery-beach-1.jpg", "images/gallery-beach-2.jpg", "images/gallery-beach-3.jpg", "images/gallery-beach-4.jpg"]
   }, {
     id: "photo_stable",
     durations: ["1hr", "1.5hr", "2hr", "3hr"],
     maxPeople: 5,
     photoshoot: true,
-    image: "images/photo-stable.avif",
+    image: "images/photo-stable.jpg",
     gallery: ["images/gallery-stable-1.jpg", "images/gallery-stable-2.jpg", "images/gallery-stable-3.jpg", "images/gallery-stable-4.jpg"]
   }, {
     id: "photo_ricefield",
@@ -450,18 +451,26 @@ const ACTIVITIES = [{
     durations: ["3hr"],
     maxPeople: 6,
     photoshoot: true,
-    image: "images/photo-cottages.avif",
+    image: "images/photo-cottages.jpg",
     gallery: ["images/gallery-cottages-1.jpg", "images/gallery-cottages-2.jpg", "images/gallery-cottages-3.jpg", "images/gallery-cottages-4.jpg"]
   }]
 }, {
   category: "Lessons",
+  // categoryImage is the Lessons category card's own thumbnail, separate from
+  // any one activity's own card image. Without it the category card reused
+  // items[0].image (Join Up's), which meant the Lessons list and the Join Up
+  // Lesson card were forced to show the same photo. Ro gave two different
+  // photos for the two spots (6 Oct 2026), so they needed to be decoupled.
+  // Rides and Photoshoots have no categoryImage and keep the old
+  // items[0].image fallback, unchanged.
+  categoryImage: "images/lessons-category.jpg",
   items: [{
     id: "joinup",
     durations: ["1hr", "1.5hr"],
     maxPeople: 2,
     perPerson: true,
     experienceNeeded: "Beginner",
-    image: "images/join-up.avif"
+    image: "images/join-up.jpg"
   }, {
     id: "whisper",
     durations: ["3hr"],
@@ -477,7 +486,7 @@ const ACTIVITIES = [{
     maxPeople: 2,
     grooming: true,
     experienceNeeded: "Beginner",
-    image: "images/grooming.avif"
+    image: "images/grooming.jpg"
   }, {
     id: "groupclinic",
     durations: ["1.5hr"],
@@ -1958,10 +1967,11 @@ html, body { background: #0a0a0a; }
   gap: 6px;
   font-family: var(--display);
   font-weight: 500;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--earth);
   cursor: pointer;
-  margin-bottom: 14px;
+  margin: -6px 0 14px -6px;
+  padding: 6px;
   width: fit-content;
 }
 .back-link:hover { color: #000000; }
@@ -2942,6 +2952,26 @@ function App() {
   const [lang, setLang] = useState("en");
   const t = T[lang];
   const [screen, setScreen] = useState("category"); // category | activity | riders | confirm
+  // The phone's native back button (and the browser's own back button) used to
+  // skip straight out of the booking flow instead of stepping back one screen,
+  // because nothing here ever pushed a history entry when screen changed. Every
+  // screen change, including the in-app "Back" links, now pushes a history
+  // entry; popstate walks back through them via setScreen. skipPush guards
+  // against the popstate handler's own setScreen call pushing a second entry.
+  const skipPush = useRef(false);
+  useEffect(() => {
+    try { window.history.replaceState({ screen: "category" }, ""); } catch (e) {}
+    function onPopState(e) {
+      skipPush.current = true;
+      setScreen((e.state && e.state.screen) || "category");
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+  useEffect(() => {
+    if (skipPush.current) { skipPush.current = false; return; }
+    try { window.history.pushState({ screen }, ""); } catch (e) {}
+  }, [screen]);
   // The date/time picker renders inside the riders screen, not as a screen of
   // its own. A fourth state value for it lingered in the comment above long
   // after the screen itself was folded in. Do not reintroduce it. Note this
@@ -3558,8 +3588,8 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "cat-card-media",
-    style: cat.items[0] && cat.items[0].image ? {
-      backgroundImage: "url(" + cat.items[0].image + ")",
+    style: (cat.categoryImage || (cat.items[0] && cat.items[0].image)) ? {
+      backgroundImage: "url(" + (cat.categoryImage || cat.items[0].image) + ")",
       backgroundSize: "cover",
       backgroundPosition: "center"
     } : undefined

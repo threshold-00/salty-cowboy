@@ -2,6 +2,29 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Lessons card gets its own photo, mobile back button fixed
+
+The Lessons category card and the Join Up Lesson activity card shared one image field,
+`cat.items[0].image`, so they always showed the same photo. Added a new `categoryImage`
+field on the Lessons category so the two can differ, with the render logic falling back to
+`cat.items[0].image` when `categoryImage` is absent, so Rides and Photoshoots are unaffected.
+Lessons category card now shows `images/lessons-category.jpg`; the Join Up Lesson card keeps
+its own `images/join-up.jpg`.
+
+Five images swapped from `.avif` to `.jpg` (photo-beach, photo-stable, photo-cottages,
+grooming, join-up) since no AVIF encoder was available locally to produce the new photos in
+that format. This is a compression regression worth revisiting if real AVIF versions become
+available.
+
+Fixed the mobile back button: the app tracked screen state only in React, with no browser
+history entries, so the hardware/gesture back button did nothing. Added history.pushState on
+every screen change and a popstate listener that restores the matching screen, guarded by a
+skip flag so the two don't loop each other. Also enlarged the on-screen back link (11px to
+13px, added 6px of padding for a bigger tap target) at Ro's request. The existing assertion
+pinning "no padding" on that element is updated to pin "no border" instead, since the original
+intent was no button chrome, not no padding, and chrome (border, background, radius) is still
+absent.
+
 ## 16 Sep 2026 - Weight policy hardened to Simone's wording
 
 Settles the 70-vs-75 discrepancy found the day before: **75kg is correct**, and Simone's WhatsApp
