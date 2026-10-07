@@ -2,6 +2,35 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 7 Oct 2026 - Photoshoots category card expanded to the full combined copy (PHOTOSHOOTS-INTRO-EXPAND)
+
+Ro flagged the earlier BEACH-RICEFIELD-MERGE pass as incomplete: the Photoshoots category card still
+only showed the short hook line ("Bring your own photoshoot or use one from Salty Cowboy!"), when
+the pasted brief was meant to read as one combined overview on that card, covering all four shoots
+with bold sub-headings, not distributed across each activity's own description screen.
+
+`introPhotoshoots` now holds the full text: the hook line, then **Beach & Ricefields Photoshoot**,
+**Paddock shoot:**, **Stable shoot** and **Cottage shoots:**, each with its own paragraph(s),
+exactly as pasted (one typo fixed: "one or our cottages" -> "one of our cottages"). Indonesian and
+Russian are Claude's own machine translation of the new material and have not been checked by a
+native speaker, same caveat as the rest of this pass.
+
+Rendering a translation string with bold sub-headings needed real markup, not a plain text node, so
+added `formatIntro()`: splits a string on `"\n\n"` for paragraph breaks and `**text**` for bold
+`<strong>` spans, returning an array of React nodes instead of a string. It's a general-purpose
+parser, not Photoshoots-specific, so it's used for all three category cards (Rides and Lessons keep
+their old plain intro text; a string with no `\n\n` or `**` markers just renders as one unstyled
+paragraph, unchanged from before).
+
+The card's clamp (`.cat-card-desc`, `-webkit-line-clamp`) widened from 2 lines to 3, per Ro's
+explicit instruction ("do the 'read more...' for this after 3 lines of text"), applying to all three
+category cards since it's shared CSS; Rides and Lessons' short intros never reach 3 lines so this is
+a no-op for them. `.cat-card-desc strong` styled in the earth accent color at a heavier weight.
+
+Verified via a real headless-Chrome run: the Photoshoots card's description shows 4 bold
+sub-headings (`Beach & Ricefields Photoshoot`, `Paddock shoot:`, `Stable shoot`, `Cottage shoots:`),
+clamps to 3 lines collapsed, and expands to the full ~1,170-character combined text on Read more.
+
 ## 7 Oct 2026 - Photoshoots copy rewritten, Beach merges with Rice Field (BEACH-RICEFIELD-MERGE)
 
 Client gave new, shorter copy for the whole Photoshoots category: a one-line category intro, and

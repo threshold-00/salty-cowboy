@@ -352,9 +352,20 @@ has('ru groupclinic description ends with the client-given phrasing', 'те же
 missing('old introPhotoshoots opening line is gone (en)', 'introPhotoshoots: "Photos with our rescue horses at our best spots around the property.');
 missing('old introPhotoshoots opening line is gone (id)', 'introPhotoshoots: "Foto bersama kuda rescue kami di spot-spot terbaik di sekitar area kami.');
 missing('old introPhotoshoots opening line is gone (ru)', 'introPhotoshoots: "Фотографии с нашими спасёнными лошадьми в лучших уголках нашей территории.');
-has('en introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!"');
-has('id introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!"');
-has('ru introPhotoshoots is now the short client-given hook', 'introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!"');
+// 7 Oct 2026 PHOTOSHOOTS-INTRO-EXPAND (client copy, Ro: card text "still does
+// not match what the text needs to say"): introPhotoshoots grew from the
+// short hook line into the full combined overview, covering all four shoots
+// with bold **sub-headings**, rendered via formatIntro() so the category
+// card can show bold text and paragraph breaks inside the existing
+// read-more/clamp mechanism.
+has('en introPhotoshoots opens with the short hook line, now followed by the full combined copy', 'introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!\\n\\n**Beach & Ricefields Photoshoot**');
+has('id introPhotoshoots opens with the short hook line, now followed by the full combined copy', 'introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!\\n\\n**Sesi Foto Pantai & Sawah**');
+has('ru introPhotoshoots opens with the short hook line, now followed by the full combined copy', 'introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!\\n\\n**Фотосессия на пляже и рисовых полях**');
+has('en introPhotoshoots covers all four shoot sub-headings', '**Paddock shoot:**');
+has('en introPhotoshoots stable sub-heading', '**Stable shoot**');
+has('en introPhotoshoots cottages sub-heading', '**Cottage shoots:**');
+has('formatIntro() parses **bold** markers into <strong> and "\\n\\n" into paragraph breaks', 'function formatIntro(text) {');
+has('cat-card-desc renders through formatIntro(), not a raw string child', 'formatIntro(cat.category === "Photoshoots" ? t.introPhotoshoots : cat.category === "Rides" ? t.introRides : t.introLessons)');
 missing('old "sit on your horse for the walk down to the sand" wording is gone (en), that detail now lives in photo_beach\'s own desc', 'though for the Beach shoot you\'ll sit on your horse for the walk down to the sand.');
 missing('old mounted-beach-shoot wording is gone (id)', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
 missing('old mounted-beach-shoot wording is gone (ru)', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
@@ -931,7 +942,10 @@ has('and in Indonesian', 'mohon tidak ada pemotretan berpakaian renang');
 has('and in Russian', 'просим не снимать в купальниках');
 has('the beach Includes line still carries the horse and staff the description no longer leads with', 'photo_beach: "Beautifully groomed model horse and staff to assist, for the 900m walk through the village and rice fields to the beach"');
 
-has('the category intro is clamped to 2 lines at 14px body copy (Ro, 13 Sep 2026: cards were too tall), so one long paragraph cannot set the height for all three', '.cat-card-desc { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 2;');
+// Widened 2 -> 3 lines on 7 Oct 2026 (PHOTOSHOOTS-INTRO-EXPAND, Ro's explicit
+// instruction: "read more... after 3 lines of text"), now that Photoshoots'
+// intro is a full multi-paragraph block instead of one short line.
+has('the category intro is clamped to 3 lines at 14px body copy, so one long paragraph cannot set the height for all three', '.cat-card-desc { font-family: var(--body); font-size: 14px; font-weight: 300; color: #5c5c5c; line-height: 19px; display: -webkit-box; -webkit-line-clamp: 3;');
 has('"Book →" is the sole navigation path off Step 1: sets activity plus every dependent reset AND advances the screen in one click, a strict superset of what tap-card-then-Next used to do', 'className: "act-book-btn",\n    onClick: e => {\n      e.stopPropagation();\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      // Clearing these here (not just duration/numPeople) matters: without\n      // it, a date/time picked for a previous activity can still satisfy\n      // section1Complete for the new one (same requiredDates, slot still\n      // valid), so section 1 would land pre-collapsed and section 2 would\n      // auto-open on a booking the user never actually confirmed.\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n      setScreen("riders");\n    }\n  }, t.bookActivity)');
 has('tapping an act-card still only selects (sets state, no screen transition), the preview affordance was not removed, only the redundant global Next button was', 'className: "act-card " + (activity === item.id ? "selected" : ""),\n    onClick: () => {\n      setActivity(item.id);\n      setDuration(null);\n      setNumPeople(null);\n      setRiders([]);\n      setPhotographerAddon(false);\n      setBookingForOther(false);\n      setGrooming(null);\n      setSelectedDates([]);\n      setSelectedTime(null);\n      setSending(false);\n    }\n  }');
 
