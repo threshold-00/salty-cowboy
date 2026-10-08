@@ -2,6 +2,25 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Oct 2026 - "Sanctuary" replaced with "stable" and "through" the rice fields replaced with "along" (SANCTUARY-STABLE-ALONG)
+
+Two wording changes from Ro, applied everywhere they appear, in all three languages. English given
+verbatim by Ro, Indonesian and Russian are Claude's own machine translation, not yet checked by a
+native speaker.
+
+**"Sanctuary" -> "stable":** the meta description, `heroSub` (hero subhead under the Salty Cowboy
+name, all three languages) and one code comment. EN "Horse rescue stable & riding centre", ID
+"Kandang penyelamatan kuda & pusat berkuda", RU "Конюшня для спасённых лошадей и центр верховой
+езды".
+
+**"Through" -> "along" the rice fields:** `descs.beach` changes outright in all three languages
+("A guided ride out along the rice fields to the beach." / "Berkuda dengan pemandu menyusuri sawah
+menuju pantai." / "Прогулка с сопровождающим вдоль рисовых полей к пляжу."). Where "through" also
+governs the village (or the village and beach, for Insta), in `introPhotoshoots`,
+`includes.photo_beach`, `descs.photo_beach` and `descs.insta`, only the rice fields part changes,
+leaving "through the village" and "through the village, beach" otherwise intact. `introRides` already
+said "along" from the 7 Oct 2026 client-copy pass.
+
 ## 7 Oct 2026 - Beach & Ricefields and Insta Ride card photos swapped (PHOTO-INSTA-PHOTO-SWAP)
 
 Ro asked to revert the Photoshoots category card (which falls back to Beach & Ricefields' own

@@ -207,9 +207,9 @@ has('masterclass 1.5hr = 1.5x 1hr ru', 'masterclass: [{ l: "1 ч", v: "IDR 1,250
 // ─── RIDE-DURATION-SPLIT (1 Sep 2026): insta ride goes 2hr-only, emphasizes ─
 // its extra photo opportunities; beach ride loses its 2hr option so the two
 // rides no longer share any duration at all (previously identical slots).
-has('insta description uses the client-approved copy (2 Sep 2026 CLIENT-COPY-FEEDBACK), emphasizing longest ride + more photo stops, replacing the previous AI-sounding draft (en)', 'insta: "Our longest ride at 2 hours, with more stops for photos through the village, beach and rice fields. Grooms take you to the best spots: golden hour is ideal.",');
-has('insta description client-approved copy (id)', 'insta: "Ride terpanjang kami, 2 jam, dengan lebih banyak titik henti untuk foto melewati desa, pantai, dan sawah. Pemandu membawa Anda ke spot-spot terbaik: golden hour adalah waktu yang paling pas.",');
-has('insta description client-approved copy (ru)', 'insta: "Наша самая длинная прогулка, 2 часа, с большим количеством остановок для фото через деревню, пляж и рисовые поля. Грумы приводят вас в лучшие места, особенно хорошо в золотой час.",');
+has('insta description uses the client-approved copy (2 Sep 2026 CLIENT-COPY-FEEDBACK), emphasizing longest ride + more photo stops, replacing the previous AI-sounding draft (en)', 'insta: "Our longest ride at 2 hours, with more stops for photos through the village, beach and along the rice fields. Grooms take you to the best spots: golden hour is ideal.",');
+has('insta description client-approved copy (id)', 'insta: "Ride terpanjang kami, 2 jam, dengan lebih banyak titik henti untuk foto melewati desa, pantai, dan menyusuri sawah. Pemandu membawa Anda ke spot-spot terbaik: golden hour adalah waktu yang paling pas.",');
+has('insta description client-approved copy (ru)', 'insta: "Наша самая длинная прогулка, 2 часа, с большим количеством остановок для фото через деревню, пляж и вдоль рисовых полей. Грумы приводят вас в лучшие места, особенно хорошо в золотой час.",');
 has('groupclinic 6M flat en',      'groupclinic: [{ l: "1.5 hr", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat id',      'groupclinic: [{ l: "1,5 jam", v: "IDR 6,000,000" }]');
 has('groupclinic 6M flat ru',      'groupclinic: [{ l: "1,5 ч", v: "IDR 6,000,000" }]');
@@ -731,7 +731,17 @@ missing('no em-dashes left anywhere in translation copy, the meta description, o
 has('en sentTitle now reads as two sentences', 'sentTitle: "WhatsApp has opened in another window. Please hit send to make the booking request",');
 has('id sentTitle now reads as two sentences', 'sentTitle: "WhatsApp telah terbuka di jendela lain. Silakan tekan kirim untuk membuat permintaan pemesanan",');
 has('ru sentTitle now reads as two sentences', 'sentTitle: "WhatsApp открылся в другом окне. Нажмите «отправить», чтобы оформить запрос на бронирование",');
-has('meta description em-dash replaced with a natural appositive comma', '<meta name="description" content="Book a horse riding experience at Salty Cowboy, a Bali horse rescue sanctuary & riding centre." />');
+has('meta description em-dash replaced with a natural appositive comma', '<meta name="description" content="Book a horse riding experience at Salty Cowboy, a Bali horse rescue stable & riding centre." />');
+
+// "sanctuary" -> "stable" everywhere (8 Oct 2026 SANCTUARY-STABLE-ALONG,
+// Ro's explicit instruction): "it's not a sanctuary, it's better if you
+// just say horse rescue stable".
+has('heroSub says stable, not sanctuary (en)', 'heroSub: "Horse rescue stable & riding centre",');
+has('heroSub says stable, not sanctuary (id, kandang)', 'heroSub: "Kandang penyelamatan kuda & pusat berkuda",');
+has('heroSub says stable, not sanctuary (ru, конюшня)', 'heroSub: "Конюшня для спасённых лошадей и центр верховой езды",');
+missing('"sanctuary" no longer appears anywhere in the page', 'sanctuary');
+missing('old id heroSub "Tempat penyelamatan" wording is gone', 'heroSub: "Tempat penyelamatan kuda & pusat berkuda",');
+missing('old ru heroSub "Приют" wording is gone', 'heroSub: "Приют для лошадей и центр верховой езды",');
 has('WhatsApp message title no longer uses an em-dash', 'lines.push("🐴 *New Salty Cowboy booking request*");');
 has('WhatsApp rider tag line uses a comma, not an em-dash', 'if (parts.length) line += ", " + parts.join(", ");');
 has('WhatsApp heavy-rider warning uses a comma, not an em-dash', 'lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");');
@@ -955,7 +965,23 @@ has('beach description now covers the client\'s walk/helmets/briefing copy (en)'
 has('the no-swimwear/bikini request survives in the new copy (en)', 'no swimwear or bikini shoots');
 has('and in Indonesian', 'mohon tidak ada pemotretan berpakaian renang');
 has('and in Russian', 'просим не снимать в купальниках');
-has('the beach Includes line still carries the horse and staff the description no longer leads with', 'photo_beach: "Beautifully groomed model horse and staff to assist, for the 900m walk through the village and rice fields to the beach"');
+has('the beach Includes line still carries the horse and staff the description no longer leads with', 'photo_beach: "Beautifully groomed model horse and staff to assist, for the 900m walk through the village and along the rice fields to the beach"');
+
+// Simone prefers "along" the rice fields over "through" (8 Oct 2026
+// SANCTUARY-STABLE-ALONG): "through" reads like the rice fields are just
+// passed on the way somewhere else, "along" matches how the ride/walk
+// actually tracks the paddy edges. Standalone "through the rice fields"
+// phrasings become "along"; where "through" also governs another noun
+// (the village, or a list including the beach), only the rice fields part
+// changes, so "village" stays reachable "through" and the rice fields are
+// walked/ridden "along", per Ro's explicit choice over changing every
+// "through" in the sentence.
+has('beach ride description says "along" the rice fields, not "through" (en)', 'beach: "A guided ride out along the rice fields to the beach."');
+has('beach ride description "along" (id, menyusuri)', 'beach: "Berkuda dengan pemandu menyusuri sawah menuju pantai."');
+has('beach ride description "along" (ru, вдоль)', 'beach: "Прогулка с сопровождающим вдоль рисовых полей к пляжу."');
+missing('old beach ride "through" wording is gone (en)', 'beach: "A guided ride out through the rice fields to the beach."');
+missing('old beach ride "melewati" wording is gone (id)', 'beach: "Berkuda dengan pemandu melewati sawah menuju pantai."');
+missing('old beach ride "через" wording is gone (ru)', 'beach: "Прогулка с сопровождающим через рисовые поля к пляжу."');
 
 // Widened 2 -> 3 lines on 7 Oct 2026 (PHOTOSHOOTS-INTRO-EXPAND, Ro's explicit
 // instruction: "read more... after 3 lines of text"), now that Photoshoots'
