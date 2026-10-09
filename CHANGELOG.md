@@ -2,6 +2,12 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 9 Oct 2026 - Horse Whisperer Course card photo updated (WHISPER-NEW-PHOTO)
+
+Ro gave a new photo: a white pony being groomed by hand, Bali village wall backdrop. Replaces the
+previous `images/horse-whisperer.jpg` in place, same filename, already a JPEG, no format conversion
+needed.
+
 ## 9 Oct 2026 - Dressage Masterclass card photo updated (DRESSAGE-NEW-PHOTO)
 
 Ro gave a new photo: rider in a dressage seat on a bay horse in the arena. Replaces the previous
