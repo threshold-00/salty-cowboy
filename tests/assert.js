@@ -16,6 +16,12 @@ has('ACTIVITIES starts with Rides',   'const ACTIVITIES = [{\n  category: "Rides
 has('Photoshoots follows Rides',      'category: "Rides",\n  items: [{\n    id: "beach"');
 has('Lessons is last category',       'category: "Lessons",\n  // categoryImage is the Lessons category card\'s own thumbnail');
 
+// Photoshoots gained its own categoryImage on 9 Oct 2026
+// (PHOTOSHOOTS-CATEGORY-IMG, Ro's explicit request), pinned to Paddock's card
+// photo so it no longer falls back to photo_beach's image via items[0].image
+// and can be swapped independently of Beach & Ricefields' own card photo.
+has('Photoshoots categoryImage pinned to Paddock\'s card photo', 'category: "Photoshoots",\n  // categoryImage pinned to Paddock\'s card photo on Ro\'s request (9 Oct 2026\n  // PHOTOSHOOTS-CATEGORY-IMG), same pattern as Lessons\' categoryImage above:\n  // without it this card falls back to items[0].image (photo_beach\'s), which\n  // meant Beach & Ricefields and the Photoshoots category card were forced to\n  // show the same photo and couldn\'t be swapped independently.\n  categoryImage: "images/photo-paddock-card.jpg",');
+
 // ─── ACTIVITIES data structure ───────────────────────────────────────────
 // photo_beach absorbed photo_ricefield on 7 Oct 2026 (BEACH-RICEFIELD-MERGE,
 // at Ro's direction): one activity now covers the stables-through-ricefields

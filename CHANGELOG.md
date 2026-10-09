@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 9 Oct 2026 - Photoshoots category card now matches Paddock's photo (PHOTOSHOOTS-CATEGORY-IMG)
+
+Ro asked for the Photoshoots category card (the "What are you looking for?" screen's top-level card)
+to use the same photo as the Paddock Photoshoot activity card. Added a `categoryImage` to the
+Photoshoots category, pinned to `images/photo-paddock-card.jpg`, same pattern Lessons already used.
+Previously this card fell back to Beach & Ricefields' own `items[0].image`, so the two couldn't be
+swapped independently; now they can. Rides is still unaffected, no `categoryImage`, still falls back
+to Beach & Rice Field Ride's own image.
+
+## 9 Oct 2026 - Cottages card photo swapped, old photo moved into the gallery (COTTAGES-PHOTO-SWAP)
+
+Ro gave a new main card photo for the Cottages photoshoot (a red-walled vintage dressing-room scene).
+The previous main photo (the window-seat scene) moves into the gallery, the set of 4 photos shown
+when a customer taps into the activity, replacing `gallery-cottages-1`, which was a near-duplicate
+composition of the same window-seat scene. The gallery grid is hardcoded to exactly 4 thumbnails for
+every photoshoot, so adding a photo without extending that grid elsewhere meant dropping one; Ro chose
+to drop the duplicate over extending the grid to 5 for every photoshoot.
+
 ## 9 Oct 2026 - Dressage Masterclass card crop fixed, rider's head was cut off (DRESSAGE-CROP-FIX)
 
 Ro reported the rider's head was cropped off the top of the Dressage Masterclass activity-list card,

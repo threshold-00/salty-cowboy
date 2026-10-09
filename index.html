@@ -407,6 +407,12 @@ const ACTIVITIES = [{
   }]
 }, {
   category: "Photoshoots",
+  // categoryImage pinned to Paddock's card photo on Ro's request (9 Oct 2026
+  // PHOTOSHOOTS-CATEGORY-IMG), same pattern as Lessons' categoryImage above:
+  // without it this card falls back to items[0].image (photo_beach's), which
+  // meant Beach & Ricefields and the Photoshoots category card were forced to
+  // show the same photo and couldn't be swapped independently.
+  categoryImage: "images/photo-paddock-card.jpg",
   items: [{
     id: "photo_beach",
     // Merged with the former standalone "photo_ricefield" activity (7 Oct
