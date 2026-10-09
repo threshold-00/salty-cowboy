@@ -2,6 +2,15 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 9 Oct 2026 - Beach & Ricefields and Insta Ride card photos updated again, new client photos (BEACH-INSTA-NEW-PHOTOS)
+
+Ro gave two new photos: Beach & Ricefields (and the Photoshoots category card, which falls back to
+Beach's `items[0].image`) now shows `images/photo-beach.jpg`, a portrait shot of a rider in white on
+a black-and-white horse at sunset. Insta Ride now shows a new `images/insta-ride.jpg`, a silhouetted
+rider on a chestnut horse at sunset with a red saddle pad. Both source files were already JPEGs, no
+AVIF-to-JPEG conversion needed this time. The old `images/photo-beach.avif` (restored from git
+history two commits ago) is removed from the repo again.
+
 ## 8 Oct 2026 - "Sanctuary" replaced with "stable" and "through" the rice fields replaced with "along" (SANCTUARY-STABLE-ALONG)
 
 Two wording changes from Ro, applied everywhere they appear, in all three languages. English given
