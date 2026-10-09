@@ -2,6 +2,16 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 9 Oct 2026 - Dressage Masterclass card crop fixed, rider's head was cut off (DRESSAGE-CROP-FIX)
+
+Ro reported the rider's head was cropped off the top of the Dressage Masterclass activity-list card,
+after the 9 Oct 2026 DRESSAGE-NEW-PHOTO swap to a tall portrait shot. `act-image` (the activity-list
+card thumbnail) read a hardcoded `"center"` background-position with no per-activity override, unlike
+`detail-header-image`, which already supported `actObj.imagePosition`. Added the same support to
+`act-image`, reading `item.imagePosition` with the same `"center"` fallback, and gave Dressage
+`imagePosition: "center 20%"`, tuned empirically via a headless-Chrome screenshot at both desktop and
+mobile widths. Verified: her head clears the top of the crop at both widths now.
+
 ## 9 Oct 2026 - Horse Whisperer Course card photo updated (WHISPER-NEW-PHOTO)
 
 Ro gave a new photo: a white pony being groomed by hand, Bali village wall backdrop. Replaces the

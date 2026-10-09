@@ -495,7 +495,8 @@ const ACTIVITIES = [{
     maxPeople: 1,
     riding: true,
     experienceNeeded: "Beginner",
-    image: "images/dressage.jpg"
+    image: "images/dressage.jpg",
+    imagePosition: "center 20%"
   }]
 }];
 const ALL_ACTIVITIES = ACTIVITIES.flatMap(c => c.items);
@@ -3660,7 +3661,7 @@ function App() {
     style: item.image && !item.hideCardImage ? {
       backgroundImage: "url(" + item.image + ")",
       backgroundSize: "cover",
-      backgroundPosition: "center"
+      backgroundPosition: item.imagePosition || "center"
     } : undefined
   })), /*#__PURE__*/React.createElement("div", {
     className: "act-info"

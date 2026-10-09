@@ -780,6 +780,14 @@ has('detail-header-image now conditionally styled with actObj.image, falling bac
 has('beach ride\'s imagePosition tuned to "center 28%", found empirically by testing live at the true 623px desktop width - gets the rider\'s full smiling face and the horse\'s eyes both in frame together', 'image: "images/beach-ride.jpg",\n    imagePosition: "center 28%"');
 has('insta ride\'s imagePosition tuned to "center 80%" - its source photo is a wide scenic beach shot with the rider small and low in an otherwise empty-sky frame, so a plain centered crop on the wide desktop band showed nothing but sky', 'image: "images/insta-ride.jpg",\n    imagePosition: "center 80%"');
 missing('photo_paddock\'s old imagePosition tuning (was "center 70%", for a Step 2 header band crop that no longer renders for any photoshoot activity) is gone along with the flag itself', 'imagePosition: "center 70%"');
+
+// act-image (the activity-list card thumbnail, as opposed to detail-header-image
+// above) gained its own imagePosition read on 9 Oct 2026 (DRESSAGE-CROP-FIX):
+// it was hardcoded to "center" and the new Dressage Masterclass photo (a tall
+// portrait shot) got its rider's head cut off on that card. Mirrors the
+// actObj.imagePosition pattern detail-header-image already used.
+has('act-image reads item.imagePosition, falling back to "center", same pattern as detail-header-image', 'className: "act-image",\n    style: item.image && !item.hideCardImage ? {\n      backgroundImage: "url(" + item.image + ")",\n      backgroundSize: "cover",\n      backgroundPosition: item.imagePosition || "center"\n    } : undefined');
+has('dressage\'s imagePosition tuned to "center 20%" so the rider\'s head clears the top of the act-image crop', 'image: "images/dressage.jpg",\n    imagePosition: "center 20%"');
 has('detail-header-card pulls up 48px to overlap the image (text-on-card-on-image, floating card)', 'margin-top: -48px;');
 has('back-link hover is a plain colour darken, matching the .hint-link convention (batch 5, Commit 3)', '.back-link:hover { color: #000000; }');
 missing('back-link hover no longer tints a background (button chrome removed)', '.back-link:hover { background: rgba(0,0,0,0.05); }');
