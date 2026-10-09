@@ -2,6 +2,11 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 9 Oct 2026 - Dressage Masterclass card photo updated (DRESSAGE-NEW-PHOTO)
+
+Ro gave a new photo: rider in a dressage seat on a bay horse in the arena. Replaces the previous
+`images/dressage.jpg` in place, same filename, already a JPEG, no format conversion needed.
+
 ## 9 Oct 2026 - Beach & Ricefields and Insta Ride card photos updated again, new client photos (BEACH-INSTA-NEW-PHOTOS)
 
 Ro gave two new photos: Beach & Ricefields (and the Photoshoots category card, which falls back to
