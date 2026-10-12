@@ -2,6 +2,14 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 12 Oct 2026 - Horse Whisperer Intensive Course card crop fixed, heads were cut off (WHISPER-CROP-FIX)
+
+Ro reported the detail header image for Horse Whisperer Intensive Course cropped out both the
+horse's head and the girl's head, same class of issue as the 9 Oct DRESSAGE-CROP-FIX. The image is a
+tall portrait (1865x2704) shown in a short, wide 269px-high band, so the default centered crop landed
+well below the subjects' heads. Added `imagePosition: "center 20%"` to the `whisper` activity, same
+pattern as Dressage, verified at desktop and mobile widths: both heads now clear the top of the crop.
+
 ## 12 Oct 2026 - Per-activity deep-link URLs for linking out (ACTIVITY-SLUGS)
 
 Ro wanted a separate URL per activity so she can link out to individual booking pages, e.g.
