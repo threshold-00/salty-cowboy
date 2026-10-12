@@ -2,6 +2,22 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 12 Oct 2026 - Per-activity deep-link URLs for linking out (ACTIVITY-SLUGS)
+
+Ro wanted a separate URL per activity so she can link out to individual booking pages, e.g.
+book.saltycowboybali.com/beach-ride, rather than only the single root URL. Added an `ACTIVITY_SLUGS`
+map (id to slug) and a reverse lookup, read from `window.location.pathname` on mount. A matching slug
+jumps straight to that activity's own booking screen (same state as tapping its "Book" button); a
+slug that matches nothing behaves exactly like the root URL, so a stale or mistyped link never
+dead-ends. GitHub Pages has no server-side routing, so any path other than `/` 404s unless the repo
+serves something for it; added `404.html` as a copy of `index.html` (GitHub Pages' documented SPA
+fallback), which must be regenerated after any future change to `index.html`. The slugs:
+beach-ride, insta-ride, dressage-masterclass, beach-photoshoot, stable-photoshoot, paddock-photoshoot,
+cottages-photoshoot, horse-whisperer-course, join-up-lesson, horse-grooming, group-clinic. The app
+does not rewrite the URL during normal browsing, only reads it on load, so this is deep-link-in only,
+not full routing. Verified with a jsdom render at the deep-link URL: lands on the riders screen with
+no console errors; both suites still pass (825/825 assert.js, 0 console errors in smoke.js).
+
 ## 9 Oct 2026 - Photoshoots category card now matches Paddock's photo (PHOTOSHOOTS-CATEGORY-IMG)
 
 Ro asked for the Photoshoots category card (the "What are you looking for?" screen's top-level card)

@@ -943,7 +943,7 @@ has('Step 1 body wrapper is now a plain "body fu" div, no reserved bottom paddin
 // whole trailing comment, which included a "calendar" screen that has not existed
 // for some time, so correcting the comment broke the test. Assert the behaviour,
 // not the prose next to it.
-has('category is now the entry screen, not activity', 'useState("category")');
+has('category is the entry screen, unless a deep-link slug sends a visitor straight to an activity', 'useState(deepLinkActivityId ? "riders" : "category")');
 missing('no dead fourth screen value in the state comment', 'riders | cal' + 'endar');
 has('"Book another" restarts from the category chooser rather than dropping into a pre-chosen category', 'function resetAll() {\n    setScreen("category");');
 has('picking a category sets it and advances, and does NOT reset the booking state (nothing is chosen yet at this point)', 'onClick: () => {\n      setActiveCat(cat.category);\n      setScreen("activity");\n    }');

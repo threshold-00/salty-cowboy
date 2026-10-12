@@ -507,6 +507,41 @@ const ACTIVITIES = [{
 }];
 const ALL_ACTIVITIES = ACTIVITIES.flatMap(c => c.items);
 
+// ─── DEEP LINKS ──────────────────────────────────────────────────────────────
+// A shareable URL per activity, e.g. book.saltycowboybali.com/beach-ride.
+// GitHub Pages has no server routing, so 404.html is a copy of this file
+// (regenerate it after any change here) and serves any unknown path, letting
+// the app read the path itself. A slug that matches nothing just falls back
+// to the normal category picker, so a stale or mistyped link never dead-ends.
+const ACTIVITY_SLUGS = {
+  beach: "beach-ride",
+  insta: "insta-ride",
+  dressage: "dressage-masterclass",
+  photo_beach: "beach-photoshoot",
+  photo_stable: "stable-photoshoot",
+  photo_paddock: "paddock-photoshoot",
+  photo_cottages: "cottages-photoshoot",
+  whisper: "horse-whisperer-course",
+  joinup: "join-up-lesson",
+  masterclass: "horse-grooming",
+  groupclinic: "group-clinic"
+};
+function activityIdForSlug(slug) {
+  for (const id in ACTIVITY_SLUGS) if (ACTIVITY_SLUGS[id] === slug) return id;
+  return null;
+}
+function activityIdFromPath() {
+  try {
+    const slug = window.location.pathname.replace(/^\/+|\/+$/g, "");
+    if (!slug) return null;
+    return activityIdForSlug(slug);
+  } catch (e) { return null; }
+}
+function categoryForActivityId(id) {
+  const cat = ACTIVITIES.find(c => c.items.some(item => item.id === id));
+  return cat ? cat.category : ACTIVITIES[0].category;
+}
+
 // ─── TIME SLOTS ──────────────────────────────────────────────────────────────
 // Slots depend on the duration chosen, so they live here rather than on the
 // activity. Saturday afternoons are closed, so afternoon slots are filtered out
@@ -2963,7 +2998,11 @@ function bodyWithLessonsLink(text, token, onGo) {
 function App() {
   const [lang, setLang] = useState("en");
   const t = T[lang];
-  const [screen, setScreen] = useState("category"); // category | activity | riders | confirm
+  // A deep-link slug in the path (e.g. /beach-ride) jumps straight past the
+  // picker into that activity's own booking screen, same as tapping its
+  // "Book" button. A slug that matches nothing behaves exactly like "/".
+  const deepLinkActivityId = useRef(activityIdFromPath()).current;
+  const [screen, setScreen] = useState(deepLinkActivityId ? "riders" : "category"); // category | activity | riders | confirm
   // The phone's native back button (and the browser's own back button) used to
   // skip straight out of the booking flow instead of stepping back one screen,
   // because nothing here ever pushed a history entry when screen changed. Every
@@ -2972,7 +3011,7 @@ function App() {
   // against the popstate handler's own setScreen call pushing a second entry.
   const skipPush = useRef(false);
   useEffect(() => {
-    try { window.history.replaceState({ screen: "category" }, ""); } catch (e) {}
+    try { window.history.replaceState({ screen }, ""); } catch (e) {}
     function onPopState(e) {
       skipPush.current = true;
       setScreen((e.state && e.state.screen) || "category");
@@ -2989,7 +3028,7 @@ function App() {
   // after the screen itself was folded in. Do not reintroduce it. Note this
   // comment deliberately avoids spelling that value, because assert.js pins
   // its absence by whole-file substring search and would match this text.
-  const [activity, setActivity] = useState(null);
+  const [activity, setActivity] = useState(deepLinkActivityId);
   const [duration, setDuration] = useState(null);
   const [numPeople, setNumPeople] = useState(null);
   const [riders, setRiders] = useState([]);
@@ -3047,7 +3086,7 @@ function App() {
   }, expandedDescs[key] ? t.readLess : t.readMore) : null;
   const [riderInfoCopied, setRiderInfoCopied] = useState(false);
   const [grooming, setGrooming] = useState(null); // "wet" | "dry" — Master Class Horse Care only
-  const [activeCat, setActiveCat] = useState(ACTIVITIES[0].category);
+  const [activeCat, setActiveCat] = useState(deepLinkActivityId ? categoryForActivityId(deepLinkActivityId) : ACTIVITIES[0].category);
   const [sentMessage, setSentMessage] = useState("");
   const [copied, setCopied] = useState(false);
   // Latches on the first Send click. window.open often fails to take focus on
