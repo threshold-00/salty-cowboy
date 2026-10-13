@@ -2,6 +2,24 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 13 Oct 2026 - Simone's feedback: ride afternoon times confirmed, Beach Photoshoot rebuilt (SIMONE-FEEDBACK-13OCT)
+
+Simone (via Ro) asked for two things. First, the afternoon start times for 1hr/1.5hr/2hr activities
+(17:00/16:30/16:00, cooler for the horses): checked against `RIDE_SLOTS` and they already match
+exactly (5:00pm/4:30pm/4:00pm), so no code change there. `PHOTO_SLOTS` (the hourly 8am-4pm list used
+by Beach Photoshoot) and `SESSION_SLOTS` (Paddock/Stable/Cottages) are untouched since her message
+only gave ride-shaped numbers and didn't mention those two.
+
+Second, Beach & Ricefields Photoshoot is renamed "Beach Photoshoot" and rebuilt to Simone's new copy:
+description now opens "Fashion, pre-wedding or private photoshoot", the 2hr tier is dropped (she only
+priced 1hr and 1.5hr, both unchanged amounts), and capacity drops from `maxPeople: 5` back to 1 since
+the new copy states "one person per horse". Updated `activities`, `descs`, `groups`, `includes` and
+`prices` for `photo_beach` in all three languages (id/ru translated to match, since the capacity and
+duration facts changed, not just English wording), plus the Photoshoots category's `introPhotoshoots`
+intro block. The ASSUMPTION flagged for Ro: `maxPeople: 1` is a literal read of "one person per horse"
+(this activity uses one horse); if two people should be able to book two horses in the same slot,
+that needs a different fix (maxPeople > 1 with perHorse pricing), not what's shipped here.
+
 ## 13 Oct 2026 - Cost-funds heading rewritten, weight field gets a with-clothes hint (COST-FUNDS-WEIGHT-HINT)
 
 Ro asked for two copy changes. The "What your booking cost funds" heading (above the rescue-horses
