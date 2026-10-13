@@ -975,12 +975,17 @@ has('the includes block is a contained card, not a label floating next to loose 
 // (client copy): it now covers the walk, helmets, and briefing request, with
 // the horse/staff detail living in the Includes line instead. The no-
 // swimwear/bikini request still survives in all three languages.
-// 13 Oct 2026, Simone's feedback: description rewritten again, now opens
-// with "fashion, pre-wedding or private photoshoot" and states one person
-// per horse; still closes on the same no-swimwear/bikini request.
+// 13 Oct 2026, Simone's feedback: description rewritten to open with
+// "fashion, pre-wedding or private photoshoot" and state one person per
+// horse. Same day, Simone sent closer-to-verbatim wording (her own phrasing
+// and emoji, 🎬 ... 🎬 and closing 🤠), replacing the smoothed first pass.
 missing('old beach description is gone', 'photo_beach: "Static shoot for fashion, pre-wedding or private sessions, along a 900m route through the rice fields. Time starts when you leave the stables. Out of respect for local culture, please no swimwear shoots."');
-has('beach description now covers the client\'s fashion/pre-wedding/one-person-per-horse copy (en)', 'photo_beach: "Fashion, pre-wedding or private photoshoot. Your model horse is beautifully groomed, with staff to help and assist you. Photoshoots are static, not riding, except walking.');
-has('the no-swimwear/bikini request survives in the new copy (en, appears in descs, groups and introPhotoshoots)', 'No swimwear or bikinis, out of respect for local culture.', 3);
+has('beach description uses Simone\'s own wording, 1st pass replaced (en)', 'photo_beach: "🎬 Fashion, prewedding or private photoshoot 🎬 Your model horse is beautifully groomed, and staff to help and assist you with the horse. Photoshoots are static, not riding except walking.');
+// "No swimwear or bikinis, out of respect for local culture." (the smoothed
+// phrasing) now only survives in groups and introPhotoshoots; descs carries
+// Simone's own "No swimwear or bikini allowed" instead.
+has('the no-swimwear/bikini request survives in groups and introPhotoshoots (en)', 'No swimwear or bikinis, out of respect for local culture.', 2);
+has('descs carries Simone\'s own no-swimwear phrasing (en)', 'No swimwear or bikini allowed');
 has('and in Indonesian', 'mohon tidak ada pemotretan berpakaian renang');
 has('and in Russian', 'просим не снимать в купальниках');
 has('the beach Includes line still carries the horse and staff the description no longer leads with', 'photo_beach: "Beautifully groomed model horse and staff to help and assist you, for the 900m walk through the village and along the rice fields to the beach"');

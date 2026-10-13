@@ -2,6 +2,18 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 13 Oct 2026 - Beach Photoshoot description swapped to Simone's own wording (SIMONE-FEEDBACK-13OCT-2)
+
+Same-day follow-up to SIMONE-FEEDBACK-13OCT: Ro sent Simone's closer-to-verbatim text for the Beach
+Photoshoot description, replacing the smoothed first pass. `descs.photo_beach` (en) now reads "🎬
+Fashion, prewedding or private photoshoot 🎬 ..." with Simone's own phrasing throughout and a closing
+🤠, kept as written rather than copyedited. The price list and activity name in her pasted text were
+left out of this field, since both already exist as their own structured fields (`prices.photo_beach`,
+`activities.photo_beach`) and repeating them inside the description would duplicate what the card
+already shows. `groups.photo_beach` and `introPhotoshoots` are unchanged, so the standard "No swimwear
+or bikinis, out of respect for local culture." phrasing still appears there; this field alone carries
+Simone's "No swimwear or bikini allowed" instead. id/ru left untouched, no translation given.
+
 ## 13 Oct 2026 - Simone's feedback: ride afternoon times confirmed, Beach Photoshoot rebuilt (SIMONE-FEEDBACK-13OCT)
 
 Simone (via Ro) asked for two things. First, the afternoon start times for 1hr/1.5hr/2hr activities
