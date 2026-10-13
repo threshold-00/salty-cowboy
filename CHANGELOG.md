@@ -2,6 +2,17 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 13 Oct 2026 - Cost-funds heading rewritten, weight field gets a with-clothes hint (COST-FUNDS-WEIGHT-HINT)
+
+Ro asked for two copy changes. The "What your booking cost funds" heading (above the rescue-horses
+paragraph, shown both in the rider-info popup and on the riders screen) is now "Riding with Salty
+Cowboy is supporting our rescue horses!", en only, since no id/ru translation was given; id and ru
+keep their own existing text unless Ro sends a translation. The weight-range field (shown whenever
+showWeight is true: rides and the Beach & Ricefields Photoshoot) now has a hint line underneath its
+label, "Please select your weight range (with clothes on)", translated for all three languages.
+New `.field-hint` CSS class, same pattern as `.field-label` but lighter. Bumped the "with clothes on"
+/ "dengan pakaian" / "в одежде" occurrence-count assertions in assert.js from 4 to 5 for the new line.
+
 ## 12 Oct 2026 - Horse Whisperer Intensive Course card crop fixed, heads were cut off (WHISPER-CROP-FIX)
 
 Ro reported the detail header image for Horse Whisperer Intensive Course cropped out both the

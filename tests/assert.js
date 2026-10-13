@@ -639,7 +639,7 @@ missing('Step 1 category intro no longer renders a header photo band (batch 6: i
 missing('.cat-intro-img element no longer rendered (batch 6: intro image removal)', 'className: "cat-intro-img"');
 
 // ─── docs/step2-figma-parity-batch.md, Commit 4: cost-funds section ───────
-has('en costFundsTitle key added (diff #19)', 'costFundsTitle: "What your booking cost funds"');
+has('en costFundsTitle key added (diff #19)', 'costFundsTitle: "Riding with Salty Cowboy is supporting our rescue horses!"');
 has('id costFundsTitle key added', 'costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan"');
 has('ru costFundsTitle key added', 'costFundsTitle: "На что идёт стоимость вашего бронирования"');
 has('.cost-funds-card CSS added, light not dark (unlike the now-removed Step 1 money-goes card)', '.cost-funds-card {\n  background: #f7f7f7;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 19px 18px;\n  margin-bottom: 18px;\n}');
@@ -1295,10 +1295,12 @@ missing('free-chip no longer semibold', 'font-size: 11px;\n  font-weight: 600;\n
 // Two substantive changes beyond the number: weight is "with clothes", and
 // weighing at the stables is now stated as certain, not conditional.
 
-// "with clothes" was absent from the page entirely before this. Four keys.
-has('weight stated as with-clothes, en', 'with clothes on', 4);
-has('weight stated as with-clothes, id', 'dengan pakaian', 4);
-has('weight stated as with-clothes, ru', 'в одежде', 4);
+// "with clothes" was absent from the page entirely before this. Four keys,
+// plus a fifth added 13 Oct 2026: the weightHint line shown above the weight
+// pills, "Please select your weight range (with clothes on)".
+has('weight stated as with-clothes, en', 'with clothes on', 5);
+has('weight stated as with-clothes, id', 'dengan pakaian', 5);
+has('weight stated as with-clothes, ru', 'в одежде', 5);
 
 // The softer predecessors must not survive anywhere; a single leftover would
 // contradict the firm copy on the very next screen.

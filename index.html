@@ -649,7 +649,7 @@ const T = {
     igLink: "Instagram",
     airbnbLink: "Airbnb Listings",
     moneyGoesBody: "Every booking goes straight back into the paddock; vet care, feed, farrier visits, and the horses themselves. Some come in underweight or scared of people. We give them time until they're ready. Some go back to gentle riding to make money for their friends, others can go to a family that is curated by us, that will adopt them and take care of them properly.",
-    costFundsTitle: "What your booking cost funds",
+    costFundsTitle: "Riding with Salty Cowboy is supporting our rescue horses!",
     introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!\n\n**Beach & Ricefields Photoshoot** 🤠📸\n\nBeautifully groomed model horse + staff to assist with the horse.\n\nThe shoot starts when we leave the stables. It's a 900m walk through the village and along the rice fields to the beach, with beautiful spots to stop for photos along the way. Helmets are required on the way to and from the beach.\n\nPlease share your shoot purpose, brand/client and outfit plans with us beforehand so we can prepare accordingly.\n\nNo swimwear or bikinis, out of respect for local culture.\n\nMax. 5 people on the team.\n\n**Paddock shoot:**\nGreen, lush and view on a horse in the paddock with the cottages in the background! You can shoot outside the paddock in designated areas, with the most beautiful backdrops!\n\nMax 5 people on the team.\n\n**Stable shoot**\nShoot in our stable with the horses in the back. The horses stay in their stables. Private horses are not available for pictures. Max 5 people on team.\n\n**Cottage shoots:**\nUse one of our cottages for your shoot. You can use the cottage garden, pool and inside area. Choice of cottage determined by availability, or use our designated photoshoot area. Max 6 people on the team.",
     introRides: "Ride out along the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Price is per person. Weight limit: 70kg",
     introLessons: "Every session except the Dressage Masterclass is off-saddle. You'll be working hand in hand with our rescue horses to build trust and learn to read them.",
@@ -694,6 +694,7 @@ const T = {
     agePlaceholder: "Years",
     permission: "I confirm a parent or guardian has given permission for this rider (under 18) to take part.",
     weight: "Weight range",
+    weightHint: "Please select your weight range (with clothes on)",
     w1: "Under 50 kg",
     w2: "50–70 kg",
     w3: "70–75 kg",
@@ -905,6 +906,7 @@ const T = {
     agePlaceholder: "Tahun",
     permission: "Saya menyatakan orang tua atau wali telah memberi izin bagi penunggang ini (di bawah 18 tahun) untuk ikut serta.",
     weight: "Rentang berat",
+    weightHint: "Silakan pilih rentang berat badan Anda (dengan pakaian)",
     w1: "Di bawah 50 kg",
     w2: "50–70 kg",
     w3: "70–75 kg",
@@ -1110,6 +1112,7 @@ const T = {
     agePlaceholder: "Лет",
     permission: "Я подтверждаю, что родитель или опекун дал разрешение этому наезднику (младше 18 лет) на участие.",
     weight: "Весовая категория",
+    weightHint: "Пожалуйста, выберите диапазон вашего веса (в одежде)",
     w1: "До 50 кг",
     w2: "50–70 кг",
     w3: "70–75 кг",
@@ -1871,6 +1874,12 @@ html, body { background: #0a0a0a; }
   margin-bottom: 6px;
   font-weight: 500;
   letter-spacing: 0.5px;
+}
+.field-hint {
+  font-size: 11px;
+  color: var(--dusk);
+  margin: -4px 0 8px;
+  opacity: 0.75;
 }
 .field-pills { display: flex; flex-wrap: wrap; gap: 6px; }
 .field-pill {
@@ -4109,6 +4118,8 @@ function App() {
     }, /*#__PURE__*/React.createElement("div", {
       className: "field-label"
     }, t.weight), /*#__PURE__*/React.createElement("div", {
+      className: "field-hint"
+    }, t.weightHint), /*#__PURE__*/React.createElement("div", {
       className: "field-pills"
     }, WEIGHT_KEYS.map(w => /*#__PURE__*/React.createElement("button", {
       key: w,
