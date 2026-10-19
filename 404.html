@@ -693,8 +693,9 @@ const T = {
     age: "Age",
     agePlaceholder: "Years",
     permission: "I confirm a parent or guardian has given permission for this rider (under 18) to take part.",
-    weight: "Weight range",
-    weightHint: "Please select your weight range (with clothes on)",
+    weight: "Weight",
+    weightHint: "Please enter your exact weight in kg (with clothes on)",
+    weightPlaceholder: "kg",
     w1: "Under 50 kg",
     w2: "50–70 kg",
     w3: "70–75 kg",
@@ -905,8 +906,9 @@ const T = {
     age: "Usia",
     agePlaceholder: "Tahun",
     permission: "Saya menyatakan orang tua atau wali telah memberi izin bagi penunggang ini (di bawah 18 tahun) untuk ikut serta.",
-    weight: "Rentang berat",
-    weightHint: "Silakan pilih rentang berat badan Anda (dengan pakaian)",
+    weight: "Berat",
+    weightHint: "Silakan masukkan berat badan Anda dalam kg (dengan pakaian)",
+    weightPlaceholder: "kg",
     w1: "Di bawah 50 kg",
     w2: "50–70 kg",
     w3: "70–75 kg",
@@ -1111,8 +1113,9 @@ const T = {
     age: "Возраст",
     agePlaceholder: "Лет",
     permission: "Я подтверждаю, что родитель или опекун дал разрешение этому наезднику (младше 18 лет) на участие.",
-    weight: "Весовая категория",
-    weightHint: "Пожалуйста, выберите диапазон вашего веса (в одежде)",
+    weight: "Вес",
+    weightHint: "Пожалуйста, укажите ваш вес в кг (в одежде)",
+    weightPlaceholder: "кг",
     w1: "До 50 кг",
     w2: "50–70 кг",
     w3: "70–75 кг",
@@ -1272,6 +1275,17 @@ const T = {
 // matching logic never depends on the chosen language.
 const WEIGHT_KEYS = ["w1", "w2", "w3", "w4"];
 const EXPERIENCE_KEYS = ["e1", "e2", "e3", "e4"];
+
+// Buckets a typed kg value into the same w1-w4 keys the rest of the booking
+// logic (horse capacity limits, over-75kg block) already keys off of.
+function weightBucket(kg) {
+  const n = parseFloat(kg);
+  if (isNaN(n)) return "";
+  if (n < 50) return "w1";
+  if (n < 70) return "w2";
+  if (n <= 75) return "w3";
+  return "w4";
+}
 
 // ─── BOOKING LOG (write-only) ────────────────────────────────────────────────
 // Apps Script /exec URL for the booking log. This is public by necessity: the
@@ -2863,7 +2877,7 @@ function buildWhatsAppMessage({
     let line = "• " + who;
     if (r.age) line += ", age " + r.age;
     if (r.experience) parts.push(T.en[r.experience]); // experience label in English
-    if (showWeight && r.weight) parts.push(T.en[r.weight]);
+    if (showWeight && r.weightKg) parts.push(r.weightKg + " kg");
     if (parts.length) line += ", " + parts.join(", ");
     if (!isNaN(ageNum) && ageNum < 18) line += " (parent/guardian permission confirmed)";
     lines.push(line);
@@ -3200,6 +3214,7 @@ function App() {
       age: "",
       permission: false,
       weight: "",
+      weightKg: "",
       experience: ""
     })));
     setNumPeople(String(count));
@@ -3208,6 +3223,13 @@ function App() {
     setRiders(prev => prev.map((r, i) => i === idx ? {
       ...r,
       [field]: val
+    } : r));
+  }
+  function updateRiderWeight(idx, kg) {
+    setRiders(prev => prev.map((r, i) => i === idx ? {
+      ...r,
+      weightKg: kg,
+      weight: weightBucket(kg)
     } : r));
   }
   function resetAll() {
@@ -4119,13 +4141,15 @@ function App() {
       className: "field-label"
     }, t.weight), /*#__PURE__*/React.createElement("div", {
       className: "field-hint"
-    }, t.weightHint), /*#__PURE__*/React.createElement("div", {
-      className: "field-pills"
-    }, WEIGHT_KEYS.map(w => /*#__PURE__*/React.createElement("button", {
-      key: w,
-      className: "field-pill " + (rider.weight === w ? "selected" : ""),
-      onClick: () => updateRider(idx, "weight", w)
-    }, t[w]))), rider.weight === "w3" && /*#__PURE__*/React.createElement("div", {
+    }, t.weightHint), /*#__PURE__*/React.createElement("input", {
+      className: "text-input",
+      type: "number",
+      inputMode: "numeric",
+      min: "1",
+      value: rider.weightKg,
+      placeholder: t.weightPlaceholder,
+      onChange: e => updateRiderWeight(idx, e.target.value)
+    }), rider.weight === "w3" && /*#__PURE__*/React.createElement("div", {
       className: "weight-warning"
     }, /*#__PURE__*/React.createElement("div", {
       className: "ww-header"

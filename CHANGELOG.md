@@ -2,6 +2,17 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 19 Oct 2026 - Deep links get the typed kg weight field (404-RESYNC)
+
+Simone reported she was still getting weight ranges, not exact weights, after the 14 Oct switch to a
+typed kg input. Cause: every activity deep link (/beach-ride, /insta-ride, ...) is served from
+`404.html`, the GitHub Pages SPA fallback, and that copy was last regenerated on 12 Oct. The two 14 Oct
+weight commits only touched `index.html`, so anyone arriving from a deep link, which is every "Book"
+button on thresholdbooking.com, still got the old range pills and sent Simone a range label.
+`404.html` is regenerated from `index.html` (the weight commits were the only difference). New
+`tests/assert.js` check fails whenever the two files differ, so CI catches a stale fallback on push.
+Bookings sent before this deploy still carry ranges.
+
 ## 13 Oct 2026 - Beach Photoshoot description swapped to Simone's own wording (SIMONE-FEEDBACK-13OCT-2)
 
 Same-day follow-up to SIMONE-FEEDBACK-13OCT: Ro sent Simone's closer-to-verbatim text for the Beach

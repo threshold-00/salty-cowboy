@@ -1324,6 +1324,19 @@ has('not refunded over 75kg, en', 'bookings over 75kg are not refunded', 4);
 has('weighing is certain, en', 'weigh riders at the stables', 3);
 has('rider-facing message says you will be weighed', 'You will be weighed at the stables.');
 
+// ─── 404.html is the deep-link fallback ──────────────────────────────────
+// Every slug (/beach-ride, /insta-ride, ...) is served from 404.html, and
+// those are the links thresholdbooking.com uses. It went stale once (14 Oct
+// 2026: the typed kg weight field shipped in index.html only, so deep-link
+// bookers still got the range pills). Regenerate with `cp index.html 404.html`.
+results.push({
+  name: '404.html is an exact copy of index.html (regenerate: cp index.html 404.html)',
+  pass: fs.readFileSync('../404.html', 'utf8') === src,
+  needle: '(file compare) 404.html vs index.html',
+  actual: 'different',
+  expectedCount: 'identical',
+});
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);
