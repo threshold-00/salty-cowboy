@@ -2,6 +2,29 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Nov 2026 - Simone's photoshoot fixes after her first booking (SIMONE-PHOTOSHOOT-FIXES)
+
+From Simone, via Ro, after a real Beach Photoshoot request (1hr, 11:00am, one person):
+
+- **Photographer is now a required choice** on every photoshoot: "We're bringing our own photographer"
+  or "Add a Salty Cowboy photographer: IDR ... (N photos)", under a new "Who's taking the photos?"
+  heading. `photographerAddon` is three-state (null until picked, false = own, true = ours) and
+  `detailsComplete` stays false on a photoshoot until one is picked, so a request cannot be sent
+  without it. The WhatsApp message says "Photographer: bringing their own" when they bring one. The
+  booking log column stays a plain boolean.
+- **Beach shoot times match the rides:** 8:00am, or the one afternoon start that finishes by 6pm
+  (5:00pm for 1hr, 4:30pm for 1.5hr, 4:00pm for 2hr). It reads `RIDE_SLOTS` directly, and the old
+  any-hour `PHOTO_SLOTS` list (8am to 4pm) is gone. Saturday is 8:00am only, as for rides.
+- **"Models", not "Riders"**, for photoshoots: the WhatsApp heading, the unnamed fallback ("Model 1"),
+  the "Model N" form labels and the "About the models" heading. Rides and Lessons are unchanged.
+- **Static copy from Ro, verbatim:** "All photoshoots are static. No riding except in Walk to the beach,
+  for the Beach Shoot only, and you can wear a suitable dress." It replaces "Photoshoots are static, not
+  riding except walking" in the Photoshoots intro and the Beach description, and opens the Stable,
+  Paddock and Cottages descriptions. id and ru are Claude's translations, not checked by a native
+  speaker.
+
+`404.html` regenerated. 839 assertions pass; smoke passes.
+
 ## 19 Oct 2026 - Deep links get the typed kg weight field (404-RESYNC)
 
 Simone reported she was still getting weight ranges, not exact weights, after the 14 Oct switch to a

@@ -572,9 +572,9 @@ const DRESSAGE_SLOTS = ["8:30am", "9:30am"];
 // section1Complete keep working unchanged; the effect below auto-selects it.
 const WHISPER_TIME = "Mon & Tue 8:30am, Thu 9:00am";
 const WHISPER_SLOTS = [WHISPER_TIME];
-// Beach shoots run any time between 08:00 and 16:00. They carry slots so the
-// Saturday afternoon closure can apply to them too.
-const PHOTO_SLOTS = ["8:00am", "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm", "3:00pm", "4:00pm"];
+// Beach shoots run at the same times as the rides (Simone, 8 Nov 2026): 8:00am,
+// or the one afternoon start per duration that finishes by 6pm. They read
+// RIDE_SLOTS directly, so the Saturday afternoon closure applies to them too.
 // Paddock, Stable and Cottages shoots run inside fixed session windows:
 // morning 08:30–11:30 and afternoon 14:30–17:30. Each duration gets an
 // earliest and latest start inside those windows.
@@ -604,7 +604,7 @@ function slotsFor(actObj, duration, dates) {
   if (actObj.id === "dressage") list = DRESSAGE_SLOTS;
   else if (actObj.id === "whisper") list = WHISPER_SLOTS;
   else if (actObj.id === "photo_paddock" || actObj.id === "photo_stable" || actObj.id === "photo_cottages") list = SESSION_SLOTS[duration] || [];
-  else if (actObj.photoshoot) list = PHOTO_SLOTS;
+  else if (actObj.id === "photo_beach") list = RIDE_SLOTS[duration] || [];
   else if (actObj.riding) list = RIDE_SLOTS[duration] || [];
   else if (actObj.id === "joinup") list = JOINUP_SLOTS;
   else if (actObj.id === "masterclass") list = GROOMING_SLOTS;
@@ -650,7 +650,7 @@ const T = {
     airbnbLink: "Airbnb Listings",
     moneyGoesBody: "Every booking goes straight back into the paddock; vet care, feed, farrier visits, and the horses themselves. Some come in underweight or scared of people. We give them time until they're ready. Some go back to gentle riding to make money for their friends, others can go to a family that is curated by us, that will adopt them and take care of them properly.",
     costFundsTitle: "Riding with Salty Cowboy is supporting our rescue horses!",
-    introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!\n\n**Beach Photoshoot** 🤠📸\n\nFashion, pre-wedding or private photoshoot. Your model horse is beautifully groomed, with staff to help and assist you.\n\nPhotoshoots are static, not riding, except walking. Shooting time starts when we leave the stables and ends when we're back. It's just a 900m walk to the beach, with beautiful rice fields and more photo opportunities along the way. Helmets are required on the way to and from the beach.\n\nOne person per horse.\n\nPlease share your shoot purpose, brand/client and outfit plans with us beforehand, for example what you'll be wearing, so we can prepare accordingly.\n\nNo swimwear or bikinis, out of respect for local culture.\n\n**Paddock shoot:**\nGreen, lush and view on a horse in the paddock with the cottages in the background! You can shoot outside the paddock in designated areas, with the most beautiful backdrops!\n\nMax 5 people on the team.\n\n**Stable shoot**\nShoot in our stable with the horses in the back. The horses stay in their stables. Private horses are not available for pictures. Max 5 people on team.\n\n**Cottage shoots:**\nUse one of our cottages for your shoot. You can use the cottage garden, pool and inside area. Choice of cottage determined by availability, or use our designated photoshoot area. Max 6 people on the team.",
+    introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!\n\n**Beach Photoshoot** 🤠📸\n\nFashion, pre-wedding or private photoshoot. Your model horse is beautifully groomed, with staff to help and assist you.\n\nAll photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Shooting time starts when we leave the stables and ends when we're back. It's just a 900m walk to the beach, with beautiful rice fields and more photo opportunities along the way. Helmets are required on the way to and from the beach.\n\nOne person per horse.\n\nPlease share your shoot purpose, brand/client and outfit plans with us beforehand, for example what you'll be wearing, so we can prepare accordingly.\n\nNo swimwear or bikinis, out of respect for local culture.\n\n**Paddock shoot:**\nGreen, lush and view on a horse in the paddock with the cottages in the background! You can shoot outside the paddock in designated areas, with the most beautiful backdrops!\n\nMax 5 people on the team.\n\n**Stable shoot**\nShoot in our stable with the horses in the back. The horses stay in their stables. Private horses are not available for pictures. Max 5 people on team.\n\n**Cottage shoots:**\nUse one of our cottages for your shoot. You can use the cottage garden, pool and inside area. Choice of cottage determined by availability, or use our designated photoshoot area. Max 6 people on the team.",
     introRides: "Ride out along the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Price is per person. Weight limit: 70kg",
     introLessons: "Every session except the Dressage Masterclass is off-saddle. You'll be working hand in hand with our rescue horses to build trust and learn to read them.",
     chooseActivity: "Choose an activity",
@@ -797,6 +797,11 @@ const T = {
       whisper: "Riding. This course is groundwork, not ridden work"
     },
     addonTitle: "Add a Salty Cowboy photographer:",
+    photogQuestion: "Who's taking the photos?",
+    photogOwn: "We're bringing our own photographer",
+    photogOurs: "Add a Salty Cowboy photographer",
+    modelLabel: "Model",
+    aboutModels: "About the models",
     photosWord: "photos",
     sAddon: "Add-on",
     photographerShort: "Photographer",
@@ -845,10 +850,10 @@ const T = {
       beach: "A guided ride out along the rice fields to the beach.",
       insta: "Our longest ride at 2 hours, with more stops for photos through the village, beach and along the rice fields. Grooms take you to the best spots: golden hour is ideal.",
       dressage: "Private lessons for all levels. Learn dressage or polish up your skills.",
-      photo_beach: "🎬 Fashion, prewedding or private photoshoot 🎬 Your model horse is beautifully groomed, and staff to help and assist you with the horse. Photoshoots are static, not riding except walking. Shooting time starts when we leave the stables and ends when we are back at the stables. It is only a 900-meter walk to the beach, along the way there are beautiful ricefields and opportunities to take pictures as well. One person per horse. Please inform us about the purpose and wishes for your shoot; for example, what kind of clothing will you be wearing? Big dress? No swimwear or bikini allowed 🤠",
-      photo_stable: "Shoot in our stable with the horses in the background. The horses stay in their stables; private horses are not available for pictures.",
-      photo_paddock: "Green and lush, with a view of horses in the paddock and the cottages in the background. You can also shoot outside the paddock in designated areas with beautiful backdrops. Entering the paddocks and touching the horses is not permitted.",
-      photo_cottages: "Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by availability of cottage, or you can choose our designated photoshoot cottage (with no pool). Location only, no horses included. Photos are taken inside the cottage or the private garden. Entering the paddocks and touching the horses is not permitted.",
+      photo_beach: "🎬 Fashion, prewedding or private photoshoot 🎬 Your model horse is beautifully groomed, and staff to help and assist you with the horse. All photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Shooting time starts when we leave the stables and ends when we are back at the stables. It is only a 900-meter walk to the beach, along the way there are beautiful ricefields and opportunities to take pictures as well. One person per horse. Please inform us about the purpose and wishes for your shoot; for example, what kind of clothing will you be wearing? Big dress? No swimwear or bikini allowed 🤠",
+      photo_stable: "All photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Shoot in our stable with the horses in the background. The horses stay in their stables; private horses are not available for pictures.",
+      photo_paddock: "All photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Green and lush, with a view of horses in the paddock and the cottages in the background. You can also shoot outside the paddock in designated areas with beautiful backdrops. Entering the paddocks and touching the horses is not permitted.",
+      photo_cottages: "All photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Rustic wooden cottage interior for fashion, pre-wedding or personal shoots. Priced by availability of cottage, or you can choose our designated photoshoot cottage (with no pool). Location only, no horses included. Photos are taken inside the cottage or the private garden. Entering the paddocks and touching the horses is not permitted.",
       whisper: "A 3-day, 10-hour course spread over Monday, Tuesday and Thursday. Two 3.5-hour sessions to build the basics, then a 3-hour session to bring it together. Includes 2 hours of grooming or choice of another related activity, starting 8:30am on Monday and Tuesday and 9:00am on Thursday, finishing at midday. Open to all levels, no experience needed. This course is for two people, so bring your friend!",
       joinup: "An introduction to natural horsemanship. Learn to 'join up' a horse so it chooses to stay with you. Hands-on, no riding.",
       masterclass: "Learn the finer art of grooming, with tips for Bali's damp, hot climate, from the stable manager, plus Q&A.",
@@ -863,7 +868,7 @@ const T = {
     airbnbLink: "Daftar Airbnb",
     moneyGoesBody: "Setiap pemesanan kembali langsung untuk kebutuhan paddock; perawatan dokter hewan, pakan, pemasangan sepatu kuda, dan kuda-kudanya sendiri. Beberapa datang dalam kondisi kurus atau takut pada manusia. Kami memberi mereka waktu hingga siap. Sebagian kembali menjalani ride dengan lembut untuk mencari dana bagi teman-teman mereka, sebagian lagi bisa pindah ke keluarga pilihan kami, yang akan mengadopsi dan merawat mereka dengan baik.",
     costFundsTitle: "Untuk apa biaya pemesanan Anda digunakan",
-    introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!\n\n**Sesi Foto Pantai** 🤠📸\n\nSesi foto fashion, pre-wedding, atau pribadi. Kuda model Anda dirawat dengan rapi, dengan staf yang membantu dan mendampingi Anda.\n\nSesi foto bersifat statis, tidak berkuda, kecuali berjalan. Sesi dimulai saat kami meninggalkan kandang dan berakhir saat kembali. Hanya perjalanan 900m menuju pantai, dengan sawah yang indah dan kesempatan foto tambahan di sepanjang jalan. Helm wajib dipakai saat perjalanan menuju dan dari pantai.\n\nSatu orang per kuda.\n\nMohon beri tahu kami tujuan pemotretan, merek/klien, dan rencana busana Anda sebelumnya, misalnya apa yang akan Anda kenakan, agar kami dapat mempersiapkan.\n\nTidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat.\n\n**Sesi foto padang:**\nHijau, rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang! Anda dapat memotret di luar padang di area yang ditentukan, dengan latar belakang paling indah!\n\nMaks 5 orang dalam tim.\n\n**Sesi foto kandang**\nPemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya. Kuda pribadi tidak tersedia untuk difoto. Maks 5 orang dalam tim.\n\n**Sesi foto cottage:**\nGunakan salah satu cottage kami untuk sesi foto Anda. Anda dapat menggunakan taman, kolam renang, dan area dalam cottage. Pilihan cottage ditentukan oleh ketersediaan, atau gunakan area pemotretan khusus kami. Maks 6 orang dalam tim.",
+    introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!\n\n**Sesi Foto Pantai** 🤠📸\n\nSesi foto fashion, pre-wedding, atau pribadi. Kuda model Anda dirawat dengan rapi, dengan staf yang membantu dan mendampingi Anda.\n\nSemua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Sesi dimulai saat kami meninggalkan kandang dan berakhir saat kembali. Hanya perjalanan 900m menuju pantai, dengan sawah yang indah dan kesempatan foto tambahan di sepanjang jalan. Helm wajib dipakai saat perjalanan menuju dan dari pantai.\n\nSatu orang per kuda.\n\nMohon beri tahu kami tujuan pemotretan, merek/klien, dan rencana busana Anda sebelumnya, misalnya apa yang akan Anda kenakan, agar kami dapat mempersiapkan.\n\nTidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat.\n\n**Sesi foto padang:**\nHijau, rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang! Anda dapat memotret di luar padang di area yang ditentukan, dengan latar belakang paling indah!\n\nMaks 5 orang dalam tim.\n\n**Sesi foto kandang**\nPemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya. Kuda pribadi tidak tersedia untuk difoto. Maks 5 orang dalam tim.\n\n**Sesi foto cottage:**\nGunakan salah satu cottage kami untuk sesi foto Anda. Anda dapat menggunakan taman, kolam renang, dan area dalam cottage. Pilihan cottage ditentukan oleh ketersediaan, atau gunakan area pemotretan khusus kami. Maks 6 orang dalam tim.",
     introRides: "Susuri sawah, jalan desa, hingga ke pantai. Pemandu kami mendampingi Anda sepanjang perjalanan. Harga per orang. Batas berat badan: 70kg",
     introLessons: "Setiap sesi kecuali Dressage Masterclass dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka.",
     chooseActivity: "Pilih aktivitas",
@@ -1004,6 +1009,11 @@ const T = {
       whisper: "Menunggang kuda. Kursus ini kerja dari darat, bukan menunggang"
     },
     addonTitle: "Tambahkan fotografer Salty Cowboy:",
+    photogQuestion: "Siapa yang mengambil foto?",
+    photogOwn: "Kami membawa fotografer sendiri",
+    photogOurs: "Tambahkan fotografer Salty Cowboy",
+    modelLabel: "Model",
+    aboutModels: "Tentang model",
     photosWord: "foto",
     sAddon: "Tambahan",
     photographerShort: "Fotografer",
@@ -1052,10 +1062,10 @@ const T = {
       beach: "Berkuda dengan pemandu menyusuri sawah menuju pantai.",
       insta: "Ride terpanjang kami, 2 jam, dengan lebih banyak titik henti untuk foto melewati desa, pantai, dan menyusuri sawah. Pemandu membawa Anda ke spot-spot terbaik: golden hour adalah waktu yang paling pas.",
       dressage: "Pelajaran privat untuk semua tingkat. Belajar dressage atau mengasah kemampuan Anda.",
-      photo_beach: "Sesi foto fashion, pre-wedding, atau pribadi. Kuda model Anda dirawat dengan rapi, dengan staf yang membantu dan mendampingi Anda. Sesi foto bersifat statis, tidak berkuda, kecuali berjalan. Sesi dimulai saat kami meninggalkan kandang dan berakhir saat kembali: hanya perjalanan 900m menuju pantai, dengan sawah yang indah dan kesempatan foto tambahan di sepanjang jalan. Satu orang per kuda. Mohon beri tahu kami tujuan pemotretan dan apa yang akan Anda kenakan, misalnya gaun besar, agar kami dapat mempersiapkan. Demi menghormati budaya setempat, mohon tidak ada pemotretan berpakaian renang atau bikini.",
-      photo_stable: "Pemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya; kuda pribadi tidak tersedia untuk difoto.",
-      photo_paddock: "Hijau dan rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang. Anda juga dapat memotret di luar padang di area yang ditentukan dengan latar yang indah. Dilarang memasuki padang dan menyentuh kuda.",
-      photo_cottages: "Interior cottage kayu rustic untuk fashion, prewedding, atau pemotretan pribadi. Harga tergantung ketersediaan cottage, atau Anda dapat memilih cottage pemotretan khusus kami (tanpa kolam renang). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage atau di taman pribadi. Dilarang memasuki padang dan menyentuh kuda.",
+      photo_beach: "Sesi foto fashion, pre-wedding, atau pribadi. Kuda model Anda dirawat dengan rapi, dengan staf yang membantu dan mendampingi Anda. Semua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Sesi dimulai saat kami meninggalkan kandang dan berakhir saat kembali: hanya perjalanan 900m menuju pantai, dengan sawah yang indah dan kesempatan foto tambahan di sepanjang jalan. Satu orang per kuda. Mohon beri tahu kami tujuan pemotretan dan apa yang akan Anda kenakan, misalnya gaun besar, agar kami dapat mempersiapkan. Demi menghormati budaya setempat, mohon tidak ada pemotretan berpakaian renang atau bikini.",
+      photo_stable: "Semua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Pemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya; kuda pribadi tidak tersedia untuk difoto.",
+      photo_paddock: "Semua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Hijau dan rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang. Anda juga dapat memotret di luar padang di area yang ditentukan dengan latar yang indah. Dilarang memasuki padang dan menyentuh kuda.",
+      photo_cottages: "Semua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Interior cottage kayu rustic untuk fashion, prewedding, atau pemotretan pribadi. Harga tergantung ketersediaan cottage, atau Anda dapat memilih cottage pemotretan khusus kami (tanpa kolam renang). Hanya lokasi, tanpa kuda. Foto diambil di dalam cottage atau di taman pribadi. Dilarang memasuki padang dan menyentuh kuda.",
       whisper: "Kursus 3 hari, 10 jam, berlangsung pada Senin, Selasa, dan Kamis. Dua sesi 3,5 jam untuk membangun dasar-dasarnya, lalu satu sesi 3 jam untuk menyatukan semuanya. Termasuk 2 jam grooming atau pilihan aktivitas terkait lainnya, dimulai pukul 08.30 pada Senin dan Selasa, dan 09.00 pada Kamis, selesai pukul 12.00. Terbuka untuk semua level, tidak perlu pengalaman. Kursus ini untuk dua orang, jadi ajak teman Anda!",
       joinup: "Pengantar natural horsemanship. Belajar 'join up' agar kuda memilih untuk tetap bersama Anda. Praktik langsung, tanpa berkuda.",
       masterclass: "Pelajari seni grooming yang lebih halus, dengan tips untuk iklim Bali yang lembap dan panas, dari manajer kandang, plus tanya jawab.",
@@ -1070,7 +1080,7 @@ const T = {
     airbnbLink: "Объявления на Airbnb",
     moneyGoesBody: "Каждое бронирование идёт напрямую на нужды пастбища; ветеринарный уход, корм, ковку и самих лошадей. Некоторые прибывают истощёнными или напуганными людьми. Мы даём им время, пока они не будут готовы. Некоторые возвращаются к спокойным прогулкам, чтобы зарабатывать на своих друзей, другие могут перейти в семью, тщательно отобранную нами, которая удочерит их и позаботится о них как следует.",
     costFundsTitle: "На что идёт стоимость вашего бронирования",
-    introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!\n\n**Фотосессия на пляже** 🤠📸\n\nФэшн, свадебная или частная фотосессия. Ваша лошадь-модель ухожена, персонал поможет вам и будет рядом.\n\nФотосессия статична, без верховой езды, кроме ходьбы. Съёмка начинается, когда мы выходим из конюшни, и заканчивается по возвращении. Это всего 900 м до пляжа, с красивыми рисовыми полями и дополнительными возможностями для фото по пути. На пути к пляжу и обратно обязательны шлемы.\n\nОдин человек на лошадь.\n\nПожалуйста, заранее расскажите нам о цели съёмки, бренде/клиенте и планах по образам, например, что вы будете надевать, чтобы мы могли подготовиться.\n\nИз уважения к местной культуре купальники и бикини не допускаются.\n\n**Фотосессия в загоне:**\nЗелёный, живописный вид на лошадь в загоне с коттеджами на фоне! Можно снимать и за пределами загона в специально отведённых местах с самыми красивыми видами!\n\nМакс 5 человек в команде.\n\n**Фотосессия в конюшне**\nСъёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах. Частные лошади для съёмки недоступны. Макс 5 человек в команде.\n\n**Фотосессия у коттеджей:**\nИспользуйте один из наших коттеджей для съёмки. Вы можете использовать сад, бассейн и внутреннее пространство коттеджа. Выбор коттеджа зависит от наличия, либо используйте нашу специальную зону для съёмок. Макс 6 человек в команде.",
+    introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!\n\n**Фотосессия на пляже** 🤠📸\n\nФэшн, свадебная или частная фотосессия. Ваша лошадь-модель ухожена, персонал поможет вам и будет рядом.\n\nВсе фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Съёмка начинается, когда мы выходим из конюшни, и заканчивается по возвращении. Это всего 900 м до пляжа, с красивыми рисовыми полями и дополнительными возможностями для фото по пути. На пути к пляжу и обратно обязательны шлемы.\n\nОдин человек на лошадь.\n\nПожалуйста, заранее расскажите нам о цели съёмки, бренде/клиенте и планах по образам, например, что вы будете надевать, чтобы мы могли подготовиться.\n\nИз уважения к местной культуре купальники и бикини не допускаются.\n\n**Фотосессия в загоне:**\nЗелёный, живописный вид на лошадь в загоне с коттеджами на фоне! Можно снимать и за пределами загона в специально отведённых местах с самыми красивыми видами!\n\nМакс 5 человек в команде.\n\n**Фотосессия в конюшне**\nСъёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах. Частные лошади для съёмки недоступны. Макс 5 человек в команде.\n\n**Фотосессия у коттеджей:**\nИспользуйте один из наших коттеджей для съёмки. Вы можете использовать сад, бассейн и внутреннее пространство коттеджа. Выбор коттеджа зависит от наличия, либо используйте нашу специальную зону для съёмок. Макс 6 человек в команде.",
     introRides: "Прогулка вдоль рисовых полей, деревенских дорог и к пляжу. Наши грумы сопровождают вас на всём пути. Цена за человека. Ограничение по весу: 70 кг",
     introLessons: "Все занятия, кроме мастер-класса по выездке, проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать.",
     chooseActivity: "Выберите занятие",
@@ -1211,6 +1221,11 @@ const T = {
       whisper: "Верховая езда. Этот курс — работа с земли, а не в седле"
     },
     addonTitle: "Добавить фотографа Salty Cowboy:",
+    photogQuestion: "Кто будет фотографировать?",
+    photogOwn: "У нас свой фотограф",
+    photogOurs: "Добавить фотографа Salty Cowboy",
+    modelLabel: "Модель",
+    aboutModels: "О моделях",
     photosWord: "фото",
     sAddon: "Доп. услуга",
     photographerShort: "Фотограф",
@@ -1259,10 +1274,10 @@ const T = {
       beach: "Прогулка с сопровождающим вдоль рисовых полей к пляжу.",
       insta: "Наша самая длинная прогулка, 2 часа, с большим количеством остановок для фото через деревню, пляж и вдоль рисовых полей. Грумы приводят вас в лучшие места, особенно хорошо в золотой час.",
       dressage: "Индивидуальные занятия для любого уровня. Освойте выездку или отточите навыки.",
-      photo_beach: "Фэшн, свадебная или частная фотосессия. Ваша лошадь-модель ухожена, персонал поможет вам и будет рядом. Фотосессия статична, без верховой езды, кроме ходьбы. Съёмка начинается, когда мы выходим из конюшни, и заканчивается по возвращении: это всего 900 м до пляжа, с красивыми рисовыми полями и дополнительными возможностями для фото по пути. Один человек на лошадь. Пожалуйста, расскажите нам о цели съёмки и что вы будете надевать, например, пышное платье, чтобы мы могли подготовиться. Из уважения к местной культуре просим не снимать в купальниках или бикини.",
-      photo_stable: "Съёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах; частные лошади для съёмки недоступны.",
-      photo_paddock: "Зелёный, живописный вид на лошадь в загоне с коттеджами на фоне. Можно снимать и за пределами загона в специально отведённых местах с красивыми видами. Заходить в загоны и трогать лошадей нельзя.",
-      photo_cottages: "Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена зависит от наличия коттеджа, либо вы можете выбрать наш специальный коттедж для съёмок (без бассейна). Только локация, без лошадей. Съёмка проходит внутри коттеджа или в приватном саду. Заходить в загоны и трогать лошадей нельзя.",
+      photo_beach: "Фэшн, свадебная или частная фотосессия. Ваша лошадь-модель ухожена, персонал поможет вам и будет рядом. Все фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Съёмка начинается, когда мы выходим из конюшни, и заканчивается по возвращении: это всего 900 м до пляжа, с красивыми рисовыми полями и дополнительными возможностями для фото по пути. Один человек на лошадь. Пожалуйста, расскажите нам о цели съёмки и что вы будете надевать, например, пышное платье, чтобы мы могли подготовиться. Из уважения к местной культуре просим не снимать в купальниках или бикини.",
+      photo_stable: "Все фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Съёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах; частные лошади для съёмки недоступны.",
+      photo_paddock: "Все фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Зелёный, живописный вид на лошадь в загоне с коттеджами на фоне. Можно снимать и за пределами загона в специально отведённых местах с красивыми видами. Заходить в загоны и трогать лошадей нельзя.",
+      photo_cottages: "Все фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Интерьер рустикального деревянного коттеджа для fashion, love story или личных съёмок. Цена зависит от наличия коттеджа, либо вы можете выбрать наш специальный коттедж для съёмок (без бассейна). Только локация, без лошадей. Съёмка проходит внутри коттеджа или в приватном саду. Заходить в загоны и трогать лошадей нельзя.",
       whisper: "Трёхдневный курс на 10 часов, проходит в понедельник, вторник и четверг. Два занятия по 3,5 часа для освоения основ, затем занятие на 3 часа, чтобы собрать всё воедино. Включает 2 часа грумминга или другой связанной активности на выбор, начало в 8:30 в понедельник и вторник и в 9:00 в четверг, окончание в 12:00. Подходит для любого уровня, опыт не требуется. Курс рассчитан на двоих, так что берите с собой друга!",
       joinup: "Введение в natural horsemanship. Научитесь делать join up, чтобы лошадь сама выбирала оставаться с вами. Практика, без верховой езды.",
       masterclass: "Освойте тонкое искусство груминга с советами для влажного и жаркого климата Бали, от менеджера конюшни, плюс вопросы и ответы.",
@@ -2854,6 +2869,8 @@ function buildWhatsAppMessage({
   if (photographerAddon) {
     const addon = photographerAddonPrice(durationLabel);
     if (addon) lines.push("Add-on: Salty Cowboy photographer (" + durationHrLabel(durationLabel) + " · IDR " + addon.price.toLocaleString("en-US") + " · " + addon.photos + " edited images)");
+  } else if (actObj && actObj.photoshoot) {
+    lines.push("Photographer: bringing their own");
   }
   if (formattedDates && formattedDates.length) {
     if (formattedDates.length > 1) {
@@ -2869,11 +2886,13 @@ function buildWhatsAppMessage({
     : "Booking on behalf of someone else. Arrival and cost info shown to the person booking.");
   if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);
   lines.push("");
-  lines.push("*Riders:*");
+  // Photoshoot people are models, not riders (Simone, 8 Nov 2026).
+  const isShoot = !!(actObj && actObj.photoshoot);
+  lines.push(isShoot ? "*Models:*" : "*Riders:*");
   riders.forEach((r, i) => {
     const ageNum = parseInt(r.age, 10);
     const parts = [];
-    const who = r.name && r.name.trim() ? r.name.trim() : "Rider " + (i + 1);
+    const who = r.name && r.name.trim() ? r.name.trim() : (isShoot ? "Model " : "Rider ") + (i + 1);
     let line = "• " + who;
     if (r.age) line += ", age " + r.age;
     if (r.experience) parts.push(T.en[r.experience]); // experience label in English
@@ -3063,7 +3082,9 @@ function App() {
   const [selectedDates, setSelectedDates] = useState([]); // array of { y, m, d }
   const [selectedTime, setSelectedTime] = useState(null);
   const [notes, setNotes] = useState("");
-  const [photographerAddon, setPhotographerAddon] = useState(false);
+  // null = not chosen yet, false = bringing their own, true = Salty Cowboy photographer.
+  // A photoshoot cannot be sent until one is picked (Simone, 8 Nov 2026).
+  const [photographerAddon, setPhotographerAddon] = useState(null);
   const [bookingForOther, setBookingForOther] = useState(false);
 
   // Jump from a weight warning through to the off-saddle activities. Mirrors the
@@ -3073,7 +3094,7 @@ function App() {
     setActivity(null);
     setDuration(null);
     setNumPeople(null);
-    setPhotographerAddon(false);
+    setPhotographerAddon(null);
     setBookingForOther(false);
     setGrooming(null);
     setSelectedDates([]);
@@ -3192,9 +3213,10 @@ function App() {
   // flow is gated separately on showWeight, since most Lessons never ask weight.
   const canBookForOther = !isPhotoshoot;
   const isWhisper = activity === "whisper";
-  // "Rider" only for the Rides category; Photoshoots and Lessons say "Person".
+  // "Rider" for the Rides category, "Model" for Photoshoots (Simone, 8 Nov 2026),
+  // "Person" for Lessons.
   const actCategory = actObj ? (ACTIVITIES.find(c => c.items.some(it => it.id === actObj.id)) || {}).category : null;
-  const personNoun = actCategory === "Rides" ? t.rider : t.personLabel;
+  const personNoun = actCategory === "Rides" ? t.rider : actCategory === "Photoshoots" ? t.modelLabel : t.personLabel;
   const isCourse = actObj?.course === true;
   const needsGrooming = actObj?.grooming === true;
   const requiredDates = actObj?.courseDays || 1; // Horse Whisperer Course runs over 3 days
@@ -3241,7 +3263,7 @@ function App() {
     setSelectedDates([]);
     setSelectedTime(null);
     setNotes("");
-    setPhotographerAddon(false);
+    setPhotographerAddon(null);
     setBookingForOther(false);
     setGrooming(null);
     setSentMessage("");
@@ -3271,7 +3293,7 @@ function App() {
     return r.name.trim() && ageOk && (!showWeight || r.weight) && (isPhotoshoot || r.experience) && minorOk;
   });
   const ridersComplete = ridersFilled && !anyOverMax && !tooManyHeavy && !anyUnderMinAge;
-  const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete;
+  const detailsComplete = !!duration && !!numPeople && (!needsGrooming || !!grooming) && ridersComplete && (!isPhotoshoot || photographerAddon !== null);
   const daysInMonth = getDaysInMonth(calYear, calMonth);
   const firstDay = getFirstDay(calYear, calMonth);
   // Can't page back past the current month either, so the "‹" nav can't be
@@ -3512,7 +3534,7 @@ function App() {
       ages: riderList("age"),
       weights: riderList("weight"),
       experience: riderList("experience"),
-      photographer_addon: isPhotoshoot ? photographerAddon : false,
+      photographer_addon: isPhotoshoot ? photographerAddon === true : false,
       booking_for_other: canBookForOther ? bookingForOther : false,
       // Named grooming_type, not grooming: it is which STYLE (wet/dry) on the one
       // activity that offers it, not whether grooming happened. Horse Whispering
@@ -3538,7 +3560,7 @@ function App() {
       riders,
       showWeight,
       notes,
-      photographerAddon: isPhotoshoot ? photographerAddon : false,
+      photographerAddon: isPhotoshoot ? photographerAddon === true : false,
       bookingForOther: canBookForOther ? bookingForOther : false,
       grooming: needsGrooming ? grooming : null,
       totalPriceStr
@@ -3707,7 +3729,7 @@ function App() {
       // TODOS #1, fixed 13 Sep 2026: riders was the only payload field with no
       // reset on this path. Every other activity-change path already cleared it.
       setRiders([]);
-      setPhotographerAddon(false);
+      setPhotographerAddon(null);
       setBookingForOther(false);
       setGrooming(null);
       setSelectedDates([]);
@@ -3724,7 +3746,7 @@ function App() {
       setDuration(null);
       setNumPeople(null);
       setRiders([]);
-      setPhotographerAddon(false);
+      setPhotographerAddon(null);
       setBookingForOther(false);
       setGrooming(null);
       setSelectedDates([]);
@@ -3768,7 +3790,7 @@ function App() {
       setDuration(null);
       setNumPeople(null);
       setRiders([]);
-      setPhotographerAddon(false);
+      setPhotographerAddon(null);
       setBookingForOther(false);
       setGrooming(null);
       // Clearing these here (not just duration/numPeople) matters: without
@@ -4084,7 +4106,7 @@ function App() {
     style: {
       display: section2Collapsed ? "none" : undefined
     }
-  }, t.aboutRiders), riders.map((rider, idx) => {
+  }, isPhotoshoot ? t.aboutModels : t.aboutRiders), riders.map((rider, idx) => {
     const ageNum = parseInt(rider.age, 10);
     const isMinor = !isNaN(ageNum) && ageNum > 0 && ageNum < 18;
     return /*#__PURE__*/React.createElement("div", {
@@ -4217,14 +4239,21 @@ function App() {
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "addon-title"
-  }, t.addonTitle), addonForDuration && /*#__PURE__*/React.createElement("div", {
+  }, t.photogQuestion), /*#__PURE__*/React.createElement("div", {
     className: "perm-row addon-row",
-    onClick: () => setPhotographerAddon(v => !v)
+    onClick: () => setPhotographerAddon(false)
   }, /*#__PURE__*/React.createElement("div", {
-    className: "perm-box " + (photographerAddon ? "checked" : "")
-  }, photographerAddon ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+    className: "perm-box " + (photographerAddon === false ? "checked" : "")
+  }, photographerAddon === false ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
     className: "perm-text"
-  }, "IDR " + addonForDuration.price.toLocaleString("en-US") + " (" + addonForDuration.photos + " " + t.photosWord + ")"))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {
+  }, t.photogOwn)), addonForDuration && /*#__PURE__*/React.createElement("div", {
+    className: "perm-row addon-row",
+    onClick: () => setPhotographerAddon(true)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "perm-box " + (photographerAddon === true ? "checked" : "")
+  }, photographerAddon === true ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
+    className: "perm-text"
+  }, t.photogOurs + ": IDR " + addonForDuration.price.toLocaleString("en-US") + " (" + addonForDuration.photos + " " + t.photosWord + ")"))))), blockedSection === 2 && /*#__PURE__*/React.createElement("div", {
     className: "blocked-note"
   }, /*#__PURE__*/React.createElement("span", null, t.section2Blocked), /*#__PURE__*/React.createElement("button", {
     className: "blocked-note-close",
