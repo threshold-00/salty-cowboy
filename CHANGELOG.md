@@ -2,6 +2,12 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Nov 2026 - Beach Photoshoot takes up to 2 models (BEACH-2-MODELS)
+
+Ro's request. The Beach shoot's number picker now offers 1 or 2 models (`maxPeople` 2, was 1), and the
+"1 horse per model" note under it is unchanged. The price is still one flat price per shoot, not per
+model. 843 assertions pass; smoke passes.
+
 ## 8 Nov 2026 - Photoshoots say "model" everywhere; Beach shoot notes 1 horse per model (PHOTOSHOOT-MODEL-WORDING)
 
 Ro's follow-up the same day. On every photoshoot the people picker reads "Number of models", a single
