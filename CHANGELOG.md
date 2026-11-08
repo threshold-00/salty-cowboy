@@ -2,6 +2,15 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 8 Nov 2026 - Photoshoots say "model" everywhere; Beach shoot notes 1 horse per model (PHOTOSHOOT-MODEL-WORDING)
+
+Ro's follow-up the same day. On every photoshoot the people picker reads "Number of models", a single
+person's card reads "Model details", and the booking summary and collapsed section 2 read "Models: 1
+model". Under the Beach shoot's number picker (which offers only 1) a small note reads "1 horse per
+model". "One person per horse" became "1 horse per model" in the Beach group line, description and
+Photoshoots intro, in all three languages (id and ru are Claude's translations). Rides and Lessons are
+unchanged. 843 assertions pass; smoke passes.
+
 ## 8 Nov 2026 - Simone's photoshoot fixes after her first booking (SIMONE-PHOTOSHOOT-FIXES)
 
 From Simone, via Ro, after a real Beach Photoshoot request (1hr, 11:00am, one person):

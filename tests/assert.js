@@ -231,7 +231,7 @@ has('3,750,000 = paddock/stable 3hr × 3 langs (ricefield no longer contributes)
 // with team-cap/helmets/no-swimwear copy; then on 13 Oct 2026, Simone's
 // feedback put "one person per horse" back as the group-size line.
 missing('old photo_beach per-horse + weight cap text is gone', 'plus 1 person standing beside a horse. Max 75kg per mounted rider. Price is per horse.');
-has('en photo_beach group copy: one person per horse, helmets, no swimwear (13 Oct 2026)', 'photo_beach: "One person per horse. Helmets required on the walk to and from the beach. No swimwear or bikinis, out of respect for local culture."');
+has('en photo_beach group copy: one person per horse, helmets, no swimwear (13 Oct 2026)', 'photo_beach: "1 horse per model. Helmets required on the walk to and from the beach. No swimwear or bikinis, out of respect for local culture."');
 missing('en cottages old "per cottage" group copy is gone', 'Max 6 people per cottage. Choice of cottage upon availability.');
 has('en cottages new group copy', 'photo_cottages: "Max 6 people on the team. Choice of cottage upon availability."');
 has('en joinup per person',        'joinup: "Max 2 people. Price is per person."');
@@ -253,7 +253,7 @@ has('inclusionBlock returns null for an activity with no entry, so covering a ne
 // Reverses the earlier "hint line is permanent" call. Testers read a collapsed
 // section showing only its hint as a section they had not filled in yet.
 has('section 1 collapsed shows duration/dates/time', 'const section1Summary = [duration, formattedDates.join(" \u00b7 "), selectedTime].filter(Boolean).join(" \u00b7 ");');
-has('section 2 collapsed shows people count and, where it applies, the grooming choice', 'numPeople ? numPeople + " " + (numPeople === "1" ? t.person : t.people) : "",');
+has('section 2 collapsed shows people count and, where it applies, the grooming choice', 'numPeople ? numPeople + " " + (isPhotoshoot ? (numPeople === "1" ? t.model : t.models) : (numPeople === "1" ? t.person : t.people)) : "",');
 has('an empty section says so explicitly rather than falling back to its hint, which is the half of the request that is easy to miss. Once per section, sections 1 and 2', '|| t.nothingSelected', 2);
 has('nothingSelected exists in all three languages', 'nothingSelected:', 3);
 // Section 3 already had a signifier (total cost when collapsed, pending hint
@@ -304,8 +304,8 @@ missing('id photo_beach old per-horse group copy is gone', 'Harga per kuda.');
 missing('id cottages old "per cottage" group copy is gone', 'Maks 6 orang per cottage');
 missing('ru photo_beach old per-horse group copy is gone', 'Цена за лошадь.');
 missing('ru cottages old "per coffee" group copy is gone', 'Максимум 6 человек на коттедж');
-has('id photo_beach group copy, one person per horse (13 Oct 2026)', 'photo_beach: "Satu orang per kuda. Helm wajib dipakai saat perjalanan menuju dan dari pantai. Tidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat."');
-has('ru photo_beach group copy, one person per horse (13 Oct 2026)', 'photo_beach: "Один человек на лошадь. На пути к пляжу и обратно обязательны шлемы. Из уважения к местной культуре купальники и бикини не допускаются."');
+has('id photo_beach group copy, one person per horse (13 Oct 2026)', 'photo_beach: "1 kuda per model. Helm wajib dipakai saat perjalanan menuju dan dari pantai. Tidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat."');
+has('ru photo_beach group copy, one person per horse (13 Oct 2026)', 'photo_beach: "1 лошадь на модель. На пути к пляжу и обратно обязательны шлемы. Из уважения к местной культуре купальники и бикини не допускаются."');
 has('id cottages new group copy',  'photo_cottages: "Maks 6 orang dalam tim. Pilihan cottage sesuai ketersediaan."');
 has('ru cottages new group copy',  'photo_cottages: "Максимум 6 человек в команде. Выбор коттеджа по наличию."');
 
@@ -566,7 +566,7 @@ has('en stepHeading2 key', 'stepHeading2: "2. Who\'s coming?"');
 has('en stepHeading3 key', 'stepHeading3: "3. Your booking summary"');
 has('id stepHeading1 key', 'stepHeading1: "1. Pilih tanggal dan waktu"');
 has('ru stepHeading1 key', 'stepHeading1: "1. Выберите дату и время"');
-has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection2\n  }, t.stepHeading2, SectionChevron(!section2Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, section2Collapsed ? (section2Summary || t.nothingSelected) : t.section2Subtitle), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('heading 2 sits above numPeople block (current, pre-reorder order)', 'React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection2\n  }, t.stepHeading2, SectionChevron(!section2Collapsed)), /*#__PURE__*/React.createElement("p", {\n    className: "section-hint",\n    style: {\n      cursor: "pointer",\n      marginBottom: section2Collapsed ? 0 : undefined\n    },\n    onClick: toggleSection2\n  }, section2Collapsed ? (section2Summary || t.nothingSelected) : t.section2Subtitle), duration && (!needsGrooming || grooming) && /*#__PURE__*/React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, isPhotoshoot ? t.numModels : t.numPeople)');
 has('section 3 (summary/total/notes/Send/notice) always renders on the riders screen now (batch 7: section 3 accordion); its content is display-gated on section3Collapsed instead of the whole block being conditionally rendered on datesComplete', 'screen === "riders" && /*#__PURE__*/React.createElement("div", {\n    className: "step2-section-box fu step2-block"\n  }, React.createElement("h3", {\n    className: "section-title section-title-toggle",\n    onClick: toggleSection3\n  }, t.stepHeading3');
 has('en sRiders renamed to Participant (Figma parity commit 1)', 'sRiders: "Participant",\n    sStatus: "Status"');
 has('id sRiders renamed to Peserta (Figma parity commit 1)', 'sRiders: "Peserta",\n    sStatus: "Status"');
@@ -598,7 +598,7 @@ has('en participantDetails key added (diff #7)', 'participantDetails: "Participa
 missing('aboutYou key removed (folded into participantDetails for the single-rider case)', 'aboutYou:');
 missing('yourDetails key removed (folded into participantDetails for the single-rider case)', 'yourDetails:');
 has('outer "about riders" wrapper only shows for 2+ riders now (was riders.length > 0)', 'riders.length > 1 && /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, isPhotoshoot ? t.aboutModels : t.aboutRiders)');
-has('single-rider card label reads participantDetails, multi-rider keeps numbered personNoun', 'className: "rider-label"\n    }, riders.length === 1 ? t.participantDetails : personNoun + " " + (idx + 1))');
+has('single-rider card label reads participantDetails, multi-rider keeps numbered personNoun', 'className: "rider-label"\n    }, riders.length === 1 ? (isPhotoshoot ? t.modelDetails : t.participantDetails) : personNoun + " " + (idx + 1))');
 has('en sTotal label sits alongside renamed sRiders (diff #13)', 'sRiders: "Participant",');
 has('en awaiting stays hourglass-free (diff #16 declined, no-decorative-emoji decision stands)', 'awaiting: "Awaiting approval"');
 missing('hourglass emoji not reintroduced onto the awaiting value specifically (notice sentence carries it instead)', '⏳ Awaiting approval');
@@ -607,7 +607,7 @@ missing('hourglass emoji not reintroduced onto the awaiting value specifically (
 has('.control-card CSS added, matches rider-card bordered treatment and padding (diff #4/#6, styling parity sub-step 3)', '.control-card {\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 14px;\n  padding: 23px 16.5px 25px;\n  margin-bottom: 22px;\n}');
 missing('duration selector no longer wrapped in control-card (reversed by batch 5, Commit 3: "Duration is not in a card")', 'className: "fu control-card"');
 has('duration selector keeps the 14px label-to-pill gap and its own 22px trailing margin via inline style, just without the card chrome (batch 5, Commit 3)', 'React.createElement("div", {\n    className: "fu",\n    style: {\n      marginBottom: 22,\n      display: section1Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category",\n    style: {\n      marginTop: 0,\n      marginBottom: 14\n    }\n  }, t.duration)');
-has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.numPeople)');
+has('number-of-people selector wrapped in control-card (diff #6)', 'React.createElement("div", {\n    className: "fu2 control-card",\n    style: {\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, isPhotoshoot ? t.numModels : t.numPeople)');
 has('grooming selector NOT wrapped in control-card (only duration, date and numPeople are in scope)', 'needsGrooming && /*#__PURE__*/React.createElement("div", {\n    className: "fu2",\n    style: {\n      marginBottom: 22,\n      display: section2Collapsed ? "none" : undefined\n    }\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "act-category"\n  }, t.groomingLabel)');
 has('sel-title (selected single-date readout) now a bordered field (diff #5)', '.sel-title {\n  font-family: var(--display);\n  font-weight: 500;\n  font-size: 16px;\n  color: var(--earth);\n  margin-bottom: 14px;\n  background: #fff;\n  border: 1px solid var(--fog);\n  border-radius: 10px;\n  padding: 12px 14px;\n}');
 
@@ -1351,6 +1351,12 @@ has('unnamed photoshoot people fall back to Model N', '(isShoot ? "Model " : "Ri
 has('form labels photoshoot people Model', 'actCategory === "Photoshoots" ? t.modelLabel : t.personLabel');
 has('booking log stays boolean for the photographer', 'photographer_addon: isPhotoshoot ? photographerAddon === true : false,');
 has('en photographer question', 'photogQuestion: "Who\'s taking the photos?",');
+
+// 8 Nov 2026 PHOTOSHOOT-MODEL-WORDING: photoshoots say "model" throughout, and the Beach shoot notes 1 horse per model.
+has('beach shoot shows the 1 horse per model note under the number picker', 'actObj && actObj.id === "photo_beach" && /*#__PURE__*/React.createElement("div", {\n    className: "field-hint",');
+has('en 1 horse per model', 'oneHorsePerModel: "1 horse per model",');
+has('summary rows say Models on photoshoots', '}, isPhotoshoot ? t.sModels : t.sRiders), /*#__PURE__*/React.createElement("span", {', 2);
+has('people counts say model/models on photoshoots', '(isPhotoshoot ? (numPeople === "1" ? t.model : t.models) : (numPeople === "1" ? t.person : t.people))', 3);
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
