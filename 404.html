@@ -499,6 +499,10 @@ const ACTIVITIES = [{
     image: "images/group-clinic.jpg"
   }, {
     id: "dressage",
+    // Hidden from Lessons for now (11 Nov 2026 DRESSAGE-HIDDEN, Ro: "hide the
+    // dressage option under lessons for now"). Everything about it stays in
+    // place, so bringing it back is deleting this one line.
+    hidden: true,
     durations: ["50min"],
     maxPeople: 1,
     riding: true,
@@ -506,8 +510,11 @@ const ACTIVITIES = [{
     image: "images/dressage.jpg",
     imagePosition: "center 20%"
   }]
-}];
+}].map(c => ({ ...c, items: c.items.filter(item => !item.hidden) }));
+// An activity with hidden: true is dropped right here, so it is in no list, no
+// category card preview and no lookup. Its deep link falls back to the picker.
 const ALL_ACTIVITIES = ACTIVITIES.flatMap(c => c.items);
+const DRESSAGE_LISTED = ALL_ACTIVITIES.some(a => a.id === "dressage");
 
 // ─── DEEP LINKS ──────────────────────────────────────────────────────────────
 // A shareable URL per activity, e.g. book.saltycowboybali.com/beach-ride.
@@ -529,7 +536,7 @@ const ACTIVITY_SLUGS = {
   groupclinic: "group-clinic"
 };
 function activityIdForSlug(slug) {
-  for (const id in ACTIVITY_SLUGS) if (ACTIVITY_SLUGS[id] === slug) return id;
+  for (const id in ACTIVITY_SLUGS) if (ACTIVITY_SLUGS[id] === slug && ALL_ACTIVITIES.some(a => a.id === id)) return id;
   return null;
 }
 function activityIdFromPath() {
@@ -654,6 +661,7 @@ const T = {
     introPhotoshoots: "Bring your own photoshoot or use one from Salty Cowboy!\n\n**Beach Photoshoot** 🤠📸\n\nFashion, pre-wedding or private photoshoot. Your model horse is beautifully groomed, with staff to help and assist you.\n\nAll photoshoots are static. No riding except in Walk to the beach, for the Beach Shoot only, and you can wear a suitable dress. Shooting time starts when we leave the stables and ends when we're back. It's just a 900m walk to the beach, with beautiful rice fields and more photo opportunities along the way. Helmets are required on the way to and from the beach.\n\n1 horse per model.\n\nPlease share your shoot purpose, brand/client and outfit plans with us beforehand, for example what you'll be wearing, so we can prepare accordingly.\n\nNo swimwear or bikinis, out of respect for local culture.\n\n**Paddock shoot:**\nGreen, lush and view on a horse in the paddock with the cottages in the background! You can shoot outside the paddock in designated areas, with the most beautiful backdrops!\n\nMax 5 people on the team.\n\n**Stable shoot**\nShoot in our stable with the horses in the back. The horses stay in their stables. Private horses are not available for pictures. Max 5 people on team.\n\n**Cottage shoots:**\nUse one of our cottages for your shoot. You can use the cottage garden, pool and inside area. Choice of cottage determined by availability, or use our designated photoshoot area. Max 6 people on the team.",
     introRides: "Ride out along the rice fields, village roads and down to the beach. Our grooms come with you the whole way. Price is per person. Weight limit: 70kg",
     introLessons: "Every session except the Dressage Masterclass is off-saddle. You'll be working hand in hand with our rescue horses to build trust and learn to read them.",
+    introLessonsGround: "Every session is off-saddle. You'll be working hand in hand with our rescue horses to build trust and learn to read them.",
     chooseActivity: "Choose an activity",
     chooseCategory: "What are you looking for?",
     backToCategories: "← All categories",
@@ -875,6 +883,7 @@ const T = {
     introPhotoshoots: "Bawa fotografer Anda sendiri, atau gunakan fotografer dari Salty Cowboy!\n\n**Sesi Foto Pantai** 🤠📸\n\nSesi foto fashion, pre-wedding, atau pribadi. Kuda model Anda dirawat dengan rapi, dengan staf yang membantu dan mendampingi Anda.\n\nSemua sesi foto bersifat statis. Tidak berkuda, kecuali saat berjalan ke pantai, khusus untuk Sesi Foto Pantai, dan Anda boleh memakai gaun yang sesuai. Sesi dimulai saat kami meninggalkan kandang dan berakhir saat kembali. Hanya perjalanan 900m menuju pantai, dengan sawah yang indah dan kesempatan foto tambahan di sepanjang jalan. Helm wajib dipakai saat perjalanan menuju dan dari pantai.\n\n1 kuda per model.\n\nMohon beri tahu kami tujuan pemotretan, merek/klien, dan rencana busana Anda sebelumnya, misalnya apa yang akan Anda kenakan, agar kami dapat mempersiapkan.\n\nTidak boleh memakai pakaian renang atau bikini, demi menghormati budaya setempat.\n\n**Sesi foto padang:**\nHijau, rimbun, dengan pemandangan kuda di padang dan cottage di latar belakang! Anda dapat memotret di luar padang di area yang ditentukan, dengan latar belakang paling indah!\n\nMaks 5 orang dalam tim.\n\n**Sesi foto kandang**\nPemotretan di kandang kami dengan kuda-kuda di latar belakang. Kuda tetap berada di kandangnya. Kuda pribadi tidak tersedia untuk difoto. Maks 5 orang dalam tim.\n\n**Sesi foto cottage:**\nGunakan salah satu cottage kami untuk sesi foto Anda. Anda dapat menggunakan taman, kolam renang, dan area dalam cottage. Pilihan cottage ditentukan oleh ketersediaan, atau gunakan area pemotretan khusus kami. Maks 6 orang dalam tim.",
     introRides: "Susuri sawah, jalan desa, hingga ke pantai. Pemandu kami mendampingi Anda sepanjang perjalanan. Harga per orang. Batas berat badan: 70kg",
     introLessons: "Setiap sesi kecuali Dressage Masterclass dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka.",
+    introLessonsGround: "Setiap sesi dilakukan tanpa berkuda. Anda akan bekerja berdampingan dengan kuda rescue kami untuk membangun kepercayaan dan belajar memahami mereka.",
     chooseActivity: "Pilih aktivitas",
     chooseCategory: "Apa yang Anda cari?",
     backToCategories: "← Semua kategori",
@@ -1090,6 +1099,7 @@ const T = {
     introPhotoshoots: "Приходите со своим фотографом или воспользуйтесь фотографом Salty Cowboy!\n\n**Фотосессия на пляже** 🤠📸\n\nФэшн, свадебная или частная фотосессия. Ваша лошадь-модель ухожена, персонал поможет вам и будет рядом.\n\nВсе фотосессии статичные. Без верховой езды, кроме прогулки к пляжу, только на фотосессии на пляже, и можно надеть подходящее платье. Съёмка начинается, когда мы выходим из конюшни, и заканчивается по возвращении. Это всего 900 м до пляжа, с красивыми рисовыми полями и дополнительными возможностями для фото по пути. На пути к пляжу и обратно обязательны шлемы.\n\n1 лошадь на модель.\n\nПожалуйста, заранее расскажите нам о цели съёмки, бренде/клиенте и планах по образам, например, что вы будете надевать, чтобы мы могли подготовиться.\n\nИз уважения к местной культуре купальники и бикини не допускаются.\n\n**Фотосессия в загоне:**\nЗелёный, живописный вид на лошадь в загоне с коттеджами на фоне! Можно снимать и за пределами загона в специально отведённых местах с самыми красивыми видами!\n\nМакс 5 человек в команде.\n\n**Фотосессия в конюшне**\nСъёмка в нашей конюшне с лошадьми на фоне. Лошади остаются в своих стойлах. Частные лошади для съёмки недоступны. Макс 5 человек в команде.\n\n**Фотосессия у коттеджей:**\nИспользуйте один из наших коттеджей для съёмки. Вы можете использовать сад, бассейн и внутреннее пространство коттеджа. Выбор коттеджа зависит от наличия, либо используйте нашу специальную зону для съёмок. Макс 6 человек в команде.",
     introRides: "Прогулка вдоль рисовых полей, деревенских дорог и к пляжу. Наши грумы сопровождают вас на всём пути. Цена за человека. Ограничение по весу: 70 кг",
     introLessons: "Все занятия, кроме мастер-класса по выездке, проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать.",
+    introLessonsGround: "Все занятия проходят без седла. Вы будете работать рука об руку с нашими спасёнными лошадьми, выстраивая доверие и учась их понимать.",
     chooseActivity: "Выберите занятие",
     chooseCategory: "Что вас интересует?",
     backToCategories: "← Все категории",
@@ -3709,7 +3719,7 @@ function App() {
   }, t.categories[cat.category]), /*#__PURE__*/React.createElement("div", {
     className: "cat-card-desc" + (expandedDescs["cat-" + cat.category] ? " expanded" : ""),
     ref: measureClamp("cat-" + cat.category)
-  }, formatIntro(cat.category === "Photoshoots" ? t.introPhotoshoots : cat.category === "Rides" ? t.introRides : t.introLessons)), readToggle("cat-" + cat.category), /*#__PURE__*/React.createElement("div", {
+  }, formatIntro(cat.category === "Photoshoots" ? t.introPhotoshoots : cat.category === "Rides" ? t.introRides : DRESSAGE_LISTED ? t.introLessons : t.introLessonsGround)), readToggle("cat-" + cat.category), /*#__PURE__*/React.createElement("div", {
     className: "cat-card-list"
   }, cat.items.map(i => t.activities[i.id]).join(" · ")), /*#__PURE__*/React.createElement("button", {
     className: "cat-next-btn"

@@ -2,6 +2,17 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 11 Nov 2026 - Dressage Masterclass hidden for now (DRESSAGE-HIDDEN)
+
+Ro's instruction: hide the dressage option under Lessons for now.
+
+- Lessons now shows four activities: Join Up, Horse Whisperer Course, Horse grooming, Group Clinic.
+  Dressage is also gone from the Lessons card preview on the first screen.
+- The old link book.saltycowboybali.com/dressage-masterclass now opens the normal picker instead.
+- The Lessons intro now reads "Every session is off-saddle", since the Dressage exception it used to
+  mention is not on screen (all three languages).
+- Nothing else about Dressage changed. To bring it back, delete `hidden: true` from its entry.
+
 ## 11 Nov 2026 - Rider weight limit is 70kg (WEIGHT-70)
 
 Ro's instruction: nobody over 70kg should be able to book a ride; the off-saddle Lessons are their

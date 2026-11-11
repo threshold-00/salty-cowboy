@@ -390,7 +390,7 @@ has('en introPhotoshoots covers all four shoot sub-headings', '**Paddock shoot:*
 has('en introPhotoshoots stable sub-heading', '**Stable shoot**');
 has('en introPhotoshoots cottages sub-heading', '**Cottage shoots:**');
 has('formatIntro() parses **bold** markers into <strong> and "\\n\\n" into paragraph breaks', 'function formatIntro(text) {');
-has('cat-card-desc renders through formatIntro(), not a raw string child', 'formatIntro(cat.category === "Photoshoots" ? t.introPhotoshoots : cat.category === "Rides" ? t.introRides : t.introLessons)');
+has('cat-card-desc renders through formatIntro(), not a raw string child', 'formatIntro(cat.category === "Photoshoots" ? t.introPhotoshoots : cat.category === "Rides" ? t.introRides : DRESSAGE_LISTED ? t.introLessons : t.introLessonsGround)');
 missing('old "sit on your horse for the walk down to the sand" wording is gone (en), that detail now lives in photo_beach\'s own desc', 'though for the Beach shoot you\'ll sit on your horse for the walk down to the sand.');
 missing('old mounted-beach-shoot wording is gone (id)', 'meski untuk sesi Pantai Anda akan menunggangi kuda saat berjalan menuju pasir.');
 missing('old mounted-beach-shoot wording is gone (ru)', 'хотя для съёмки на пляже вы проедете верхом на лошади по пути к воде.');
@@ -1368,6 +1368,20 @@ has('beach shoot shows the 1 horse per model note under the number picker', 'act
 has('en 1 horse per model', 'oneHorsePerModel: "1 horse per model",');
 has('summary rows say Models on photoshoots', '}, isPhotoshoot ? t.sModels : t.sRiders), /*#__PURE__*/React.createElement("span", {', 2);
 has('people counts say model/models on photoshoots', '(isPhotoshoot ? (numPeople === "1" ? t.model : t.models) : (numPeople === "1" ? t.person : t.people))', 3);
+
+// ─── DRESSAGE-HIDDEN (11 Nov 2026) ───────────────────────────────────────
+// Ro: "hide the dressage option under lessons for now". dressage carries
+// hidden: true and ACTIVITIES drops hidden items, so it is in no list, no
+// category preview and no lookup. Its deep link falls back to the picker, and
+// the Lessons intro stops promising a Dressage exception that isn't on screen.
+has('dressage is flagged hidden', 'id: "dressage",\n    // Hidden from Lessons');
+has('dressage hidden: true line present', '    hidden: true,\n    durations: ["50min"]');
+has('ACTIVITIES drops hidden items', '}].map(c => ({ ...c, items: c.items.filter(item => !item.hidden) }));');
+has('DRESSAGE_LISTED derived from ALL_ACTIVITIES', 'const DRESSAGE_LISTED = ALL_ACTIVITIES.some(a => a.id === "dressage");');
+has('deep links only resolve to a listed activity', 'if (ACTIVITY_SLUGS[id] === slug && ALL_ACTIVITIES.some(a => a.id === id)) return id;');
+has('en ground-only Lessons intro', 'introLessonsGround: "Every session is off-saddle. You\'ll be working hand in hand');
+has('id ground-only Lessons intro', 'introLessonsGround: "Setiap sesi dilakukan tanpa berkuda.');
+has('ru ground-only Lessons intro', 'introLessonsGround: "Все занятия проходят без седла.');
 
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;

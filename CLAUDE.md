@@ -192,6 +192,8 @@ Every photoshoot card and the step-2 detail screen show: "BYO Photographer or ad
 
 Order: Join Up, Horse Whisperer Course, Horse grooming, Group Clinic, Dressage Masterclass.
 
+**Dressage Masterclass is hidden for now** (11 Nov 2026 DRESSAGE-HIDDEN, Ro: "hide the dressage option under lessons for now"). It carries `hidden: true`, and `ACTIVITIES` drops hidden items as it is built, so it appears in no list, no category card preview and no lookup; customers see four Lessons. Its deep link `/dressage-masterclass` falls back to the normal picker (`activityIdForSlug` only resolves listed activities). The Lessons intro switches from `introLessons` ("Every session except the Dressage Masterclass is off-saddle") to `introLessonsGround` ("Every session is off-saddle") via `DRESSAGE_LISTED`, in all three languages. Its slots, price, copy and image are all untouched, so bringing it back is deleting the one `hidden: true` line. Everything below that describes Dressage is how it behaves when listed.
+
 | Lesson | Max duration | Pricing basis | Price |
 |---|---|---|---|
 | Join Up | 1.5 hr | Per person | IDR 2,500,000 (1hr) / IDR 3,150,000 (1.5hr) |
