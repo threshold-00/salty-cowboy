@@ -2,6 +2,26 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 11 Nov 2026 - Rider weight limit is 70kg (WEIGHT-70)
+
+Ro's instruction: nobody over 70kg should be able to book a ride; the off-saddle Lessons are their
+alternative. A real booking had come through with the old 75kg guideline in the WhatsApp line.
+
+- Typing anything over 70kg (70.5 included) now shows "Sorry, we can't accommodate this weight" and
+  blocks the booking, with the link through to Lessons. 70kg itself can book. Applies to every riding
+  activity: Beach & Rice Field Ride, Insta Ride, Dressage Masterclass.
+- The 70-75kg band is gone: its "only 2 horses can carry over 70kg" warning (all three languages), the
+  "max 2 riders over 70kg" rule and the WhatsApp heavy-rider line.
+- Every 75kg in the copy is now 70kg, in all three languages: the rejection message, the booking for
+  someone else note, the rider info popup, the group lines, and the WhatsApp line ("70kg weight limit
+  shown to the person booking", was "75kg weight guideline").
+- This also resolves the 7 Oct inconsistency: the Rides card already said "Weight limit: 70kg".
+- The booking log keeps its w1-w4 columns; w3 is always 0 from now on.
+
+TSV for the Customer Offerings sheet: `customer-offerings-2026-11-11.tsv` (Dressage, Beach & Rice Field
+Ride and Insta Ride rows, plus the notes line). `404.html` regenerated. Checked by typing 55, 70, 70.5,
+71, 74 and 80kg into the Beach ride form. All assertions pass; smoke passes.
+
 ## 8 Nov 2026 - Beach Photoshoot takes up to 2 models (BEACH-2-MODELS)
 
 Ro's request. The Beach shoot's number picker now offers 1 or 2 models (`maxPeople` 2, was 1), and the

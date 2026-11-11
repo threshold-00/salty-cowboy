@@ -141,8 +141,18 @@ missing('no more 78kg (no space)', '78kg');
 missing('no more 77kg anywhere (WEIGHT-THRESHOLD commit, 77kg -> 75kg)',   '77 kg');
 missing('no more 77kg (no space)', '77kg');
 missing('no more 77 кг anywhere (ru)', '77 кг');
-has('w3 band is 70-75kg (en + id share Latin unit)', 'w3: "70–75 kg"', 2);
-has('w4 band is over 75kg',        'w4: "Over 75 kg"');
+// 11 Nov 2026 WEIGHT-70: the cap dropped to 70kg and the 70-75kg band (w3,
+// "max 2 riders over 70kg") is gone. Over 70 is w4 and blocks the booking.
+missing('no w3 70-75kg band label', '70–75 kg');
+missing('no w3 band warning copy', 'w3Body');
+has('w4 band is over 70kg (en)', 'w4: "Over 70 kg"');
+has('w4 band is over 70kg (id)', 'w4: "Di atas 70 kg"');
+has('w4 band is over 70kg (ru)', 'w4: "Более 70 кг"');
+has('weightBucket: up to and including 70kg is w2', 'if (n <= 70) return "w2";\n  return "w4";');
+missing('no 75kg cap left anywhere (en)', '75kg');
+missing('no 75kg cap left anywhere (id/en with space)', '75 kg');
+missing('no 75kg cap left anywhere (ru)', '75 кг');
+missing('no max-2-riders-over-70 rule left', 'tooManyHeavy');
 
 // ─── REJECT-COPY commit: weight-rejection title/body reworded ────────────
 has('en w4Title reworded ("So sorry" -> "Sorry")', 'w4Title: "Sorry, we can\'t accommodate this weight",');
@@ -388,7 +398,6 @@ missing('no leftover "walk alongside your horse" beach-shoot wording', 'walk alo
 has('en lessonsToken matches the quoted word inside w3Body/w4Body (6 Sep 2026 WEIGHT-LESSONS-LINK)', 'lessonsToken: "\'Lessons\'"');
 has('id lessonsToken', 'lessonsToken: "\'Pelajaran\'"');
 has('ru lessonsToken', 'lessonsToken: "\u00abУроки\u00bb"');
-has('w3Body renders through the Lessons link helper', 'bodyWithLessonsLink(t.w3Body, t.lessonsToken, goToLessons)');
 has('w4Body renders through the Lessons link helper', 'bodyWithLessonsLink(t.w4Body, t.lessonsToken, goToLessons)');
 has('link helper falls back to the plain string when the token is absent', 'if (i === -1) return text;');
 has('goToLessons switches category and returns to step 1', 'setActiveCat("Lessons");');
@@ -752,7 +761,7 @@ missing('old id heroSub "Tempat penyelamatan" wording is gone', 'heroSub: "Tempa
 missing('old ru heroSub "Приют" wording is gone', 'heroSub: "Приют для лошадей и центр верховой езды",');
 has('WhatsApp message title no longer uses an em-dash', 'lines.push("🐴 *New Salty Cowboy booking request*");');
 has('WhatsApp rider tag line uses a comma, not an em-dash', 'if (parts.length) line += ", " + parts.join(", ");');
-has('WhatsApp heavy-rider warning uses a comma, not an em-dash', 'lines.push("⚠️ " + heavy + " rider(s) over 70kg, needs a heavier-weight horse");');
+missing('WhatsApp heavy-rider warning gone with the 70-75kg band (11 Nov 2026 WEIGHT-70)', 'needs a heavier-weight horse');
 has('WhatsApp empty-notes placeholder reads "None", not a bare em-dash', 'lines.push("Notes: " + (notes && notes.trim() ? notes.trim() : "None"));');
 missing('no em-dash left in any activity description across en/id/ru', 'natural horsemanship —');
 missing('confirm-icon flower emoji (🌺) removed from the confirm screen', '"🌺"');
@@ -814,7 +823,7 @@ has('id notice carries the hourglass emoji', 'notice: "⏳ Tanggal dan waktu yan
 has('ru notice carries the hourglass emoji', 'notice: "⏳ Выбранные вами дата и время будут подтверждены Salty Cowboy через WhatsApp."');
 has('buildWhatsAppMessage takes formattedDates as a named param, not a DOM read', 'function buildWhatsAppMessage({\n  actObj,\n  durationLabel,\n  formattedDates,\n  isCourse,\n  selectedTime,\n  numPeople,\n  riders,');
 has('buildWhatsAppMessage now also takes totalPriceStr as a named param, same state-not-DOM pattern as every other field', 'grooming,\n  totalPriceStr\n}) {');
-has('final price line reads T.en.totalCostLabel ("Total cost"), matching the site\'s own English label text rather than a new hardcoded string, sits right after Group size (and the bookingForOther line, added 29 Aug 2026 BOOKING-FOR-OTHER) and before the blank line into *Riders:*, and is skipped entirely if totalPriceStr is falsy (e.g. duration/numPeople/selPrice not all chosen yet)', 'lines.push("Group size: " + numPeople);\n  if (bookingForOther) lines.push(showWeight\n    ? "Booking on behalf of another rider. 75kg weight guideline shown to the person booking."\n    : "Booking on behalf of someone else. Arrival and cost info shown to the person booking.");\n  if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);\n  lines.push("");\n  // Photoshoot people are models, not riders (Simone, 8 Nov 2026).\n  const isShoot = !!(actObj && actObj.photoshoot);\n  lines.push(isShoot ? "*Models:*" : "*Riders:*");');
+has('final price line reads T.en.totalCostLabel ("Total cost"), matching the site\'s own English label text rather than a new hardcoded string, sits right after Group size (and the bookingForOther line, added 29 Aug 2026 BOOKING-FOR-OTHER) and before the blank line into *Riders:*, and is skipped entirely if totalPriceStr is falsy (e.g. duration/numPeople/selPrice not all chosen yet)', 'lines.push("Group size: " + numPeople);\n  if (bookingForOther) lines.push(showWeight\n    ? "Booking on behalf of another rider. 70kg weight limit shown to the person booking."\n    : "Booking on behalf of someone else. Arrival and cost info shown to the person booking.");\n  if (totalPriceStr) lines.push(T.en.totalCostLabel + ": " + totalPriceStr);\n  lines.push("");\n  // Photoshoot people are models, not riders (Simone, 8 Nov 2026).\n  const isShoot = !!(actObj && actObj.photoshoot);\n  lines.push(isShoot ? "*Models:*" : "*Riders:*");');
 has('handleSend passes riders/numPeople/selectedTime from state into buildWhatsAppMessage, not the DOM', 'const message = buildWhatsAppMessage({\n      actObj,\n      durationLabel: duration,\n      formattedDates,\n      isCourse,\n      selectedTime,\n      numPeople,\n      riders,');
 missing('no document.querySelector calls anywhere in the app (payload assembly cannot depend on collapsed/hidden DOM state)', 'document.querySelector');
 has('section 1 calendar block (cal-header) CSS-hidden on completion, not unmounted (stays out of a new conditional gate)', 'className: "cal-header",\n    style: {\n      display: section1Collapsed ? "none" : undefined\n    }\n  },');
@@ -886,7 +895,7 @@ has('checkbox opens the modal only when turning the box on, not when turning it 
 has('single defensive effect closes the modal (and resets its copy feedback) whenever bookingForOther goes false, covering every reset path without touching each call site', 'useEffect(() => {\n    if (!bookingForOther) {\n      setShowRiderInfoModal(false);\n      setRiderInfoCopied(false);\n    }\n  }, [bookingForOther]);');
 has('buildRiderInfoMessage builds the copyable message in the booker\'s own site language (t), unlike buildWhatsAppMessage which is always English', 'function buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime, showWeight }) {');
 has('riderInfoMessage intro/closing lines plus activity and date/time summary, reusing t.sActivity/t.sDateTime rather than new keys', 'lines.push(t.riderInfoMsgIntro);\n  lines.push("");\n  if (actObj) lines.push(t.sActivity + ": " + t.activities[actObj.id]);\n  if (formattedDates && formattedDates.length) {');
-has('riderInfoMessage includes arrival, money-goes and (only where weight is collected) the weight section, reusing t.costFundsTitle/t.moneyGoesBody rather than duplicating the funds copy', 'lines.push(t.riderInfoArrivalTitle + ": " + t.riderInfoArrivalBody);\n  lines.push("");\n  // Weight guidance only where weight is actually collected. Most Lessons are\n  // groundwork, so a 75kg rider limit in the message would be nonsense there.\n  if (showWeight) {\n    lines.push(t.riderInfoWeightTitle + ": " + t.riderInfoWeightBody);\n    lines.push("");\n  }\n  lines.push(t.costFundsTitle + ": " + t.moneyGoesBody);');
+has('riderInfoMessage includes arrival, money-goes and (only where weight is collected) the weight section, reusing t.costFundsTitle/t.moneyGoesBody rather than duplicating the funds copy', 'lines.push(t.riderInfoArrivalTitle + ": " + t.riderInfoArrivalBody);\n  lines.push("");\n  // Weight guidance only where weight is actually collected. Most Lessons are\n  // groundwork, so a 70kg rider limit in the message would be nonsense there.\n  if (showWeight) {\n    lines.push(t.riderInfoWeightTitle + ": " + t.riderInfoWeightBody);\n    lines.push("");\n  }\n  lines.push(t.costFundsTitle + ": " + t.moneyGoesBody);');
 has('riderInfoMessage computed once per render as a derived const, shared by the modal display and the copy handler', 'const riderInfoMessage = buildRiderInfoMessage({ t, actObj, formattedDates, selectedTime, showWeight });');
 has('copyRiderInfoMessage mirrors copyMessage\'s clipboard-then-fallback pattern, 2s "Copied!" feedback', 'function copyRiderInfoMessage() {\n    const done = () => {\n      setRiderInfoCopied(true);\n      setTimeout(() => setRiderInfoCopied(false), 2000);\n    };\n    if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {\n      navigator.clipboard.writeText(riderInfoMessage).then(done).catch(() => fallbackCopy(riderInfoMessage, done));\n    } else {\n      fallbackCopy(riderInfoMessage, done);\n    }\n  }');
 has('modal rendered as the first child of .app (position:fixed escapes .app\'s overflow:hidden the same way .gallery-lightbox already does, so DOM position within the flex layout doesn\'t matter)', 'className: "app"\n  }, showRiderInfoModal && /*#__PURE__*/React.createElement("div", {\n    className: "rider-info-backdrop",\n    onClick: () => setShowRiderInfoModal(false)\n  }, /*#__PURE__*/React.createElement("div", {\n    className: "rider-info-modal",\n    onClick: e => e.stopPropagation()\n  }');
@@ -1308,9 +1317,10 @@ missing('free-chip no longer semibold', 'font-size: 11px;\n  font-weight: 600;\n
 // "with clothes" was absent from the page entirely before this. Four keys,
 // plus a fifth added 13 Oct 2026: the weightHint line shown above the weight
 // pills, "Please select your weight range (with clothes on)".
-has('weight stated as with-clothes, en', 'with clothes on', 5);
-has('weight stated as with-clothes, id', 'dengan pakaian', 5);
-has('weight stated as with-clothes, ru', 'в одежде', 5);
+// 4 since 11 Nov 2026 WEIGHT-70 removed w3Body.
+has('weight stated as with-clothes, en', 'with clothes on', 4);
+has('weight stated as with-clothes, id', 'dengan pakaian', 4);
+has('weight stated as with-clothes, ru', 'в одежде', 4);
 
 // The softer predecessors must not survive anywhere; a single leftover would
 // contradict the firm copy on the very next screen.
@@ -1320,9 +1330,10 @@ missing('no conditional weighing, ru', 'может быть уточнён в к
 missing('75kg is a limit, not a guideline, en', 'weight guideline of 75kg');
 
 // The three policy consequences, stated wherever weight is discussed.
-has('cannot ride over 75kg, en', 'over 75kg cannot ride', 3);
-has('not refunded over 75kg, en', 'bookings over 75kg are not refunded', 4);
-has('weighing is certain, en', 'weigh riders at the stables', 3);
+// Limit moved to 70kg on 11 Nov 2026 (WEIGHT-70); counts drop by one with w3Body.
+has('cannot ride over 70kg, en', 'over 70kg cannot ride', 2);
+has('not refunded over 70kg, en', 'bookings over 70kg are not refunded', 3);
+has('weighing is certain, en', 'weigh riders at the stables', 2);
 has('rider-facing message says you will be weighed', 'You will be weighed at the stables.');
 
 // ─── 404.html is the deep-link fallback ──────────────────────────────────
