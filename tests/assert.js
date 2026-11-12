@@ -1383,6 +1383,14 @@ has('en ground-only Lessons intro', 'introLessonsGround: "Every session is off-s
 has('id ground-only Lessons intro', 'introLessonsGround: "Setiap sesi dilakukan tanpa berkuda.');
 has('ru ground-only Lessons intro', 'introLessonsGround: "Все занятия проходят без седла.');
 
+// ─── HERO-ACCOMMODATION (12 Nov 2026) ────────────────────────────────────
+// Ro: heading reads "Book your experience and accommodation". The title used
+// to be nowrap, which clipped the longer line, so it now wraps balanced.
+has('en hero heading adds accommodation', 'heroTitle2: "experience and accommodation",');
+has('id hero heading adds akomodasi', 'heroTitle2: "pengalaman dan akomodasi Anda",');
+has('ru hero heading adds проживание', 'heroTitle2: "впечатление и проживание",');
+has('hero title wraps balanced instead of clipping', '  text-wrap: balance;\n}\n@media (max-width: 360px) { .hero-title');
+
 // ─── Report ──────────────────────────────────────────────────────────────
 const passed = results.filter(r => r.pass).length;
 const failed = results.filter(r => !r.pass);

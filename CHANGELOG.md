@@ -2,6 +2,17 @@
 
 All notable changes to the Salty Cowboy booking engine, most recent first.
 
+## 12 Nov 2026 - Heading says experience and accommodation (HERO-ACCOMMODATION)
+
+Ro's instruction: the heading "Book your experience" becomes "Book your experience and accommodation".
+
+- English "Book your experience and accommodation", Indonesian "Pesan pengalaman dan akomodasi Anda",
+  Russian "Забронируйте впечатление и проживание".
+- The heading used to be forced onto one line, which clipped the longer text, so it now wraps onto two
+  balanced lines (sidebar on desktop and on phones).
+- The browser tab title is unchanged ("Salty Cowboy · Book your experience").
+- No offering data changed, so no sheet update.
+
 ## 11 Nov 2026 - Dressage Masterclass hidden for now (DRESSAGE-HIDDEN)
 
 Ro's instruction: hide the dressage option under Lessons for now.

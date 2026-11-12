@@ -652,7 +652,7 @@ const LANGS = [{
 const T = {
   en: {
     heroTitle1: "Book your",
-    heroTitle2: "experience",
+    heroTitle2: "experience and accommodation",
     heroSub: "Horse rescue stable & riding centre",
     igLink: "Instagram",
     airbnbLink: "Airbnb Listings",
@@ -874,7 +874,7 @@ const T = {
   },
   id: {
     heroTitle1: "Pesan",
-    heroTitle2: "pengalaman Anda",
+    heroTitle2: "pengalaman dan akomodasi Anda",
     heroSub: "Kandang penyelamatan kuda & pusat berkuda",
     igLink: "Instagram",
     airbnbLink: "Daftar Airbnb",
@@ -1090,7 +1090,7 @@ const T = {
   },
   ru: {
     heroTitle1: "Забронируйте",
-    heroTitle2: "впечатление",
+    heroTitle2: "впечатление и проживание",
     heroSub: "Конюшня для спасённых лошадей и центр верховой езды",
     igLink: "Instagram",
     airbnbLink: "Объявления на Airbnb",
@@ -1558,7 +1558,10 @@ html, body { background: #0a0a0a; }
   line-height: 1.2;
   margin-bottom: 4px;
   position: relative;
-  white-space: nowrap;
+  /* Wraps since 12 Nov 2026 (HERO-ACCOMMODATION): "Book your experience and
+     accommodation" is too long for one line in the sidebar or on a phone, so
+     it breaks into two balanced lines instead of being clipped. */
+  text-wrap: balance;
 }
 @media (max-width: 360px) { .hero-title { font-size: 22px; } }
 .hero-sub {
